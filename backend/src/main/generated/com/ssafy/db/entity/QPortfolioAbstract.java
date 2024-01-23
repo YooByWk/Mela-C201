@@ -24,6 +24,8 @@ public class QPortfolioAbstract extends EntityPathBase<PortfolioAbstract> {
 
     public final StringPath instagram = createString("instagram");
 
+    public final QFile portfolio_picture_file_idx;
+
     public final NumberPath<Long> portfolioAbstractIdx = createNumber("portfolioAbstractIdx", Long.class);
 
     public final StringPath selfIntro = createString("selfIntro");
@@ -50,6 +52,7 @@ public class QPortfolioAbstract extends EntityPathBase<PortfolioAbstract> {
 
     public QPortfolioAbstract(Class<? extends PortfolioAbstract> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.portfolio_picture_file_idx = inits.isInitialized("portfolio_picture_file_idx") ? new QFile(forProperty("portfolio_picture_file_idx")) : null;
         this.userIdx = inits.isInitialized("userIdx") ? new QUser(forProperty("userIdx")) : null;
     }
 

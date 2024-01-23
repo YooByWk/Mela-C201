@@ -25,4 +25,6 @@ public class File {
     @NotNull
     String saveFile;
 
+    String file_description;
+
 }

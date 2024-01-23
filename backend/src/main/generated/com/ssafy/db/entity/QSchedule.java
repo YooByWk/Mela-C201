@@ -52,7 +52,7 @@ public class QSchedule extends EntityPathBase<Schedule> {
 
     public QSchedule(Class<? extends Schedule> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.teamspaceIdx = inits.isInitialized("teamspaceIdx") ? new QTeamspace(forProperty("teamspaceIdx")) : null;
+        this.teamspaceIdx = inits.isInitialized("teamspaceIdx") ? new QTeamspace(forProperty("teamspaceIdx"), inits.get("teamspaceIdx")) : null;
     }
 
 }

@@ -7,29 +7,21 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-public class Teamspace {
+public class Feed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
-    Long teamspaceIdx;
-
-    @NotNull
-    String teamName;
-    @NotNull
-    LocalDateTime startDate;
-    @NotNull
-    LocalDateTime endDate;
-    @NotNull
-    String host;
+    Long Feed_idx;
 
     @ManyToOne
-    @JoinColumn(name="TEAMSPACE_PICTURE_FILE_IDX", referencedColumnName="fileIdx")
+    @JoinColumn(name="USER_IDX", referencedColumnName="userIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    File teamspace_picture_file_idx;
+    User userIdx;
+
+    String feed_content;
 }

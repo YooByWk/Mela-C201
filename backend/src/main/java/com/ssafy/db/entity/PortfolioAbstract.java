@@ -26,4 +26,11 @@ public class PortfolioAbstract {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     User userIdx;
+
+
+    @ManyToOne
+    @JoinColumn(name="PORTFOLIO_PICTURE_FILE_IDX", referencedColumnName="fileIdx")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
+    File portfolio_picture_file_idx;
 }
