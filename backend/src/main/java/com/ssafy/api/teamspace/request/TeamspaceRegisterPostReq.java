@@ -26,6 +26,9 @@ public class TeamspaceRegisterPostReq {
     @ApiModelProperty(name = "팀 스페이스 host idx", example = "543")
     User host;
 
+    @ApiModelProperty(name = "팀 스페이스 description", example = "팀스페이스입니다.")
+    String teamDescription;
+
     @ApiModelProperty(name = "팀 스페이스 ", example = "1134")
     File teamspace_picture_file_idx;
 }
