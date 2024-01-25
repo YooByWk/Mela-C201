@@ -4,7 +4,7 @@ import { Reset } from "styled-reset";
 import { Fragment } from "react";
 
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Homepage from "./pages/Homepage";
+import { Homepage } from "./pages/Homepage";
 import Navbar from "./components/Navbar";
 import SignupModal from "./components/SignupModal";
 
