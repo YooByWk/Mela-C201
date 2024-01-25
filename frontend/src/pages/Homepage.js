@@ -32,6 +32,7 @@ function Homepage() {
         <p>
           글자 테스트
         </p>
+        <p>혹은 잘못 오셨나요?</p>
       </Container>
 
     </header>
