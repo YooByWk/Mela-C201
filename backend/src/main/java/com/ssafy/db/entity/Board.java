@@ -35,12 +35,6 @@ public class Board {
     @NotNull
     int viewNum=0;
 
-    @NotNull
-    int likeNum=0;
-
-    @NotNull
-    int commentNum=0;
-
     @ManyToOne
     @JoinColumn(name="user_idx", referencedColumnName="userIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)

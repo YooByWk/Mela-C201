@@ -1,10 +1,13 @@
 package com.ssafy.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,35 +21,45 @@ public class User {
     @NotNull
     Long userIdx;
 
-    @Column(unique=true)
+    @Column(length = 25)
     @NotNull
     String emailId;
 
     @NotNull
+    @Column(length = 25)
     String emailDomain;
 
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(length = 25)
     @NotNull
     String password;
+
+    @Column(length = 25)
     @NotNull
     String name;
+
+    @Column(length = 25)
     @NotNull
     String nickname;
+
     @NotNull
+    @Column(columnDefinition = "VARCHAR(10) CHARACTER SET UTF8")
     String gender;
+
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     LocalDateTime birth;
 
     @NotNull
+    //@ColumnDefault("unauth")
+    @Column(length = 10)
     String userType;
+
     @NotNull
+    //@ColumnDefault("false")
     Boolean searchAllow;
 
-    @NotNull
-    int followerNum = 0;
-    @NotNull
-    int followeeNum = 0;
-
+    String jwtToken;
 
 }

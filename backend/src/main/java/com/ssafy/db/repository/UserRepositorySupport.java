@@ -1,8 +1,10 @@
 package com.ssafy.db.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.db.entity.QUser;
+//import com.ssafy.db.entity.QUser;
 
+import com.ssafy.db.entity.QUser;
+import com.ssafy.db.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,9 +22,5 @@ public class UserRepositorySupport {
 //                .where(qUser.userId.eq(userId)).fetchOne();
 //        if(user == null) return Optional.empty();
 //        return Optional.ofNullable(user);
-//    }
-
-//    public void loginSaveJwt(String userId, String jwtToken){
-//        User suer = jpaQueryFactory.update(qUser.jwtToken).from(qUser)
 //    }
 }
