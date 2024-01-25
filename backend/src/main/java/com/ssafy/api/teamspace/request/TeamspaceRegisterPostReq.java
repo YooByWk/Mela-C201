@@ -1,5 +1,6 @@
 package com.ssafy.api.teamspace.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.db.entity.File;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.ApiModel;
@@ -18,9 +19,11 @@ public class TeamspaceRegisterPostReq {
     String teamName;
 
     @ApiModelProperty(name = "팀 스페이스 start_date", example = "2023-01-01")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     LocalDate startDate;
 
     @ApiModelProperty(name = "팀 스페이스 end_date", example = "2023-01-01")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     LocalDate endDate;
 
     @ApiModelProperty(name = "팀 스페이스 host idx", example = "543")

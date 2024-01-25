@@ -37,16 +37,16 @@ public class TeamspaceController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<? extends BaseResponseBody> register(
-            @RequestBody @ApiParam(value="회원가입 정보", required = true) TeamspaceRegisterPostReq registerInfo,
+            @RequestBody @ApiParam(value="팀스페이스 생성 정보", required = true) TeamspaceRegisterPostReq registerInfo,
             @ApiIgnore Authentication authentication) {
-
-        Teamspace teamspace = teamspaceService.createTeamspace(registerInfo);
 
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
-        teamspace.setHost(user);
+
+        registerInfo.setHost(user);
+        Teamspace teamspace = teamspaceService.createTeamspace(registerInfo);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
