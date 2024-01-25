@@ -1,0 +1,10 @@
+ @font-face {
+  font-family: "InterBold";
+  src: url("./fonts/Inter-Bold.ttf");
+ }
+
+ @font-face {
+  font-family: "InterMedium";
+  src: url("./fonts/Inter-Medium.ttf");
+ }
+ 
