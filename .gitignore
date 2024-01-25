@@ -312,4 +312,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# generated 폴더 제외
+/src/main/generated
+
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java,node,windows,vuejs
