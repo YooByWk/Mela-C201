@@ -42,7 +42,7 @@ public class AuthController {
 		String password = loginInfo.getPassword();
 
 		String emailId = userEmail.substring(0, userEmail.indexOf('@'));
-		String emailDomain = userEmail.substring(0, userEmail.indexOf('@') + 1);
+		String emailDomain = userEmail.substring(userEmail.indexOf('@') + 1);
 
 		User user = userService.getUserByEmailIdAndEmailDomain(emailId, emailDomain);
 
@@ -50,7 +50,7 @@ public class AuthController {
 		if(passwordEncoder.matches(password, user.getPassword())) {
 			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
 			String jwtToken = JwtTokenUtil.getToken(userEmail);
-			userService.loginSaveJwt(userEmail, jwtToken);
+			userService.loginSaveJwt(emailId, jwtToken);
 			return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", jwtToken));
 		}
 
@@ -69,9 +69,9 @@ public class AuthController {
 	public ResponseEntity<? extends BaseResponseBody> logout(@ApiIgnore Authentication authentication){
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 
-		String emailId = userDetails.getUsername();
+		String email = userDetails.getUsername();
 
-		userService.logoutSaveJwt(emailId);
+		userService.logoutSaveJwt(email);
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}

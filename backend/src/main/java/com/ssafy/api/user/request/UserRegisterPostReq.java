@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -35,7 +36,7 @@ public class UserRegisterPostReq {
 
 	@ApiModelProperty(name="유저 birth", example="your_birth")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	LocalDateTime birth;
+	LocalDate birth;
 
 	@ApiModelProperty(name="유저 search_allow", example="your_search_allow")
 	boolean searchAllow;

@@ -33,7 +33,8 @@ public class UserServiceImpl implements UserService {
 		user.setName(userRegisterInfo.getName());
 		user.setNickname(userRegisterInfo.getNickname());
 		user.setGender(userRegisterInfo.getGender());
-//		user.setBirth(userRegisterInfo.getBirth());
+		user.setBirth(userRegisterInfo.getBirth());
+
 		// boolean은 isXXX으로 getter 만들어짐!!
 		user.setSearchAllow(userRegisterInfo.isSearchAllow());
 
@@ -66,12 +67,12 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByEmailId(userId).get();
 		user.setJwtToken(jwtToken);
 		userRepository.save(user);
-//		userRepositorySupport.loginSaveJwt(userId, jwtToken);
 	}
 
 	@Override
-	public void logoutSaveJwt(String userId) {
-		User user = userRepository.findByEmailId(userId).get();
+	public void logoutSaveJwt(String email) {
+		String emailId = email.substring(0, email.indexOf('@'));
+		User user = userRepository.findByEmailId(emailId).get();
 		user.setJwtToken(null);
 		userRepository.save(user);
 	}
@@ -79,8 +80,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User updateUser(User user, UserUpdatePostReq userUpdateInfo) {
 		// 수정 사항 추가 필요!!
+		user.setName(userUpdateInfo.getName());
 		user.setNickname(userUpdateInfo.getNickname());
+		user.setBirth(userUpdateInfo.getBirth());
+		user.setGender(userUpdateInfo.getGender());
 		user.setSearchAllow(userUpdateInfo.isSearchAllow());
+
+		System.out.println(userUpdateInfo.isSearchAllow());
 
 		return userRepository.save(user);
 	}
@@ -104,6 +110,12 @@ public class UserServiceImpl implements UserService {
 	public boolean checkPassword(String password, User user) {
 		//입력받은 패스워드를 암호화 하여 DB에 저장된 패스워드와 대조
 		return passwordEncoder.matches(password, user.getPassword());
+	}
+
+	@Override
+	public void updatePassword(String password, User user) {
+		user.setPassword(passwordEncoder.encode(password));
+		userRepository.save(user);
 	}
 
 }

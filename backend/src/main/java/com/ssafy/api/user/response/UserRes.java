@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -26,7 +27,7 @@ public class UserRes{
 	@ApiModelProperty(name="user name")
 	String gender;
 	@ApiModelProperty(name="user birth")
-	LocalDateTime birth;
+	LocalDate birth;
 	@ApiModelProperty(name="user type")
 	String userType;
 	@ApiModelProperty(name="user search allow")

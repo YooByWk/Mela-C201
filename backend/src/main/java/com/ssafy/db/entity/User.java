@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -31,7 +32,6 @@ public class User {
 
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(length = 25)
     @NotNull
     String password;
 
@@ -49,7 +49,7 @@ public class User {
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    LocalDateTime birth;
+    LocalDate birth;
 
     @NotNull
     //@ColumnDefault("unauth")

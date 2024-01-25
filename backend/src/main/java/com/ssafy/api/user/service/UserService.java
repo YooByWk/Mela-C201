@@ -21,4 +21,6 @@ public interface UserService {
 	boolean idDupCheck(String userId);
 
 	boolean checkPassword(String password, User user);
+
+	void updatePassword(String password, User user);
 }

@@ -21,8 +21,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping("/teamspaces")
 public class TeamspaceController {
-    @Autowired
-    TeamspaceService teamspaceService;
+//    @Autowired
+//    TeamspaceService teamspaceService;
 
     @Autowired
     UserService userService;

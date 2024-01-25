@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -25,7 +26,7 @@ public class UserUpdatePostReq {
     String gender;
 
     @ApiModelProperty(name="유저 birth")
-    LocalDateTime birth;
+    LocalDate birth;
 
     @ApiModelProperty(name="유저 search_allow")
     boolean searchAllow;
