@@ -19,7 +19,7 @@ public class QFile extends EntityPathBase<File> {
 
     public static final QFile file = new QFile("file");
 
-    public final StringPath file_description = createString("file_description");
+    public final StringPath fileDescription = createString("fileDescription");
 
     public final NumberPath<Long> fileIdx = createNumber("fileIdx", Long.class);
 
