@@ -1,8 +1,12 @@
 package com.ssafy.api.user.response;
 
+import com.ssafy.db.entity.User;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 /**
  * 회원 본인 정보 조회 API ([GET] /api/v1/users/me) 요청에 대한 응답값 정의.
@@ -11,21 +15,34 @@ import lombok.Setter;
 @Setter
 @ApiModel("UserResponse")
 public class UserRes{
-	@ApiModelProperty(name="User ID")
-	String userId;
+	@ApiModelProperty(name="user email id")
+	String emailId;
+	@ApiModelProperty(name = "user email domain")
+	String emailDomain;
 	@ApiModelProperty(name="user department")
-	String department;
-	@ApiModelProperty(name="user position")
-	String position;
-	@ApiModelProperty(name="user name")
 	String name;
+	@ApiModelProperty(name="user position")
+	String nickname;
+	@ApiModelProperty(name="user name")
+	String gender;
+	@ApiModelProperty(name="user birth")
+	LocalDateTime birth;
+	@ApiModelProperty(name="user type")
+	String userType;
+	@ApiModelProperty(name="user search allow")
+	boolean searchAllow;
+
 
 	public static UserRes of(User user) {
 		UserRes res = new UserRes();
-		res.setUserId(user.getUserId());
-		res.setDepartment(user.getDepartment());
+		res.setEmailId(user.getEmailId());
+		res.setEmailDomain(user.getEmailDomain());
 		res.setName(user.getName());
-		res.setPosition(user.getPosition());
+		res.setNickname(user.getNickname());
+		res.setGender(user.getGender());
+		res.setBirth(user.getBirth());
+		res.setUserType(user.getUserType());
+		res.setSearchAllow(user.getSearchAllow());
 		return res;
 	}
 }

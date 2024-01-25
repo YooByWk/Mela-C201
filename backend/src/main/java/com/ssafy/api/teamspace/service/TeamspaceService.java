@@ -1,2 +1,4 @@
-package com.ssafy.api.teamspace.service;public interface TeamspaceService {
+package com.ssafy.api.teamspace.service;
+
+public interface TeamspaceService {
 }

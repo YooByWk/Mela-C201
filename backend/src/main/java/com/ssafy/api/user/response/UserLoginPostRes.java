@@ -3,6 +3,7 @@ package com.ssafy.api.user.response;
 import com.ssafy.common.model.response.BaseResponseBody;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 

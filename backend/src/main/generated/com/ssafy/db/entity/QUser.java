@@ -25,11 +25,9 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath emailId = createString("emailId");
 
-    public final NumberPath<Integer> followeeNum = createNumber("followeeNum", Integer.class);
-
-    public final NumberPath<Integer> followerNum = createNumber("followerNum", Integer.class);
-
     public final StringPath gender = createString("gender");
+
+    public final StringPath jwtToken = createString("jwtToken");
 
     public final StringPath name = createString("name");
 
