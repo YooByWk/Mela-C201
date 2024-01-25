@@ -8,3 +8,7 @@
   src: url("./fonts/Inter-Medium.ttf");
  }
  
+ * {
+  background-color: #121212;
+  color: white;
+ }
