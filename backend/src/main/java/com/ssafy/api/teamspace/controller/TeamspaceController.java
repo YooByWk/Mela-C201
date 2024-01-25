@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/teamspaces")
 public class TeamspaceController {
-    @Autowired
-    TeamspaceService teamspaceService;
+//    @Autowired
+//    TeamspaceService teamspaceService;
 
     @PostMapping()
     @ApiOperation(value = "팀스페이스 생성", notes = "<strong>를</strong>를 통해 팀스페이스를 생성한다.")

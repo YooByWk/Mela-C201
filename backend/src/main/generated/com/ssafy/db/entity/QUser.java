@@ -19,7 +19,7 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
-    public final DateTimePath<java.time.LocalDateTime> birth = createDateTime("birth", java.time.LocalDateTime.class);
+    public final DatePath<java.time.LocalDate> birth = createDate("birth", java.time.LocalDate.class);
 
     public final StringPath emailDomain = createString("emailDomain");
 
