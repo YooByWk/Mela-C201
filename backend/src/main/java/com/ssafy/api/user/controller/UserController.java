@@ -162,4 +162,31 @@ public class UserController {
 		userService.updatePassword(inputPassword, user);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
+
+	@GetMapping("/generaterandomnickname")
+	@ApiOperation(value = "랜덤 닉네임 생성", notes = "중복되지 않는 랜덤 닉네임을 생성한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<String> checkDupNickname() {
+		String randomNickname = null;
+		long start = System.currentTimeMillis();
+		long now;
+
+		//1.5초간 중복없는 랜덤 닉네임 생성
+		do {
+			now = System.currentTimeMillis();
+			randomNickname = userService.generateRandomNickname();
+
+			if (!userService.nicknameDupCheck(randomNickname)) {
+
+				return ResponseEntity.status(200).body(randomNickname);
+			} else {
+				System.out.println("중복 걸림");
+			}
+		} while ((now - start) / 1000 <= 1.5);
+
+		return ResponseEntity.status(500).body("랜덤 닉네임 생성 실패");
+	}
 }
