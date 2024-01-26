@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 @Setter
 @ApiModel("UserResponse")
 public class UserRes{
+	@ApiModelProperty(name="user idx")
+	Long userIdx;
 	@ApiModelProperty(name="user email id")
 	String emailId;
 	@ApiModelProperty(name = "user email domain")
@@ -36,6 +38,7 @@ public class UserRes{
 
 	public static UserRes of(User user) {
 		UserRes res = new UserRes();
+		res.setUserIdx(user.getUserIdx());
 		res.setEmailId(user.getEmailId());
 		res.setEmailDomain(user.getEmailDomain());
 		res.setName(user.getName());

@@ -27,4 +27,14 @@ public class File {
     @Column(length = 100)
     String fileDescription;
 
+    @Override
+    public String toString() {
+        return "File{" +
+                "fileIdx=" + fileIdx +
+                ", saveFolder='" + saveFolder + '\'' +
+                ", originalFolder='" + originalFolder + '\'' +
+                ", saveFile='" + saveFile + '\'' +
+                ", fileDescription='" + fileDescription + '\'' +
+                '}';
+    }
 }

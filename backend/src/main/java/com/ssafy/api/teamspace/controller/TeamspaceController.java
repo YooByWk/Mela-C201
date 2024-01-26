@@ -2,8 +2,9 @@ package com.ssafy.api.teamspace.controller;
 
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
+import com.ssafy.api.teamspace.response.TeamspaceRes;
 import com.ssafy.api.teamspace.service.TeamspaceService;
-import com.ssafy.api.user.request.UserRegisterPostReq;
+import com.ssafy.api.user.response.UserRes;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -29,7 +30,7 @@ public class TeamspaceController {
     UserService userService;
 
     @PostMapping()
-    @ApiOperation(value = "팀스페이스 생성", notes = "<strong>를</strong>를 통해 팀스페이스를 생성한다.")
+    @ApiOperation(value = "팀스페이스 생성", notes = "<strong>팀스페이스 이름, 시작일, 종료일, 팀스페이스 설명, 썸네일을</strong>를 통해 팀스페이스를 생성한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 401, message = "인증 실패"),
@@ -52,7 +53,7 @@ public class TeamspaceController {
     }
 
     @PutMapping("/{teamspaceid}")
-    @ApiOperation(value = "팀스페이스 정보 수정", notes = "<strong>이름, 시작일, 종료일, </strong>를 통해 팀스페이스를 생성한다.")
+    @ApiOperation(value = "팀스페이스 정보 수정", notes = "<strong>팀스페이스 이름, 시작일, 종료일, 팀스페이스 설명, 배경 이미지, 썸네일 그리고 팀스페이스 인덱스</strong>정보를 보내 팀스페이스 정보를 수정한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 404, message = "존재하지 않는 팀스페이스"),
@@ -63,7 +64,7 @@ public class TeamspaceController {
             @PathVariable(name = "teamspaceid") String teamspaceId
     ) {
         try{
-            // 여기서 teamspace 조회 안되면 어떤 값 나오는지?
+            // 여기서 teamspace 조회 안되면 어떻게되는지?
             Teamspace teamspace = teamspaceService.getTeamspaceById(Long.valueOf(teamspaceId));
             teamspaceService.updateTeamspace(teamspace, updateInfo);
         } catch (Exception e) {
@@ -91,5 +92,17 @@ public class TeamspaceController {
         }
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+    }
+
+    @GetMapping(value = "/{teamspaceid}", name = "teamspaceId")
+    public ResponseEntity<TeamspaceRes> getTeamspace(@PathVariable String teamspaceId) {
+        Teamspace teamspace = null;
+        try {
+            teamspace = teamspaceService.getTeamspaceById(Long.valueOf(teamspaceId));
+
+            return ResponseEntity.status(200).body(TeamspaceRes.of(teamspace));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
