@@ -1,6 +1,7 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import logo from "../assets/images/logo.png"
 import styled from 'styled-components';
+import openSignupModal from '../components/Modals/Signupmodal'
 
 // const H1 = styled.h1`
 //   font-family: InterBold;
@@ -21,7 +22,7 @@ const Container = styled.div`
 // 반응형 ? 
 // css 요소에는 ;를 달아서 표시중입니다.
 
-function Homepage() {
+function Homepage(props) {
   return (
    <Container>
     <header>  
@@ -32,15 +33,46 @@ function Homepage() {
         <p>
           글자 테스트
         </p>
+        <button>
+          signup
+        </button>
         <p>혹은 잘못 오셨나요?</p>
       </Container>
-
     </header>
-      <h1>Mela</h1>
-      <br />
-      <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi voluptatum ab, magnam necessitatibus possimus eum reprehenderit odio quidem blanditiis distinctio nihil quis ut, nisi harum aut saepe repudiandae facilis quas?</h1>
     <footer></footer>
    </Container> 
   )
 }
-export default Homepage
+
+
+function Modal() {
+  
+  const [modalOpen, setModalOpen] = useState(false)
+  
+  // 모달창 오픈
+  const openSignupModal = () => {
+    setModalOpen(true)
+  }
+
+  // const openSigninModal = () => {
+  //   setModalOpen(true)
+  // }
+
+  const closeSignupModal = () => {
+    setModalOpen(false)
+  }
+  return (
+    <React>
+      <Fragment>
+        <button onClick={openSignupModal}>
+          signup
+        </button>
+        <openSignupModal open={ modalOpen } close={ closeSignupModal } header='Modal heading'>
+          아오 힘드네 벌써
+        </openSignupModal>
+      </Fragment>
+    </React>
+  )
+}
+
+export { Homepage, Modal}
