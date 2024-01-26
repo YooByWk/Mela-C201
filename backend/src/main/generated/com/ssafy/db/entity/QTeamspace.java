@@ -22,13 +22,17 @@ public class QTeamspace extends EntityPathBase<Teamspace> {
 
     public static final QTeamspace teamspace = new QTeamspace("teamspace");
 
-    public final DateTimePath<java.time.LocalDateTime> endDate = createDateTime("endDate", java.time.LocalDateTime.class);
+    public final DatePath<java.time.LocalDate> endDate = createDate("endDate", java.time.LocalDate.class);
 
-    public final StringPath host = createString("host");
+    public final QUser host;
 
-    public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
+    public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
+
+    public final StringPath teamDescription = createString("teamDescription");
 
     public final StringPath teamName = createString("teamName");
+
+    public final QFile teamspace_background_picture_file_idx;
 
     public final QFile teamspace_picture_file_idx;
 
@@ -52,6 +56,8 @@ public class QTeamspace extends EntityPathBase<Teamspace> {
 
     public QTeamspace(Class<? extends Teamspace> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.host = inits.isInitialized("host") ? new QUser(forProperty("host")) : null;
+        this.teamspace_background_picture_file_idx = inits.isInitialized("teamspace_background_picture_file_idx") ? new QFile(forProperty("teamspace_background_picture_file_idx")) : null;
         this.teamspace_picture_file_idx = inits.isInitialized("teamspace_picture_file_idx") ? new QFile(forProperty("teamspace_picture_file_idx")) : null;
     }
 
