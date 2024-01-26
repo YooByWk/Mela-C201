@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { styled, css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
 
-function SignupModal() {
+function SigninModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -12,7 +12,7 @@ function SignupModal() {
   return (
     <div>
       <TriggerButton type="button" onClick={handleOpen}>
-        Sign Up
+        Sign In
       </TriggerButton>
       <Modal
         aria-labelledby="unstyled-modal-title"
@@ -22,28 +22,24 @@ function SignupModal() {
         slots={{ backdrop: StyledBackdrop }}
       >
         <ModalContent sx={{ width: 400 }}>
-          <h2 id="unstyled-modal-title" className="modal-title">
-            SIGN UP
+          <h2 id="modal-title" className="modal-title">
+            SIGN IN
           </h2>
-          <p id="unstyled-modal-description" className="modal-description">
+          <p id="modal-description" className="modal-description">
             Email
             <input type='email' placeholder='ssafy@gmail.com' />
             <br/>
             Password
             <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' />
-            <br/>
-            Password again
-            <input type='password' />
-            <br/>
-            Name
-            <input type='text' placeholder='홍길동'/>
-            <br/>
-            Nickname
-            <input type='text' placeholder='최대 32자'/>
-            <br/>
-            <button type='submit'>
-              Create an account
-            </button>
+            <br />
+            <input type='checkbox' />
+              Remember me
+            <br />
+            <button type='submit'>Log in</button>
+            <br />
+            <p id='find-password' className='find-password'>
+              Forgot password
+            </p>
           </p>
         </ModalContent>
       </Modal>
@@ -114,6 +110,13 @@ const ModalContent = styled('div')(
       font-weight: 400;
       margin-bottom: 4px;
     }
+
+    & .find-password {
+      margin: 0;
+      font-weight: 200;
+      margin-bottom: 4px;
+      color: gray;
+    }
   `,
 );
 
@@ -143,5 +146,4 @@ const TriggerButton = styled('button')(
     }
   `,
 );
-
-export default SignupModal
+export default SigninModal
