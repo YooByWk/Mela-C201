@@ -4,10 +4,7 @@ import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -18,13 +15,16 @@ public class File {
     @NotNull
     Long fileIdx;
 
-    @NotNull
+    @NotNull @Column(length = 50)
     String saveFolder;
-    @NotNull
+
+    @NotNull @Column(length = 50)
     String originalFolder;
-    @NotNull
+
+    @NotNull @Column(length = 50)
     String saveFile;
 
-    String file_description;
+    @Column(length = 100)
+    String fileDescription;
 
 }
