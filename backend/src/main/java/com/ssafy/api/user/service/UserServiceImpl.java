@@ -2,12 +2,15 @@ package com.ssafy.api.user.service;
 
 import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
+import com.ssafy.common.util.CSVParser;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
 import com.ssafy.db.repository.UserRepositorySupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Random;
 
 /**
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
@@ -22,6 +25,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
+
+	Random random = new Random();
+	CSVParser frontWords = new CSVParser("front_words");
+	CSVParser backWords = new CSVParser("back_words");
 
 	@Override
 	public User createUser(UserRegisterPostReq userRegisterInfo) {
@@ -110,6 +117,28 @@ public class UserServiceImpl implements UserService {
 	public boolean checkPassword(String password, User user) {
 		//입력받은 패스워드를 암호화 하여 DB에 저장된 패스워드와 대조
 		return passwordEncoder.matches(password, user.getPassword());
+	}
+
+	@Override
+	public boolean nicknameDupCheck(String nickName) {
+		boolean result = userRepository.findByNickname(nickName).isPresent();
+
+		return result;
+	}
+
+	public String generateRandomNickname() {
+		int randomIndex = 0;
+		String randomNickname = null;
+
+		random.setSeed(System.currentTimeMillis() * 10_000);
+		randomIndex = random.nextInt(frontWords.getSize());
+		randomNickname = frontWords.getWord(randomIndex);
+
+		random.setSeed(System.currentTimeMillis() * 20_000);
+		randomIndex = random.nextInt(backWords.getSize());
+		randomNickname += backWords.getWord(randomIndex);
+
+		return randomNickname;
 	}
 
 	@Override
