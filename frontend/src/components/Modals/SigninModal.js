@@ -3,12 +3,41 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { styled, css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
+import { signin } from '../API/AuthAPI';
 
 function SigninModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [values, setValues] = React.useState({
+    email: "", 
+    password: "", 
+    password2: "",
+    name: "",
+    nickname: "", 
+    gender: "", 
+    birth: "",
+  })
+  
+  const handleChange = async (e) => {
+    setValues({...values,
+    [e.target.id]: e.target.value,
+    })
+  }
 
+  const handleSubmit = async (e) => {
+    signin(values)
+    .then((res) => {
+      localStorage.clear()
+      localStorage.setItem('tokenType', res.tokenType)
+      localStorage.setItem('accessToken', res.accessToken)
+      localStorage.setItem('refreshToken', res.refreshToken)
+      window.location.href = `/home`
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
   return (
     <div>
       <TriggerButton type="button" onClick={handleOpen}>
@@ -21,16 +50,16 @@ function SigninModal() {
         onClose={handleClose}
         slots={{ backdrop: StyledBackdrop }}
       >
-        <ModalContent sx={{ width: 400 }}>
+        <ModalContent sx={{ width: 400 }} onSubmit={handleSubmit}>
           <h2 id="modal-title" className="modal-title">
             SIGN IN
           </h2>
           <p id="modal-description" className="modal-description">
             Email
-            <input type='email' placeholder='ssafy@gmail.com' />
+            <input type='email' placeholder='ssafy@gmail.com' id='email' onChange={handleChange} />
             <br/>
             Password
-            <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' />
+            <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} />
             <br />
             <input type='checkbox' />
               Remember me
