@@ -5,12 +5,37 @@ import { styled, css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
 import Dropdown from '../Dropdown/SignupGender';
 import CalendarDropdown from '../Dropdown/Calendar';
+import { signup } from '../API/AuthAPI';
 
 function SignupModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [view, setView] = React.useState(false)
+  const [values, setValues] = React.useState({
+    email: "", 
+    password: "", 
+    password2: "",
+    name: "",
+    nickname: "", 
+    gender: "", 
+    birth: "",
+  })
+
+  const handleChange = async (e) => {
+    setValues({...values,
+    [e.target.id]: e.target.value,})
+  }
+
+  const handleSubmit = async (e) => {
+    signup(values)
+    .then((res) => {
+      window.location.href = `/signin`
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
 
   return (
     <div>
@@ -24,33 +49,33 @@ function SignupModal() {
         onClose={handleClose}
         slots={{ backdrop: StyledBackdrop }}
       >
-        <ModalContent sx={{ width: 400 }}>
+        <ModalContent sx={{ width: 400 }} onSubmit={handleSubmit}>
           <h2 id="unstyled-modal-title" className="modal-title">
             SIGN UP
           </h2>
           <p id="unstyled-modal-description" className="modal-description">
             Email
-            <input type='email' placeholder='ssafy@gmail.com' />
+            <input type='email' placeholder='ssafy@gmail.com' id='email' onChange={handleChange}/>
             <br/>
             Password
-            <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' />
+            <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange}/>
             <br/>
             Password again
-            <input type='password' />
+            <input type='password' id='password2' onChange={handleChange}/>
             <br/>
             Name
-            <input type='text' placeholder='홍길동'/>
+            <input type='text' placeholder='홍길동' id='name' onChange={handleChange}/>
             <br/>
             Nickname
-            <input type='text' placeholder='최대 32자'/>
+            <input type='text' placeholder='최대 32자' id='nickname' onChange={handleChange}/>
             <br/>
-              <ul onClick={() => {setView(!view)}}>
+              <ul onClick={() => {setView(!view)}} id='gender' onChange={handleChange}>
                 Gender{" "}
                 {view ? '⌃' : '⌄'}
                 {view && <Dropdown />}
               </ul>
             <br/>
-            <ul onClick={() => {setView(!view)}}>
+            <ul onClick={() => {setView(!view)}} id='birth' onChange={handleChange}>
               Birth{" "}
               {view ? '⌃' : '⌄'}
               {view && <CalendarDropdown />}

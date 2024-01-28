@@ -12,11 +12,6 @@ function SigninModal() {
   const [values, setValues] = React.useState({
     email: "", 
     password: "", 
-    password2: "",
-    name: "",
-    nickname: "", 
-    gender: "", 
-    birth: "",
   })
   
   const handleChange = async (e) => {
