@@ -55,6 +55,10 @@ function SignupModal() {
               {view ? '⌃' : '⌄'}
               {view && <CalendarDropdown />}
             </ul>
+            <br/>
+            <input type='checkbox' />
+              다른 회원의 검색 조건에 노출을 허용합니다.
+            <br />
             <button type='submit'>
               Create an account
             </button>
