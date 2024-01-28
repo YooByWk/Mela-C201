@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { styled, css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
 import Dropdown from '../Dropdown/SignupGender';
+import CalendarDropdown from '../Dropdown/Calendar';
 
 function SignupModal() {
   const [open, setOpen] = React.useState(false);
@@ -48,6 +49,12 @@ function SignupModal() {
                 {view ? '⌃' : '⌄'}
                 {view && <Dropdown />}
               </ul>
+            <br/>
+            <ul onClick={() => {setView(!view)}}>
+              Birth{" "}
+              {view ? '⌃' : '⌄'}
+              {view && <CalendarDropdown />}
+            </ul>
             <button type='submit'>
               Create an account
             </button>
