@@ -1,14 +1,21 @@
  @font-face {
   font-family: "InterBold";
-  src: url("./fonts/Inter-Bold.ttf");
+  src: url("./styles/fonts/Inter-Bold.ttf");
  }
 
  @font-face {
   font-family: "InterMedium";
-  src: url("./fonts/Inter-Medium.ttf");
+  src: url("./styles/fonts/Inter-Medium.ttf");
  }
  
+ /* 테마색이라서 꼭 써야합니다. . . . */
  /* * {
   background-color: #10141d;
   color: white;
  } */
+
+ /* .maincolour {
+  background-color: black;
+  color : white
+ } */
+
