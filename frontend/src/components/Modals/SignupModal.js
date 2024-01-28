@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { styled, css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
+import Dropdown from '../Dropdown/SignupGender';
 
 function SignupModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [view, setView] = React.useState(false)
 
   return (
     <div>
@@ -41,6 +43,11 @@ function SignupModal() {
             Nickname
             <input type='text' placeholder='최대 32자'/>
             <br/>
+              <ul onClick={() => {setView(!view)}}>
+                Gender{" "}
+                {view ? '⌃' : '⌄'}
+                {view && <Dropdown />}
+              </ul>
             <button type='submit'>
               Create an account
             </button>
