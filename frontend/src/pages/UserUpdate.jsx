@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import GenderDropdown from '../components/GenderDropdown'
-import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
+import DefaultButton from "../components/DefaultButton";
+import { MdLockOutline } from "react-icons/md";
+import { CgDanger } from "react-icons/cg";
 
 const Container = styled.div`
     display: flex;
@@ -13,6 +15,7 @@ const Container = styled.div`
 
 const Title = styled.h1`
     margin-bottom: 20px;
+    color: white;
 `
 
 const Label = styled.span`
@@ -33,12 +36,28 @@ const InputWrapper = styled.div`
 
 const Input = styled.input`
     placeholder: ${(props) => props.placeholder};
+    background-color: #151c2c;
+    color: white;
+    border: none;
+`
 
+const ButtonWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+`
+const Span = styled.span`
+    color: white;
+    padding: 5px;
 `
 
 function UserUpdateForm(props) {
-    const [open, setOpen] = useState()
+    const navigate = useNavigate()
     
+    const handleCancel = () => {
+        navigate(-1)
+    }
+
     return(
         <Container>
             <Title>
@@ -67,10 +86,7 @@ function UserUpdateForm(props) {
                     <Label>
                         Gender
                     </Label>
-                    <ul onClick={() => {setOpen(!open)}}>
-                        {open ? <RiArrowDropUpLine /> : <RiArrowDropDownLine />}
-                        {open && <GenderDropdown />}
-                    </ul>
+
                 </InputWrapper>
                 <InputWrapper>
                     <Label>
@@ -97,7 +113,29 @@ function UserUpdateForm(props) {
                     
                 </InputWrapper>
             </Form>
-            {/* <Button>수정 완료</Button> */}
+            <ButtonWrapper>
+                <DefaultButton 
+                    text={'Cancel'}
+                    backgroundcolor={'#6C7383'}
+                    fontcolor={'white'}
+                    width={'8rem'}
+                    onClick={handleCancel}
+                />
+                <DefaultButton 
+                    text={'Save'}
+                    backgroundcolor={'#254ef8'}
+                    fontcolor={'white'}
+                    width={'8rem'}
+                />
+            </ButtonWrapper>
+            <Span>
+                <MdLockOutline />
+                Change password
+            </Span>
+            <Span>
+                <CgDanger />
+                회원 탈퇴
+            </Span>
         </Container> 
     )
 }

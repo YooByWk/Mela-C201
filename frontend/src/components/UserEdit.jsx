@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import DefaultButton from '../components/DefaultButton';
 import styled from 'styled-components';
 
@@ -17,18 +17,24 @@ const Title = styled.h3`
 `
 
 function UserEdit(props) {
+    const navigate = useNavigate()
+
+    const goUpdate = () => {
+        navigate('/users')
+    }
 
     return (
         <Container>
             <Title>유저정보</Title>
-            <Link to={'/users'} style={{ textDecoration: 'none'}}>
-                <DefaultButton 
-                    text={'Edit'}
-                    backgroundcolor={'#6C7383'}
-                    fontcolor={'white'}
-                    width={'6rem'}
-                />
-            </Link>
+
+            <DefaultButton 
+                text={'Edit'}
+                backgroundcolor={'#6C7383'}
+                fontcolor={'white'}
+                width={'6rem'}
+                onClick={goUpdate}
+            />
+
         </Container>
     );
 }

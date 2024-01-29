@@ -21,27 +21,29 @@ const Text = styled.span`
     
 `
 
-const defaultButton = (props) => {
+const DefaultButton = (props) => {
     return (
+        <>
         <Container
             backgroundcolor={props.backgroundcolor}
             fontcolor={props.fontcolor}
             width={props.width}
-            onclick={props.onclick}
+            onClick={props.onClick}
         >
             <Text>
                 {props.text}
             </Text>
         </Container>
+        </>
     )
 }
 
-defaultButton.props={
+DefaultButton.defaultProps={
     text: 'default',
     backgroundcolor: '#254ef8',
     fontcolor: 'white',
     width: '1rem',
-    onclick: () => {}
+    onClick: () => {}
 }
 
-export default defaultButton
+export default DefaultButton
