@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultButton from "./DefaultButton";
 
@@ -14,7 +15,13 @@ const Title = styled.h3`
     margin-bottom: 10px;
 `
 
-function PortfolioList() {
+function PortfolioPin() {
+    const navigate = useNavigate()
+
+    const goPortfolioAdd = () => {
+        navigate('/musics')
+    }
+
     return (
         <>
         <Container>
@@ -24,10 +31,11 @@ function PortfolioList() {
                 backgroundcolor={'#254ef8'}
                 fontcolor={'white'}
                 width={'6rem'}
+                onClick={goPortfolioAdd}
             />
         </Container>
         </>
     )
 }
 
-export default PortfolioList
+export default PortfolioPin
