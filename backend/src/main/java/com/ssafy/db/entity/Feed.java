@@ -15,7 +15,7 @@ public class Feed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
-    Long feedIdx;
+    Long Feed_idx;
 
     @ManyToOne
     @JoinColumn(name="USER_IDX", referencedColumnName="userIdx")
@@ -23,5 +23,5 @@ public class Feed {
     @NotNull
     User userIdx;
 
-    String feedContent;
+    String feed_content;
 }

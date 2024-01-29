@@ -22,9 +22,9 @@ public class QFeed extends EntityPathBase<Feed> {
 
     public static final QFeed feed = new QFeed("feed");
 
-    public final StringPath feedContent = createString("feedContent");
+    public final StringPath feed_content = createString("feed_content");
 
-    public final NumberPath<Long> feedIdx = createNumber("feedIdx", Long.class);
+    public final NumberPath<Long> Feed_idx = createNumber("Feed_idx", Long.class);
 
     public final QUser userIdx;
 

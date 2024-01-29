@@ -2,11 +2,10 @@ import styled from 'styled-components'
 import logo from "../assets/images/logo.png"
 import React, { useState, Fragment } from 'react';
 import { FaSearch } from "react-icons/fa";
-import { Link, NavLink } from 'react-router-dom';
-import { blue } from '@mui/material/colors';
+import Sidebar from "./Sidebar";
+
 
 const Container = styled.div`
-  padding-top: 1%;
   display: flex;
   height: 3rem;
   color: #FFFFFF;
@@ -14,7 +13,6 @@ const Container = styled.div`
   font-size: larger;
   justify-content: space-between;
   align-items: center;
-  background-color: ${props => props.theme.colours.primary};
   span {
     font-size: medium;
     /* margin-left: 5% ; */
@@ -31,16 +29,7 @@ const Container = styled.div`
     padding: 1%;
     width: 40%;
   }
-  a {
-    text-decoration: none;
-  }
 `
-const activeStyle = {
-  color: '#873FFA'
-}
-const deActiveStyle = {
-  color: '#FFFFFF'
-}
 
 const SearchBar = styled.form`
   // 최상위
@@ -92,15 +81,12 @@ function Navbar() {
           <input type="search" spellCheck='false' placeholder='Search'  />
           </SearchBar>
       <div className='MenuContainer'>
-        <span><NavLink
-        style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/gather'>Gather</NavLink></span>
-        <span><NavLink
-        style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/teamspace'>Team Space</NavLink></span>
-        <span><NavLink
-        style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/community'>Community</NavLink></span>
+        <span>Gather</span>
+        <span>Team Space</span>
+        <span>Community</span>
       </div>
       </Container>
-      {/* <Sidebar /> */}
+      <Sidebar />
     </>
   )
 }

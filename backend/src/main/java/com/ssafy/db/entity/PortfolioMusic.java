@@ -37,10 +37,12 @@ public class PortfolioMusic {
     @ManyToOne
     @JoinColumn(name="lylic_file_idx", referencedColumnName="fileIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    File lyricFileIdx;
+    File lylicFileIdx;
 
     @ManyToOne
     @JoinColumn(name="album_art_file_idx", referencedColumnName="fileIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     File albumArtFileIdx;
+
+
 }
