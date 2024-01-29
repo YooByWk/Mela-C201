@@ -10,6 +10,7 @@ import Navbar from '../components/Navbar';
 import Teamspace from '../pages/Teamspace';
 import Gather from '../pages/Gather';
 import UserUpdate from '../pages/UserUpdate';
+import PortfolioAll from '../pages/PortfolioAll';
 
 function AppRouter({ className }) {
   return (  
@@ -44,6 +45,10 @@ function AppRouter({ className }) {
 
           <Route
             path='/users' element={<UserUpdate />}
+            />
+
+          <Route
+            path='/musics' element={<PortfolioAll />}
             />
 
           <Route

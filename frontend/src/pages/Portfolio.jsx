@@ -2,14 +2,14 @@
 import React from 'react';
 import UserEdit from '../components/UserEdit';
 import Selfshorts from '../components/Selfshorts';
-import PortfolioList from '../components/PortfolioList';
+import PortfolioPin from '../components/PortfolioPin';
 
 function Portfolio() {
     return (
         <>
             <UserEdit />
             <Selfshorts />
-            <PortfolioList />
+            <PortfolioPin />
         </>
     );
 }
