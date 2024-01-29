@@ -27,6 +27,7 @@ function SignupModal() {
   const handleChange = async (e) => {
     setValues({...values,
     [e.target.id]: e.target.value,})
+    console.log(e.target)
   }
 
   const handleSubmit = async (e) => {
@@ -78,14 +79,14 @@ function SignupModal() {
             <input type='text' placeholder='최대 32자' id='nickname' onChange={handleChange}/>
             <br/>
             <ul onClick={() => {setViewGender(!viewGender)}} id='gender' onChange={handleChange}>
-              Gender{" "}
+              Gender{}
               {viewGender ? '⌃' : '⌄'}
               {viewGender && <Dropdown />}
             </ul>
             <br/>
             <ul onClick={() => {setViewBirth(!viewBirth)}} id='birth' onChange={handleChange}>
-              Birth{" "}
-              {viewBirth ? '⌃' : '⌄'}
+              Birth{""}
+              {viewBirth ? '^' : '⌄'}
               {viewBirth && <CalendarDropdown />}
             </ul>
             <br/>

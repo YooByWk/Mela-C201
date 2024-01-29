@@ -1,11 +1,17 @@
 function Dropdown() {
 
     return (
-      <>
-        <li>비공개</li>
-        <li>여자</li>
-        <li>남자</li>
-      </>
+      <select value={1}>
+        <option value={1}>
+          etc
+        </option>
+        <option value={2}>
+          Male
+        </option>
+        <option value={3}>
+          Female
+        </option>
+      </select>
     )
   }
   
