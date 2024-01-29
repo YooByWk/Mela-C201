@@ -124,6 +124,22 @@ public class UserController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
+	@GetMapping("/nickname/{nickname}")
+	@ApiOperation(value = "닉네임 중복 확인", notes = "기존에 존재하는 닉네임인지 확인한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "닉네임 중복 없음"),
+			@ApiResponse(code = 409, message = "닉네임 중복 있음"),
+			@ApiResponse(code= 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> checkDupNickname(@PathVariable String nickname) {
+		if (!userService.nicknameDupCheck(nickname)) {
+
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+		}
+
+		return ResponseEntity.status(409).body(BaseResponseBody.of(409, "Conflict"));
+	}
+
 	@PostMapping("/password")
 	@ApiOperation(value = "비밀번호 확인", notes = "회원 정보 조회 또는 탈퇴를 위해 사용자가 입력한 비밀번호와 DB에 저장된 비밀번호를 대조한다.")
 	@ApiResponses({
@@ -161,5 +177,30 @@ public class UserController {
 
 		userService.updatePassword(inputPassword, user);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	@GetMapping("/generaterandomnickname")
+	@ApiOperation(value = "랜덤 닉네임 생성", notes = "중복되지 않는 랜덤 닉네임을 생성한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<String> generateRandomNickname() {
+		String randomNickname = null;
+		long start = System.currentTimeMillis();
+		long now;
+
+		//1.5초간 중복없는 랜덤 닉네임 생성
+		do {
+			now = System.currentTimeMillis();
+			randomNickname = userService.generateRandomNickname();
+
+			if (!userService.nicknameDupCheck(randomNickname)) {
+
+				return ResponseEntity.status(200).body(randomNickname);
+			}
+		} while ((now - start) / 1000 <= 1.5);
+
+		return ResponseEntity.status(500).body("랜덤 닉네임 생성 실패");
 	}
 }

@@ -23,4 +23,8 @@ public interface UserService {
 	boolean checkPassword(String password, User user);
 
 	void updatePassword(String password, User user);
+
+	boolean nicknameDupCheck(String nickName);
+
+	String generateRandomNickname();
 }
