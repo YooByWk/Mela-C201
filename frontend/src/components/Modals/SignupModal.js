@@ -29,6 +29,7 @@ function SignupModal() {
   }
 
   const handleSubmit = async (e) => {
+    e.preventDefault()
     signup(values)
     .then((res) => {
       // window.location.href = `/login`

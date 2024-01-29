@@ -21,6 +21,7 @@ function SigninModal() {
   }
 
   const handleSubmit = async (e) => {
+    e.preventDefault()
     signin(values)
     .then((res) => {
       localStorage.clear()
