@@ -185,7 +185,6 @@ public class UserServiceImpl implements UserService {
 	public void saveEmailAuthToken(Long userIdx, String token) {
 		// 1. 조회 -> 이미 발급받은 token이 있는지 db에서 조회
 		if(checkEmailAuthToken(userIdx)) {
-			System.out.println("1. 조회");
 			// 2-1. db에 결과값이 없으면 새로 입력
 			EmailAuth emailAuth = new EmailAuth();
 			emailAuth.setUserIdx(userRepository.getOne(userIdx));
@@ -221,7 +220,7 @@ public class UserServiceImpl implements UserService {
 		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
 		htmlContent += "<p>Mela!를 정상적으로 이용하기 위해서는 이메일 인증을 해주세요</p>";
 		htmlContent += "<p>아래 링크를 누르시면 인증이 완료됩니다.</p>";
-		htmlContent += "<a href=\"http://localhost:8080/auth/verify?token=" + token + "\">인증 링크</a>";
+		htmlContent += "<a href=\"http://localhost:8080/api/v1/auth/verify?token=" + token + "\">인증 링크</a>";
 		htmlContent += "</body></html>";
 
 		helper.setText(htmlContent, true);
@@ -245,9 +244,9 @@ public class UserServiceImpl implements UserService {
 				try{
 					// 토큰 유효성 확인
 					JwtTokenUtil.handleError(token);
+					System.out.println("token 유효성");
 
 					// 인증 회원으로 전환
-//					User user = userRepository.getOne(userIdx);
 					user.setUserType("auth");
 					userRepository.save(user);
 					return true;

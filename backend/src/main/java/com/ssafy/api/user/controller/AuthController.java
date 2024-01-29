@@ -45,8 +45,7 @@ public class AuthController {
 			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
 			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
 	})
-	public
-	ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginPostReq loginInfo) {
+	public ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginPostReq loginInfo) {
 		String userEmail = loginInfo.getId();
 		String password = loginInfo.getPassword();
 
@@ -96,8 +95,6 @@ public class AuthController {
 		String token = JwtTokenUtil.getToken(expires, sendEmailInfo.getEmailId());
 
 		User user = userService.getUserByEmailId(sendEmailInfo.getEmailId());
-//		System.out.println("user!! " + user.getEmailId()); // 여기까지 됨
-		System.out.println("user!!! " + user.getUserIdx());
 
         try {
             userService.sendEmail(user.getUserIdx(),token);
@@ -109,6 +106,7 @@ public class AuthController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
+	@CrossOrigin
 	@GetMapping("/verify")
 	@ApiOperation(value = "사용자 이메일 인증", notes = "<strong>token</strong>을 통해 메일을 인증 완료한다.")
 	@ApiResponses({
@@ -117,8 +115,7 @@ public class AuthController {
 			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
 			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
 	})
-	public ResponseEntity<? extends  BaseResponseBody> verifyEmail(@RequestParam String token) {
-		System.out.println("token: " + token);
+	public ResponseEntity<?> verifyEmail(@RequestParam String token) {
 		JWTVerifier verifier = JwtTokenUtil.getVerifier();
 
 		try {
@@ -127,18 +124,20 @@ public class AuthController {
 
 			try {
 				User user = userService.getUserByEmailId(emailId);
-				userService.verifyEmail(user.getUserIdx(), token);
+				if(!userService.verifyEmail(user.getUserIdx(), token)) {
+					return ResponseEntity.status(401).body("유효하지 않은 주소입니다.");
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				return ResponseEntity.status(404).body(BaseResponseBody.of(404, "NotFound"));
+				return ResponseEntity.status(404).body("유효하지 않은 주소입니다.");
 			}
 
 		} catch (JWTVerificationException e) {
 			e.printStackTrace();
-			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized"));
+			return ResponseEntity.status(401).body("유효하지 않은 주소입니다.");
 		}
 
 
-		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+		return ResponseEntity.status(200).body("인증 완료되었습니다.");
 	}
 }

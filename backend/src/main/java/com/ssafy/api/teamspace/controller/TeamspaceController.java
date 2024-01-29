@@ -3,7 +3,6 @@ package com.ssafy.api.teamspace.controller;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
 import com.ssafy.api.teamspace.service.TeamspaceService;
-import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
