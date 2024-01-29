@@ -7,6 +7,7 @@ import SigninModal from '../components/SigninModal';
 import SignupModal from '../components/SignupModal';
 import { Homepage } from '../pages/Homepage';
 import Navbar from '../components/Navbar';
+import UserUpdate from '../pages/UserUpdate';
 
 function AppRouter({ className }) {
   return (  
@@ -31,7 +32,7 @@ function AppRouter({ className }) {
             path='/login' element={<SigninModal />}
           />
           <Route
-            path='/user' element={<SignupModal/>}
+            path='/users' element={<UserUpdate />}
             />
           <Route
             path='*' element = {<Homepage />}

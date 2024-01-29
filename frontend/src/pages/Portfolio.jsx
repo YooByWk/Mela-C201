@@ -1,14 +1,15 @@
 //포트폴리오 페이지
 import React from 'react';
 import UserEdit from '../components/UserEdit';
+import Selfshorts from '../components/Selfshorts';
+import PortfolioList from '../components/PortfolioList';
 
 function Portfolio() {
     return (
         <>
-            <h5>유저정보</h5>
-            <div className="Container">
-                <UserEdit />
-            </div>
+            <UserEdit />
+            <Selfshorts />
+            <PortfolioList />
         </>
     );
 }

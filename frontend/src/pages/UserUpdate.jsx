@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import GenderDropdown from '../components/GenderDropdown'
-import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
+import DefaultButton from "../components/DefaultButton";
+// import GenderDropdown from '../components/GenderDropdown'
+// import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 
 const Container = styled.div`
     display: flex;
@@ -13,6 +15,7 @@ const Container = styled.div`
 
 const Title = styled.h1`
     margin-bottom: 20px;
+    color: white;
 `
 
 const Label = styled.span`
@@ -33,13 +36,17 @@ const InputWrapper = styled.div`
 
 const Input = styled.input`
     placeholder: ${(props) => props.placeholder};
-
+    background-color: #202C44;
+    border: none;
+    color: white;
 `
 
 function UserUpdateForm(props) {
-    const [open, setOpen] = useState()
+    // const [open, setOpen] = useState()
+    const navigate = useNavigate()
     
     return(
+        <>
         <Container>
             <Title>
                 Profile Settings
@@ -67,10 +74,10 @@ function UserUpdateForm(props) {
                     <Label>
                         Gender
                     </Label>
-                    <ul onClick={() => {setOpen(!open)}}>
+                    {/* <ul onClick={() => {setOpen(!open)}}>
                         {open ? <RiArrowDropUpLine /> : <RiArrowDropDownLine />}
                         {open && <GenderDropdown />}
-                    </ul>
+                    </ul> */}
                 </InputWrapper>
                 <InputWrapper>
                     <Label>
@@ -94,11 +101,24 @@ function UserUpdateForm(props) {
                     <Label>
                         SNS
                     </Label>
-                    
+                
                 </InputWrapper>
             </Form>
-            {/* <Button>수정 완료</Button> */}
-        </Container> 
+            <DefaultButton 
+                text={'Cancel'}
+                backgroundcolor={'#6C7383'}
+                fontcolor={'white'}
+                width={'8rem'}
+                onClick={()=>{navigate(-1)}}
+            />
+            <DefaultButton 
+                text={'Save'}
+                backgroundcolor={'#254ef8'}
+                fontcolor={'white'}
+                width={'8rem'}
+            />
+        </Container>
+        </>
     )
 }
 
