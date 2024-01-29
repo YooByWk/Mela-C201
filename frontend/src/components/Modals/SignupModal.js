@@ -3,15 +3,20 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
-import Dropdown from '../Dropdown/SignupGender'
+// import GenderDropdown from '../Dropdown/SignupGender'
 import CalendarDropdown from '../Dropdown/Calendar'
 import { signup } from '../API/AuthAPI'
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 function SignupModal() {
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-  const [viewGender, setViewGender] = React.useState(false)
+  // const [viewGender, setViewGender] = React.useState(false)
   const [viewBirth, setViewBirth] = React.useState(false)
   const [values, setValues] = React.useState({
     emailId: "",
@@ -23,6 +28,14 @@ function SignupModal() {
     birth: "",
     searchAllow: "",
   })
+
+  // const handleGenderChange = (gender) => {
+  //   setValues({ ...values, gender })
+  // }
+
+  const handleBirthChange = (birth) => {
+    setValues({ ...values, birth })
+  }
 
   const handleChange = async (e) => {
     setValues({...values,
@@ -78,13 +91,26 @@ function SignupModal() {
             Nickname
             <input type='text' placeholder='최대 32자' id='nickname' onChange={handleChange}/>
             <br/>
-            <ul onClick={() => {setViewGender(!viewGender)}} id='gender' onChange={handleChange}>
-              Gender{}
-              {viewGender ? '⌃' : '⌄'}
-              {viewGender && <Dropdown />}
-            </ul>
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Gender
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={values}
+                  label="Gender"
+                  onChange={handleChange}
+                >
+                  <MenuItem value='Etc'>Etc</MenuItem>
+                  <MenuItem value='Male'>Male</MenuItem>
+                  <MenuItem value='Female'>Female</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
             <br/>
-            <ul onClick={() => {setViewBirth(!viewBirth)}} id='birth' onChange={handleChange}>
+            <ul onClick={() => {setViewBirth(!viewBirth)}} id='birth' onChange={handleBirthChange}>
               Birth{""}
               {viewBirth ? '^' : '⌄'}
               {viewBirth && <CalendarDropdown />}
@@ -150,6 +176,7 @@ const ModalContent = styled('div')(
     border-radius: 8px;
     border: solid 1px #254EF8;
     padding: 24px;
+    color: white;
 
     & .modal-title {
       text-align: center;

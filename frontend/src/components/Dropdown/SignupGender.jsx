@@ -1,18 +1,31 @@
-function Dropdown() {
+import {useRef, useState} from "react";
+import Link from "react-router-dom";
+import styles from "styles/components/DropDown.module.scss";
+import classNames from "classNames";
+import useDetectClose from "hooks/useDetectClose";
 
-    return (
-      <select value={1}>
-        <option value={1}>
-          etc
-        </option>
-        <option value={2}>
-          Male
-        </option>
-        <option value={3}>
-          Female
-        </option>
-      </select>
-    )
-  }
-  
-  export default Dropdown
+
+const GenderDropdown = () => {
+  const dropDownRef = useRef(null);
+  const [isOpen, setIsOpen] = useDetectClose(dropDownRef, false);
+  return (
+    <div className={styles.dropDownMenu}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        메뉴 보기
+      </button>
+
+      <ul
+        ref={dropDownRef}
+        className={classNames(styles.menu, { [styles.active]: isOpen })}
+      >
+        <li>
+          <Link href="/mypage">마이페이지</Link>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+export default GenderDropdown
