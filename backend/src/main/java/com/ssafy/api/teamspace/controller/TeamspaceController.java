@@ -1,7 +1,10 @@
 package com.ssafy.api.teamspace.controller;
 
+import com.querydsl.core.Tuple;
+import com.ssafy.api.teamspace.request.ScheduleRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
+import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
 import com.ssafy.api.teamspace.response.TeamspaceRes;
 import com.ssafy.api.teamspace.service.TeamspaceService;
 import com.ssafy.api.user.service.UserService;
@@ -16,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
 
 @Slf4j
 @Api(value = "팀스페이스 API", tags = {"Teamspace"})
@@ -94,6 +99,12 @@ public class TeamspaceController {
     }
 
     @GetMapping(value = "/{teamspaceid}", name = "teamspaceId")
+    @ApiOperation(value = "팀스페이스 정보 조회", notes ="<string>팀스페이스 아이디<strong>를 통해 팀스페이스 정보를 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "존재하지 않는 팀스페이스"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
     public ResponseEntity<TeamspaceRes> getTeamspace(@PathVariable String teamspaceId) {
         Teamspace teamspace = null;
         try {
@@ -103,5 +114,83 @@ public class TeamspaceController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @PostMapping(value = "/{teamspaceid}/users/{userid}")
+    @ApiOperation(value = "팀원 추가", notes ="<string>팀스페이스 아이디, 유저 이메일 아이디<strong>를 통해 팀스페이스에 초대한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "존재하지 않는 팀스페이스"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> addMember(
+            @PathVariable(name = "teamspaceid") String teamspaceId,
+            @PathVariable(name = "userid") String userId
+    ) {
+        User user = userService.getUserByEmailId(userId);
+
+        try {
+            teamspaceService.addMember(Long.valueOf(teamspaceId), user.getUserIdx());
+
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "not found"));
+        }
+    }
+
+    @DeleteMapping(value = "/{teamspaceid}/users")
+    @ApiOperation(value = "팀스페이스 탈퇴", notes ="<string>팀스페이스 아이디, 유저아이디<strong>를 통해 팀스페이스를 탈퇴한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "존재하지 않는 팀스페이스"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> leaveTeamspace(
+            @PathVariable(name = "teamspaceid") String teamspaceId,
+            @ApiIgnore Authentication authentication
+    ) {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+
+        String userEmail = userDetails.getUsername();
+        User user = userService.getUserByEmail(userEmail);
+
+        try {
+            teamspaceService.leaveTeamspace(Long.valueOf(teamspaceId), user.getUserIdx());
+
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "not found"));
+        }
+    }
+
+    @GetMapping("/{teamspaceid}/users")
+    @ApiOperation(value = "팀스페이스 멤버 조회", notes ="<string>팀스페이스 아이디<strong>를 통해 팀스페이스 멤버를 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "존재하지 않는 팀스페이스"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<List<TeamspaceMemberListRes>> getTeamspaceMember(
+            @PathVariable(name = "teamspaceid") Long teamspaceIdx
+    ) {
+        List<TeamspaceMemberListRes> users = teamspaceService.getTeamspaceMemberList(teamspaceIdx);
+
+        return ResponseEntity.status(200).body(users);
+    }
+
+    @PostMapping(value = "/{teamspaceid}/schedules")
+    @ApiOperation(value = "일정 추가", notes ="<string><strong>를 통해 일정을 추가한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 404, message = "존재하지 않는 팀스페이스"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> addSchedule(
+            @PathVariable(name = "teamspaceid") String teamspaceId,
+            @RequestBody @ApiParam(value="회원가입 정보", required = true) ScheduleRegisterPostReq registInfo
+    ) {
+
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 }

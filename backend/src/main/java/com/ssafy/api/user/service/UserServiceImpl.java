@@ -216,6 +216,7 @@ public class UserServiceImpl implements UserService {
 		helper.setFrom("Mela!");
 		helper.setSubject("[Mela!] 이메일 계정을 인증해주세요");
 
+		// localhost 변수로 빼야해요
 		String htmlContent = "<html><body>";
 		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
 		htmlContent += "<p>Mela!를 정상적으로 이용하기 위해서는 이메일 인증을 해주세요</p>";
