@@ -23,7 +23,7 @@ function PortfolioList() {
                 text={'More'}
                 backgroundcolor={'#254ef8'}
                 fontcolor={'white'}
-                width={'8rem'}
+                width={'6rem'}
             />
         </Container>
         </>

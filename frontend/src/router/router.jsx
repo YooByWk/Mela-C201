@@ -9,6 +9,7 @@ import { Homepage } from '../pages/Homepage';
 import Navbar from '../components/Navbar';
 import Teamspace from '../pages/Teamspace';
 import Gather from '../pages/Gather';
+import UserUpdate from '../pages/UserUpdate';
 
 function AppRouter({ className }) {
   return (  
@@ -42,7 +43,7 @@ function AppRouter({ className }) {
           />
 
           <Route
-            path='/user' element={<SignupModal/>}
+            path='/users' element={<UserUpdate />}
             />
 
           <Route
