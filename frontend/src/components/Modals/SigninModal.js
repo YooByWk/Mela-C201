@@ -10,7 +10,7 @@ function SigninModal() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [values, setValues] = React.useState({
-    email: "", 
+    id: "", 
     password: "", 
   })
   
@@ -56,7 +56,7 @@ function SigninModal() {
           <form onSubmit={handleSubmit}> 
           <div id="modal-description" className="modal-description">
             Email
-            <input type='email' placeholder='ssafy@gmail.com' id='email' onChange={handleChange} />
+            <input type='email' placeholder='ssafy@gmail.com' id='id' onChange={handleChange} />
             <br/>
             Password
             <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} />

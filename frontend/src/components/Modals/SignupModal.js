@@ -14,13 +14,14 @@ function SignupModal() {
   const [viewGender, setViewGender] = React.useState(false)
   const [viewBirth, setViewBirth] = React.useState(false)
   const [values, setValues] = React.useState({
-    email: "", 
+    emailId: "",
+    emailDomain: "", 
     password: "", 
-    password2: "",
     name: "",
     nickname: "", 
     gender: "", 
     birth: "",
+    searchAllow: "",
   })
 
   const handleChange = async (e) => {
@@ -60,7 +61,9 @@ function SignupModal() {
           <form  onSubmit={handleSubmit}>
           <div id="unstyled-modal-description" className="modal-description">
             Email
-            <input type='email' placeholder='ssafy@gmail.com' id='email' onChange={handleChange}/>
+            <input type='text' placeholder='ssafy' id='emailId' onChange={handleChange} />
+            @
+            <input type='text' palceholder='gmail.com' id='emailDomain' onChange={handleChange} />
             <br/>
             Password
             <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange}/>
@@ -86,7 +89,7 @@ function SignupModal() {
               {viewBirth && <CalendarDropdown />}
             </ul>
             <br/>
-            <input type='checkbox' />
+            <input type='checkbox' id='searchAllow' onChange={handleChange} />
               다른 회원의 검색 조건에 노출을 허용합니다.
             <br />
             <button type='submit'>

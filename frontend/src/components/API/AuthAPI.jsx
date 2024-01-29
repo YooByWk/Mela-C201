@@ -5,21 +5,49 @@ let ACCESS_TOKEN = localStorage.getItem("accessToken");
 
 /** CREATE CUSTOM AXIOS INSTANCE */
 export const AuthApi = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: 'http://localhost:8080/api/v1',
     headers: {
         // 'Content-Type': 'application/json',
         'Authorization': `${TOKEN_TYPE} ${ACCESS_TOKEN}`,
     },
-});
+})
+
 /** SIGNIN API */
-export const signin = async ({ email, password, password2, name, nickname, gender, birth }) => {
-    const data = { email, password, password2, name, nickname, gender, birth };
-    const response = await AuthApi.post(`/auth/login`, data);
-    return response.data;
+export const signin = async ({ 
+    id, 
+    password }) => {
+    const data = { 
+        id, 
+        password 
+    }
+
+    const response = await AuthApi.post(`/auth/login`, data)
+
+    return response.data
 }
+
 /** SIGNUP API */
-export const signup = async ({ email, password, password2, name, nickname, gender, birth }) => {
-    const data = { email, password, password2, name, nickname, gender, birth };
-    const response = await AuthApi.post(`/users`, data);
+export const signup = async ({ 
+    emailId, 
+    emailDomain, 
+    password, 
+    name, 
+    nickname, 
+    gender, 
+    birth, 
+    searchAllow }) => {
+    const data = { 
+        emailId, 
+        emailDomain, 
+        password, 
+        name, 
+        nickname, 
+        gender, 
+        birth, 
+        searchAllow 
+    }
+
+    const response = await AuthApi.post(`/users`, data)
+
     return response.data;
 }
