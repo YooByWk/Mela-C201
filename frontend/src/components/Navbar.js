@@ -13,6 +13,7 @@ const Container = styled.div`
   font-size: larger;
   justify-content: space-between;
   align-items: center;
+  background-color: ${props => props.theme.colours.primary};
   span {
     font-size: medium;
     /* margin-left: 5% ; */
@@ -86,7 +87,7 @@ function Navbar() {
         <span>Community</span>
       </div>
       </Container>
-      <Sidebar />
+      {/* <Sidebar /> */}
     </>
   )
 }
