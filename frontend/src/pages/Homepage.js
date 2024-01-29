@@ -3,49 +3,51 @@ import logo from "../assets/images/logo.png"
 import styled from 'styled-components';
 import openSignupModal from '../components/Modals/Signupmodal'
 
-// const H1 = styled.h1`
-//   font-family: InterBold;
-//   color: white;
-//   background-color: black;
-// `;
+const H1 = styled.h1`
+  font-family: InterBold;
+`;
 
 const Container = styled.div`
-  background-color: #121212;
   div img {
     width: 20%;
   };
   &.Header-container {
     font-family: InterMedium;
-    color: #ffffff;
   };
 `;
+
 // 반응형 ? 
 // css 요소에는 ;를 달아서 표시중입니다.
 
-function Homepage(props) {
+export function Homepage(props) {
   return (
    <Container>
     <header>  
-      <Container className='Header-container'>
+      {/* <Container className='Header-container'>
       <a href="/404">
         <img src={logo} alt="경로이탈"  />
       </a>
         <p>
           글자 테스트
         </p>
+
         <button>
           signup
         </button>
         <p>혹은 잘못 오셨나요?</p>
-      </Container>
+      </Container> */}
     </header>
-    <footer></footer>
+    <footer>
+      <H1>
+        Homepage ?
+      </H1>
+    </footer>
    </Container> 
   )
 }
 
 
-function Modal() {
+export function Modal() {
   
   const [modalOpen, setModalOpen] = useState(false)
   
@@ -54,9 +56,9 @@ function Modal() {
     setModalOpen(true)
   }
 
-  // const openSigninModal = () => {
-  //   setModalOpen(true)
-  // }
+  const openSigninModal = () => {
+    setModalOpen(true)
+  }
 
   const closeSignupModal = () => {
     setModalOpen(false)
@@ -75,4 +77,4 @@ function Modal() {
   )
 }
 
-export { Homepage, Modal}
+// export { Homepage, Modal}

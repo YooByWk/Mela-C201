@@ -38,6 +38,10 @@ public class SsafyUserDetails implements UserDetails {
 //		return this.user.getUserId();
 		return this.user.getEmailId() + "@" + this.user.getEmailDomain();
 	}
+
+	public User getUserIdx() {
+		return this.user;
+	}
 	@Override
 	public boolean isAccountNonExpired() {
 		return this.accountNonExpired;
