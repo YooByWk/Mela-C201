@@ -23,7 +23,7 @@ function Selfshorts() {
                 text={'Add'}
                 backgroundcolor={'#254ef8'}
                 fontcolor={'white'}
-                width={'8rem'}
+                width={'6rem'}
             />
         </Container>
         </>
