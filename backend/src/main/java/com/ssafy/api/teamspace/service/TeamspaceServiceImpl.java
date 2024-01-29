@@ -2,13 +2,16 @@ package com.ssafy.api.teamspace.service;
 
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
+import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
 import com.ssafy.db.entity.Teamspace;
-import com.ssafy.db.repository.FileRepository;
-import com.ssafy.db.repository.FileRepositorySupport;
-import com.ssafy.db.repository.TeamspaceRepository;
-import com.ssafy.db.repository.TeamspaceRepositorySupport;
+import com.ssafy.db.entity.TeamspaceMember;
+import com.ssafy.db.entity.User;
+import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service("teamspaceService")
 public class TeamspaceServiceImpl implements TeamspaceService{
@@ -17,6 +20,16 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     TeamspaceRepository teamspaceRepository;
     @Autowired
     TeamspaceRepositorySupport teamspaceRepositorySupport;
+
+    @Autowired
+    TeamspaceMemberRepository teamspaceMemberRepository;
+    @Autowired
+    TeamspaceMemberRepositorySupport teamspaceMemberRepositorySupport;
+
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    UserRepositorySupport userRepositorySupport;
 
     @Autowired
     FileRepository fileRepository;
@@ -76,6 +89,31 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     @Override
     public void deleteTeamspace(Teamspace teamspace) {
         teamspaceRepository.delete(teamspace);
+    }
+
+    @Override
+    public void addMember(Long teamspaceIdx, Long userIdx) {
+        TeamspaceMember teamspaceMember = new TeamspaceMember();
+        teamspaceMember.setTeamspaceIdx(teamspaceRepository.getOne(teamspaceIdx));
+        teamspaceMember.setUserIdx(userRepository.getOne(userIdx));
+        teamspaceMemberRepository.save(teamspaceMember);
+    }
+
+    @Override
+    public void leaveTeamspace(Long teamspaceIdx, Long userIdx) {
+        Teamspace teamspace = teamspaceRepository.getOne(teamspaceIdx);
+        User user = userRepository.getOne(userIdx);
+        Optional<TeamspaceMember> teamspaceMember =  teamspaceMemberRepository.findByUserIdxAndTeamspaceIdx(user, teamspace);
+        if(teamspaceMember.isPresent()) {
+            teamspaceMemberRepository.delete(teamspaceMember.get());
+        }
+    }
+
+    @Override
+    public List<TeamspaceMemberListRes> getTeamspaceMemberList(Long teamspaceIdx) {
+        Teamspace teamspace = teamspaceRepository.getOne(teamspaceIdx);
+        List<TeamspaceMemberListRes> users = teamspaceRepositorySupport.findTeamspaceMemberList(teamspace);
+        return users;
     }
 
 
