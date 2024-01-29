@@ -1,16 +1,16 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { styled, css } from '@mui/system';
-import { Modal as BaseModal } from '@mui/base/Modal';
-import Dropdown from '../Dropdown/SignupGender';
-import CalendarDropdown from '../Dropdown/Calendar';
-import { signup } from '../API/AuthAPI';
+import * as React from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { styled, css } from '@mui/system'
+import { Modal as BaseModal } from '@mui/base/Modal'
+import Dropdown from '../Dropdown/SignupGender'
+import CalendarDropdown from '../Dropdown/Calendar'
+import { signup } from '../API/AuthAPI'
 
 function SignupModal() {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
   const [viewGender, setViewGender] = React.useState(false)
   const [viewBirth, setViewBirth] = React.useState(false)
   const [values, setValues] = React.useState({
@@ -31,7 +31,7 @@ function SignupModal() {
   const handleSubmit = async (e) => {
     signup(values)
     .then((res) => {
-      window.location.href = `/login`
+      // window.location.href = `/login`
       console.log('회원가입 성공')
       console.log(res)
     })
@@ -96,26 +96,24 @@ function SignupModal() {
         </ModalContent>
       </Modal>
     </div>
-  );
+  )
 }
 
 const Backdrop = React.forwardRef((props, ref) => {
-  const { open, className, ...other } = props;
+  const { open, className, ...other } = props
   return (
     <div
       className={clsx({ 'base-Backdrop-open': open }, className)}
       ref={ref}
       {...other}
     />
-  );
-});
+  )
+})
 
 Backdrop.propTypes = {
   className: PropTypes.string.isRequired,
   open: PropTypes.bool,
-};
-
-
+}
 
 const Modal = styled(BaseModal)`
   position: fixed;
@@ -124,7 +122,7 @@ const Modal = styled(BaseModal)`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+`
 
 const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
@@ -132,7 +130,7 @@ const StyledBackdrop = styled(Backdrop)`
   inset: 0;
   background-color: rgb(0 0 0 / 0.5);
   -webkit-tap-highlight-color: transparent;
-`;
+`
 
 const ModalContent = styled('div')(
   ({ theme }) => css`
@@ -163,7 +161,7 @@ const ModalContent = styled('div')(
       margin-bottom: 4px;
     }
   `,
-);
+)
 
 // signup버튼
 const TriggerButton = styled('button')(
@@ -190,6 +188,6 @@ const TriggerButton = styled('button')(
       background: #254EF8;
     }
   `,
-);
+)
 
 export default SignupModal

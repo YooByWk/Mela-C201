@@ -1,9 +1,9 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { styled, css } from '@mui/system';
-import { Modal as BaseModal } from '@mui/base/Modal';
-import { signin } from '../API/AuthAPI';
+import * as React from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { styled, css } from '@mui/system'
+import { Modal as BaseModal } from '@mui/base/Modal'
+import { signin } from '../API/AuthAPI'
 
 function SigninModal() {
   const [open, setOpen] = React.useState(false);
@@ -35,6 +35,7 @@ function SigninModal() {
       console.log(err)
     })
   }
+
   return (
     <div>
       <TriggerButton type="button" onClick={handleOpen}>
@@ -74,7 +75,7 @@ function SigninModal() {
         </ModalContent>
       </Modal>
     </div>
-  );
+  )
 }
 
 const Backdrop = React.forwardRef((props, ref) => {
@@ -85,15 +86,13 @@ const Backdrop = React.forwardRef((props, ref) => {
       ref={ref}
       {...other}
     />
-  );
-});
+  )
+})
 
 Backdrop.propTypes = {
   className: PropTypes.string.isRequired,
   open: PropTypes.bool,
-};
-
-
+}
 
 const Modal = styled(BaseModal)`
   position: fixed;
@@ -102,7 +101,7 @@ const Modal = styled(BaseModal)`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+`
 
 const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
@@ -110,7 +109,7 @@ const StyledBackdrop = styled(Backdrop)`
   inset: 0;
   background-color: rgb(0 0 0 / 0.5);
   -webkit-tap-highlight-color: transparent;
-`;
+`
 
 const ModalContent = styled('div')(
   ({ theme }) => css`
@@ -148,7 +147,7 @@ const ModalContent = styled('div')(
       color: gray;
     }
   `,
-);
+)
 
 // signup버튼
 const TriggerButton = styled('button')(
@@ -175,5 +174,6 @@ const TriggerButton = styled('button')(
       background: #254EF8;
     }
   `,
-);
+)
+
 export default SigninModal
