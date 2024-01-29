@@ -31,6 +31,8 @@ function SignupModal() {
     signup(values)
     .then((res) => {
       window.location.href = `/signin`
+      console.log('회원가입 성공')
+      console.log(res)
     })
     .catch((err) => {
       console.log(err)
@@ -49,11 +51,12 @@ function SignupModal() {
         onClose={handleClose}
         slots={{ backdrop: StyledBackdrop }}
       >
-        <ModalContent sx={{ width: 400 }} onSubmit={handleSubmit}>
+        <ModalContent sx={{ width: 400 }}>
           <h2 id="unstyled-modal-title" className="modal-title">
             SIGN UP
           </h2>
-          <p id="unstyled-modal-description" className="modal-description">
+          <form  onSubmit={handleSubmit}>
+          <div id="unstyled-modal-description" className="modal-description">
             Email
             <input type='email' placeholder='ssafy@gmail.com' id='email' onChange={handleChange}/>
             <br/>
@@ -69,11 +72,11 @@ function SignupModal() {
             Nickname
             <input type='text' placeholder='최대 32자' id='nickname' onChange={handleChange}/>
             <br/>
-              <ul onClick={() => {setView(!view)}} id='gender' onChange={handleChange}>
-                Gender{" "}
-                {view ? '⌃' : '⌄'}
-                {view && <Dropdown />}
-              </ul>
+            <ul onClick={() => {setView(!view)}} id='gender' onChange={handleChange}>
+              Gender{" "}
+              {view ? '⌃' : '⌄'}
+              {view && <Dropdown />}
+            </ul>
             <br/>
             <ul onClick={() => {setView(!view)}} id='birth' onChange={handleChange}>
               Birth{" "}
@@ -87,7 +90,8 @@ function SignupModal() {
             <button type='submit'>
               Create an account
             </button>
-          </p>
+          </div>
+          </form>
         </ModalContent>
       </Modal>
     </div>
