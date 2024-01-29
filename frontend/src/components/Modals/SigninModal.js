@@ -27,7 +27,9 @@ function SigninModal() {
       localStorage.setItem('tokenType', res.tokenType)
       localStorage.setItem('accessToken', res.accessToken)
       localStorage.setItem('refreshToken', res.refreshToken)
-      window.location.href = `/home`
+      // window.location.href = `/home`
+      console.log('로그인 성공')
+      console.log(res)
     })
     .catch((err) => {
       console.log(err)
@@ -45,11 +47,12 @@ function SigninModal() {
         onClose={handleClose}
         slots={{ backdrop: StyledBackdrop }}
       >
-        <ModalContent sx={{ width: 400 }} onSubmit={handleSubmit}>
+        <ModalContent sx={{ width: 400 }}>
           <h2 id="modal-title" className="modal-title">
             SIGN IN
           </h2>
-          <p id="modal-description" className="modal-description">
+          <form onSubmit={handleSubmit}> 
+          <div id="modal-description" className="modal-description">
             Email
             <input type='email' placeholder='ssafy@gmail.com' id='email' onChange={handleChange} />
             <br/>
@@ -59,12 +62,15 @@ function SigninModal() {
             <input type='checkbox' />
               Remember me
             <br />
-            <button type='submit'>Log in</button>
+            <button type='submit'>
+              Log in
+            </button>
             <br />
-            <p id='find-password' className='find-password'>
+            <div id='find-password' className='find-password'>
               Forgot password
-            </p>
-          </p>
+            </div>
+          </div>
+          </form>
         </ModalContent>
       </Modal>
     </div>

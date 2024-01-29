@@ -11,7 +11,8 @@ function SignupModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [view, setView] = React.useState(false)
+  const [viewGender, setViewGender] = React.useState(false)
+  const [viewBirth, setViewBirth] = React.useState(false)
   const [values, setValues] = React.useState({
     email: "", 
     password: "", 
@@ -30,7 +31,7 @@ function SignupModal() {
   const handleSubmit = async (e) => {
     signup(values)
     .then((res) => {
-      window.location.href = `/signin`
+      window.location.href = `/login`
       console.log('회원가입 성공')
       console.log(res)
     })
@@ -72,16 +73,16 @@ function SignupModal() {
             Nickname
             <input type='text' placeholder='최대 32자' id='nickname' onChange={handleChange}/>
             <br/>
-            <ul onClick={() => {setView(!view)}} id='gender' onChange={handleChange}>
+            <ul onClick={() => {setViewGender(!viewGender)}} id='gender' onChange={handleChange}>
               Gender{" "}
-              {view ? '⌃' : '⌄'}
-              {view && <Dropdown />}
+              {viewGender ? '⌃' : '⌄'}
+              {viewGender && <Dropdown />}
             </ul>
             <br/>
-            <ul onClick={() => {setView(!view)}} id='birth' onChange={handleChange}>
+            <ul onClick={() => {setViewBirth(!viewBirth)}} id='birth' onChange={handleChange}>
               Birth{" "}
-              {view ? '⌃' : '⌄'}
-              {view && <CalendarDropdown />}
+              {viewBirth ? '⌃' : '⌄'}
+              {viewBirth && <CalendarDropdown />}
             </ul>
             <br/>
             <input type='checkbox' />
