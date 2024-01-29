@@ -7,9 +7,10 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    color: ${(props) => props.fontColor};
-    background: ${(props) => props.backgroundColor};
+    color: ${(props) => props.fontcolor};
+    background: ${(props) => props.backgroundcolor};
     border-radius: 30px;
+    cursor: pointer;
 
     &:hover{
         filter: brightness(90%);
@@ -23,9 +24,10 @@ const Text = styled.span`
 const defaultButton = (props) => {
     return (
         <Container
-            backgroundColor={props.backgroundColor}
-            fontColor={props.fontColor}
+            backgroundcolor={props.backgroundcolor}
+            fontcolor={props.fontcolor}
             width={props.width}
+            onclick={props.onclick}
         >
             <Text>
                 {props.text}
@@ -36,9 +38,10 @@ const defaultButton = (props) => {
 
 defaultButton.props={
     text: 'default',
-    backgroundColor: '#254ef8',
-    fontColor: 'white',
+    backgroundcolor: '#254ef8',
+    fontcolor: 'white',
     width: '1rem',
+    onclick: () => {}
 }
 
 export default defaultButton
