@@ -33,8 +33,13 @@ public class UserRegisterPostReq {
 	@ApiModelProperty(name="유저 gender", example="your_gender")
 	String gender;
 
+<<<<<<< HEAD
 	@ApiModelProperty(name="유저 birth", example="your_birth")
 		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+=======
+	@ApiModelProperty(name="유저 birth", example="2000-01-01")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+>>>>>>> 8c3d5a03a01debfccb00f29b278eeb237c6dceb0
 	LocalDate birth;
 
 	@ApiModelProperty(name="유저 search_allow", example="your_search_allow")

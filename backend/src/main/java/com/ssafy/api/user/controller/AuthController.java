@@ -1,6 +1,10 @@
 package com.ssafy.api.user.controller;
 
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssafy.api.user.request.UserLoginPostReq;
+import com.ssafy.api.user.request.UserSendEmailPostReq;
 import com.ssafy.api.user.response.UserLoginPostRes;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
@@ -14,6 +18,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.mail.MessagingException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Optional;
 
 /**
  * 인증 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -36,8 +45,7 @@ public class AuthController {
 			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
 			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
 	})
-	public
-	ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginPostReq loginInfo) {
+	public ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginPostReq loginInfo) {
 		String userEmail = loginInfo.getId();
 		String password = loginInfo.getPassword();
 
@@ -74,5 +82,62 @@ public class AuthController {
 		userService.logoutSaveJwt(email);
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	@PostMapping("/email")
+	@ApiOperation(value = "이메일 인증 메일 전송", notes = "<strong>이메일 아이디</strong>을 통해 메일을 전송한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<? extends  BaseResponseBody> sendEmail(@RequestBody UserSendEmailPostReq sendEmailInfo) {
+		Instant expires = Instant.now().plus(Duration.ofDays(1));
+		String token = JwtTokenUtil.getToken(expires, sendEmailInfo.getEmailId());
+
+		User user = userService.getUserByEmailId(sendEmailInfo.getEmailId());
+
+        try {
+            userService.sendEmail(user.getUserIdx(),token);
+        } catch (MessagingException e) {
+			e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	@CrossOrigin
+	@GetMapping("/verify")
+	@ApiOperation(value = "사용자 이메일 인증", notes = "<strong>token</strong>을 통해 메일을 인증 완료한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+			@ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+			@ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<?> verifyEmail(@RequestParam String token) {
+		JWTVerifier verifier = JwtTokenUtil.getVerifier();
+
+		try {
+			DecodedJWT decodedJWT = verifier.verify(token.replace(JwtTokenUtil.TOKEN_PREFIX, ""));
+			String emailId = decodedJWT.getSubject();
+
+			try {
+				User user = userService.getUserByEmailId(emailId);
+				if(!userService.verifyEmail(user.getUserIdx(), token)) {
+					return ResponseEntity.status(401).body("유효하지 않은 주소입니다.");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return ResponseEntity.status(404).body("유효하지 않은 주소입니다.");
+			}
+
+		} catch (JWTVerificationException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(401).body("유효하지 않은 주소입니다.");
+		}
+
+
+		return ResponseEntity.status(200).body("인증 완료되었습니다.");
 	}
 }

@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 import logo from "../assets/images/logo.png"
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { FaSearch } from "react-icons/fa";
+import Sidebar from "./Sidebar";
 
 
 const Container = styled.div`
-  background-color: #121212;
   display: flex;
   height: 3rem;
   color: #FFFFFF;
@@ -71,21 +71,23 @@ const submitHandler = (event) => {
   // state 
 }
 
-
 function Navbar() {
   return (
-    <Container>
-      <img  src={logo} alt="" />
-        <SearchBar onSubmit={submitHandler}>
-        <FaSearch className='Icon'/>
-        <input type="search" spellCheck='false' placeholder='Search'  />
-        </SearchBar>
-    <div className='MenuContainer'>
-      <span>Gather</span>
-      <span>Team Space</span>
-      <span>Community</span>
-    </div>
-    </Container>
+    <>
+      <Container>
+        <img  src={logo} alt="" />
+          <SearchBar onSubmit={submitHandler}>
+          <FaSearch className='Icon'/>
+          <input type="search" spellCheck='false' placeholder='Search'  />
+          </SearchBar>
+      <div className='MenuContainer'>
+        <span>Gather</span>
+        <span>Team Space</span>
+        <span>Community</span>
+      </div>
+      </Container>
+      <Sidebar />
+    </>
   )
 }
 

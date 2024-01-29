@@ -11,17 +11,17 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class Feed {
+public class EmailAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
-    Long feedIdx;
+    Long emailAuthIdx;
 
-    @ManyToOne
-    @JoinColumn(name="USER_IDX", referencedColumnName="userIdx")
+    @OneToOne
+    @JoinColumn(name="user_idx", referencedColumnName="userIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     User userIdx;
 
-    String feedContent;
+    String token;
 }
