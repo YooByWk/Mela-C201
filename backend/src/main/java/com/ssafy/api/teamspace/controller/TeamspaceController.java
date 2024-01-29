@@ -63,7 +63,7 @@ public class TeamspaceController {
             @PathVariable(name = "teamspaceid") String teamspaceId
     ) {
         try{
-            // 여기서 teamspace 조회 안되면 어떤 값 나오는지?
+            // 여기서 teamspace 조회 안되면 어떤 값 나오는지? // 후기 기다리는 중입니다.
             Teamspace teamspace = teamspaceService.getTeamspaceById(Long.valueOf(teamspaceId));
             teamspaceService.updateTeamspace(teamspace, updateInfo);
         } catch (Exception e) {

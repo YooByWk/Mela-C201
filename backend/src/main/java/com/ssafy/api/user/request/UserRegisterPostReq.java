@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  * 유저 회원가입 API ([POST] /users) 요청에 필요한 리퀘스트 바디 정의.
@@ -35,7 +34,7 @@ public class UserRegisterPostReq {
 	String gender;
 
 	@ApiModelProperty(name="유저 birth", example="your_birth")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	LocalDate birth;
 
 	@ApiModelProperty(name="유저 search_allow", example="your_search_allow")
