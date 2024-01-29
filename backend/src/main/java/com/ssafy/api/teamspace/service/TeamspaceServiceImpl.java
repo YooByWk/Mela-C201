@@ -1,8 +1,11 @@
 package com.ssafy.api.teamspace.service;
 
+import com.ssafy.api.teamspace.request.ScheduleRegisterPostReq;
+import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
+import com.ssafy.db.entity.Schedule;
 import com.ssafy.db.entity.Teamspace;
 import com.ssafy.db.entity.TeamspaceMember;
 import com.ssafy.db.entity.User;
@@ -10,6 +13,7 @@ import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +40,13 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     @Autowired
     FileRepositorySupport fileRepositorySupport;
 
+    @Autowired
+    ScheduleRepository scheduleRepository;
+    @Autowired
+    ScheduleRepositorySupport scheduleRepositorySupport;
+
     @Override
-    public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo) {
+    public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx) {
         // 팀 스페이스 썸네일 저장
         // 팀 스페이스 썸네일 사진 파일 idx 얻기
         // ...
@@ -48,7 +57,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         teamspace.setTeamName(registerInfo.getTeamName());
         teamspace.setStartDate(registerInfo.getStartDate());
         teamspace.setEndDate(registerInfo.getEndDate());
-        teamspace.setHost(registerInfo.getHost());
+        teamspace.setHost(userRepository.getOne(userIdx));
         teamspace.setTeamDescription(registerInfo.getTeamDescription());
         teamspace.setTeamspace_picture_file_idx(registerInfo.getTeamspace_picture_file_idx());
         return teamspaceRepository.save(teamspace);
@@ -114,6 +123,33 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         Teamspace teamspace = teamspaceRepository.getOne(teamspaceIdx);
         List<TeamspaceMemberListRes> users = teamspaceRepositorySupport.findTeamspaceMemberList(teamspace);
         return users;
+    }
+
+    @Override
+    public void addSchedule(ScheduleRegisterPostReq registInfo, Long teamspaceIdx) throws Exception {
+        Schedule schedule = new Schedule();
+        schedule.setTeamspaceIdx(teamspaceRepository.getOne(teamspaceIdx)); // EntityNotFoundException
+        schedule.setContent(registInfo.getContent());
+        schedule.setPlace(registInfo.getPlace());
+        schedule.setStartTime(registInfo.getStartTime());
+        schedule.setEndTime(registInfo.getEndTime());
+        scheduleRepository.save(schedule);
+    }
+
+    @Override
+    public void deleteSchedule(Long scheduleId) {
+        Schedule schedule = scheduleRepository.getOne(scheduleId);
+        scheduleRepository.delete(schedule);
+    }
+
+    @Override
+    public void updateSchedule(ScheduleUpdatePutReq updateInfo, Long scheduleIdx) throws EntityNotFoundException {
+        Schedule schedule = scheduleRepository.getOne(scheduleIdx);
+        schedule.setContent(updateInfo.getContent());
+        schedule.setPlace(updateInfo.getPlace());
+        schedule.setStartTime(updateInfo.getStartTime());
+        schedule.setEndTime(updateInfo.getEndTime());
+        scheduleRepository.save(schedule);
     }
 
 
