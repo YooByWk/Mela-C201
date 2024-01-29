@@ -28,7 +28,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         // 팀 스페이스 썸네일 저장
         // 팀 스페이스 썸네일 사진 파일 idx 얻기
         // ...
-
+        System.out.println("파일: " +  registerInfo.getTeamspace_picture_file_idx());
 
         // 팀 스페이스 생성
         Teamspace teamspace = new Teamspace();
