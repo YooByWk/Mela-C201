@@ -17,6 +17,9 @@ const CommunityContainer = styled.body`
     margin-right: 15%;
   }
   padding-top: 2.5% ;
+  hr {
+    color: white;
+  }
 `;
 const Community = () => {
   return (
@@ -25,7 +28,7 @@ const Community = () => {
         <h1>
         Community : 이러면 안되는 개발의 표본
         </h1>
-
+<hr />
     </>
   );
 };
