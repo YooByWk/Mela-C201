@@ -1,20 +1,15 @@
-import { useState } from 'react';
-import Calendar from 'react-calendar';
-import moment from "moment";
+import React from 'react';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
 
-function CalendarDropdown({ onChange }) {
-  const [date, setDate] = useState(new Date());
-
-  const handleDateChange = (newDate) => {
-    setDate(newDate);
-    onChange(moment(newDate).format("YYYY-MM-DD"));
-  }
-
+const CalendarDropdown = ({ handleBirthClick }) => {
   return (
-    <div>
-      <Calendar onChange={handleDateChange} value={date} />
-    </div> 
+    <FullCalendar
+      plugins={[dayGridPlugin]}
+      initialView="dayGridMonth"
+      dateClick={handleBirthClick}
+    />
   );
-}
+};
 
 export default CalendarDropdown

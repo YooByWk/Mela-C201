@@ -5,6 +5,7 @@ import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
 import CalendarDropdown from '../Dropdown/Calendar'
 import { signup } from '../API/AuthAPI'
+//Gender Dropdown
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -26,11 +27,6 @@ function SignupModal() {
     birth: "",
     searchAllow: "",
   })
-
-  
-  const handleBirthChange = (birth) => {
-    setValues({ ...values, birth })
-  }
   
   const handleChange = async (e) => {
     setValues({...values,
@@ -43,6 +39,11 @@ function SignupModal() {
       [e.target.name]: e.target.value,})
       console.log(e.target)
     }
+  
+  const handleBirthClick = (date) => {
+    const selectedDate = date.dateStr
+    console.log(date)
+  }
 
   const handleSearchAllowChange = async (e) => {
     setValues({...values,
@@ -124,10 +125,10 @@ function SignupModal() {
               </FormControl>
             </Box>
             <br/>
-            <ul onClick={() => {setViewBirth(!viewBirth)}} id='birth' onChange={handleBirthChange}>
+            <ul onClick={() => {setViewBirth(!viewBirth)}} id='birth'>
               Birth{""}
               {viewBirth ? '^' : '⌄'}
-              {viewBirth && <CalendarDropdown />}
+              {viewBirth && <CalendarDropdown handleBirthClick={handleBirthClick}/>}
             </ul>
             <br/>
             <input type='checkbox' id='searchAllow' onChange={handleSearchAllowChange}/>
