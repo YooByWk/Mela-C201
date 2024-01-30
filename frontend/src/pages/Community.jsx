@@ -7,29 +7,37 @@ import Sidebar from './../components/Sidebar';
 // import { mainTheme } from './../styles/theme';
 
 
-const CommunityContainer = styled.body`
-  background-color: ${props => props.theme.colours.primary};
-  /* color : white; */
+const CommunityContainer = styled.div`
+  /* background-color: ${props => props.theme.colours.primary}; */
   display: flex;
-  flex-direction: row;
+  /* flex-direction: column; */
   height: 70rem;
-  & > Sidebar {
-    margin-right: 15%;
-  }
   padding-top: 2.5% ;
-  hr {
-    color: white;
-  }
 `;
+
+const ComCon = styled.div`
+  color : white;
+  & > hr {
+    border: 3px dashed green;
+    border-color: ${props => props.theme.colours.third};
+  }
+`
+console.log()
 const Community = () => {
   return (
-    <>
-
+    <ComCon>
         <h1>
         Community : 이러면 안되는 개발의 표본
         </h1>
 <hr />
-    </>
+<hr />
+<br />
+<br />
+<br />
+<h1>테그별 태스트</h1>
+<h2>테그별 태스트</h2>
+<h3>테그별 태스트</h3>
+    </ComCon>
   );
 };
 

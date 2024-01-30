@@ -56,7 +56,7 @@ const SearchBar = styled.form`
     background-color: #202C44;
     min-height: 20px;
     width: 80%;
-    height: 3vh;
+    height: 4vh;
     border:0;
     border-radius: 15rem;
     padding-left: 8%;
