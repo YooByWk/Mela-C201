@@ -125,11 +125,8 @@ function SignupModal() {
               </FormControl>
             </Box>
             <br/>
-            <ul onClick={() => {setViewBirth(!viewBirth)}} id='birth'>
-              Birth{""}
-              {viewBirth ? '^' : '⌄'}
-              {viewBirth && <CalendarDropdown handleBirthClick={handleBirthClick}/>}
-            </ul>
+            Birth
+            <input type='date' id='birth' onChange={handleChange}/>
             <br/>
             <input type='checkbox' id='searchAllow' onChange={handleSearchAllowChange}/>
               다른 회원의 검색 조건에 노출을 허용합니다.
