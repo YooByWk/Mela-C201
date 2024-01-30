@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Api(value = "게시판 API", tags = {"Board"})
+@Api(value = "구인 API", tags = {"Gather"})
 @RestController
-@RequestMapping("/api/v1/board")
-public class BoardController {
+@RequestMapping("/api/v1/gather")
+public class GatherController {
 
 }

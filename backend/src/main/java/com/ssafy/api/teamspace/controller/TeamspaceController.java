@@ -5,12 +5,14 @@ import com.ssafy.api.teamspace.request.ScheduleRegisterPostReq;
 import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
+import com.ssafy.api.teamspace.response.TeamspaceListRes;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
 import com.ssafy.api.teamspace.response.TeamspaceRes;
 import com.ssafy.api.teamspace.service.TeamspaceService;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.db.entity.Schedule;
 import com.ssafy.db.entity.Teamspace;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
@@ -115,6 +117,23 @@ public class TeamspaceController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping()
+    @ApiOperation(value = "내 팀스페이스 목록 조회", notes ="<string>유저 아이디<strong>를 통해 내 팀스페이스 목록을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<List<Teamspace>> getTeamspaceList(@ApiIgnore Authentication authentication) {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+
+        String userEmail = userDetails.getUsername();
+        User user = userService.getUserByEmail(userEmail);
+
+        List<Teamspace> teamspaceList = teamspaceService.getTeamspaceList(user.getUserIdx());
+
+        return ResponseEntity.status(200).body(teamspaceList);
     }
 
     @PostMapping(value = "/{teamspaceid}/users/{userid}")
@@ -237,5 +256,39 @@ public class TeamspaceController {
         } catch (Exception e) {
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "not found"));
         }
+    }
+
+    @GetMapping(value = "/{teamspaceid}/schedules")
+    @ApiOperation(value = "일정 목록", notes ="<string>팀스페이스 아이디<strong>를 통해 일정 목록을 얻는다. 정렬X")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<List<Schedule>> getScheduleList(
+            @PathVariable(name = "teamspaceid") Long teamspaceIdx
+    ) {
+        try {
+            List<Schedule> schedules = teamspaceService.getScheduleList(teamspaceIdx);
+
+            return ResponseEntity.status(200).body(schedules);
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(null);
+        }
+    }
+
+    @GetMapping(value = "/{teamspaceid}/schedules/{schdulesid}")
+    @ApiOperation(value = "일정 단건 조회 (지원X)", notes ="<string>일정 아이디<strong>를 통해 일정을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<Schedule> getSchedule(
+            @PathVariable(name = "schdulesid") Long schdulesIdx
+    ) {
+
+            return ResponseEntity.status(200).body(null);
+
     }
 }

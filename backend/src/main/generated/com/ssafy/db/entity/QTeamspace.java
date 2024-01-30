@@ -32,11 +32,11 @@ public class QTeamspace extends EntityPathBase<Teamspace> {
 
     public final StringPath teamName = createString("teamName");
 
-    public final QFile teamspace_background_picture_file_idx;
-
-    public final QFile teamspace_picture_file_idx;
+    public final QFile teamspaceBackgroundPictureFileIdx;
 
     public final NumberPath<Long> teamspaceIdx = createNumber("teamspaceIdx", Long.class);
+
+    public final QFile teamspacePictureFileIdx;
 
     public QTeamspace(String variable) {
         this(Teamspace.class, forVariable(variable), INITS);
@@ -57,8 +57,8 @@ public class QTeamspace extends EntityPathBase<Teamspace> {
     public QTeamspace(Class<? extends Teamspace> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.host = inits.isInitialized("host") ? new QUser(forProperty("host")) : null;
-        this.teamspace_background_picture_file_idx = inits.isInitialized("teamspace_background_picture_file_idx") ? new QFile(forProperty("teamspace_background_picture_file_idx")) : null;
-        this.teamspace_picture_file_idx = inits.isInitialized("teamspace_picture_file_idx") ? new QFile(forProperty("teamspace_picture_file_idx")) : null;
+        this.teamspaceBackgroundPictureFileIdx = inits.isInitialized("teamspaceBackgroundPictureFileIdx") ? new QFile(forProperty("teamspaceBackgroundPictureFileIdx")) : null;
+        this.teamspacePictureFileIdx = inits.isInitialized("teamspacePictureFileIdx") ? new QFile(forProperty("teamspacePictureFileIdx")) : null;
     }
 
 }
