@@ -1,18 +1,46 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { styled, css } from '@mui/system';
-import { Modal as BaseModal } from '@mui/base/Modal';
+import * as React from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { styled, css } from '@mui/system'
+import { Modal as BaseModal } from '@mui/base/Modal'
+import { signin } from '../API/AuthAPI'
 
-function SignupModal() {
+function SigninModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [values, setValues] = React.useState({
+    id: "", 
+    password: "", 
+  })
+  
+  const handleChange = async (e) => {
+    setValues({...values,
+    [e.target.id]: e.target.value,
+    })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    signin(values)
+    .then((res) => {
+      localStorage.clear()
+      localStorage.setItem('tokenType', res.tokenType)
+      localStorage.setItem('accessToken', res.accessToken)
+      localStorage.setItem('refreshToken', res.refreshToken)
+      // window.location.href = `/home`
+      console.log('로그인 성공')
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
 
   return (
     <div>
       <TriggerButton type="button" onClick={handleOpen}>
-        Sign Up
+        Sign In
       </TriggerButton>
       <Modal
         aria-labelledby="unstyled-modal-title"
@@ -22,33 +50,33 @@ function SignupModal() {
         slots={{ backdrop: StyledBackdrop }}
       >
         <ModalContent sx={{ width: 400 }}>
-          <h2 id="unstyled-modal-title" className="modal-title">
-            SIGN UP
+          <h2 id="modal-title" className="modal-title">
+            SIGN IN
           </h2>
-          <p id="unstyled-modal-description" className="modal-description">
+          <form onSubmit={handleSubmit}> 
+          <div id="modal-description" className="modal-description">
             Email
-            <input type='email' placeholder='ssafy@gmail.com' />
+            <input type='email' placeholder='ssafy@gmail.com' id='id' onChange={handleChange} />
             <br/>
             Password
-            <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' />
-            <br/>
-            Password again
-            <input type='password' />
-            <br/>
-            Name
-            <input type='text' placeholder='홍길동'/>
-            <br/>
-            Nickname
-            <input type='text' placeholder='최대 32자'/>
-            <br/>
+            <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} />
+            <br />
+            <input type='checkbox' />
+              Remember me
+            <br />
             <button type='submit'>
-              Create an account
+              Log in
             </button>
-          </p>
+            <br />
+            <div id='find-password' className='find-password'>
+              Forgot password
+            </div>
+          </div>
+          </form>
         </ModalContent>
       </Modal>
     </div>
-  );
+  )
 }
 
 const Backdrop = React.forwardRef((props, ref) => {
@@ -59,15 +87,13 @@ const Backdrop = React.forwardRef((props, ref) => {
       ref={ref}
       {...other}
     />
-  );
-});
+  )
+})
 
 Backdrop.propTypes = {
   className: PropTypes.string.isRequired,
   open: PropTypes.bool,
-};
-
-
+}
 
 const Modal = styled(BaseModal)`
   position: fixed;
@@ -76,7 +102,7 @@ const Modal = styled(BaseModal)`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+`
 
 const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
@@ -84,7 +110,7 @@ const StyledBackdrop = styled(Backdrop)`
   inset: 0;
   background-color: rgb(0 0 0 / 0.5);
   -webkit-tap-highlight-color: transparent;
-`;
+`
 
 const ModalContent = styled('div')(
   ({ theme }) => css`
@@ -114,8 +140,15 @@ const ModalContent = styled('div')(
       font-weight: 400;
       margin-bottom: 4px;
     }
+
+    & .find-password {
+      margin: 0;
+      font-weight: 200;
+      margin-bottom: 4px;
+      color: gray;
+    }
   `,
-);
+)
 
 // signup버튼
 const TriggerButton = styled('button')(
@@ -142,6 +175,6 @@ const TriggerButton = styled('button')(
       background: #254EF8;
     }
   `,
-);
+)
 
-export default SignupModal
+export default SigninModal
