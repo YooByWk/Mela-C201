@@ -29,19 +29,22 @@ function SignupModal() {
     searchAllow: "",
   })
 
-  // const handleGenderChange = (gender) => {
-  //   setValues({ ...values, gender })
-  // }
-
+  
   const handleBirthChange = (birth) => {
     setValues({ ...values, birth })
   }
-
+  
   const handleChange = async (e) => {
     setValues({...values,
-    [e.target.id]: e.target.value,})
-    console.log(e.target)
-  }
+      [e.target.id]: e.target.value,})
+      console.log(e.target.value)
+    }
+    
+  const handleGenderChange = async (e) => {
+    setValues({...values,
+      [e.target.name]: e.target.value,})
+      console.log(e.target)
+    }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -99,13 +102,20 @@ function SignupModal() {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={values}
+                  value={values.gender}
                   label="Gender"
-                  onChange={handleChange}
+                  onChange={handleGenderChange}
+                  name='gender'
                 >
-                  <MenuItem value='Etc'>Etc</MenuItem>
-                  <MenuItem value='Male'>Male</MenuItem>
-                  <MenuItem value='Female'>Female</MenuItem>
+                  <MenuItem value='Etc'>
+                    Etc
+                  </MenuItem>
+                  <MenuItem value='Male'>
+                    Male
+                  </MenuItem>
+                  <MenuItem value='Female'>
+                    Female
+                  </MenuItem>
                 </Select>
               </FormControl>
             </Box>
