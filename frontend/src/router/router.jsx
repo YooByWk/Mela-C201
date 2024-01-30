@@ -38,17 +38,22 @@ function AppRouter({ className }) {
           <Route 
             path='/teamspace' element={<Teamspace/>}
           />
+
+          <Route
+            path='/signup' element={<SignupModal />}
+            />
+
           <Route
             path='/login' element={<SigninModal />}
           />
 
           <Route
             path='/users' element={<UserUpdate />}
-            />
+          />
 
           <Route
             path='/musics' element={<PortfolioAll />}
-            />
+          />
 
           <Route
             path='*' element = {<Homepage />}
