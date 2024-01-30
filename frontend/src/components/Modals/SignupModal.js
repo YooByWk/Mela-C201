@@ -46,6 +46,12 @@ function SignupModal() {
       console.log(e.target)
     }
 
+  const handleSearchAllowChange = async (e) => {
+    setValues({...values,
+      [e.target.id]: e.target.checked,})
+      console.log(e.target.checked)
+    }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     signup(values)
@@ -126,7 +132,7 @@ function SignupModal() {
               {viewBirth && <CalendarDropdown />}
             </ul>
             <br/>
-            <input type='checkbox' id='searchAllow' onChange={handleChange} />
+            <input type='checkbox' id='searchAllow' onChange={handleSearchAllowChange}/>
               다른 회원의 검색 조건에 노출을 허용합니다.
             <br />
             <button type='submit'>
