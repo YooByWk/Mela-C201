@@ -4,8 +4,6 @@ import { Fragment } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 // import { Homepage } from "./pages/Homepage";
 import Navbar from "./components/Navbar";
-import SignupModal from "./components/SignupModal";
-import SigninModal from "./components/SigninModal";
 import Landing from "./pages/Landing";
 import GlobalStyle from "./styles/GlobalStyle";
 import styled, { ThemeProvider } from "styled-components";
