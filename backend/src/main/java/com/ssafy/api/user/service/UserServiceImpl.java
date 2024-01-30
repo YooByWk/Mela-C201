@@ -13,6 +13,7 @@ import com.ssafy.db.repository.UserRepositorySupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -201,6 +202,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+//	@Async
 	@Override
 	public void sendEmail(Long userIdx, String token) throws MessagingException {
 		saveEmailAuthToken(userIdx, token);
@@ -216,6 +218,7 @@ public class UserServiceImpl implements UserService {
 		helper.setFrom("Mela!");
 		helper.setSubject("[Mela!] 이메일 계정을 인증해주세요");
 
+		// localhost 변수로 빼야해요
 		String htmlContent = "<html><body>";
 		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
 		htmlContent += "<p>Mela!를 정상적으로 이용하기 위해서는 이메일 인증을 해주세요</p>";

@@ -30,9 +30,9 @@ public class TeamspaceRes {
     @ApiModelProperty(name="teamspace host")
     User host;
     @ApiModelProperty(name="teamspace 썸네일")
-    File teamspace_picture_file_idx;
+    File teamspacePictureFileIdx;
     @ApiModelProperty(name="teamspace 배경사진")
-    File teamspace_background_picture_file_idx;
+    File teamspaceBackgroundPictureFileIdx;
 
     public static TeamspaceRes of(Teamspace teamspace) {
         TeamspaceRes res = new TeamspaceRes();
@@ -41,8 +41,8 @@ public class TeamspaceRes {
         res.setEndDate(teamspace.getEndDate());
         res.setTeamDescription(teamspace.getTeamDescription());
         res.setHost(teamspace.getHost());
-        res.setTeamspace_picture_file_idx(teamspace.getTeamspace_picture_file_idx());
-        res.setTeamspace_background_picture_file_idx(teamspace.getTeamspace_background_picture_file_idx());
+        res.setTeamspacePictureFileIdx(teamspace.getTeamspacePictureFileIdx());
+        res.setTeamspaceBackgroundPictureFileIdx(teamspace.getTeamspaceBackgroundPictureFileIdx());
         return res;
     }
 

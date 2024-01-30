@@ -28,21 +28,26 @@ const Body = styled.div `
   color :white;
   background-color: #10141d;
   height: 60rem;
-  .BodyRouter {
+
+  .BodyRouter { // 컴포 이하 
     width: 90%;
     background-color: #10141d;
     padding-left: 2% ;
     /* padding-top: 2%; */
     height:100%;
   }
-  .Side {
+  .Side { // 사이드 L 바
+    margin-left: 15px;
     width: 10%;
     min-width: 80px;
+    padding-top: 2%;
     max-width: 120px;
     text-align: center;
-    height: 100%;
-    background-color: #10141d;
+    height: 80%;
+    background-color: #202C44;
+    border-radius: 10px;
   }
+
 `
 
 
