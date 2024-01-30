@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
-// import GenderDropdown from '../Dropdown/SignupGender'
 import CalendarDropdown from '../Dropdown/Calendar'
 import { signup } from '../API/AuthAPI'
 import Box from '@mui/material/Box';
@@ -16,7 +15,6 @@ function SignupModal() {
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-  // const [viewGender, setViewGender] = React.useState(false)
   const [viewBirth, setViewBirth] = React.useState(false)
   const [values, setValues] = React.useState({
     emailId: "",
