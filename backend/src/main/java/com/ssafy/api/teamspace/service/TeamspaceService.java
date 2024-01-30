@@ -4,7 +4,10 @@ import com.ssafy.api.teamspace.request.ScheduleRegisterPostReq;
 import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
+import com.ssafy.api.teamspace.response.TeamspaceListRes;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
+import com.ssafy.api.teamspace.response.TeamspaceRes;
+import com.ssafy.db.entity.Schedule;
 import com.ssafy.db.entity.Teamspace;
 
 import javax.persistence.EntityNotFoundException;
@@ -19,6 +22,8 @@ public interface TeamspaceService {
 
     void deleteTeamspace(Teamspace teamspace);
 
+    List<Teamspace> getTeamspaceList(Long userIdx);
+
     void addMember(Long teamspaceIdx, Long userIdx);
 
     void leaveTeamspace(Long teamspaceIdx, Long userIdx);
@@ -30,4 +35,6 @@ public interface TeamspaceService {
     void deleteSchedule(Long scheduleId);
 
     void updateSchedule(ScheduleUpdatePutReq updateInfo, Long scheduleIdx) throws EntityNotFoundException;
+
+    List<Schedule> getScheduleList(Long teamspaceIdx);
 }
