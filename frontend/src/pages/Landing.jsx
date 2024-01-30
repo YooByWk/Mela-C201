@@ -4,6 +4,7 @@ import mainImage from '../assets/images/mainImage.png'
 import SignupModal from './../components/SignupModal';
 import SigninModal from "../components/SigninModal";
 // background-color: ${props => props.theme.colours.primary};
+import { styled as styled2 } from '@mui/system' ;
 
 const LandingPageContainer = styled.div`  
   min-height: 300vh;
@@ -42,11 +43,16 @@ const LandingImageDiv = styled.div`
   }
 `;
 
-const SignUp = styled(SignupModal)`
-margin:100px;
-`
+const SignUp = styled2(SignupModal)`
+  margin: 2rem;
+  font-size: 1.5rem;
+  padding: 12px 24px;
+`;
 
-const SignIn = styled(SigninModal)
+const SignIn = styled2(SigninModal)`
+  font-size: 1.5rem;
+  padding: 12px 24px;
+`;
 
 // console.log(props)
 function Landing() {
@@ -62,11 +68,27 @@ function Landing() {
           <h1>P O R T F O L I O</h1>
         </div>
         <div>
-          <SignUp />
-          <SigninModal />
+          <SignUp  />
+          <SignIn />
         </div>
         </LandingImageDiv>
-      <p>여기가 수정되어야 하는 공간임 </p>
+
+      <div>
+        <div>
+          <h1> Matching</h1>
+        </div>
+        <div>
+          <h1> Gathering List</h1>
+        </div>
+        <div>
+          <h1> Popular Musicians</h1>
+        </div>
+        <div>
+          <h1> Community</h1>
+        </div>
+      </div>
+
+      
       </LandingPageContainer>
     </>
   );
