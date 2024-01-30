@@ -1,6 +1,6 @@
 package com.ssafy.api.board.controller;
 
-import com.ssafy.api.board.response.BoardRegisterPostReq;
+import com.ssafy.api.board.request.BoardRegisterPostReq;
 import com.ssafy.api.board.service.BoardService;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
