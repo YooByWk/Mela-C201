@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
-import CalendarDropdown from '../Dropdown/Calendar'
 import { signup } from '../API/AuthAPI'
 //Gender Dropdown
 import Box from '@mui/material/Box';
@@ -16,7 +15,6 @@ function SignupModal() {
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-  const [viewBirth, setViewBirth] = React.useState(false)
   const [values, setValues] = React.useState({
     emailId: "",
     emailDomain: "", 
@@ -39,11 +37,6 @@ function SignupModal() {
       [e.target.name]: e.target.value,})
       console.log(e.target)
     }
-  
-  const handleBirthClick = (date) => {
-    const selectedDate = date.dateStr
-    console.log(date)
-  }
 
   const handleSearchAllowChange = async (e) => {
     setValues({...values,
