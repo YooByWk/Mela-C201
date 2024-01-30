@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import mainImage from '../assets/images/mainImage.png'
-import SignupModal from './../components/SignupModal';
-import SigninModal from "../components/SigninModal";
-// background-color: ${props => props.theme.colours.primary};
+import SignupModal from './../components/Modals/SignupModal';
+import SigninModal from "../components/Modals/SigninModal";
 import { styled as styled2 } from '@mui/system' ;
+// background-color: ${props => props.theme.colours.primary};
+
 
 const LandingPageContainer = styled.div`  
   min-height: 300vh;
@@ -49,7 +50,7 @@ const SignUp = styled2(SignupModal)`
   padding: 12px 24px;
 `;
 
-const SignIn = styled2(SigninModal)`
+const SignIn = styled(SigninModal)`
   font-size: 1.5rem;
   padding: 12px 24px;
 `;
