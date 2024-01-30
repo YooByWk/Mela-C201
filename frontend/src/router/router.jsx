@@ -2,9 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Portfolio from "../pages/Portfolio"
 import Community from "../pages/Community"
-
-import SigninModal from '../components/SigninModal';
-import SignupModal from '../components/SignupModal';
+import SigninModal from '../components/Modals/SigninModal';
+import SignupModal from '../components/Modals/SignupModal';
 import { Homepage } from '../pages/Homepage';
 import Navbar from '../components/Navbar';
 import Teamspace from '../pages/Teamspace';
