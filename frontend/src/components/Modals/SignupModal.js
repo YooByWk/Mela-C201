@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
-import { signup } from '../API/AuthAPI'
+import { signup, checkDupNickname } from '../API/AuthAPI'
 //Gender Dropdown
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -26,6 +26,26 @@ function SignupModal({className, fontSize, padding}) {
     searchAllow: "",
   })
   
+  // 닉네임 중복 확인
+  const checkNickname = () => {
+    checkDupNickname(values.nickname)
+    .then((res) => {
+      console.log(values.nickname)
+      console.log(res)
+      if (res.statusCode === 200) {
+        alert('중복 없음')
+      }
+    })
+    .catch((err) => {
+        if (err.statusCode === 409) {
+          alert('이미 있는 닉네임')
+        }
+        else {
+          console.error(err)
+        }
+    })
+  }
+
   const handleChange = async (e) => {
     setValues({...values,
       [e.target.id]: e.target.value,})
@@ -60,7 +80,6 @@ function SignupModal({className, fontSize, padding}) {
   return (
     <div>
       <TriggerButton type="button" onClick={handleOpen} className={className} fontSize={fontSize} padding={padding}>
-      
         Sign Up
       </TriggerButton>
       <Modal
@@ -92,6 +111,7 @@ function SignupModal({className, fontSize, padding}) {
             <br/>
             Nickname
             <input type='text' placeholder='최대 32자' id='nickname' onChange={handleChange}/>
+            <input type='button' onClick={checkNickname} value='닉네임 중복 확인' />
             <br/>
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>

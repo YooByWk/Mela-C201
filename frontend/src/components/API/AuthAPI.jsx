@@ -1,15 +1,10 @@
 import axios from "axios";
 
-const TOKEN_TYPE = localStorage.getItem("tokenType");
 let ACCESS_TOKEN = localStorage.getItem("accessToken");
 
 /** CREATE CUSTOM AXIOS INSTANCE */
 export const AuthApi = axios.create({
     baseURL: 'http://localhost:8080/api/v1',
-    headers: {
-        // 'Content-Type': 'application/json',
-        'Authorization': `${TOKEN_TYPE} ${ACCESS_TOKEN}`,
-    },
 })
 
 /** SIGNIN API */
@@ -46,8 +41,20 @@ export const signup = async ({
         birth, 
         searchAllow 
     }
-
     const response = await AuthApi.post(`/users`, data)
 
-    return response.data;
+    return response.data
+}
+
+/**  닉네임 중복 확인 API */
+export const checkDupNickname = async ({ 
+    nickname }) => {
+    const data = { 
+        nickname
+    }
+
+    const response = await AuthApi.get(`/users/nickname/${encodeURIComponent(data)}`, data)
+    console.log(encodeURIComponent(data))
+    console.log(data)
+    return response.data
 }
