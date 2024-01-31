@@ -1,0 +1,16 @@
+{
+  "pinFixed": false,
+  "title": "Mela!",
+  "userIdx": {
+    "birth": "yyyy-MM-dd",
+    "emailDomain": "string",
+    "emailId": "string",
+    "gender": "string",
+    "jwtToken": "string",
+    "name": "string",
+    "nickname": "string",
+    "searchAllow": true,
+    "userIdx": 0,
+    "userType": "string"
+  }
+}

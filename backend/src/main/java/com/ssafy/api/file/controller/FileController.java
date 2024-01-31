@@ -1,15 +1,18 @@
 package com.ssafy.api.file.controller;
 
 import com.ssafy.api.file.service.FileService;
-import com.ssafy.api.user.request.UserRegisterPostReq;
-import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
-import com.ssafy.db.entity.User;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -22,10 +25,8 @@ public class FileController {
     @Autowired
     FileService fileService;
 
-//    @PostMapping()
     @PostMapping(value = "/add-item", consumes = MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "파일 업로드", notes = "파일을 업로드합니다.")
-//    @ApiImplicitParam(name = "file", value = "File to upload", required = true, dataType = "file")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 401, message = "인증 실패"),
@@ -35,10 +36,7 @@ public class FileController {
     public ResponseEntity<? extends BaseResponseBody> uploadFile(
             @RequestPart(value = "file", required = true) MultipartFile[] files) {
 
-        System.err.println("files: " + files);
-
         for(MultipartFile file : files) {
-            System.err.println("파일 이름: " + file.getOriginalFilename());
             fileService.saveFile(file);
         }
 

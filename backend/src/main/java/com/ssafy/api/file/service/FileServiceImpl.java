@@ -24,7 +24,6 @@ import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Service("fileServiceImpl")
 public class FileServiceImpl implements FileService {
@@ -37,34 +36,7 @@ public class FileServiceImpl implements FileService {
     @Autowired
     AmazonS3 amazonS3Client;
 
-    //@Autowired 있어야 하나?
-    //Root 디렉토리에 폴더 생성
-//    @Autowired
-//    public FileServiceImpl() {
-//        Path root = Paths.get(uploadPath);
-//
-//        try {
-//            if (!Files.exists(root)) {
-//                Files.createDirectories(Paths.get(uploadPath));
-//            }
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public File multipartFile2File(MultipartFile multipartFile) {
-//        작동 안함 시작
-//        File file = new File(multipartFile.getOriginalFilename());
-//
-//        try {
-//            multipartFile.transferTo(file);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        return file;
-//        작동 안함 끝
-
         File file = new File(multipartFile.getOriginalFilename());
 
         try {
@@ -115,9 +87,6 @@ public class FileServiceImpl implements FileService {
             String extension = FilenameUtils.getExtension(file.getOriginalFilename());
             savePath = savePath.resolve(extension);
 
-            System.err.println("업로드 할 파일 경로: " + savePath);
-            System.err.println("업로드 할 파일 이름: " + uuid.toString() + "_" + file.getOriginalFilename());
-
             //파일이 저장될 폴더 생성 작동 확인 필요
             Files.createDirectories(Paths.get(savePath.toString()));
 
@@ -126,37 +95,17 @@ public class FileServiceImpl implements FileService {
             Files.copy(inputStream, savePath.resolve(uuid.toString() + "_" + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
 
             //2-5. 파일 업로드 (Amazon S3)
-//            String newFileName = savePath.resolve(uuid.toString() + "_" + file.getOriginalFilename()).toString();
-            String newFileName = file.getOriginalFilename().toString();
-            System.err.println("파일 이름 잘 나오는지 확인하기! newFileName: " + newFileName);
+            String newFileName = savePath.resolve(uuid.toString() + "_" + file.getOriginalFilename()).toString();
+            newFileName = newFileName.replace("\\", "/");
 
-//            File convertedFile = convert(file);                 //MultipartFile -> File 변환 (Amazon S3 업로드 위함)   #작동 안함
             File convertedFile = multipartFile2File(file);      //MultipartFile -> File 변환 (Amazon S3 업로드 위함)
-            System.err.println("파일 크기 convertedFile.length(): " + convertedFile.length());
 
-            // PublicRead 권한으로 업로드 됨
+            // PublicRead 권한으로 업로드
             amazonS3Client.putObject(new PutObjectRequest(bucket, newFileName, convertedFile).withCannedAcl(CannedAccessControlList.PublicRead));
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
-
-//    사용 안하면 삭제
-//    @Override
-//    public Stream<Path> loadAll() {
-//        try {
-//            Path root = Paths.get(uploadPath);
-//            return Files.walk(root, 1).filter(path -> !path.equals(root));
-//
-//        } catch (IOException e) {
-//            throw new RuntimeException("파일 읽기 실패", e);
-//        }
-//    }
-
-//    @Override
-//    public Path getFilename(String filename) {
-//        return null;
-//    }
 
     @Override
     public Resource loadAsResource(String filePath) {
