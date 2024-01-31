@@ -219,6 +219,7 @@ public class UserController {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String userEmail = userDetails.getUsername();
 		User nowLoginUser = userService.getUserByEmail(userEmail);
+		userService.followUser(nowLoginUser,userId);
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
@@ -235,15 +236,6 @@ public class UserController {
 
 		List<User> followerList = userService.getFollower(userId);
 
-		System.out.println("Hello+===========================");
-		for(User userItem : followerList){
-			System.out.print(userItem.getEmailId());
-			System.out.print(userItem.getEmailDomain());
-			System.out.print(userItem.getName());
-			System.out.println(userItem.getNickname());
-		}
-		System.out.println("Hello+===========================");
-
 		return ResponseEntity.status(200).body(followerList);
 	}
 
@@ -257,15 +249,6 @@ public class UserController {
 			@PathVariable String userId) {
 
 		List<User> followeeList = userService.getFollowee(userId);
-
-		System.out.println("Hello+===========================");
-		for(User userItem : followeeList){
-			System.out.print(userItem.getEmailId());
-			System.out.print(userItem.getEmailDomain());
-			System.out.print(userItem.getName());
-			System.out.println(userItem.getNickname());
-		}
-		System.out.println("Hello+===========================");
 
 		return ResponseEntity.status(200).body(followeeList);
 	}
