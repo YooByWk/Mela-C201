@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import DefaultButton from '../components/DefaultButton';
 import styled from 'styled-components';
+import { fetchUser } from '../components/API/UserAPI';
 
 const Container = styled.div`
     padding: 1rem;
@@ -9,23 +10,47 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     background-color: #202c44;
+    color: white;
 `
 
 const Title = styled.h3`
-    color: white;
     margin-bottom: 10px;
 `
 
 function UserEdit(props) {
+    const [user, setUser] = useState([])
+
     const navigate = useNavigate()
 
     const goUpdate = () => {
         navigate('/users')
     }
 
+    useEffect(()=> {
+        const getUserInfo = async() => {
+            try {
+                const res = await fetchUser()
+                setUser(res)
+            } catch (err) {
+                console.error(err)
+            }
+        }; getUserInfo()
+       
+    }, [])
+
     return (
         <Container>
-            <Title>유저정보</Title>
+            <Title>{user.nickname}</Title>
+            {user && (
+                <div>
+                    <p>{ user.name }</p>
+                    <p>Gender : { user.gender }</p>
+                    <p>Birth : { user.birth }</p>
+                    <p>Like genre : </p>
+                    <p>Position : </p>
+                    <p>SNS</p>
+                </div>
+            )}
 
             <DefaultButton 
                 text={'Edit'}
@@ -34,7 +59,6 @@ function UserEdit(props) {
                 width={'6rem'}
                 onClick={goUpdate}
             />
-
         </Container>
     );
 }
