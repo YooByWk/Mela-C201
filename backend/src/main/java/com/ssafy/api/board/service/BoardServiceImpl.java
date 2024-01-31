@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service("BoardService")
 public class BoardServiceImpl implements BoardService {
@@ -74,8 +73,6 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Board> getBoardList(BoardGetListReq getListInfo) {
-        System.out.println(getListInfo.getPage() + " " + getListInfo.getSize() + " " + getListInfo.getWord() + " " + getListInfo.getSortKey());
-
         Pageable pageable;
         Page<Board> page;
 

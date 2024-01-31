@@ -7,7 +7,6 @@ import com.ssafy.api.board.request.CommentRegisterPostReq;
 import com.ssafy.db.entity.Board;
 import com.ssafy.db.entity.Comment;
 import com.ssafy.db.entity.User;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

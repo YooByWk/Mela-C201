@@ -3,6 +3,7 @@ package com.ssafy.api.board.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.db.entity.Board;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,22 +13,23 @@ import java.time.LocalDateTime;
 @Setter
 @ApiModel("BoardResponse")
 public class BoardRes {
+    @ApiModelProperty(name="board idx")
     Long boardIdx;
-
+    @ApiModelProperty(name="write user nickname")
     String nickname;
-
+    @ApiModelProperty(name="title")
     String title;
-
+    @ApiModelProperty(name="content")
     String content;
-
+    @ApiModelProperty(name="regist time", example = "20000-02-02 22:22:22")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     LocalDateTime registDate;
-
+    @ApiModelProperty(name="update time", example = "20000-02-02 22:22:22")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     LocalDateTime updateDate;
-
+    @ApiModelProperty(name="viewNum")
     int viewNum=0;
-
+    @ApiModelProperty(name="write user idx")
     Long userIdx;
 
     public static BoardRes of(Board board){
