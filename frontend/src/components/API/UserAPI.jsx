@@ -25,6 +25,7 @@ UserApi.interceptors.response.use((response) => {
 // 회원조회
 export const fetchUser = async () => {
     const response = await UserApi.get(`/api/v1/users/myinfo`)
+    console.log(response.data)
     return response.data
 }
 
