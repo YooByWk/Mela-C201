@@ -5,7 +5,6 @@ import Community from "../pages/Community"
 import SigninModal from '../components/Modals/SigninModal';
 import SignupModal from '../components/Modals/SignupModal';
 import { Homepage } from '../pages/Homepage';
-import Navbar from '../components/Navbar';
 import Teamspace from '../pages/Teamspace';
 import Gather from '../pages/Gather';
 import UserUpdate from '../pages/UserUpdate';
@@ -20,7 +19,7 @@ function AppRouter({ className }) {
         <Routes>
 
           <Route
-            path='/portfolio' element={<Portfolio/>}
+            path='/portfolio/:nickname' element={<Portfolio />}
           />
 
           <Route
