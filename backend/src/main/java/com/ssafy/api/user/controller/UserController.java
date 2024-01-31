@@ -15,6 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
  */
@@ -203,4 +206,68 @@ public class UserController {
 
 		return ResponseEntity.status(500).body("랜덤 닉네임 생성 실패");
 	}
+
+	@PutMapping("/follow/{userId}")
+	@ApiOperation(value = "특정 사용자를 팔로우", notes = "특정 사용자를 팔로우한다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code= 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> followUser(
+			@ApiIgnore Authentication authentication,
+			@PathVariable String userId) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userEmail = userDetails.getUsername();
+		User nowLoginUser = userService.getUserByEmail(userEmail);
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+
+	@GetMapping("/{userId}/followers")
+	@ApiOperation(value = "사용자가 팔로우한 사람들 목록", notes = "특정 사용자가 팔로우한 사람들 목록을 보여준다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code= 500, message = "서버 오류")
+	})
+	public ResponseEntity<List<User>> getFollower(
+			@PathVariable String userId) {
+
+		List<User> followerList = userService.getFollower(userId);
+
+		System.out.println("Hello+===========================");
+		for(User userItem : followerList){
+			System.out.print(userItem.getEmailId());
+			System.out.print(userItem.getEmailDomain());
+			System.out.print(userItem.getName());
+			System.out.println(userItem.getNickname());
+		}
+		System.out.println("Hello+===========================");
+
+		return ResponseEntity.status(200).body(followerList);
+	}
+
+	@GetMapping("/{userId}/followees")
+	@ApiOperation(value = "사용자를 팔로우한 사람들 목록", notes = "특정 사용자를 팔로우한 사람들의 목록을 보여준다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code= 500, message = "서버 오류")
+	})
+	public ResponseEntity<List<User>> getFollowee(
+			@PathVariable String userId) {
+
+		List<User> followeeList = userService.getFollowee(userId);
+
+		System.out.println("Hello+===========================");
+		for(User userItem : followeeList){
+			System.out.print(userItem.getEmailId());
+			System.out.print(userItem.getEmailDomain());
+			System.out.print(userItem.getName());
+			System.out.println(userItem.getNickname());
+		}
+		System.out.println("Hello+===========================");
+
+		return ResponseEntity.status(200).body(followeeList);
+	}
 }
+

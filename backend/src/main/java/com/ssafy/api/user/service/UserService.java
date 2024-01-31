@@ -5,6 +5,7 @@ import com.ssafy.api.user.request.UserUpdatePostReq;
 import com.ssafy.db.entity.User;
 
 import javax.mail.MessagingException;
+import java.util.List;
 
 /**
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 인터페이스 정의.
@@ -43,4 +44,10 @@ public interface UserService {
 	void sendEmail(Long userIdx, String token) throws MessagingException;
 
 	boolean verifyEmail(Long userIdx, String token);
+
+	void followUser(User nowLoginUser, String userId);
+
+	List<User> getFollower(String emailId);
+
+	List<User> getFollowee(String emailId);
 }
