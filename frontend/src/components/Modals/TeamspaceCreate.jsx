@@ -3,15 +3,15 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
-import { signin } from '../API/AuthAPI'
 
-function SigninModal({className, fontSize, padding}) {
+function TeamspaceCreateModal({className, fontSize, padding}) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [values, setValues] = React.useState({
-    id: "", 
-    password: "", 
+    title: "", 
+    content: "",
+    members: [], 
   })
   
   const handleChange = async (e) => {
@@ -22,12 +22,7 @@ function SigninModal({className, fontSize, padding}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    signin(values)
     .then((res) => {
-      localStorage.clear()
-      localStorage.setItem('accessToken', res.accessToken)
-      window.location.href = `/profile`
-      console.log('로그인 성공')
       console.log(res)
     })
     .catch((err) => {
@@ -37,8 +32,8 @@ function SigninModal({className, fontSize, padding}) {
 
   return (
     <div>
-      <TriggerButton type="button" onClick={handleOpen} className={className} fontSize={fontSize} padding={padding}>
-        Sign In
+      <TriggerButton type="button" onClick={handleOpen} >
+        <p>+</p>
       </TriggerButton>
       <Modal
         aria-labelledby="unstyled-modal-title"
@@ -47,9 +42,9 @@ function SigninModal({className, fontSize, padding}) {
         onClose={handleClose}
         slots={{ backdrop: StyledBackdrop }}
       >
-        <ModalContent sx={{ width: 400 }}>
+        <ModalContent sx={{ width: 700 }}>
           <h2 id="modal-title" className="modal-title">
-            SIGN IN
+            Create
           </h2>
           <form onSubmit={handleSubmit}> 
           <div id="modal-description" className="modal-description">
@@ -148,37 +143,63 @@ const ModalContent = styled('div')(
   `,
 )
 
-const dynamicStyle = ({ fontSize = '0.875rem', padding = '8px 16px' }) => css`
-  font-size: ${fontSize};
-  padding: ${padding};
-`;
-// signin버튼
-const TriggerButton = styled('button')(
-  // ({ theme, fontSize, padding }) => css`
-  `${dynamicStyle}
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 600;
-    font-size: ${props => props.fontSize ||'0.875rem'};
-    padding: ${props => props.padding || '8px 16px'};
-    line-height: 1.5;
-    border-radius: 28px;
-    transition: all 150ms ease;
-    cursor: pointer;
-    background: #10141d;
-    border: 4px solid #254EF8;
-    color: white;
-    // 버튼을 올렸을 때 색상
-    &:hover {
-      background:linear-gradient(90deg, #254EF8,#3960fc, #873FFA,#a977fa);
-      border:4px solid #254EF8;
-    }
 
-    // 버튼을 누를 때 색상
-    &:active {
-      background:linear-gradient(90deg, #254EF8, #873FFA);
-      border:4px solid #10141d;
+const TriggerButton = styled('button')(
+  ({ theme }) => css`
+  /* default */
+
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  left: 33px;
+  top: 38px;
+
+  /* Rectangle 1 */
+
+  position: fixed;
+  left: 12.5%;
+  right: 12.5%;
+  top: 12.5%;
+  bottom: 12.5%;
+  font-size: xx-large;
+  color: #254EF8;
+
+  /* btn color
+
+  버튼컴포넌트 색
+  */
+  border: 2px solid #254EF8;
+  border-radius: 4px;
+
+
+    & :hover {
+      /* hover */
+
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      left: 33px;
+      top: 38px;
+
+      /* Rectangle 1 */
+
+      position: fixed;
+      left: 12.5%;
+      right: 12.5%;
+      top: 12.5%;
+      bottom: 12.5%;
+      font-size: xx-large;
+      color: white;
+
+      /* btn color
+
+      버튼컴포넌트 색
+      */
+      background: #254EF8;
+      border-radius: 4px;
+
     }
-  `,
+    `,
 )
 
-export default SigninModal
+export default TeamspaceCreateModal
