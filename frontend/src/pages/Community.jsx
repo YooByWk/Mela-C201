@@ -14,19 +14,25 @@ const Community = () => {
 const [isWriting, setIsWriting] = useState(false)
 const [data, setData] = useState(null)
 
+// page는 현재 페이지
+// column 이름으로 sort
+// size : results at 1 page
 useEffect(() => {
   const fetchData = async () => {
-    const response = await BoardList({ page: 1, size: 20 })
+    const response = await BoardList({ page: 0, size: 20 })
     // console.log(response, 'fetch log')
     setData(response.data)
     console.log(data)
     // 패칭한 데이터를 상태에 저장
   };
   fetchData(); 
-  // console.log(data)
+  console.log(data, '리스트 조회 완료')
 }, []);
 
-
+const ViewSorted = async() => {
+  const response = await BoardList({page:0, size: 20, sortKey:'viewNum',})
+  setData(response.data)
+}
 
 const Create = () => {
   console.log(isWriting)
@@ -52,11 +58,22 @@ const Create = () => {
             </span>
             <div>
               <button>최신순</button>
-              <button>조회수순</button>
+              <button onClick={ViewSorted}>조회수순</button>
               <button>좋아요순</button>
             </div>
           </div>
           <p>여기에 이제 글 쓰십시오.</p>
+          <ul>
+            {data && data.map( (article) => {
+             return <li key={article.boardIdx}>
+             {article.boardIdx}
+             || 제목 : {article.title}
+             || 작성자 : {article.nickname}
+             || 조회수 : {article.viewNum}
+             </li>
+            })
+            }
+          </ul>
           <button > 
             버튼을 눌러봐요
           </button>
