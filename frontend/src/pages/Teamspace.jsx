@@ -5,7 +5,8 @@ function Teamspace () {
   return ( 
     <>
     <h1>팀 스페이스 공간입니다.</h1>
-    <DefaultFileShape />
+    <DefaultFileShape 
+    />
     </>
    );
 }

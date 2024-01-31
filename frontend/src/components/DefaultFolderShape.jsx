@@ -45,17 +45,28 @@ const Container = styled.div`
 
 // 프로젝트 이름
 const Title = styled.span`
-    
+    color: white;
+    font-weight: bold;
+    position: absolute;
+    top: 70px;
+    left: 30px;
+    font-size: x-large;
 `
 
 // 프로젝트 설명
 const Content = styled.span`
-    
+    color: white;
+    position: absolute;
+    top: 180px;
+    left: 30px;
 `
 
 // 프로젝트 디데이
 const Day = styled.span`
-  
+  color: white;
+  position: absolute;
+  top: 70px;
+  right: 30px;
 `
 
 const DefaultFileShape = (props) => {
@@ -66,13 +77,13 @@ const DefaultFileShape = (props) => {
             onClick={props.onClick}
         >
             <Title>
-                {props.text}
+                {props.title}
             </Title>
             <Content>
-                {props.text}
+                {props.content}
             </Content>
             <Day>
-                {props.text}
+                {props.day}
             </Day>
         </Container>
         </>
