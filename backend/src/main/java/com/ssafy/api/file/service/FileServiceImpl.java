@@ -51,7 +51,9 @@ public class FileServiceImpl implements FileService {
         return file;
     }
     @Override
-    public void saveFile(MultipartFile file) {
+    public String saveFile(MultipartFile file) {
+        String newFileName = null;
+
         //1. 업로드 한 파일이 비어있는지 확인
         try {
             if (file.isEmpty()) {
@@ -61,50 +63,51 @@ public class FileServiceImpl implements FileService {
             e.printStackTrace();
         }
 
-        Path root = Paths.get(uploadPath);
-
         //2. 파일 업로드
         try (InputStream inputStream = file.getInputStream()) {
-            //2-1. UUID 생성
+            //2-1. UUID 생성 (같은 이름의 파일 (확장자 포함) 업로드 충돌 방지)
             UUID uuid = UUID.randomUUID();
 
             //2-2. 오늘 날짜 가져옴
-            Date today = new Date(); //현재 날짜를 가져오기
+            Date today = new Date();    //현재 날짜를 가져오기
 
-            // SimpleDateFormat을 사용하여 원하는 형식으로 날짜를 포맷
+            //SimpleDateFormat을 사용하여 원하는 형식으로 날짜를 포맷
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
             String formattedDate = dateFormat.format(today);
 
-            String year = formattedDate.substring(0, 4);
-            String month = formattedDate.substring(4, 6);
-            String date = formattedDate.substring(6, 8);
+            String year = formattedDate.substring(0, 4);    //예: 2024
+            String month = formattedDate.substring(4, 6);   //예: 01
+            String date = formattedDate.substring(6, 8);    //예: 31
 
-            //2-3. 업로드할 폴더 생성
-            //TODO: 확장자 또는 날짜별 파일 디렉토리 다르게 하기
-            Path savePath = root.resolve(year).resolve(month).resolve(date);
+            //2-3. 업로드할 파일 명 결정
+            //application.properties 파일에 저장된 ${spring.servlet.multipart.location} 값 불러옴 (Amazon S3에 저장할 디렉토리 경로) 예: mela/upload/
+            Path root = Paths.get(uploadPath);
 
-            //확장자 가져오는 소스 #사용 안 하면 삭제하기!
+            //2-3-1. 클라이언트가 업로드한 파일의 확장자 추출
             String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-            savePath = savePath.resolve(extension);
 
-            //파일이 저장될 폴더 생성 작동 확인 필요
-            Files.createDirectories(Paths.get(savePath.toString()));
+            //2-3-2. {year} '/' + {month} + '/' + {date} + '/' + {확장자} + UUID + '_' + {파일 명}으로 결정 예: mela/upload/2024/01/31/mp3/c6f24614-0f2a-4d74-b1bd-3343cb1fb72a_mela.mp3
+            Path savePath = root.resolve(year).resolve(month).resolve(date).resolve(extension);
 
-            //2-4. 파일 업로드 (서버 PC에 저장되므로 코드 지우기!)
+            //2-4. 파일 업로드 (서버 PC에 저장되는 코드이므로 주석!)
             //StandardCopyOption.REPLACE_EXISTING 옵션: 같은 이름의 파일이 존재하는 경우 기존 파일 대체
-            Files.copy(inputStream, savePath.resolve(uuid.toString() + "_" + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            //Files.copy(inputStream, savePath.resolve(uuid.toString() + "_" + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
 
-            //2-5. 파일 업로드 (Amazon S3)
-            String newFileName = savePath.resolve(uuid.toString() + "_" + file.getOriginalFilename()).toString();
-            newFileName = newFileName.replace("\\", "/");
+            //2-4. 파일 업로드 (Amazon S3)
+            newFileName = savePath.resolve(uuid.toString() + "_" + file.getOriginalFilename()).toString();
+            newFileName = newFileName.replace("\\", "/");           //Amazon S3의 경로 구분자는 '/'이므로 "\\" -> "/" 치환
 
-            File convertedFile = multipartFile2File(file);      //MultipartFile -> File 변환 (Amazon S3 업로드 위함)
+            //MultipartFile -> File 변환 (Amazon S3 업로드 위함)
+            File convertedFile = multipartFile2File(file);
 
-            // PublicRead 권한으로 업로드
+            //PublicRead 권한으로 Amazon S3 업로드
             amazonS3Client.putObject(new PutObjectRequest(bucket, newFileName, convertedFile).withCannedAcl(CannedAccessControlList.PublicRead));
         } catch(Exception e) {
             e.printStackTrace();
         }
+        System.err.println("Should Never Reach Here! - FileServiceImpl.java");
+
+        return newFileName;
     }
 
     @Override

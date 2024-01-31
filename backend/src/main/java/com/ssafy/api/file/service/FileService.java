@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface FileService {
-    void saveFile(MultipartFile file);
+    String saveFile(MultipartFile file);
 //    Stream<Path> loadAll();
 //    Path getFilename(String filename);
     Resource loadAsResource(String filename);
