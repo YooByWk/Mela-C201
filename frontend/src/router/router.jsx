@@ -27,8 +27,6 @@ function AppRouter({ className }) {
             path='/gather' exact element={<Gather/>}
           /> 
 
-
-
           <Route 
             path='/teamspace' element={<Teamspace/>}
           />
