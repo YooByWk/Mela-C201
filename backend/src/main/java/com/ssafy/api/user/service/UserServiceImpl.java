@@ -5,11 +5,9 @@ import com.ssafy.api.user.request.UserUpdatePostReq;
 import com.ssafy.common.util.CSVParser;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.EmailAuth;
+import com.ssafy.db.entity.Follow;
 import com.ssafy.db.entity.User;
-import com.ssafy.db.repository.EmailAuthRepository;
-import com.ssafy.db.repository.EmailAuthRepositorySupport;
-import com.ssafy.db.repository.UserRepository;
-import com.ssafy.db.repository.UserRepositorySupport;
+import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -19,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -41,6 +40,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
+
+	@Autowired
+	FollowRepository followRepository;
+
+	@Autowired
+	FollowRepositorySupport followRepositorySupport;
 
 	@Autowired
 	private JavaMailSender mailSender;
@@ -262,4 +267,23 @@ public class UserServiceImpl implements UserService {
 		return false;
 	}
 
+	@Override
+	public void followUser(User nowLoginUser, String userId) {
+		Follow follow = new Follow();
+		follow.setFollower(nowLoginUser);
+		follow.setFollowe(userRepository.findByEmailId(userId).get());
+		followRepository.save(follow);
+	}
+
+	@Override
+	public List<User> getFollower(String emailId) {
+		return followRepositorySupport.findUserFollower(userRepository.findByEmailId(emailId).get());
+	}
+
+	@Override
+	public List<User> getFollowee(String emailId) {
+
+		return followRepositorySupport.findUserFollowee(userRepository.findByEmailId(emailId).get());
+
+	}
 }
