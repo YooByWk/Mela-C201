@@ -34,7 +34,7 @@ public class BoardServiceImpl implements BoardService {
     UserRepositorySupport userRepositorySupport;
 
     @Override
-    public void registBoard(BoardRegisterPostReq registInfo, User user) {
+    public Board registBoard(BoardRegisterPostReq registInfo, User user) {
         Board board = new Board();
         board.setNickname(user.getNickname());
         board.setContent(registInfo.getContent());
@@ -42,7 +42,7 @@ public class BoardServiceImpl implements BoardService {
         board.setUserIdx(user);
         board.setViewNum(0);
         board.setRegistDate(LocalDateTime.now());
-        boardRepository.save(board);
+        return boardRepository.save(board);
     }
 
     @Override

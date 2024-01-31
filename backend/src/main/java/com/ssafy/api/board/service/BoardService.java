@@ -11,7 +11,7 @@ import com.ssafy.db.entity.User;
 import java.util.List;
 
 public interface BoardService {
-    void registBoard(BoardRegisterPostReq registInfo, User user);
+    Board registBoard(BoardRegisterPostReq registInfo, User user);
     void updateBoard(BoardUpdatePutReq updateInfo, Long boardIdx, Long userIdx);
     void deleteBoard(Long boardIdx);
     Board getBoard(Long boardIdx) throws Exception;
