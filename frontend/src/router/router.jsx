@@ -10,6 +10,7 @@ import Teamspace from '../pages/Teamspace';
 import Gather from '../pages/Gather';
 import UserUpdate from '../pages/UserUpdate';
 import PortfolioAll from '../pages/PortfolioAll';
+import Message from '../pages/Message';
 import Landing from '../pages/Landing';
 
 function AppRouter({ className }) {
@@ -46,6 +47,10 @@ function AppRouter({ className }) {
 
           <Route
             path='/musics' element={<PortfolioAll />}
+            />
+
+          <Route
+            path='/message' element={<Message />}
             />
         </Routes>
     </div>
