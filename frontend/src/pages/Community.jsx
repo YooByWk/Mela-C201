@@ -4,8 +4,7 @@ import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import Sidebar from "./../components/Sidebar";
 import { FaSearch } from "react-icons/fa";
-import axios from 'axios';
-
+import { BoardList } from "../components/API/BoardAPI";
 
 const CommunityContainer = styled.div`
   background-color: ${(props) => props.theme.colours.primary};
@@ -76,22 +75,7 @@ const RSideDiv = styled.div`
 console.log();
 
 //
-const BoardList = () => {
-  const getBoardList = async () => {
-    const response = (await axios.get('http://localhost:8080/recruit')).data
-    console.log(response.data)
-  }
-}
 
-
-// const UserApi = axios.create({
-//   baseURL: 'http://localhost:8080',
-//   headers: {
-//       // 'Content-Type': 'application/json',
-//       'Authorization': `${TOKEN_TYPE} ${ACCESS_TOKEN}`,
-//       'REFRESH_TOKEN': REFRESH_TOKEN,
-//   },
-// })
 
 const Community = () => {
   return (
@@ -115,6 +99,9 @@ const Community = () => {
             </div>
           </div>
           <p>여기에 이제 글 쓰십시오.</p>
+          <button onClick={BoardList} > 
+            버튼을 눌러봐요
+          </button>
         </div>
       </MainDiv>
       <RSideDiv>3</RSideDiv>
