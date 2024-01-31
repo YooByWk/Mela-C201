@@ -67,6 +67,8 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Board getBoard(Long boardIdx) throws Exception{
         Board board = boardRepository.getOne(boardIdx);
+        board.setViewNum(board.getViewNum()+1);
+        boardRepository.save(board);
         return board;
     }
 
@@ -76,41 +78,23 @@ public class BoardServiceImpl implements BoardService {
 
         Pageable pageable;
         Page<Board> page;
-        if (getListInfo.getWord() == null && getListInfo.getSortKey() == null) {
-            pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize());
+
+        //TODO: 좋아요 순 정렬
+        
+        // 기본 정렬: 최신순
+        Sort sort = (getListInfo.getSortKey() != null)
+                ? Sort.by(Sort.Direction.DESC, getListInfo.getSortKey())
+                : Sort.by(Sort.Direction.DESC, "boardIdx");
+
+        if (getListInfo.getWord() == null) {
+            pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
             page = boardRepository.findAll(pageable);
-
         } else {
-            Sort sort = (getListInfo.getSortKey() != null)
-                    ? Sort.by(Sort.Direction.DESC, getListInfo.getSortKey())
-                    : Sort.unsorted();
-
             pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
             page = boardRepository.findByTitleContainingOrContentContaining(getListInfo.getWord(), getListInfo.getWord(), pageable);
         }
 
-//        Optional<Sort> sort = Optional
-//                .ofNullable(getListInfo.getSortKey())
-//                .map(key -> Sort.by(Sort.Direction.DESC, key));
-//
-//        pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort.orElse(Sort.unsorted()));
-
-//        if(getListInfo.getWord() == null && getListInfo.getSortKey() == null) {
-//
-//        } else if (getListInfo.getWord() == null) {
-//
-//        } else if (getListInfo.getSortKey() == null) {
-//
-//        } else {
-//            pageable = PageRequest
-//                    .of(getListInfo.getPage(), getListInfo.getSize(), Sort.by(Sort.Direction.DESC, getListInfo.getSortKey()));
-//
-//        }
-
-
-        System.out.println(page);
-
-        return null;
+        return page.getContent();
     }
 
     @Override

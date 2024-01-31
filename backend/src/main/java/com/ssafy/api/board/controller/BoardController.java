@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -39,13 +40,9 @@ public class BoardController {
 
     @GetMapping("")
     @ApiOperation(value = "게시글 리스트 조회", notes = "<string>페이지번호, 페이지당 글 수, 검색어, 정렬조건</string>에 따라 게시글을 조회한다.")
-//    public ResponseEntity<List<Board>> getBoardList(@QueryStringArgResolver BoardGetListReq listInfo) {
-//    public ResponseEntity<List<Board>> getBoardList(@ModelAttribute BoardGetListReq listInfo) {
-    public ResponseEntity<List<Board>> getBoardList(
+    public ResponseEntity<List<BoardRes>> getBoardList(
             @RequestParam int page, @RequestParam int size, @RequestParam(required = false) String word, @RequestParam(required = false) String sortKey
     ) {
-//        System.out.println("getBoardList");
-//        System.out.println(pgno + " " + spp + " " + word + " " + sortKey);
         BoardGetListReq boardGetListReq = new BoardGetListReq();
         boardGetListReq.setPage(page);
         boardGetListReq.setSize(size);
@@ -53,8 +50,12 @@ public class BoardController {
         boardGetListReq.setSortKey(sortKey);
 
         List<Board> boards = boardService.getBoardList(boardGetListReq);
+        List<BoardRes> res = new ArrayList<>();
+        for (Board board : boards) {
+            res.add(BoardRes.of(board));
+        }
 
-        return ResponseEntity.status(200).body(null);
+        return ResponseEntity.status(200).body(res);
     }
 
     @PostMapping("")
@@ -103,11 +104,11 @@ public class BoardController {
     }
 
     @GetMapping("/{boardid}")
-    @ApiOperation(value = "게시글 단건 조회", notes = "<string>게시글 아이디</string>로 게시글을 조회한다.")
+    @ApiOperation(value = "게시글 상세보기", notes = "<string>게시글 아이디</string>로 게시글을 조회한다.")
     public ResponseEntity<BoardRes> getBoard(@PathVariable(name = "boardid") Long boardIdx) {
         try {
             Board board = boardService.getBoard(boardIdx);
-            System.out.println("board: "+board.getBoardIdx());
+            System.out.println("board: " + board.getBoardIdx());
 
             return ResponseEntity.status(200).body(BoardRes.of(board));
         } catch (Exception e) {
