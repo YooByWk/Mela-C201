@@ -6,6 +6,7 @@ import com.ssafy.common.util.CSVParser;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.EmailAuth;
 import com.ssafy.db.entity.Follow;
+import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -25,6 +28,7 @@ import java.util.Random;
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
  */
 @Service("userService")
+@Transactional
 public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
@@ -46,6 +50,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	FollowRepositorySupport followRepositorySupport;
+
+	@Autowired
+	NotificationRepository notificationRepository;
 
 	@Autowired
 	private JavaMailSender mailSender;
@@ -269,10 +276,32 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void followUser(User nowLoginUser, String userId) {
-		Follow follow = new Follow();
-		follow.setFollower(nowLoginUser);
-		follow.setFollowe(userRepository.findByEmailId(userId).get());
-		followRepository.save(follow);
+		User followedUser = userRepository.findByEmailId(userId).get();
+		Optional<Follow> isFollowed = followRepository.findByFollowerAndFollowe(nowLoginUser, followedUser);
+		Notification notification = new Notification();
+		notification.setUserIdx(followedUser);	//알람을 받을 사용자; User 객체 타입
+
+		if(isFollowed.isPresent()){
+			isFollowed.get().setFollower(nowLoginUser);
+			isFollowed.get().setFollowe(followedUser);
+			followRepository.delete(isFollowed.get());
+
+			notification.setAlarmContent(nowLoginUser.getNickname()+"님이 당신을 팔로우 취소 하였습니다.");
+		}
+		else{
+			Follow follow = new Follow();
+			follow.setFollower(nowLoginUser);
+			follow.setFollowe(followedUser);
+			followRepository.save(follow);
+
+			notification.setAlarmContent(nowLoginUser.getNickname()+"님이 당신을 팔로우 하였습니다.");
+		}
+
+		notification.setChecked(false);
+		notification.setAlarmDate(LocalDateTime.now());
+		notificationRepository.save(notification);
+
+
 	}
 
 	@Override
