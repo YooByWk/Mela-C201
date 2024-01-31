@@ -2,6 +2,7 @@ package com.ssafy.api.teamspace.controller;
 
 import com.ssafy.api.teamspace.request.ScheduleRegisterPostReq;
 import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
+import com.ssafy.api.teamspace.response.ScheduleRes;
 import com.ssafy.api.teamspace.service.TeamspaceService;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -94,13 +96,17 @@ public class ScheduleController {
             @ApiResponse(code = 400, message = "잘못된 요청"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<List<Schedule>> getScheduleList(
+    public ResponseEntity<List<ScheduleRes>> getScheduleList(
             @PathVariable(name = "teamspaceid") Long teamspaceIdx
     ) {
         try {
             List<Schedule> schedules = teamspaceService.getScheduleList(teamspaceIdx);
+            List<ScheduleRes> res = new ArrayList<>();
+            for(Schedule schedule : schedules) {
+                res.add(ScheduleRes.of(schedule));
+            }
 
-            return ResponseEntity.status(200).body(schedules);
+            return ResponseEntity.status(200).body(res);
         } catch (Exception e) {
             return ResponseEntity.status(400).body(null);
         }
