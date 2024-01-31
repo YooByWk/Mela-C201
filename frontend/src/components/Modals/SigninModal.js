@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
-import { signin } from '../API/AuthAPI'
+import { signin } from '../../API/AuthAPI'
 
 function SigninModal() {
   const [open, setOpen] = React.useState(false);

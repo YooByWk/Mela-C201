@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
 import CalendarDropdown from '../Dropdown/Calendar'
-import { signup } from '../API/AuthAPI'
+import { signup } from '../../API/AuthAPI'
 //Gender Dropdown
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
