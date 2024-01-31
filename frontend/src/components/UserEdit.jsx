@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import DefaultButton from '../components/DefaultButton';
 import styled from 'styled-components';
-import { fetchUser } from '../components/API/UserAPI';
+import { fetchUser } from './API/UserAPI';
 
 const Container = styled.div`
     padding: 1rem;
@@ -49,6 +49,7 @@ function UserEdit(props) {
                     <p>Like genre : </p>
                     <p>Position : </p>
                     <p>SNS</p>
+                    <p>{user.searchAllow}</p>
                 </div>
             )}
 

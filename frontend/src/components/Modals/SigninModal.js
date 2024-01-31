@@ -26,7 +26,7 @@ function SigninModal({className, fontSize, padding}) {
     .then((res) => {
       localStorage.clear()
       localStorage.setItem('accessToken', res.accessToken)
-      // window.location.href = `/home`
+      window.location.href = `/profile`
       console.log('로그인 성공')
       console.log(res)
     })

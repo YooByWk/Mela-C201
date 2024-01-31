@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from "react";
+import { Link } from "react-router-dom";
 import { Card, List, ListItem, ListItemPrefix } from "@material-tailwind/react";
 
 import { FaRegUser, FaRegHeart } from "react-icons/fa6";
@@ -16,6 +17,7 @@ const SideContainer = styled.div`
   /* height: auto;
   padding: 0.5rem;
   border-radius: 20px; */
+  color: white;
   padding-top: ${props => props.$paddingtop || '0'};
   .items {
     margin-top: 30px;
@@ -30,6 +32,10 @@ const SideContainer = styled.div`
   }
 `;
 
+const CustomLink = styled(Link)`
+  text-decoration: none;
+`
+
 function Sidebar({ className, paddingtop }) {
   return (
     <div className={className}>
@@ -43,13 +49,17 @@ function Sidebar({ className, paddingtop }) {
               <ListItemPrefix>
                 <FaRegUser />
               </ListItemPrefix>
+            <CustomLink to='/portfolio'>
               <span className="wd">Profile</span>
+            </CustomLink>
             </ListItem>
             <ListItem className="items">
               <ListItemPrefix>
                 <AiOutlineMessage />
               </ListItemPrefix>
-              <span className="wd">Message</span>
+              <CustomLink to='/message'>
+                <span className="wd">Message</span>
+              </CustomLink>
             </ListItem>
             <ListItem className="items">
               <ListItemPrefix>
