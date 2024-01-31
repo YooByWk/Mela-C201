@@ -67,6 +67,8 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Board getBoard(Long boardIdx) throws Exception{
         Board board = boardRepository.getOne(boardIdx);
+        board.setViewNum(board.getViewNum()+1);
+        boardRepository.save(board);
         return board;
     }
 
