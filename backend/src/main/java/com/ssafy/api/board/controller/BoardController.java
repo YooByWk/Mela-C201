@@ -15,6 +15,7 @@ import com.ssafy.db.entity.Comment;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,10 +40,17 @@ public class BoardController {
     UserService userService;
 
     @GetMapping("")
-    @ApiOperation(value = "게시글 리스트 조회", notes = "<string>페이지번호, 페이지당 글 수, 검색어, 정렬조건</string>에 따라 게시글을 조회한다.")
+    @ApiOperation(value = "게시글 리스트 조회", notes = "<string>페이지번호(page), 페이지당 글 수(size), 검색어(word), 정렬조건(sortKey) </string>에 따라 게시글을 조회한다.")
     public ResponseEntity<List<BoardRes>> getBoardList(
-            @RequestParam int page, @RequestParam int size, @RequestParam(required = false) String word, @RequestParam(required = false) String sortKey
+            @ApiParam(value = "페이지 번호 (1부터 시작)", example = "1") @RequestParam int page,
+            @ApiParam(value = "페이지당 글 수", example = "10") @RequestParam int size,
+            @ApiParam(value = "검색어", example = "검색내용") @RequestParam(required = false) String word,
+            @ApiParam(value = "정렬 조건", example = "viewNum") @RequestParam(required = false) String sortKey
     ) {
+        // 1부터 시작하도록 함
+        page-=1;
+        System.out.println("page : " + page);
+
         BoardGetListReq boardGetListReq = new BoardGetListReq();
         boardGetListReq.setPage(page);
         boardGetListReq.setSize(size);

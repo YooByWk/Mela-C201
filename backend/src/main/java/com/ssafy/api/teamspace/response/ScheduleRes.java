@@ -2,7 +2,6 @@ package com.ssafy.api.teamspace.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.db.entity.Schedule;
-import com.ssafy.db.entity.Teamspace;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
