@@ -12,6 +12,7 @@ import UserUpdate from '../pages/UserUpdate';
 import PortfolioAll from '../pages/PortfolioAll';
 import Message from '../pages/Message';
 import Landing from '../pages/Landing';
+
 function AppRouter({ className }) {
   return (  
     <div className={className}>
@@ -56,5 +57,6 @@ function AppRouter({ className }) {
   );
 }
 
-export default AppRouter
+export default AppRouter 
+
 
