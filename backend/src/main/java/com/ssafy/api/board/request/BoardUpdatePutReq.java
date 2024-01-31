@@ -1,22 +1,17 @@
-package com.ssafy.api.board.response;
+package com.ssafy.api.board.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
-@ApiModel("BoardRegisterPostRequest")
-public class BoardRegisterPostReq {
-
+@ApiModel("BoardUpdatePutRequest")
+public class BoardUpdatePutReq {
     @ApiModelProperty(name="제목", example="제목")
     String title;
 
     @ApiModelProperty(name="내용", example="내용")
     String content;
-
 }

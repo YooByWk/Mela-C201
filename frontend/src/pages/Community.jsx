@@ -1,10 +1,79 @@
 // 커뮤니티 게시판 메인
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import Sidebar from "./../components/Sidebar";
 import { FaSearch } from "react-icons/fa";
 import { BoardList } from "../components/API/BoardAPI";
+import { Routes } from 'react-router-dom';
+
+
+
+const Community = () => {
+  //
+const [isWriting, setIsWriting] = useState(false)
+const [data, setData] = useState(null)
+
+useEffect(() => {
+  const fetchData = async () => {
+    const response = await BoardList({ page: 1, size: 20 })
+    // console.log(response, 'fetch log')
+    setData(response.data)
+    console.log(data)
+    // 패칭한 데이터를 상태에 저장
+  };
+  fetchData(); 
+  // console.log(data)
+}, []);
+
+
+
+const Create = () => {
+  console.log(isWriting)
+  setIsWriting(!isWriting)
+  console.log(isWriting, '버튼 누른 후')
+}
+
+  return (
+    <CommunityContainer>
+    {!isWriting && (
+      <SideDiv >
+        <Sidebar paddingtop="6vh" />
+      </SideDiv>
+      )}
+      <MainDiv>
+        <Navbar backcolour="10" />
+        <div className="Container">
+          <h1>자유게시판</h1>
+          <div className="BoardSearch">
+            <span className="SearchContainer">
+              <FaSearch />
+              <input type="text" placeholder="검색어를 입력해주세요" />
+            </span>
+            <div>
+              <button>최신순</button>
+              <button>조회수순</button>
+              <button>좋아요순</button>
+            </div>
+          </div>
+          <p>여기에 이제 글 쓰십시오.</p>
+          <button > 
+            버튼을 눌러봐요
+          </button>
+          <button onClick={Create} > 
+            작성 버튼을 눌러봐요
+          </button>
+        </div>
+      </MainDiv>
+      {!isWriting && (
+      <RSideDiv>3</RSideDiv>
+      )}
+    </CommunityContainer>
+  );
+};
+
+export default Community;
+
 
 const CommunityContainer = styled.div`
   background-color: ${(props) => props.theme.colours.primary};
@@ -69,44 +138,6 @@ const MainDiv = styled.div`
 `;
 
 const RSideDiv = styled.div`
-  width: 15%;
+  width: 12.5%;
 `;
 
-console.log();
-
-//
-
-
-const Community = () => {
-  return (
-    <CommunityContainer>
-      <SideDiv>
-        <Sidebar paddingtop="6vh" />
-      </SideDiv>
-      <MainDiv>
-        <Navbar backcolour="10" />
-        <div className="Container">
-          <h1>자유게시판</h1>
-          <div className="BoardSearch">
-            <span className="SearchContainer">
-              <FaSearch />
-              <input type="text" placeholder="검색어를 입력해주세요" />
-            </span>
-            <div>
-              <button>최신순</button>
-              <button>조회수순</button>
-              <button>좋아요순</button>
-            </div>
-          </div>
-          <p>여기에 이제 글 쓰십시오.</p>
-          <button onClick={BoardList} > 
-            버튼을 눌러봐요
-          </button>
-        </div>
-      </MainDiv>
-      <RSideDiv>3</RSideDiv>
-    </CommunityContainer>
-  );
-};
-
-export default Community;
