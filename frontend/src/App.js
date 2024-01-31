@@ -8,7 +8,7 @@ import Landing from "./pages/Landing";
 import GlobalStyle from "./styles/GlobalStyle";
 import styled, { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
-
+import Community from "./pages/Community";
 import AppRouter from "./router/router";
 import Sidebar from "./components/Sidebar";
 
@@ -57,6 +57,7 @@ function App() {
         <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path='/community' element={<Community />}/>
           <Route
             path="*"
             element={

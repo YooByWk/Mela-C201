@@ -16,18 +16,24 @@ const SideContainer = styled.div`
   /* height: auto;
   padding: 0.5rem;
   border-radius: 20px; */
+  padding-top: ${props => props.$paddingtop || '0'};
   .items {
     margin-top: 30px;
     margin-bottom: 30px;
+    display: flex;
   }
   .contents {
   }
+  .wd {
+    margin-left: 10%;
+    font-size: large;
+  }
 `;
 
-function Sidebar({ className }) {
+function Sidebar({ className, paddingtop }) {
   return (
     <div className={className}>
-      <SideContainer className="contents">
+      <SideContainer className="contents" $paddingtop={paddingtop}>
         <p>
             프로필 사진 들어갈 자리
         </p>
@@ -37,31 +43,31 @@ function Sidebar({ className }) {
               <ListItemPrefix>
                 <FaRegUser />
               </ListItemPrefix>
-              Profile
+              <span className="wd">Profile</span>
             </ListItem>
             <ListItem className="items">
               <ListItemPrefix>
                 <AiOutlineMessage />
               </ListItemPrefix>
-              Message
+              <span className="wd">Message</span>
             </ListItem>
             <ListItem className="items">
               <ListItemPrefix>
                 <MdOutlineLocalFireDepartment />
               </ListItemPrefix>
-              Matching
+              <span className="wd">Matching</span>
             </ListItem>
             <ListItem className="items">
               <ListItemPrefix>
                 <FaRegHeart />
               </ListItemPrefix>
-              Favorite
+              <span className="wd">Favorite</span>
             </ListItem>
             <ListItem className="items">
               <ListItemPrefix>
                 <MdOutlineLogout />
               </ListItemPrefix>
-              Logout
+              <span className="wd">Logout</span>
             </ListItem>
           </List>
         </Card>

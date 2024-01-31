@@ -25,9 +25,7 @@ function AppRouter({ className }) {
             path='/gather' exact element={<Gather/>}
           /> 
 
-          <Route
-            path='/community' element={<Community />}
-          />
+
 
           <Route 
             path='/teamspace' element={<Teamspace/>}

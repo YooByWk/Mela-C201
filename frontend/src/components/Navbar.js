@@ -14,9 +14,9 @@ const Container = styled.div`
   font-size: larger;
   justify-content: space-between;
   align-items: center;
-  background-color: ${props => props.theme.colours.primary};
+  background-color: ${props => props.$backcolour==='10' ? props.theme.colours.point : props.theme.colours.primary};
   span {
-    font-size: medium;
+    font-size: large;
     /* margin-left: 5% ; */
   }
   img {
@@ -82,10 +82,10 @@ const submitHandler = (event) => {
   // state 
 }
 
-function Navbar() {
+function Navbar({backcolour, radius}) {
   return (
-    <>
-      <Container>
+    < >
+      <Container $backcolour={backcolour}>
         <img  src={logo} alt="" />
           <SearchBar onSubmit={submitHandler}>
           <FaSearch className='Icon'/>
