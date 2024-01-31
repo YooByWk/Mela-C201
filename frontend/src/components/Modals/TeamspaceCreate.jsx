@@ -48,22 +48,18 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
           </h2>
           <form onSubmit={handleSubmit}> 
           <div id="modal-description" className="modal-description">
-            Email
-            <input type='email' placeholder='ssafy@gmail.com' id='id' onChange={handleChange} />
+            <input type="file" />
+            <input type="date" />
             <br/>
-            Password
-            <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} />
-            <br />
-            <input type='checkbox' />
-              Remember me
+            팀 스페이스
+            <input type='text' placeholder='팀 스페이스 이름을 입력해주세요. (최대 30자)' id='title' onChange={handleChange} />
+            <br/>
+            <input type='text' placeholder='팀 스페이스 설명을 입력해주세요.' id='content' onChange={handleChange} />
             <br />
             <button type='submit'>
-              Log in
+              Create
             </button>
             <br />
-            <div id='find-password' className='find-password'>
-              Forgot password
-            </div>
           </div>
           </form>
         </ModalContent>
@@ -118,6 +114,7 @@ const ModalContent = styled('div')(
     border-radius: 8px;
     border: solid 1px #254EF8;
     padding: 24px;
+    color: white;
 
     & .modal-title {
       text-align: center;
