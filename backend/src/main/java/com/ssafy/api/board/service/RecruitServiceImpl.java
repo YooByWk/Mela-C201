@@ -129,7 +129,7 @@ public class RecruitServiceImpl implements RecruitService {
             positions.add(position.getPositionIdx());
         }
 
-        return BoardRecruitRes.of(boardRecruit.getBoardIdx(), boardRecruit, positions);
+        return BoardRecruitRes.of(boardRecruit.getBoardIdx(), boardRecruit, positions, boardService.getBoardLikeNum(boardRecruit.getBoardIdx().getBoardIdx()));
     }
 
     @Override
@@ -146,14 +146,6 @@ public class RecruitServiceImpl implements RecruitService {
 
         pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
         page = recruitRepository.findByTitleContainingOrContentContaining(getListInfo.getWord(), pageable);
-
-//        if (getListInfo.getWord() == null) {
-//            pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
-//            page = boardRepository.findAll(pageable);
-//        } else {
-//            pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
-//            page = boardRepository.findByTitleContainingOrContentContaining(getListInfo.getWord(), getListInfo.getWord(), pageable);
-//        }
 
         return page.getContent();
     }

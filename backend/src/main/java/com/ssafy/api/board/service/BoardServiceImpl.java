@@ -5,6 +5,7 @@ import com.ssafy.api.board.request.BoardRegisterPostReq;
 import com.ssafy.api.board.request.BoardUpdatePutReq;
 import com.ssafy.api.board.request.CommentRegisterPostReq;
 import com.ssafy.db.entity.Board;
+import com.ssafy.db.entity.BoardLike;
 import com.ssafy.db.entity.Comment;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.*;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service("BoardService")
 public class BoardServiceImpl implements BoardService {
@@ -32,6 +34,8 @@ public class BoardServiceImpl implements BoardService {
     UserRepository userRepository;
     @Autowired
     UserRepositorySupport userRepositorySupport;
+    @Autowired
+    BoardLikeRepository boardLikeRepository;
 
     @Override
     public Board registBoard(BoardRegisterPostReq registInfo, User user) {
@@ -116,5 +120,35 @@ public class BoardServiceImpl implements BoardService {
         List<Comment> comments = commentRepository.findByBoardIdxOrderByRegistDateDesc(boardRepository.getOne(boardIdx));
 
         return comments;
+    }
+
+    @Override
+    public void likeBoard(Long boardIdx, User user) {
+        Optional<BoardLike> boardLike = boardLikeRepository.findByUserIdxAndBoardIdx(user, boardRepository.getOne(boardIdx));
+        if(boardLike.isPresent()) {
+            deleteLikeBoard(boardIdx, user);
+        } else {
+            createLikeBoard(boardIdx, user);
+        }
+    }
+
+
+    @Override
+    public void createLikeBoard(Long boardIdx, User user) {
+        BoardLike boardLike = new BoardLike();
+        boardLike.setBoardIdx(boardRepository.getOne(boardIdx));
+        boardLike.setUserIdx(user);
+        boardLikeRepository.save(boardLike);
+    }
+
+    @Override
+    public void deleteLikeBoard(Long boardIdx, User user) {
+        BoardLike boardLike = boardLikeRepository.findByUserIdxAndBoardIdx(user, boardRepository.getOne(boardIdx)).get();
+        boardLikeRepository.delete(boardLike);
+    }
+
+    @Override
+    public int getBoardLikeNum(Long boardIdx) {
+        return boardLikeRepository.countByBoardIdx(boardRepository.getOne(boardIdx));
     }
 }
