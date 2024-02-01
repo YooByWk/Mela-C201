@@ -6,7 +6,8 @@ import SigninModal from '../components/Modals/SigninModal';
 import SignupModal from '../components/Modals/SignupModal';
 import { Homepage } from '../pages/Homepage';
 import Navbar from '../components/Navbar';
-import Teamspace from '../pages/Teamspace';
+import TeamspaceMain from '../pages/TeamspaceMain';
+import TeamspaceDetail from '../pages/TeamspaceDetail'
 import Gather from '../pages/Gather';
 import UserUpdate from '../pages/UserUpdate';
 import PortfolioAll from '../pages/PortfolioAll';
@@ -26,12 +27,14 @@ function AppRouter({ className }) {
             path='/gather' exact element={<Gather/>}
           /> 
 
-
-
           <Route 
-            path='/teamspace' element={<Teamspace/>}
+            path='/teamspace' element={<TeamspaceMain/>}
           />
 
+          <Route 
+            path='/teamspace/detail' element={<TeamspaceDetail/>}
+          />
+          
           <Route
             path='/signup' element={<SignupModal />}
             />
