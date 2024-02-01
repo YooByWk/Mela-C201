@@ -1,11 +1,13 @@
 import DefaultFileShape from "../components/DefaultFolderShape";
 import TeamspaceCreateModal from "../components/Modals/TeamspaceCreate";
+import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import styled from "styled-components";
-
+import { Outlet } from "react-router-dom";
+import { useState } from "react";
 
 function TeamspaceMain () {
-  console.log('팀스페이스 공사중')
+  const [isWriting, setIsWriting] = useState(false);
   return ( 
     <TeamspaceContainer>
       <SideDiv>
@@ -13,11 +15,14 @@ function TeamspaceMain () {
       </SideDiv>
       
       <MainDiv>
+      <Navbar backcolour="10" />
+        <Outlet />
         <h1>팀 스페이스 공간입니다.</h1>
         <TeamspaceCreateModal />
         <DefaultFileShape 
         />
       </MainDiv>
+      {!isWriting && <RSideDiv>3</RSideDiv>}
     </TeamspaceContainer>
    );
 }
@@ -56,4 +61,8 @@ const MainDiv = styled.div`
       margin-bottom: 3vh;
     }
   }
+`;
+
+const RSideDiv = styled.div`
+  width: 12.5%;
 `;
