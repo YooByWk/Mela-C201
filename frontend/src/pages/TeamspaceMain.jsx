@@ -1,7 +1,7 @@
 import DefaultFileShape from "../components/DefaultFolderShape";
 import TeamspaceCreateModal from "../components/Modals/TeamspaceCreate";
 
-function Teamspace () {
+function TeamspaceMain () {
   console.log('팀스페이스 공사중')
   return ( 
     <>
@@ -13,4 +13,4 @@ function Teamspace () {
    );
 }
 
-export default Teamspace ;
+export default TeamspaceMain ;
