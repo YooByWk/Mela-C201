@@ -15,9 +15,9 @@ import com.ssafy.db.entity.Comment;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,6 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Api(value = "게시판 API", tags = {"Board"})
@@ -39,10 +38,15 @@ public class BoardController {
     UserService userService;
 
     @GetMapping("")
-    @ApiOperation(value = "게시글 리스트 조회", notes = "<string>페이지번호, 페이지당 글 수, 검색어, 정렬조건</string>에 따라 게시글을 조회한다.")
+    @ApiOperation(value = "게시글 리스트 조회", notes = "<string>페이지번호(page), 페이지당 글 수(size), 검색어(word), 정렬조건(sortKey) </string>에 따라 게시글을 조회한다.")
     public ResponseEntity<List<BoardRes>> getBoardList(
-            @RequestParam int page, @RequestParam int size, @RequestParam(required = false) String word, @RequestParam(required = false) String sortKey
+            @ApiParam(value = "페이지 번호 (1부터 시작)", example = "1") @RequestParam int page,
+            @ApiParam(value = "페이지당 글 수", example = "10") @RequestParam int size,
+            @ApiParam(value = "검색어", example = "검색내용") @RequestParam(required = false) String word,
+            @ApiParam(value = "정렬 조건", example = "viewNum") @RequestParam(required = false) String sortKey
     ) {
+        page-=1; // 1부터 시작하도록 함
+
         BoardGetListReq boardGetListReq = new BoardGetListReq();
         boardGetListReq.setPage(page);
         boardGetListReq.setSize(size);
@@ -160,25 +164,5 @@ public class BoardController {
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
-
-    /*
-    @PostMapping()
-	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드 ...를</strong>를 통해 회원가입 한다.")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "성공"),
-			@ApiResponse(code = 401, message = "인증 실패"),
-			@ApiResponse(code = 404, message = "사용자 없음"),
-			@ApiResponse(code = 500, message = "서버 오류")
-	})
-	public ResponseEntity<? extends BaseResponseBody> register(
-			@RequestBody @ApiParam(value="회원가입 정보", required = true) UserRegisterPostReq registerInfo) {
-
-		//임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
-		User user = userService.createUser(registerInfo);
-		user.setUserType("unauth");
-
-		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-	}
-     */
 
 }

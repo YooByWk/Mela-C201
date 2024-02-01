@@ -7,12 +7,11 @@ import com.ssafy.api.board.request.CommentRegisterPostReq;
 import com.ssafy.db.entity.Board;
 import com.ssafy.db.entity.Comment;
 import com.ssafy.db.entity.User;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface BoardService {
-    void registBoard(BoardRegisterPostReq registInfo, User user);
+    Board registBoard(BoardRegisterPostReq registInfo, User user);
     void updateBoard(BoardUpdatePutReq updateInfo, Long boardIdx, Long userIdx);
     void deleteBoard(Long boardIdx);
     Board getBoard(Long boardIdx) throws Exception;

@@ -2,15 +2,12 @@ package com.ssafy.api.teamspace.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssafy.db.entity.File;
-import com.ssafy.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
