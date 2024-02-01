@@ -46,15 +46,9 @@ export const signup = async ({
 }
 
 /**  닉네임 중복 확인 API */
-export const checkDupNickname = async ({ 
-    nickname }) => {
-    const data = { 
-        nickname
-    }
-
-    const response = await AuthApi.get(`/users/nickname/${encodeURIComponent(data)}`, data)
-    console.log(encodeURIComponent(data))
-    console.log(data)
+export const checkDupNickname = async ({ nickname }) => {
+    const response = await AuthApi.get(`/users/nickname/${encodeURIComponent(nickname)}`)
+    console.log(response.data)
     return response.data
 }
 
@@ -66,18 +60,14 @@ export const logout = async () => {
 // 이메일 인증 전송
 export const email = async (emailId) => {
     const data = { emailId }
-    console.log(data)
+    const response = await AuthApi.post(`/auth/email`, data)
 
-    const response = AuthApi.post(`/auth/email`, data)
-    console.log(response)
     return response.data
 }
 
-
 // 사용자 이메일 인증
-// export const verify = async () => {
-
-//     const response = await AuthApi.get(`/auth/verify`)
-//     console.log(response.data)
-//     return response.data
-// }
+export const verify = async (accessToken) => {
+    const response = await AuthApi.get(`/auth/verify?token=${accessToken}`)
+    console.log(response.data)
+    return response.data
+}

@@ -61,3 +61,10 @@ export const followUser = async (userId) => {
     console.log(response.data)
     return response.data
 }
+
+// 이메일 중복 확인
+export const emailCheck = async (userId) => {
+    const response = await UserApi.get(`/api/v1/users/emailId/${userId}`)
+    console.log(response.data)
+    return response.data
+}

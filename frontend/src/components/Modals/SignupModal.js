@@ -4,20 +4,22 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
-import { signup, checkDupNickname } from '../../API/AuthAPI'
+import { signup, checkDupNickname, email } from '../../API/AuthAPI'
 //Gender Dropdown
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { email } from '../../API/AuthAPI';
+import Box from '@mui/material/Box'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import { emailCheck } from '../../API/UserAPI'
 
 function SignupModal({className, fontSize, padding}) {
   const navigate = useNavigate()
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
+  const [passwordConfirm, setPasswordConfirm] = React.useState('')
+  const [isPasswordConfirm, setIsPasswordConfirm] = React.useState(false)
   const [values, setValues] = React.useState({
     emailId: "",
     emailDomain: "", 
@@ -36,16 +38,36 @@ function SignupModal({className, fontSize, padding}) {
       console.log(values.nickname)
       console.log(res)
       if (res.statusCode === 200) {
-        alert('중복 없음')
+        alert('사용 가능한 닉네임입니다.')
       }
     })
     .catch((err) => {
         if (err.statusCode === 409) {
-          alert('이미 있는 닉네임')
+          alert('이미 있는 닉네임입니다.')
         }
         else {
           console.error(err)
         }
+    })
+  }
+
+  // 이메일 아이디 중복 확인
+  const checkEmailId = () => {
+    emailCheck(values.emailId)
+    .then((res) => {
+      console.log(res)
+      console.log(values.emailId)
+      if (res.statusCode === 200) {
+        alert('사용 가능한 아이디입니다.')
+      }
+    })
+    .catch((err) => {
+      if (err.statusCode === 409) {
+        alert('이미 있는 아이디입니다.')
+      }
+      else {
+        console.error(err)
+      }
     })
   }
 
@@ -54,6 +76,17 @@ function SignupModal({className, fontSize, padding}) {
       [e.target.id]: e.target.value,})
       console.log(e.target.value)
     }
+
+  // 비밀번호 확인
+  const handlePasswordCheck = async (e) => {
+    const currentPasswordCheck = e.target.value
+    setPasswordConfirm(currentPasswordCheck)
+    if (values.password !== currentPasswordCheck) {
+      setIsPasswordConfirm(false)
+    } else {
+      setIsPasswordConfirm(true)
+    }
+  }
     
   const handleGenderChange = async (e) => {
     setValues({...values,
@@ -73,7 +106,8 @@ function SignupModal({className, fontSize, padding}) {
     try {
       await email(values.emailId)
       console.log(values.emailId)
-      navigate('/verify')
+      alert('이메일 인증을 진행해주세요.')
+      navigate('/')
     } catch (err) {
       console.log(err)
     }
@@ -101,48 +135,56 @@ function SignupModal({className, fontSize, padding}) {
             <input type='text' placeholder='ssafy' id='emailId' onChange={handleChange} />
             @
             <input type='text' palceholder='gmail.com' id='emailDomain' onChange={handleChange} />
+            <input type='button' onClick={checkEmailId} value='중복 확인' />
             <br/>
             Password
             <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange}/>
             <br/>
             Password again
-            <input type='password' id='password2' onChange={handleChange}/>
+            <input type='password' id='password2' onChange={handlePasswordCheck} value={passwordConfirm}/>
+            {passwordConfirm && (isPasswordConfirm
+              ? <p style={{ color: 'green'}}>비밀번호가 일치합니다.</p>
+              : <p style={{ color: 'red'}}>비밀번호가 다릅니다.</p>
+            )}
             <br/>
             Name
             <input type='text' placeholder='홍길동' id='name' onChange={handleChange}/>
             <br/>
             Nickname
             <input type='text' placeholder='최대 32자' id='nickname' onChange={handleChange}/>
-            <input type='button' onClick={checkNickname} value='닉네임 중복 확인' />
+            <input type='button' onClick={checkNickname} value='중복 확인' />
             <br/>
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Gender
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={values.gender}
-                  label="Gender"
-                  onChange={handleGenderChange}
-                  name='gender'
-                >
-                  <MenuItem value='Etc'>
-                    Etc
-                  </MenuItem>
-                  <MenuItem value='Male'>
-                    Male
-                  </MenuItem>
-                  <MenuItem value='Female'>
-                    Female
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-            <br/>
-            Birth
-            <input type='date' id='birth' onChange={handleChange}/>
+            <div className='gender-birth'>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Gender
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={values.gender}
+                    label="Gender"
+                    onChange={handleGenderChange}
+                    name='gender'
+                    className='select'
+                  >
+                    <MenuItem value='Etc'>
+                      Etc
+                    </MenuItem>
+                    <MenuItem value='Male'>
+                      Male
+                    </MenuItem>
+                    <MenuItem value='Female'>
+                      Female
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+              <br/>
+              Birth
+              <input type='date' id='birth' onChange={handleChange} className='select'/>
+            </div>
             <br/>
             <input type='checkbox' id='searchAllow' onChange={handleSearchAllowChange}/>
               다른 회원의 검색 조건에 노출을 허용합니다.
@@ -219,6 +261,15 @@ const ModalContent = styled('div')(
       line-height: 1.5rem;
       font-weight: 400;
       margin-bottom: 4px;
+    }
+
+    & .gender-birth {
+      display: flex;
+    }
+
+    & .select {
+      background-color: #151c2c;
+      color: white;
     }
   `,
 )
