@@ -25,8 +25,8 @@ const useStore = create(set => ({
     set({user: null})
     localStorage.clear()
     set({islogined: false})
-    window.alert('로그아웃')
-    window.location.href = `/`
+    // window.alert('로그아웃')
+    // window.location.href = `/`
   },
 }))
 

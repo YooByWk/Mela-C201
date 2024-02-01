@@ -98,7 +98,7 @@ public class BoardController {
 
 
     @DeleteMapping("/{boardid}")
-    @ApiOperation(value = "게시글 삭제", notes = "<string>게시글 아이디로</strong>로 댓글을 삭제한다.")
+    @ApiOperation(value = "게시글 삭제", notes = "<string>게시글 아이디로</strong>로 게시글을 삭제한다.")
     public ResponseEntity<? extends BaseResponseBody> deleteBoard(
             @PathVariable(name = "boardid") Long boardIdx
     ) {
@@ -112,7 +112,6 @@ public class BoardController {
     public ResponseEntity<BoardRes> getBoard(@PathVariable(name = "boardid") Long boardIdx) {
         try {
             Board board = boardService.getBoard(boardIdx);
-            System.out.println("board: " + board.getBoardIdx());
 
             return ResponseEntity.status(200).body(BoardRes.of(board));
         } catch (Exception e) {

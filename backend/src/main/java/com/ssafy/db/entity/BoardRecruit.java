@@ -32,18 +32,15 @@ public class BoardRecruit {
     @ManyToOne
     @JoinColumn(name="genre_idx1", referencedColumnName="genreIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
     Genre genreIdx1;
 
     @ManyToOne
     @JoinColumn(name="genre_idx2", referencedColumnName="genreIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
     Genre genreIdx2;
 
     @ManyToOne
     @JoinColumn(name="genre_idx3", referencedColumnName="genreIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
     Genre genreIdx3;
 }
