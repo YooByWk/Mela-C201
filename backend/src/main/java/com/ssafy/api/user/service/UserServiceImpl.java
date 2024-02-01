@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -314,5 +315,37 @@ public class UserServiceImpl implements UserService {
 
 		return followRepositorySupport.findUserFollowee(userRepository.findByEmailId(emailId).get());
 
+	}
+
+	@Override
+	public List<Notification> getNotification(User nowLoginUser) {
+		Optional<List<Notification>> notiList = notificationRepository.findByUserIdx(nowLoginUser);
+		if(notiList.isPresent()){
+			return notiList.get();
+		}
+		return null;
+	}
+
+	@Override
+	public String checkNotification(User nowLoginUser, Long notiId) {
+		Optional<Notification> notification = notificationRepository.findByNotificationIdxAndUserIdx(notiId, nowLoginUser);
+
+		if(notification.isPresent()){
+			if(!notification.get().getChecked()){
+				notification.get().setChecked(true);
+				notificationRepository.save(notification.get());
+				return "알람을 확인했습니다";
+			}else{
+				return "이미 확인한 알람입니다";
+			}
+		}
+		else{
+			return "알람이 없습니다";
+		}
+	}
+
+	@Override
+	public void deleteNotification(User nowLoginUser, Long notiId) {
+		notificationRepository.deleteByNotificationIdxAndUserIdx(notiId, nowLoginUser);
 	}
 }

@@ -19,3 +19,5 @@ export const BoardList = async({page, size, sortKey, word}) => {
   console.log(response)
   return response
 }
+
+export const BoardPost = () => {}
