@@ -36,6 +36,8 @@ public class BoardRecruitRes {
     int viewNum=0;
     @ApiModelProperty(name="write user idx")
     Long userIdx;
+    @ApiModelProperty(name="like number")
+    int likeNum;
 
     @ApiModelProperty(name="마감일", example="2000-01-01")
     LocalDate endDate;
@@ -48,7 +50,7 @@ public class BoardRecruitRes {
     @ApiModelProperty(name="포지션 리스트")
     List<String> positions;
 
-    public static BoardRecruitRes of(Board board, BoardRecruit boardRecruit, List<Position> positions){
+    public static BoardRecruitRes of(Board board, BoardRecruit boardRecruit, List<Position> positions, int likeNum){
         BoardRecruitRes res = new BoardRecruitRes();
         res.setBoardIdx(board.getBoardIdx());
         res.setTitle(board.getTitle());
@@ -58,6 +60,7 @@ public class BoardRecruitRes {
         res.setUpdateDate(board.getUpdateDate());
         res.setViewNum(board.getViewNum());
         res.setUserIdx(board.getUserIdx().getUserIdx());
+        res.setLikeNum(likeNum);
 
         res.setEndDate(boardRecruit.getEndDate());
         if (boardRecruit.getGenreIdx1() != null) {

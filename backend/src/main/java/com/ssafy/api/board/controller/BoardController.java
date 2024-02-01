@@ -56,7 +56,7 @@ public class BoardController {
         List<Board> boards = boardService.getBoardList(boardGetListReq);
         List<BoardRes> res = new ArrayList<>();
         for (Board board : boards) {
-            res.add(BoardRes.of(board));
+            res.add(BoardRes.of(board, boardService.getBoardLikeNum(board.getBoardIdx())));
         }
 
         return ResponseEntity.status(200).body(res);
@@ -96,7 +96,6 @@ public class BoardController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
-
     @DeleteMapping("/{boardid}")
     @ApiOperation(value = "게시글 삭제", notes = "<string>게시글 아이디로</strong>로 게시글을 삭제한다.")
     public ResponseEntity<? extends BaseResponseBody> deleteBoard(
@@ -113,13 +112,12 @@ public class BoardController {
         try {
             Board board = boardService.getBoard(boardIdx);
 
-            return ResponseEntity.status(200).body(BoardRes.of(board));
+            return ResponseEntity.status(200).body(BoardRes.of(board, boardService.getBoardLikeNum(board.getBoardIdx())));
         } catch (Exception e) {
             return ResponseEntity.status(400).body(null);
         }
 
     }
-
 
     @PostMapping("/{boardid}/comments")
     @ApiOperation(value = "댓글 등록", notes = "<string></strong>댓글을 등록한다.")
@@ -164,4 +162,18 @@ public class BoardController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
+    @PutMapping("/{boardid}/like")
+    @ApiOperation(value = "게시글 좋아요", notes = "게시글 좋아요 / 좋아요 취소를 한다.")
+    public ResponseEntity<? extends BaseResponseBody> likeBoard(
+            @ApiIgnore Authentication authentication,
+            @PathVariable(name = "boardid") Long boardIdx
+    ) {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userEmail = userDetails.getUsername();
+        User user = userService.getUserByEmail(userEmail);
+
+        boardService.likeBoard(boardIdx, user);
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
 }

@@ -2,16 +2,13 @@ import styled from "styled-components";
 import { FaSearch } from "react-icons/fa";
 import React, { useState, useEffect } from 'react';
 import { BoardList } from "../../API/BoardAPI";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, Link } from "react-router-dom";
 
 
 function CommunityHome() {
-
   const [data, setData] = useState(null);
   const [boardInput, setBoardInput] = useState('');
   const movePage = useNavigate()
-
 
   // page는 현재 페이지
   // column 이름으로 sort
@@ -38,6 +35,7 @@ function CommunityHome() {
     const response = await BoardList({ page: 1, size: 20,word :boardInput? boardInput : '' });
     setData(response.data);
   };
+
   const LastedSorted = async () => {
     const response = await BoardList({ page: 1, size: 20, word :boardInput? boardInput : '' });
     if (response.data.length>1) {
@@ -46,13 +44,9 @@ function CommunityHome() {
     } 
   };
 
-
   const Create = () => {
     movePage('/community/create')
   };
-
-  
-
 
   const SearchKeyword = async (event) => {
     setBoardInput(event.target.value)
@@ -96,7 +90,7 @@ function CommunityHome() {
               return (
                 <li key={article.boardIdx}>
                   {article.boardIdx}
-                  || 제목 : {article.title}
+                  || 제목 : <Link to={`/community/${article.boardIdx}`}>{article.title} </Link>
                   || 작성자 : {article.nickname}
                   || 조회수 : {article.viewNum}
                 </li>
@@ -119,8 +113,8 @@ function CommunityHome() {
 
 export default CommunityHome;
 
-const MainDiv = styled.div`
 
+const MainDiv = styled.div`
 
   .Container {
     margin-top: 5%;

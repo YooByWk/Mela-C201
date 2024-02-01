@@ -3,6 +3,7 @@ package com.ssafy.api.board.controller;
 import com.ssafy.api.board.request.*;
 import com.ssafy.api.board.response.BoardRecruitRes;
 import com.ssafy.api.board.response.BoardRes;
+import com.ssafy.api.board.service.BoardService;
 import com.ssafy.api.board.service.RecruitService;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
@@ -33,6 +34,8 @@ public class RecruitController {
     RecruitService recruitService;
     @Autowired
     UserService userService;
+    @Autowired
+    BoardService boardService;
 
     @GetMapping("")
     @ApiOperation(value = "구인글 리스트 조회", notes = "<string>페이지번호(page), 페이지당 글 수(size), 검색어(word), 정렬조건(sortKey) </string>에 따라 게시글을 조회한다.")
@@ -55,7 +58,7 @@ public class RecruitController {
         List<BoardRecruitRes> res = new ArrayList<>();
         for (BoardRecruit board : recruits) {
             List<Position> positions = recruitService.getPositions(board.getBoardRecruitIdx());
-            res.add(BoardRecruitRes.of(board.getBoardIdx(), board, positions));
+            res.add(BoardRecruitRes.of(board.getBoardIdx(), board, positions, boardService.getBoardLikeNum(board.getBoardIdx().getBoardIdx())));
         }
 
         return ResponseEntity.status(200).body(res);

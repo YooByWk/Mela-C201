@@ -7,6 +7,7 @@ import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
 import com.ssafy.api.teamspace.response.TeamspaceListRes;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
 import com.ssafy.api.teamspace.response.TeamspaceRes;
+import com.ssafy.common.util.NotificationUtil;
 import com.ssafy.db.entity.Schedule;
 import com.ssafy.db.entity.Teamspace;
 import com.ssafy.db.entity.TeamspaceMember;
@@ -48,6 +49,9 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     ScheduleRepository scheduleRepository;
     @Autowired
     ScheduleRepositorySupport scheduleRepositorySupport;
+
+    @Autowired
+    NotificationUtil notificationUtil;
 
     @Override
     @Transactional
@@ -135,6 +139,18 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         teamspaceMember.setTeamspaceIdx(teamspaceRepository.getOne(teamspaceIdx));
         teamspaceMember.setUserIdx(userRepository.getOne(userIdx));
         teamspaceMemberRepository.save(teamspaceMember);
+
+        if (teamspaceMember.getUserIdx().getUserIdx() != teamspaceRepository.getOne(teamspaceIdx).getHost().getUserIdx()) {
+
+            String message = teamspaceRepository.getOne(teamspaceIdx).getTeamName();
+            if(message.length() >= 6) {
+                message = message.substring(0, 7) + "..";
+            }
+
+            message = "'" + message + "' 팀스페이스에 초대되었습니다.";
+
+            notificationUtil.sendNotification(message, userRepository.getOne(userIdx));
+        }
     }
 
     @Override
@@ -163,6 +179,13 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         schedule.setStartTime(registInfo.getStartTime());
         schedule.setEndTime(registInfo.getEndTime());
         scheduleRepository.save(schedule);
+
+        List<TeamspaceMemberListRes> lists = getTeamspaceMemberList(teamspaceIdx);
+        for (TeamspaceMemberListRes list : lists) {
+            User user = userRepository.getOne(list.getUserIdx());
+            // TODO:
+            String message = "팀스페이스에 " + " 일정이 추가되었습니다.";
+        }
     }
 
     @Override

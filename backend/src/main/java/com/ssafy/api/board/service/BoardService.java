@@ -20,4 +20,9 @@ public interface BoardService {
     void registComment(CommentRegisterPostReq registInfo, Board board, User user);
     void deleteComment(Long commentIdx);
     List<Comment> listComment(Long boardIdx);
+
+    void likeBoard(Long boardIdx, User user);
+    void createLikeBoard(Long boardIdx, User user);
+    void deleteLikeBoard(Long boardIdx, User user);
+    int getBoardLikeNum(Long boardIdx);
 }
