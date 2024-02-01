@@ -2,15 +2,19 @@ import "./App.scss";
 import { Fragment } from "react";
 
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-// import { Homepage } from "./pages/Homepage";
 import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import GlobalStyle from "./styles/GlobalStyle";
 import styled, { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
-import Community from "./pages/Community";
 import AppRouter from "./router/router";
 import Sidebar from "./components/Sidebar";
+
+import Community from "./pages/Community";
+import CommunityCreate from "./components/community/CommunityCreate";
+import CommunityDetail from "./components/community/CommunityDetail";
+import CommunityHome from "./components/community/CommunityHome";
+
 
 const StyledAppRouter = styled(AppRouter)`
   /* background-color: blue; */
@@ -57,7 +61,11 @@ function App() {
         <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path='/community' element={<Community />}/>
+          <Route path='/community' element={<Community />}>
+          <Route path='/community' exact element={<CommunityHome/>} />
+        <Route path='/community/create' element={<CommunityCreate/>} />
+        <Route path='/community/1' element={<CommunityDetail/>} />
+          </Route>
           <Route
             path="*"
             element={

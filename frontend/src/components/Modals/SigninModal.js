@@ -4,8 +4,15 @@ import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
 import { signin } from '../../API/AuthAPI'
+import useStore from '../../status/store'
+import { useNavigate } from 'react-router-dom'
 
 function SigninModal({className, fontSize, padding}) {
+  const setIsLogined = useStore(state => state.setIsLogined)
+  const IsLogined = useStore(state => state.islogined)
+  const fetchUser = useStore(state => state.fetchUser)
+  const userInfo = useStore(state => state.user)
+  const movePage = useNavigate()
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -26,9 +33,17 @@ function SigninModal({className, fontSize, padding}) {
     .then((res) => {
       localStorage.clear()
       localStorage.setItem('accessToken', res.accessToken)
-      window.location.href = `/profile`
       console.log('로그인 성공')
       console.log(res)
+      setIsLogined(true)
+      console.log(IsLogined)
+      fetchUser().then(() => {
+        console.log(userInfo, '유저 정보')
+      })
+      movePage('/profile')
+    })
+    .then(() => {
+
     })
     .catch((err) => {
       console.log(err)
