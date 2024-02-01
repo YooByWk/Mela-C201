@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import DefaultButton from '../components/DefaultButton';
 import styled from 'styled-components';
-import { fetchUser, followUser } from './API/UserAPI';
+import { fetchUser, followUser } from '../API/UserAPI';
 
 const Container = styled.div`
     padding: 1rem;
@@ -20,7 +20,7 @@ const Title = styled.h3`
 function UserEdit(props) {
     const [values, setValues] = useState([])
     const [isFollowed, setIsFollowed] = useState(false)
-    const [currentUser, setCurrentUser] = useState(null) 
+    const [currentUser, setCurrentUser] = useState({}) 
 
     const navigate = useNavigate()
 
@@ -62,35 +62,37 @@ function UserEdit(props) {
     return (
         <Container>
             <Title>{values.nickname}</Title>
-            {values && (
+            {values && currentUser && (
                 <div>
-                    <p>{ values.name }</p>
-                    <p>Gender : { values.gender }</p>
-                    <p>Birth : { values.birth }</p>
-                    <p>Like genre : </p>
-                    <p>Position : </p>
-                    <p>SNS</p>
-                    <p>{values.searchAllow}</p>
-                </div>
-            )}
+                    {currentUser.emailId === values.emailId ? (
+                        <>
+                            <p>{ values.name }</p>
+                            <p>Gender : { values.gender }</p>
+                            <p>Birth : { values.birth }</p>
+                            <p>Like genre : </p>
+                            <p>Position : </p>
+                            <p>SNS</p>
+                            <p>{values.searchAllow}</p>
 
-            {currentUser && values && currentUser.emailId === values.emailId ? (
-                <DefaultButton 
-                    text={'Edit'}
-                    backgroundcolor={'#6C7383'}
-                    fontcolor={'white'}
-                    width={'6rem'}
-                    onClick={goUpdate}
-                />
-            ) : (
-                <DefaultButton 
-                    text={isFollowed ? 'Unfollow' : 'Follow'}
-                    backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
-                    fontcolor={'white'}
-                    width={'6rem'}
-                    onClick={handleFollow}
-                />
-            )}
+                            <DefaultButton 
+                                text={'Edit'}
+                                backgroundcolor={'#6C7383'}
+                                fontcolor={'white'}
+                                width={'6rem'}
+                                onClick={goUpdate}
+                            />
+                        </>
+                    ) : (
+                        <DefaultButton 
+                            text={isFollowed ? 'Unfollow' : 'Follow'}
+                            backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
+                            fontcolor={'white'}
+                            width={'6rem'}
+                            onClick={handleFollow}
+                        />
+                    )}
+                </div>   
+            )}   
         </Container>
     )
 }

@@ -6,7 +6,7 @@ import { FaRegUser, FaRegHeart } from "react-icons/fa6";
 import { AiOutlineMessage } from "react-icons/ai";
 import { MdOutlineLocalFireDepartment, MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
-import { fetchUser, follower, followee } from "./API/UserAPI";
+import { fetchUser, follower, followee } from "../API/UserAPI";
 
 const SideContainer = styled.div`
   /* width: 10%;
