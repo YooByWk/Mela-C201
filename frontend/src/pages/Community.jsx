@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import Sidebar from "./../components/Sidebar";
 import { FaSearch } from "react-icons/fa";
-import { BoardList } from "../components/API/BoardAPI";
+import { BoardList } from "../API/BoardAPI";
 import { Routes } from 'react-router-dom';
 
 

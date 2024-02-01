@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card, List, ListItem, ListItemPrefix } from "@material-tailwind/react";
 
@@ -6,6 +6,7 @@ import { FaRegUser, FaRegHeart } from "react-icons/fa6";
 import { AiOutlineMessage } from "react-icons/ai";
 import { MdOutlineLocalFireDepartment, MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
+import { fetchUser, follower, followee } from "../API/UserAPI";
 import { logout } from "../API/AuthAPI";
 
 const SideContainer = styled.div`
@@ -38,12 +39,39 @@ const CustomLink = styled(Link)`
 `
 
 function Sidebar({ className, paddingtop }) {
+  const [currentUser, setCurrentUser] = useState(null)
+  const [followerList, setFollowerList] = useState([])
+  const [followeeList, setFolloweeList] = useState([])
+
+  useEffect(() => {
+    const loadCurrentUser = async() => {     
+      try {
+          const loginUser = await fetchUser()
+          setCurrentUser(loginUser)
+          console.log(currentUser.nickname)
+      } catch (err) {
+          console.error(err)
+      }
+    }; loadCurrentUser()
+
+    const getFollowList = async() => {
+      try {
+        const followerList = await follower()
+        setFollowerList(followerList)
+        console.log(followeeList)
+
+      } catch (err) {
+        console.error(err)
+      }
+    }; getFollowList()
+  }, [])
+
+
   return (
     <div className={className}>
       <SideContainer className="contents" $paddingtop={paddingtop}>
-        <p>
-            프로필 사진 들어갈 자리
-        </p>
+        <h3>{currentUser && currentUser.nickname}</h3>
+        <p>{followerList}</p>
         <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4">
           <List>
             <ListItem className="items">
