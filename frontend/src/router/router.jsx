@@ -9,6 +9,7 @@ import Gather from '../pages/Gather';
 import UserUpdate from '../pages/UserUpdate';
 import PortfolioAll from '../pages/PortfolioAll';
 import Message from '../pages/Message';
+import EmailVerify from '../pages/EmailVerify';
 
 
 function AppRouter({ className }) {
@@ -48,6 +49,10 @@ function AppRouter({ className }) {
           <Route
             path='/message' element={<Message />}
             />
+
+          <Route 
+            path='/verify' element={<EmailVerify />}
+          />
         </Routes>
     </div>
   );
