@@ -93,6 +93,7 @@ function CommunityHome() {
                   || 제목 : <Link to={`/community/${article.boardIdx}`}>{article.title} </Link>
                   || 작성자 : {article.nickname}
                   || 조회수 : {article.viewNum}
+                  || 좋아요 : {article.likeNum}
                 </li>
               );
             }) )
@@ -115,7 +116,10 @@ export default CommunityHome;
 
 
 const MainDiv = styled.div`
-
+  a {
+    text-decoration: none;
+    color : rgb(19, 160, 0)
+  }
   .Container {
     margin-top: 5%;
     h1 {
