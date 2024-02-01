@@ -4,10 +4,45 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import styled from "styled-components";
 import { Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { TeamspaceList } from "../API/TeamspaceAPI";
+
+
 
 function TeamspaceMain () {
   const [isWriting, setIsWriting] = useState(false);
+  
+  const [values, setValues] = useState({
+    endDate: "",
+    host: {}, 
+    startDate: "", 
+    teamDescription: "",
+    teamName: "", 
+    // teamspaceBackgroundPictureFileIdx: {}, 
+    teamspaceIdx: "",
+    // teamspacePictureFileIdx: {},
+  })
+
+  useEffect(() => {
+    const myTeamspaceList = async() => {     
+      try {
+          const teamspace = await TeamspaceList()
+          // teamsapce가 배열형식이므로 하나씩 저장
+          // teamspace.map((elem, index) => {
+          //   setValues(teamspace(elem))
+          //   console.log(index)
+          // })
+          setValues(teamspace[0])
+          console.log(teamspace)
+      } catch (err) {
+          console.error(err)
+      }
+    }; 
+    
+    myTeamspaceList()
+
+  }, [])
+
   return ( 
     <TeamspaceContainer>
       <SideDiv>
@@ -19,7 +54,12 @@ function TeamspaceMain () {
         <Outlet />
         <h1>팀 스페이스 공간입니다.</h1>
         <TeamspaceCreateModal />
+
         <DefaultFileShape 
+            title={values.teamName}
+            content={values.teamDescription}
+            day={values.endDate}
+            // onClick: () => {}
         />
       </MainDiv>
       {!isWriting && <RSideDiv>3</RSideDiv>}

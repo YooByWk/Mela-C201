@@ -1,17 +1,20 @@
 import axios from 'axios';
 
-
-
+let ACCESS_TOKEN = localStorage.getItem('accessToken')
 
 export const TeamspaceAPI = axios.create({
-  baseURL: 'http://localhost:8080/api/v1/teamspaces'
+  baseURL: 'http://localhost:8080/api/v1/teamspaces',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${ACCESS_TOKEN}`,
+},
 })
 
 // 나의 팀스페이스 조회
 export const TeamspaceList = async() => {
   
-  const response = TeamspaceAPI.get(`/`)
-  console.log(response.data)
+  const response = await TeamspaceAPI.get(`/`)
+  console.log(response)
   return response.data
 }
 
