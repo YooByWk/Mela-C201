@@ -15,26 +15,35 @@ public class File {
     @NotNull
     Long fileIdx;
 
-    @NotNull @Column(length = 50)
-    String saveFolder;
+    //파일 경로
+    @NotNull @Column(length = 200)
+    String savePath;
 
-    @NotNull @Column(length = 50)
-    String originalFolder;
+    //원본 파일 명
+    @NotNull @Column(length = 200)
+    String originalFilename;
 
-    @NotNull @Column(length = 50)
-    String saveFile;
+    //저장되는 파일 명
+    @NotNull @Column(length = 200)
+    String saveFilename;
 
+    //파일 설명
     @Column(length = 100)
     String fileDescription;
+
+    //파일 크기 (용량)
+    @NotNull @Column
+    Long fileSize;
 
     @Override
     public String toString() {
         return "File{" +
                 "fileIdx=" + fileIdx +
-                ", saveFolder='" + saveFolder + '\'' +
-                ", originalFolder='" + originalFolder + '\'' +
-                ", saveFile='" + saveFile + '\'' +
+                ", savePath='" + savePath + '\'' +
+                ", originalFilename='" + originalFilename + '\'' +
+                ", saveFilename='" + saveFilename + '\'' +
                 ", fileDescription='" + fileDescription + '\'' +
+                ", fileSize=" + fileSize +
                 '}';
     }
 }

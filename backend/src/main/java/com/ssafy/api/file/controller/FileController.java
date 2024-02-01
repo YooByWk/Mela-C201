@@ -37,7 +37,7 @@ public class FileController {
             @RequestPart(value = "file", required = true) MultipartFile[] files) {
 
         for(MultipartFile file : files) {
-            fileService.saveFile(file);
+            fileService.saveFileTest(file);
         }
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
