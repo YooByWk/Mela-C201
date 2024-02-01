@@ -11,14 +11,14 @@ function CommunityHome() {
   const [data, setData] = useState(null);
   const [boardInput, setBoardInput] = useState('');
   const movePage = useNavigate()
-  
+
 
   // page는 현재 페이지
   // column 이름으로 sort
   // size : results at 1 page
   useEffect(() => {
     const fetchData = async () => {
-      const response = await BoardList({ page: 0, size: 20 });
+      const response = await BoardList({ page: 1, size: 20 });
       // console.log(response, 'fetch log')
       setData(response.data);
       console.log(data);
@@ -29,17 +29,17 @@ function CommunityHome() {
   }, []);
 
   const ViewSorted = async () => {
-    const response = await BoardList({ page: 0, size: 20, sortKey: "viewNum", word :boardInput? boardInput : '' });
+    const response = await BoardList({ page: 1, size: 20, sortKey: "viewNum", word :boardInput? boardInput : '' });
     setData(response.data);
   };
 
   const LikeSorted = async () => {
     window.alert('좋아요 순 대신 최신순으로 정렬되었습니다.')
-    const response = await BoardList({ page: 0, size: 20,word :boardInput? boardInput : '' });
+    const response = await BoardList({ page: 1, size: 20,word :boardInput? boardInput : '' });
     setData(response.data);
   };
   const LastedSorted = async () => {
-    const response = await BoardList({ page: 0, size: 20, word :boardInput? boardInput : '' });
+    const response = await BoardList({ page: 1, size: 20, word :boardInput? boardInput : '' });
     if (response.data.length>1) {
       console.log(response.data.length)
       setData(response.data);
@@ -62,7 +62,7 @@ function CommunityHome() {
 
   const SortByKey =  async(event)=> {
     event.preventDefault()
-    const response =  await BoardList({page:0, size:20, word:boardInput})
+    const response =  await BoardList({page:1, size:20, word:boardInput})
     if (response.data.length > 1) {
     setData(response.data)
     console.log(response.data.length) }
