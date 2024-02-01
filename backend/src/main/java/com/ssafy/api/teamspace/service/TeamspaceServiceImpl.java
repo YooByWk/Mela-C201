@@ -22,6 +22,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service("teamspaceService")
 public class TeamspaceServiceImpl implements TeamspaceService{
 
@@ -54,7 +55,6 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     NotificationUtil notificationUtil;
 
     @Override
-    @Transactional
     public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx) {
         // 팀 스페이스 썸네일 저장
         // 팀 스페이스 썸네일 사진 파일 idx 얻기
@@ -143,7 +143,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         if (teamspaceMember.getUserIdx().getUserIdx() != teamspaceRepository.getOne(teamspaceIdx).getHost().getUserIdx()) {
 
             String message = teamspaceRepository.getOne(teamspaceIdx).getTeamName();
-            if(message.length() >= 6) {
+            if(message.length() >= 7) {
                 message = message.substring(0, 7) + "..";
             }
 
@@ -184,7 +184,13 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         for (TeamspaceMemberListRes list : lists) {
             User user = userRepository.getOne(list.getUserIdx());
             // TODO:
-            String message = "팀스페이스에 " + " 일정이 추가되었습니다.";
+
+            String message = schedule.getContent();
+            if (message.length() >= 7) {
+                message = message.substring(0, 7) + "..";
+            }
+            message = "팀스페이스에 '" + message + "' 일정이 추가되었습니다.";
+            notificationUtil.sendNotification(message, user);
         }
     }
 

@@ -22,7 +22,6 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.mail.MessagingException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Optional;
 
 /**
  * 인증 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -97,7 +96,7 @@ public class AuthController {
 		User user = userService.getUserByEmailId(sendEmailInfo.getEmailId());
 
         try {
-            userService.sendEmail(user.getUserIdx(),token);
+            userService.sendAuthEmail(user.getUserIdx(),token);
         } catch (MessagingException e) {
 			e.printStackTrace();
             throw new RuntimeException(e);

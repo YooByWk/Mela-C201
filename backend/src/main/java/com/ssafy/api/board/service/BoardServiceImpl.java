@@ -52,7 +52,12 @@ public class BoardServiceImpl implements BoardService {
         board.setUserIdx(user);
         board.setViewNum(0);
         board.setRegistDate(LocalDateTime.now());
-        return boardRepository.save(board);
+        boardRepository.save(board);
+
+        String message = user.getNickname() + " 님이 게시물을 작성하였습니다.";
+        notificationUtil.addFeed(message, user);
+
+        return board;
     }
 
     @Override
@@ -116,7 +121,7 @@ public class BoardServiceImpl implements BoardService {
 
         if (board.getUserIdx().getUserIdx() != user.getUserIdx()) {
             String message = board.getTitle();
-            if (message.length() >= 6) {
+            if (message.length() >= 7) {
                 message = message.substring(0, 7) + "..";
             }
 

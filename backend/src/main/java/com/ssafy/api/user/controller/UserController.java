@@ -1,11 +1,20 @@
 package com.ssafy.api.user.controller;
 
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.ssafy.api.user.request.UserFindPasswordPutReq;
 import com.ssafy.api.user.request.UserRegisterPostReq;
+import com.ssafy.api.user.request.UserSendEmailPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
+import com.ssafy.api.user.response.FeedRes;
+import com.ssafy.api.user.response.UserLoginPostRes;
 import com.ssafy.api.user.response.UserRes;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.common.util.JwtTokenUtil;
+import com.ssafy.db.entity.Feed;
 import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
@@ -16,6 +25,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.mail.MessagingException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -183,6 +195,58 @@ public class UserController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
+	@PostMapping("/email")
+	@ApiOperation(value = "비밀번호 변경 링크 이메일 전송", notes = "<strong>이메일 아이디</strong>을 통해 메일을 전송한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<? extends  BaseResponseBody> sendEmail(@RequestBody UserSendEmailPostReq sendEmailInfo) {
+		Instant expires = Instant.now().plus(Duration.ofDays(1));
+		String token = JwtTokenUtil.getToken(expires, sendEmailInfo.getEmailId());
+
+		User user = userService.getUserByEmailId(sendEmailInfo.getEmailId());
+
+		try {
+			userService.sendFindPasswordEmail(user.getUserIdx(), token);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "bad request"));
+		}
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	@PutMapping("/newpassword")
+	@ApiOperation(value = "비밀번호 재설정", notes = "비로그인 사용자의 비밀번호 재설정")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<? extends  BaseResponseBody> modifyPassword(@RequestBody UserFindPasswordPutReq reqInfo) {
+			JWTVerifier verifier = JwtTokenUtil.getVerifier();
+
+			try {
+				DecodedJWT decodedJWT = verifier.verify(reqInfo.getToken().replace(JwtTokenUtil.TOKEN_PREFIX, ""));
+				String emailId = decodedJWT.getSubject();
+
+				try {
+					User user = userService.getUserByEmailId(emailId);
+					userService.updatePassword(reqInfo.getPassword(), user);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Not Found"));
+				}
+
+			} catch (JWTVerificationException e) {
+				e.printStackTrace();
+				return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized"));
+			}
+
+
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+		}
+
 	@GetMapping("/generaterandomnickname")
 	@ApiOperation(value = "랜덤 닉네임 생성", notes = "중복되지 않는 랜덤 닉네임을 생성한다.")
 	@ApiResponses({
@@ -258,7 +322,7 @@ public class UserController {
 	}
 
 
-	@GetMapping("/notification")
+	@GetMapping("/notifications")
 	@ApiOperation(value = "알람 가져오기", notes = "로그인 한 사용자의 알람을 보여주기 위해 가져온다")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -276,7 +340,7 @@ public class UserController {
 		return ResponseEntity.status(200).body(notiList);
 	}
 
-	@GetMapping("/noticheck/{notiid}")
+	@GetMapping("/notifications/{notificationid}")
 	@ApiOperation(value = "알람 확인하기", notes = "로그인 한 사용자가 확인한 알람을 체크한다")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -285,18 +349,18 @@ public class UserController {
 	})
 	public ResponseEntity<String> checkNotification(
 			@ApiIgnore Authentication authentication,
-			@PathVariable Long notiid) {
+			@PathVariable(name = "notificationid") Long notiIdx) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String userEmail = userDetails.getUsername();
 		User nowLoginUser = userService.getUserByEmail(userEmail);
 
-		String message = userService.checkNotification(nowLoginUser, notiid);
+		String message = userService.checkNotification(nowLoginUser, notiIdx);
 		System.out.println(message);
 
 		return ResponseEntity.status(200).body(message);
 	}
 
-	@DeleteMapping("/notidelete/{notiid}")
+	@DeleteMapping("/notifications/{notificationid}")
 	@ApiOperation(value = "알람 삭제하기", notes = "로그인 한 사용자가 선택한 알람을 삭제한다")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -305,14 +369,30 @@ public class UserController {
 	})
 	public ResponseEntity<? extends BaseResponseBody> deleteNotification(
 			@ApiIgnore Authentication authentication,
-			@PathVariable Long notiid) {
+			@PathVariable(name = "notificationid") Long notiIdx) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String userEmail = userDetails.getUsername();
 		User nowLoginUser = userService.getUserByEmail(userEmail);
 
-		userService.deleteNotification(nowLoginUser, notiid);
+		userService.deleteNotification(nowLoginUser, notiIdx);
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	@GetMapping("/feed")
+	@ApiOperation(value = "피드 목록", notes = "내가 팔로우하는 사용자들의 알림 목록")
+	public ResponseEntity<List<FeedRes>> getFeed(@ApiIgnore Authentication authentication) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userEmail = userDetails.getUsername();
+		User user = userService.getUserByEmail(userEmail);
+
+		List<Feed> feeds = userService.getFeed(user);
+		List<FeedRes> res = new ArrayList<>();
+		for (Feed feed : feeds) {
+			res.add(FeedRes.of(feed));
+		}
+
+		return ResponseEntity.status(200).body(res);
 	}
 }
 

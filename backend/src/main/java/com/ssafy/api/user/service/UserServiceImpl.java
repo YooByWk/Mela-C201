@@ -4,10 +4,7 @@ import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
 import com.ssafy.common.util.CSVParser;
 import com.ssafy.common.util.JwtTokenUtil;
-import com.ssafy.db.entity.EmailAuth;
-import com.ssafy.db.entity.Follow;
-import com.ssafy.db.entity.Notification;
-import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -28,32 +25,27 @@ import java.util.Random;
 /**
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
  */
-@Service("userService")
 @Transactional
+@Service("userService")
 public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
-
 	@Autowired
     UserRepositorySupport userRepositorySupport;
-
 	@Autowired
 	EmailAuthRepository emailAuthRepository;
-
-	@Autowired
-	EmailAuthRepositorySupport emailAuthRepositorySupport;
-
 	@Autowired
 	PasswordEncoder passwordEncoder;
-
 	@Autowired
 	FollowRepository followRepository;
-
 	@Autowired
 	FollowRepositorySupport followRepositorySupport;
-
 	@Autowired
 	NotificationRepository notificationRepository;
+	@Autowired
+	FeedRepository feedRepository;
+	@Autowired
+	FeedRepositorySupport feedRepositorySupport;
 
 	@Autowired
 	private JavaMailSender mailSender;
@@ -118,7 +110,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User updateUser(User user, UserUpdatePostReq userUpdateInfo) {
-		// 수정 사항 추가 필요!!
+		// TODO: 수정 사항 추가 필요!! (포트폴리오)
 		user.setName(userUpdateInfo.getName());
 		user.setNickname(userUpdateInfo.getNickname());
 		user.setBirth(userUpdateInfo.getBirth());
@@ -154,6 +146,17 @@ public class UserServiceImpl implements UserService {
 	public void updatePassword(String password, User user) {
 		user.setPassword(passwordEncoder.encode(password));
 		userRepository.save(user);
+		
+		deleteAuthToken(user); // 이메일을 통한 비밀번호 재설정인 경우
+	}
+
+	@Override
+	public void deleteAuthToken(User user) {
+		Optional<EmailAuth> emailAuth = emailAuthRepository.findByUserIdx(user);
+
+		if (emailAuth.isPresent()) {
+			emailAuthRepository.delete(emailAuth.get());
+		}
 	}
 
 	@Override
@@ -217,7 +220,7 @@ public class UserServiceImpl implements UserService {
 
 //	@Async
 	@Override
-	public void sendEmail(Long userIdx, String token) throws MessagingException {
+	public void sendAuthEmail(Long userIdx, String token) throws MessagingException {
 		saveEmailAuthToken(userIdx, token);
 
 		// 이메일 발송
@@ -231,7 +234,7 @@ public class UserServiceImpl implements UserService {
 		helper.setFrom("Mela!");
 		helper.setSubject("[Mela!] 이메일 계정을 인증해주세요");
 
-		// localhost 변수로 빼야해요
+		// TODO: localhost 변수로 빼야해요
 		String htmlContent = "<html><body>";
 		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
 		htmlContent += "<p>Mela!를 정상적으로 이용하기 위해서는 이메일 인증을 해주세요</p>";
@@ -276,6 +279,35 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public void sendFindPasswordEmail(Long userIdx, String token) throws MessagingException {
+		saveEmailAuthToken(userIdx, token);
+
+		// 이메일 발송
+		MimeMessage mimeMessage = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+		User user = userRepository.getOne(userIdx);
+		String email = user.getEmailId()+"@"+user.getEmailDomain();
+
+		helper.setTo(email);
+		helper.setFrom("Mela!");
+		helper.setSubject("[Mela!] 비밀번호 재설정");
+
+		// TODO: 비밀번호 재설정 프론트 주소 입력
+		String addr = "http://" + "token=sdfsdfjsdjlsdkfj";
+
+		String htmlContent = "<html><body>";
+		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
+		htmlContent += "<p>아래 링크를 통해 비밀번호를 재설정해주세요</p>";
+		htmlContent += "<a href=" + addr + "\">비밀번호 재설정</a>";
+		htmlContent += "</body></html>";
+
+		helper.setText(htmlContent, true);
+
+		mailSender.send(mimeMessage);
+	}
+
+	@Override
 	public void followUser(User nowLoginUser, String userId) {
 		User followedUser = userRepository.findByEmailId(userId).get();
 		Optional<Follow> isFollowed = followRepository.findByFollowerAndFollowe(nowLoginUser, followedUser);
@@ -301,8 +333,6 @@ public class UserServiceImpl implements UserService {
 		notification.setChecked(false);
 		notification.setAlarmDate(LocalDateTime.now());
 		notificationRepository.save(notification);
-
-
 	}
 
 	@Override
@@ -347,5 +377,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteNotification(User nowLoginUser, Long notiId) {
 		notificationRepository.deleteByNotificationIdxAndUserIdx(notiId, nowLoginUser);
+	}
+
+	@Override
+	public List<Feed> getFeed(User user) {
+		List<Feed> feeds = feedRepositorySupport.getFeed(user);
+
+		return feeds;
 	}
 }
