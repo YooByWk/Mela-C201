@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import mainImage from '../assets/images/mainImage.png'
-import SignupModal from './../components/Modals/SignupModal';
+import SignupModal from '../components/Modals/SignupModal';
 import SigninModal from "../components/Modals/SigninModal";
 import { styled as styled2 } from '@mui/system' ;
 // background-color: ${props => props.theme.colours.primary};
