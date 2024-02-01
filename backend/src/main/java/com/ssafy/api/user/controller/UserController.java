@@ -1,11 +1,18 @@
 package com.ssafy.api.user.controller;
 
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.ssafy.api.user.request.UserFindPasswordPutReq;
 import com.ssafy.api.user.request.UserRegisterPostReq;
+import com.ssafy.api.user.request.UserSendEmailPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
+import com.ssafy.api.user.response.UserLoginPostRes;
 import com.ssafy.api.user.response.UserRes;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
@@ -16,6 +23,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.mail.MessagingException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -182,6 +192,58 @@ public class UserController {
 		userService.updatePassword(inputPassword, user);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
+
+	@PostMapping("/email")
+	@ApiOperation(value = "비밀번호 변경 링크 이메일 전송", notes = "<strong>이메일 아이디</strong>을 통해 메일을 전송한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<? extends  BaseResponseBody> sendEmail(@RequestBody UserSendEmailPostReq sendEmailInfo) {
+		Instant expires = Instant.now().plus(Duration.ofDays(1));
+		String token = JwtTokenUtil.getToken(expires, sendEmailInfo.getEmailId());
+
+		User user = userService.getUserByEmailId(sendEmailInfo.getEmailId());
+
+		try {
+			userService.sendFindPasswordEmail(user.getUserIdx(), token);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "bad request"));
+		}
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	@PutMapping("/newpassword")
+	@ApiOperation(value = "비밀번호 재설정", notes = "비로그인 사용자의 비밀번호 재설정")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<? extends  BaseResponseBody> modifyPassword(@RequestBody UserFindPasswordPutReq reqInfo) {
+			JWTVerifier verifier = JwtTokenUtil.getVerifier();
+
+			try {
+				DecodedJWT decodedJWT = verifier.verify(reqInfo.getToken().replace(JwtTokenUtil.TOKEN_PREFIX, ""));
+				String emailId = decodedJWT.getSubject();
+
+				try {
+					User user = userService.getUserByEmailId(emailId);
+					userService.updatePassword(reqInfo.getPassword(), user);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return ResponseEntity.status(404).body(BaseResponseBody.of(404, "Not Found"));
+				}
+
+			} catch (JWTVerificationException e) {
+				e.printStackTrace();
+				return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized"));
+			}
+
+
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+		}
 
 	@GetMapping("/generaterandomnickname")
 	@ApiOperation(value = "랜덤 닉네임 생성", notes = "중복되지 않는 랜덤 닉네임을 생성한다.")

@@ -42,9 +42,13 @@ public interface UserService {
 
 	void saveEmailAuthToken(Long userIdx, String token);
 
-	void sendEmail(Long userIdx, String token) throws MessagingException;
+	void sendAuthEmail(Long userIdx, String token) throws MessagingException;
 
 	boolean verifyEmail(Long userIdx, String token);
+
+	void sendFindPasswordEmail(Long userIdx, String token) throws MessagingException;
+
+	void deleteAuthToken(User user);
 
 	void followUser(User nowLoginUser, String userId);
 

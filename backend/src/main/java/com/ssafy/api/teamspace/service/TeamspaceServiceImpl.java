@@ -22,6 +22,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service("teamspaceService")
 public class TeamspaceServiceImpl implements TeamspaceService{
 
@@ -54,7 +55,6 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     NotificationUtil notificationUtil;
 
     @Override
-    @Transactional
     public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx) {
         // 팀 스페이스 썸네일 저장
         // 팀 스페이스 썸네일 사진 파일 idx 얻기
