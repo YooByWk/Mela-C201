@@ -12,7 +12,6 @@ export const TeamspaceAPI = axios.create({
 
 // 나의 팀스페이스 조회
 export const TeamspaceList = async() => {
-  
   const response = await TeamspaceAPI.get(`/`)
   console.log(response)
   return response.data
