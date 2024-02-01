@@ -4,6 +4,7 @@ import com.ssafy.api.board.request.BoardGetListReq;
 import com.ssafy.api.board.request.BoardRegisterPostReq;
 import com.ssafy.api.board.request.BoardUpdatePutReq;
 import com.ssafy.api.board.request.CommentRegisterPostReq;
+import com.ssafy.common.util.NotificationUtil;
 import com.ssafy.db.entity.Board;
 import com.ssafy.db.entity.BoardLike;
 import com.ssafy.db.entity.Comment;
@@ -15,11 +16,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service("BoardService")
 public class BoardServiceImpl implements BoardService {
     @Autowired
@@ -36,6 +39,9 @@ public class BoardServiceImpl implements BoardService {
     UserRepositorySupport userRepositorySupport;
     @Autowired
     BoardLikeRepository boardLikeRepository;
+
+    @Autowired
+    NotificationUtil notificationUtil;
 
     @Override
     public Board registBoard(BoardRegisterPostReq registInfo, User user) {
@@ -107,6 +113,16 @@ public class BoardServiceImpl implements BoardService {
         comment.setRegistDate(LocalDateTime.now());
         comment.setBoardIdx(board);
         commentRepository.save(comment);
+
+        if (board.getUserIdx().getUserIdx() != user.getUserIdx()) {
+            String message = board.getTitle();
+            if (message.length() >= 6) {
+                message = message.substring(0, 7) + "..";
+            }
+
+            message = "'" + message + "' 에 댓글이 등록되었습니다.";
+            notificationUtil.sendNotification(message, board.getUserIdx());
+        }
     }
 
     @Override
