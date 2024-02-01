@@ -8,17 +8,9 @@ import { MdOutlineLocalFireDepartment, MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
 import { fetchUser, follower, followee } from "../API/UserAPI";
 import { logout } from "../API/AuthAPI";
+import useStore from "../status/store";
 
 const SideContainer = styled.div`
-  /* width: 10%;
-  max-width: 110px;
-  text-align: center;
-  height: 100%; */
-  /* background-color: #202C44; */
-  /* padding:10 px; */
-  /* height: auto;
-  padding: 0.5rem;
-  border-radius: 20px; */
   color: white;
   padding-top: ${props => props.$paddingtop || '0'};
   .items {
@@ -39,46 +31,28 @@ const CustomLink = styled(Link)`
 `
 
 function Sidebar({ className, paddingtop }) {
+
   const [currentUser, setCurrentUser] = useState(null)
+  const { fetchUser, user, logout} = useStore()
 
   useEffect(() => {
-    const loadCurrentUser = async() => {     
-      try {
-          const loginUser = await fetchUser()
-          setCurrentUser(loginUser)
-          console.log(currentUser.nickname)
-      } catch (err) {
-          console.error(err)
-      }
-    }; loadCurrentUser()
-
-  //   const getFollowList = async() => {
-  //     try {
-  //       const followerList = await follower()
-  //       setFollowerList(followerList)
-  //       console.log(followeeList)
-
-  //     } catch (err) {
-  //       console.error(err)
-  //     }
-  //   }; getFollowList()
-  }, [])
-
-  const handleLogout = () => {
-    logout()
-    .then((res) => {
-      localStorage.removeItem('accessToken')
-      console.log(res)
-      window.location.href = '/'
-    }).catch((err) => {
-      console.log(err)
-    })
-  }
+    fetchUser()
+  }, [fetchUser])
+  // const handleLogout = () => {
+  //   logout()
+  //   .then((res) => {
+  //     localStorage.removeItem('accessToken')
+  //     console.log(res)
+  //     window.location.href = '/'
+  //   }).catch((err) => {
+  //     console.log(err)
+  //   })
+  // }
 
   return (
     <div className={className}>
       <SideContainer className="contents" $paddingtop={paddingtop}>
-        <h3>{currentUser && currentUser.nickname}</h3>
+        {user && <h3> {user.nickname} </h3>}
 
         <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4">
           <List>
@@ -114,7 +88,7 @@ function Sidebar({ className, paddingtop }) {
               <ListItemPrefix>
                 <MdOutlineLogout />
               </ListItemPrefix>
-              <span className="wd" onClick={handleLogout}>Logout</span>
+              <span className="wd" onClick={logout}>Logout</span>
             </ListItem>
           </List>
         </Card>
