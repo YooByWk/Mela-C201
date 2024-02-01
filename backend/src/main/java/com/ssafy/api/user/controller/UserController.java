@@ -7,12 +7,14 @@ import com.ssafy.api.user.request.UserFindPasswordPutReq;
 import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserSendEmailPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
+import com.ssafy.api.user.response.FeedRes;
 import com.ssafy.api.user.response.UserLoginPostRes;
 import com.ssafy.api.user.response.UserRes;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
+import com.ssafy.db.entity.Feed;
 import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
@@ -375,6 +377,22 @@ public class UserController {
 		userService.deleteNotification(nowLoginUser, notiIdx);
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	@GetMapping("/feed")
+	@ApiOperation(value = "피드 목록", notes = "내가 팔로우하는 사용자들의 알림 목록")
+	public ResponseEntity<List<FeedRes>> getFeed(@ApiIgnore Authentication authentication) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userEmail = userDetails.getUsername();
+		User user = userService.getUserByEmail(userEmail);
+
+		List<Feed> feeds = userService.getFeed(user);
+		List<FeedRes> res = new ArrayList<>();
+		for (Feed feed : feeds) {
+			res.add(FeedRes.of(feed));
+		}
+
+		return ResponseEntity.status(200).body(res);
 	}
 }
 

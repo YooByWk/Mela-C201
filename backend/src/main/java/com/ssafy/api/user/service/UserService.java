@@ -2,6 +2,7 @@ package com.ssafy.api.user.service;
 
 import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
+import com.ssafy.db.entity.Feed;
 import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.User;
 
@@ -61,4 +62,6 @@ public interface UserService {
 	String checkNotification(User nowLoginUser, Long notiId);
 
 	void deleteNotification(User nowLoginUser, Long notiId);
+
+	List<Feed> getFeed(User user);
 }

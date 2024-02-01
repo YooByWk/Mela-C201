@@ -52,7 +52,12 @@ public class BoardServiceImpl implements BoardService {
         board.setUserIdx(user);
         board.setViewNum(0);
         board.setRegistDate(LocalDateTime.now());
-        return boardRepository.save(board);
+        boardRepository.save(board);
+
+        String message = user.getNickname() + " 님이 게시물을 작성하였습니다.";
+        notificationUtil.addFeed(message, user);
+
+        return board;
     }
 
     @Override

@@ -4,10 +4,7 @@ import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
 import com.ssafy.common.util.CSVParser;
 import com.ssafy.common.util.JwtTokenUtil;
-import com.ssafy.db.entity.EmailAuth;
-import com.ssafy.db.entity.Follow;
-import com.ssafy.db.entity.Notification;
-import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -33,27 +30,22 @@ import java.util.Random;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
-
 	@Autowired
     UserRepositorySupport userRepositorySupport;
-
 	@Autowired
 	EmailAuthRepository emailAuthRepository;
-
-	@Autowired
-	EmailAuthRepositorySupport emailAuthRepositorySupport;
-
 	@Autowired
 	PasswordEncoder passwordEncoder;
-
 	@Autowired
 	FollowRepository followRepository;
-
 	@Autowired
 	FollowRepositorySupport followRepositorySupport;
-
 	@Autowired
 	NotificationRepository notificationRepository;
+	@Autowired
+	FeedRepository feedRepository;
+	@Autowired
+	FeedRepositorySupport feedRepositorySupport;
 
 	@Autowired
 	private JavaMailSender mailSender;
@@ -385,5 +377,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteNotification(User nowLoginUser, Long notiId) {
 		notificationRepository.deleteByNotificationIdxAndUserIdx(notiId, nowLoginUser);
+	}
+
+	@Override
+	public List<Feed> getFeed(User user) {
+		List<Feed> feeds = feedRepositorySupport.getFeed(user);
+
+		return feeds;
 	}
 }
