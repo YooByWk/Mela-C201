@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import DefaultButton from '../components/DefaultButton';
 import styled from 'styled-components';
-import { fetchUser } from '../API/UserAPI';
+import { fetchUser, followUser } from './API/UserAPI';
 
 const Container = styled.div`
     padding: 1rem;
@@ -18,7 +18,9 @@ const Title = styled.h3`
 `
 
 function UserEdit(props) {
-    const [user, setUser] = useState([])
+    const [values, setValues] = useState([])
+    const [isFollowed, setIsFollowed] = useState(false)
+    const [currentUser, setCurrentUser] = useState(null) 
 
     const navigate = useNavigate()
 
@@ -30,38 +32,67 @@ function UserEdit(props) {
         const getUserInfo = async() => {
             try {
                 const res = await fetchUser()
-                setUser(res)
+                setValues(res)
             } catch (err) {
                 console.error(err)
             }
         }; getUserInfo()
-       
+
+        const loadCurrentUser = async() => {     
+            try {
+                const loginUser = await fetchUser()
+                setCurrentUser(loginUser)
+            } catch (err) {
+                console.error(err)
+            }
+        }; loadCurrentUser()
     }, [])
+
+    const handleFollow = async() => {
+        if (values && currentUser && values.emailId !== currentUser.emailId) {
+            try {
+                await followUser(values.emailId)
+                setIsFollowed(!isFollowed)
+            } catch(err) {
+                console.error(err)
+            }
+        }
+    }
 
     return (
         <Container>
-            <Title>{user.nickname}</Title>
-            {user && (
+            <Title>{values.nickname}</Title>
+            {values && (
                 <div>
-                    <p>{ user.name }</p>
-                    <p>Gender : { user.gender }</p>
-                    <p>Birth : { user.birth }</p>
+                    <p>{ values.name }</p>
+                    <p>Gender : { values.gender }</p>
+                    <p>Birth : { values.birth }</p>
                     <p>Like genre : </p>
                     <p>Position : </p>
                     <p>SNS</p>
-                    <p>{user.searchAllow}</p>
+                    <p>{values.searchAllow}</p>
                 </div>
             )}
 
-            <DefaultButton 
-                text={'Edit'}
-                backgroundcolor={'#6C7383'}
-                fontcolor={'white'}
-                width={'6rem'}
-                onClick={goUpdate}
-            />
+            {currentUser && values && currentUser.emailId === values.emailId ? (
+                <DefaultButton 
+                    text={'Edit'}
+                    backgroundcolor={'#6C7383'}
+                    fontcolor={'white'}
+                    width={'6rem'}
+                    onClick={goUpdate}
+                />
+            ) : (
+                <DefaultButton 
+                    text={isFollowed ? 'Unfollow' : 'Follow'}
+                    backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
+                    fontcolor={'white'}
+                    width={'6rem'}
+                    onClick={handleFollow}
+                />
+            )}
         </Container>
-    );
+    )
 }
-    
+
 export default UserEdit;

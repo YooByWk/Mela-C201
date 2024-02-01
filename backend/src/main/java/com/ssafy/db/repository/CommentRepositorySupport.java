@@ -1,15 +1,15 @@
 package com.ssafy.db.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.db.entity.QBoard;
+import com.ssafy.db.entity.QComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class BoardRepositorySupport {
+public class CommentRepositorySupport {
 
     @Autowired
     private JPAQueryFactory jpaQueryFactory;
 
-    QBoard qBoard = QBoard.board;
+    QComment qComment = QComment.comment;
 }

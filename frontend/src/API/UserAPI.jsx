@@ -39,3 +39,24 @@ export const updateUser = async (data) => {
 export const deleteUser = async () => {
     await UserApi.delete(`api/v1/users/delete`)
 }
+
+// 나를 팔로우 한 사람 조회
+export const follower = async (userId) => {
+    const response = await UserApi.get(`/api/v1/users/${userId}/followees`)
+    console.log(response.data)
+    return response.data
+}
+
+// 내가 팔로우 한 사람 조회
+export const followee = async (userId) => {
+    const response = await UserApi.get(`/api/v1/users/${userId}/followers`)
+    console.log(response.data)
+    return response.data
+}
+
+// 팔로우 요청 
+export const followUser = async (userId) => {
+    const response = await UserApi.put(`/api/v1/users/follow/${userId}`)
+    console.log(response.data)
+    return response.data
+}

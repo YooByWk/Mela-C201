@@ -1,24 +1,34 @@
 package com.ssafy.api.teamspace.response;
 
-import com.ssafy.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
 @ApiModel("TeamspaceMemberListResponse")
 public class TeamspaceMemberListRes {
+    @ApiModelProperty(name="유저 idx")
     Long userIdx;
+
+    @ApiModelProperty(name="user birthday", example = "2000-02-02")
     LocalDate birth;
-    String emailDomain;
+
+    @ApiModelProperty(name="email id")
     String emailId;
+
+    @ApiModelProperty(name="email domain")
+    String emailDomain;
+
+    @ApiModelProperty(name="gender")
     String gender;
+
+    @ApiModelProperty(name="user name")
     String name;
+
+    @ApiModelProperty(name="user nickname")
     String nickname;
 }
