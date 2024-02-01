@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
@@ -10,8 +11,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { email } from '../../API/AuthAPI';
 
 function SignupModal({className, fontSize, padding}) {
+  const navigate = useNavigate()
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -66,15 +69,14 @@ function SignupModal({className, fontSize, padding}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    signup(values)
-    .then((res) => {
-      // window.location.href = `/login`
-      console.log('회원가입 성공')
-      console.log(res)
-    })
-    .catch((err) => {
+
+    try {
+      await email(values.emailId)
+      console.log(values.emailId)
+      navigate('/verify')
+    } catch (err) {
       console.log(err)
-    })
+    }
   }
 
   return (

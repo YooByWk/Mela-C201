@@ -38,6 +38,7 @@ export const updateUser = async (data) => {
 // 회원탈퇴
 export const deleteUser = async () => {
     await UserApi.delete(`api/v1/users/delete`)
+    localStorage.clear()
 }
 
 // 나를 팔로우 한 사람 조회

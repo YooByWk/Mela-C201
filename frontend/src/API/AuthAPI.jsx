@@ -42,7 +42,6 @@ export const signup = async ({
         searchAllow 
     }
     const response = await AuthApi.post(`/users`, data)
-
     return response.data
 }
 
@@ -63,3 +62,22 @@ export const checkDupNickname = async ({
 export const logout = async () => {
     AuthApi.get(`/auth/logout`)
 }
+
+// 이메일 인증 전송
+export const email = async (emailId) => {
+    const data = { emailId }
+    console.log(data)
+
+    const response = AuthApi.post(`/auth/email`, data)
+    console.log(response)
+    return response.data
+}
+
+
+// 사용자 이메일 인증
+// export const verify = async () => {
+
+//     const response = await AuthApi.get(`/auth/verify`)
+//     console.log(response.data)
+//     return response.data
+// }
