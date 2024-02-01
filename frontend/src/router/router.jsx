@@ -26,10 +26,6 @@ function AppRouter({ className }) {
           /> 
 
           <Route 
-            path='/teamspace' element={<TeamspaceMain/>}
-          />
-
-          <Route 
             path='/teamspace/detail' element={<TeamspaceDetail/>}
           />
           
