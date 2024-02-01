@@ -1,5 +1,6 @@
 package com.ssafy.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +8,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -18,10 +19,9 @@ public class BoardRecruit {
     @NotNull
     Long boardRecruitIdx;
 
-    String position;
-
     @NotNull
-    LocalDateTime endDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    LocalDate endDate;
 
     @ManyToOne
     @JoinColumn(name="board_idx", referencedColumnName="boardIdx")

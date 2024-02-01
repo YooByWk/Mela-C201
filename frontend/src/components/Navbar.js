@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import logo from "../assets/images/logo.png"
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment  } from 'react';
 import { FaSearch } from "react-icons/fa";
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
 
 const Container = styled.div`
@@ -83,10 +83,15 @@ const submitHandler = (event) => {
 }
 
 function Navbar({backcolour, radius}) {
+  const navigate = useNavigate();
+  function LogoClick(event) {
+    console.log(event, '홈으로 이동합니다.')
+    navigate('/')
+  }
   return (
     < >
       <Container $backcolour={backcolour}>
-        <img  src={logo} alt="" />
+        <img  src={logo} alt="" onClick={LogoClick} />
           <SearchBar onSubmit={submitHandler}>
           <FaSearch className='Icon'/>
           <input type="search" spellCheck='false' placeholder='Search'  />
