@@ -53,4 +53,6 @@ public interface UserService {
 	List<User> getFollowee(String emailId);
 
 	List<Notification> getNotification(User nowLoginUser);
+
+	String checkNotification(User nowLoginUser, Long notiId);
 }
