@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.api.user.request.PortfolioMusicPostReq;
 import com.ssafy.api.user.service.PortfolioService;
+import com.ssafy.db.entity.PortfolioMusic;
 import com.ssafy.db.repository.FileRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,7 +132,7 @@ public class FileServiceImpl implements FileService {
 
     }
 
-    public boolean saveFiles(PortfolioMusicPostReq portfolioMusicPostReq, MultipartFile[] multipartFile) {
+    public boolean addPortfolioMusic(PortfolioMusic portfolioMusic, MultipartFile[] multipartFile, String fileDescription) {
         for(MultipartFile mf : multipartFile) {
             String extension = FilenameUtils.getExtension(mf.getOriginalFilename());                            //클라이언트가 업로드한 파일의 확장자 추출
             com.ssafy.db.entity.File file;                                                                      //Amazon S3에 업로드한 파일에 관한 정보를 담고 있는 객체 (파일 경로, 원본 파일 명, 저장되는 파일 명, 파일 설명, 용량)
@@ -139,17 +140,18 @@ public class FileServiceImpl implements FileService {
             try {
                 //TODO: swith-case 문으로 수정 가능
                 if (extension.equals("mp3") || extension.equals("flac")) {                                       //2-4-1. 음원 파일 (mp3, flac)
-                    file = saveFile(portfolioMusicPostReq, mf);
+                    file = saveFile(mf, fileDescription);
+                    file.setFileDescription(fileDescription);
                     file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusicPostReq.setMusicFileIdx(file);
+                    portfolioMusic.setMusicFileIdx(file);
                 } else if (extension.equals("pdf") || extension.equals("xml")) {                                 //2-4-2. 가사 파일 (pdf, xml)
-                    file = saveFile(portfolioMusicPostReq, mf);
+                    file = saveFile(mf, fileDescription);
                     file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusicPostReq.setLyricFileIdx(file);
+                    portfolioMusic.setLyricFileIdx(file);
                 } else if (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")) {     //2-4-3. 앨범 아트(jpg, jpeg, png)
-                    file = saveFile(portfolioMusicPostReq, mf);
+                    file = saveFile(mf, fileDescription);
                     file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusicPostReq.setAlbumArtFileIdx(file);
+                    portfolioMusic.setAlbumArtFileIdx(file);
                 } else {
                     throw new Exception("지원하지 않는 파일 형식입니다.");
                 }
@@ -157,9 +159,9 @@ public class FileServiceImpl implements FileService {
                 e.printStackTrace();
             }
 
-            System.err.println("portfolioMusicPostReq: " + portfolioMusicPostReq);
+            System.err.println("portfolioMusic: " + portfolioMusic);
 
-            portfolioService.addPortfolioMusic(portfolioMusicPostReq);                                          //3. Service 구현체를 통해 포트폴리오 음악 추가
+            portfolioService.addPortfolioMusic(portfolioMusic);                                          //3. Service 구현체를 통해 포트폴리오 음악 추가
 
             return true;
 
@@ -171,7 +173,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public com.ssafy.db.entity.File saveFile(PortfolioMusicPostReq portfolioMusicPostReq, MultipartFile multipartFile) {
+    public com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription) {
 //        com.ssafy.db.entity.File file = null;
         com.ssafy.db.entity.File file = new com.ssafy.db.entity.File();
 
@@ -230,7 +232,7 @@ public class FileServiceImpl implements FileService {
             file.setSavePath(savePath.toString());                                              //1. 파일 경로
             file.setOriginalFilename(multipartFile.getOriginalFilename());                      //2. 원본 파일 명
             file.setSaveFilename(uuid.toString() + "_" + multipartFile.getOriginalFilename());  //3. 저장되는 파일 명
-            file.setFileDescription(portfolioMusicPostReq.getFileDescription());                //4. 파일 설명
+            file.setFileDescription(fileDescription);                                           //4. 파일 설명
             file.setFileSize(convertedFile.length());                                           //5. 파일 크기 (용량)
         } catch(Exception e) {
             e.printStackTrace();
