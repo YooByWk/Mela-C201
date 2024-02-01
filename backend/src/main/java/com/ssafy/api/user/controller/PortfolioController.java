@@ -45,23 +45,17 @@ public class PortfolioController {
             @RequestPart(value = "file", required = true) MultipartFile[] multipartFile) {
 
         PortfolioMusic portfolioMusic = new PortfolioMusic();
-//        String fileDescription = portfolioMusicPostReq.getFileDescription();
 
         //TODO: 토큰 유효성 확인
-
-        System.err.println("받은 파일 이름");
-        for(MultipartFile mf : multipartFile) {
-            System.err.println(mf.getOriginalFilename());
-        }
 
         //토큰으로부터 사용자 확인 후 VO에 설정
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         portfolioMusic.setUserIdx(userDetails.getUser());
 
         //2. Amazon S3에 파일 저장
-        if(fileService.addPortfolioMusic(portfolioMusic, multipartFile, portfolioMusicPostReq)) {         //파일 정상 저장 (Response 200)
+        if(fileService.addPortfolioMusic(portfolioMusic, multipartFile, portfolioMusicPostReq)) {           //파일 정상 저장 (Response 200)
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-        } else {                                                                                    //파일 저장 실패 (Response 500)
+        } else {                                                                                            //파일 저장 실패 (Response 500)
             return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
         }
     }

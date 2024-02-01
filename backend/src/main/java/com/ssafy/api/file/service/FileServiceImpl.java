@@ -62,9 +62,9 @@ public class FileServiceImpl implements FileService {
     private void removeFile(File targetFile) { // 로컬파일 삭제
         if (targetFile.exists()) {
             if (targetFile.delete()) {
-//                System.out.println("파일이 삭제되었습니다.");
+                //System.out.println("파일이 삭제되었습니다.");
             } else {
-//                System.out.println("파일이 삭제되지 못했습니다.");
+                //System.out.println("파일이 삭제되지 못했습니다.");
             }
         }
     }
@@ -168,7 +168,6 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription) {
-//        com.ssafy.db.entity.File file = null;
         com.ssafy.db.entity.File file = new com.ssafy.db.entity.File();
 
         //1. 업로드 한 파일이 비어있는지 확인
@@ -222,7 +221,6 @@ public class FileServiceImpl implements FileService {
             //PublicRead 권한으로 Amazon S3 업로드
             amazonS3Client.putObject(new PutObjectRequest(bucket, saveFilename, convertedFile).withCannedAcl(CannedAccessControlList.PublicRead));
 
-//            file = new com.ssafy.db.entity.File();
             file.setSavePath(savePath.toString());                                              //1. 파일 경로
             file.setOriginalFilename(multipartFile.getOriginalFilename());                      //2. 원본 파일 명
             file.setSaveFilename(uuid.toString() + "_" + multipartFile.getOriginalFilename());  //3. 저장되는 파일 명
@@ -231,7 +229,6 @@ public class FileServiceImpl implements FileService {
         } catch(Exception e) {
             e.printStackTrace();
         }
-//        System.err.println("Should Never Reach Here! - FileServiceImpl.java - saveFile");
 
         return file;
     }
@@ -253,16 +250,6 @@ public class FileServiceImpl implements FileService {
         System.err.println("Should Never Reach Here! - FileServiceImpl.java");
 
         return null;
-    }
-
-//    @Override
-//    public void deleteAll() {
-//
-//    }
-
-    @Override
-    public void deleteFile(String filePath) {
-        FileSystemUtils.deleteRecursively(Paths.get(filePath).toFile());
     }
 
     @Override
