@@ -40,8 +40,6 @@ const CustomLink = styled(Link)`
 
 function Sidebar({ className, paddingtop }) {
   const [currentUser, setCurrentUser] = useState(null)
-  const [followerList, setFollowerList] = useState([])
-  const [followeeList, setFolloweeList] = useState([])
 
   useEffect(() => {
     const loadCurrentUser = async() => {     
@@ -54,24 +52,34 @@ function Sidebar({ className, paddingtop }) {
       }
     }; loadCurrentUser()
 
-    const getFollowList = async() => {
-      try {
-        const followerList = await follower()
-        setFollowerList(followerList)
-        console.log(followeeList)
+  //   const getFollowList = async() => {
+  //     try {
+  //       const followerList = await follower()
+  //       setFollowerList(followerList)
+  //       console.log(followeeList)
 
-      } catch (err) {
-        console.error(err)
-      }
-    }; getFollowList()
+  //     } catch (err) {
+  //       console.error(err)
+  //     }
+  //   }; getFollowList()
   }, [])
 
+  const handleLogout = () => {
+    logout()
+    .then((res) => {
+      localStorage.removeItem('accessToken')
+      console.log(res)
+      window.location.href = '/'
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
 
   return (
     <div className={className}>
       <SideContainer className="contents" $paddingtop={paddingtop}>
         <h3>{currentUser && currentUser.nickname}</h3>
-        <p>{followerList}</p>
+
         <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4">
           <List>
             <ListItem className="items">
@@ -106,7 +114,7 @@ function Sidebar({ className, paddingtop }) {
               <ListItemPrefix>
                 <MdOutlineLogout />
               </ListItemPrefix>
-              <span className="wd" onClick={logout()}>Logout</span>
+              <span className="wd" onClick={handleLogout}>Logout</span>
             </ListItem>
           </List>
         </Card>
@@ -115,4 +123,4 @@ function Sidebar({ className, paddingtop }) {
   );
 }
 
-export default Sidebar;
+export default Sidebar
