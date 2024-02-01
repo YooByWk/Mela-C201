@@ -55,4 +55,6 @@ public interface UserService {
 	List<Notification> getNotification(User nowLoginUser);
 
 	String checkNotification(User nowLoginUser, Long notiId);
+
+	void deleteNotification(User nowLoginUser, Long notiId);
 }

@@ -276,7 +276,7 @@ public class UserController {
 		return ResponseEntity.status(200).body(notiList);
 	}
 
-	@GetMapping("/noticheck/{notiId}")
+	@GetMapping("/noticheck/{notiid}")
 	@ApiOperation(value = "알람 확인하기", notes = "로그인 한 사용자가 확인한 알람을 체크한다")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -285,15 +285,34 @@ public class UserController {
 	})
 	public ResponseEntity<String> checkNotification(
 			@ApiIgnore Authentication authentication,
-			@PathVariable Long notiId) {
+			@PathVariable Long notiid) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String userEmail = userDetails.getUsername();
 		User nowLoginUser = userService.getUserByEmail(userEmail);
 
-		String message = userService.checkNotification(nowLoginUser, notiId);
+		String message = userService.checkNotification(nowLoginUser, notiid);
 		System.out.println(message);
 
 		return ResponseEntity.status(200).body(message);
+	}
+
+	@DeleteMapping("/notidelete/{notiid}")
+	@ApiOperation(value = "알람 삭제하기", notes = "로그인 한 사용자가 선택한 알람을 삭제한다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> deleteNotification(
+			@ApiIgnore Authentication authentication,
+			@PathVariable Long notiid) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userEmail = userDetails.getUsername();
+		User nowLoginUser = userService.getUserByEmail(userEmail);
+
+		userService.deleteNotification(nowLoginUser, notiid);
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
 }

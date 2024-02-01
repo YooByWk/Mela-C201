@@ -343,4 +343,9 @@ public class UserServiceImpl implements UserService {
 			return "알람이 없습니다";
 		}
 	}
+
+	@Override
+	public void deleteNotification(User nowLoginUser, Long notiId) {
+		notificationRepository.deleteByNotificationIdxAndUserIdx(notiId, nowLoginUser);
+	}
 }
