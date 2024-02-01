@@ -6,6 +6,7 @@ import { FaRegUser, FaRegHeart } from "react-icons/fa6";
 import { AiOutlineMessage } from "react-icons/ai";
 import { MdOutlineLocalFireDepartment, MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
+import { logout } from "../API/AuthAPI";
 
 const SideContainer = styled.div`
   /* width: 10%;
@@ -77,7 +78,7 @@ function Sidebar({ className, paddingtop }) {
               <ListItemPrefix>
                 <MdOutlineLogout />
               </ListItemPrefix>
-              <span className="wd">Logout</span>
+              <span className="wd" onClick={logout()}>Logout</span>
             </ListItem>
           </List>
         </Card>
