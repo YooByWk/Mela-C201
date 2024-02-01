@@ -7,6 +7,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import { MdOutlineLocalFireDepartment, MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
 import { fetchUser, follower, followee } from "../API/UserAPI";
+import { logout } from "../API/AuthAPI";
 import useStore from "../status/store";
 
 const SideContainer = styled.div`
