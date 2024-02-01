@@ -64,7 +64,7 @@ function App() {
           <Route path='/community' element={<Community />}>
           <Route path='/community' exact element={<CommunityHome/>} />
         <Route path='/community/create' element={<CommunityCreate/>} />
-        <Route path='/community/1' element={<CommunityDetail/>} />
+        <Route path='/community/:boardIdx' element={<CommunityDetail/>} />
           </Route>
           <Route
             path="*"
