@@ -58,3 +58,8 @@ export const checkDupNickname = async ({
     console.log(data)
     return response.data
 }
+
+// 로그아웃
+export const logout = async () => {
+    AuthApi.get(`/auth/logout`)
+}

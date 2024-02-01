@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service("BoardService")
 public class BoardServiceImpl implements BoardService {
@@ -35,7 +34,7 @@ public class BoardServiceImpl implements BoardService {
     UserRepositorySupport userRepositorySupport;
 
     @Override
-    public void registBoard(BoardRegisterPostReq registInfo, User user) {
+    public Board registBoard(BoardRegisterPostReq registInfo, User user) {
         Board board = new Board();
         board.setNickname(user.getNickname());
         board.setContent(registInfo.getContent());
@@ -43,7 +42,7 @@ public class BoardServiceImpl implements BoardService {
         board.setUserIdx(user);
         board.setViewNum(0);
         board.setRegistDate(LocalDateTime.now());
-        boardRepository.save(board);
+        return boardRepository.save(board);
     }
 
     @Override
@@ -74,8 +73,6 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Board> getBoardList(BoardGetListReq getListInfo) {
-        System.out.println(getListInfo.getPage() + " " + getListInfo.getSize() + " " + getListInfo.getWord() + " " + getListInfo.getSortKey());
-
         Pageable pageable;
         Page<Board> page;
 
