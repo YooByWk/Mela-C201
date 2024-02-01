@@ -258,7 +258,7 @@ public class UserController {
 	}
 
 
-	@GetMapping("/notification")
+	@GetMapping("/notifications")
 	@ApiOperation(value = "알람 가져오기", notes = "로그인 한 사용자의 알람을 보여주기 위해 가져온다")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -276,7 +276,7 @@ public class UserController {
 		return ResponseEntity.status(200).body(notiList);
 	}
 
-	@GetMapping("/noticheck/{notiid}")
+	@GetMapping("/notifications/{notificationid}")
 	@ApiOperation(value = "알람 확인하기", notes = "로그인 한 사용자가 확인한 알람을 체크한다")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -285,18 +285,18 @@ public class UserController {
 	})
 	public ResponseEntity<String> checkNotification(
 			@ApiIgnore Authentication authentication,
-			@PathVariable Long notiid) {
+			@PathVariable(name = "notificationid") Long notiIdx) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String userEmail = userDetails.getUsername();
 		User nowLoginUser = userService.getUserByEmail(userEmail);
 
-		String message = userService.checkNotification(nowLoginUser, notiid);
+		String message = userService.checkNotification(nowLoginUser, notiIdx);
 		System.out.println(message);
 
 		return ResponseEntity.status(200).body(message);
 	}
 
-	@DeleteMapping("/notidelete/{notiid}")
+	@DeleteMapping("/notifications/{notificationid}")
 	@ApiOperation(value = "알람 삭제하기", notes = "로그인 한 사용자가 선택한 알람을 삭제한다")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -305,12 +305,12 @@ public class UserController {
 	})
 	public ResponseEntity<? extends BaseResponseBody> deleteNotification(
 			@ApiIgnore Authentication authentication,
-			@PathVariable Long notiid) {
+			@PathVariable(name = "notificationid") Long notiIdx) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String userEmail = userDetails.getUsername();
 		User nowLoginUser = userService.getUserByEmail(userEmail);
 
-		userService.deleteNotification(nowLoginUser, notiid);
+		userService.deleteNotification(nowLoginUser, notiIdx);
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
