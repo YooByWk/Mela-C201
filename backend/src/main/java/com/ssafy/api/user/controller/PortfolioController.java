@@ -31,7 +31,7 @@ public class PortfolioController {
     @Autowired
     PortfolioService portfolioService;
 
-    @PostMapping(value = "/music", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/musics", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "포트폴리오 음악 등록", notes = "포트폴리오 음악을 등록한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),

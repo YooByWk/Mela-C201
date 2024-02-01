@@ -226,6 +226,9 @@ public class FileServiceImpl implements FileService {
             file.setSaveFilename(uuid.toString() + "_" + multipartFile.getOriginalFilename());  //3. 저장되는 파일 명
             file.setFileDescription(fileDescription);                                           //4. 파일 설명
             file.setFileSize(convertedFile.length());                                           //5. 파일 크기 (용량)
+
+            //MultipartFile -> File로 변환하면서 로컬에 저장된 파일 삭제
+            removeFile(convertedFile);
         } catch(Exception e) {
             e.printStackTrace();
         }
