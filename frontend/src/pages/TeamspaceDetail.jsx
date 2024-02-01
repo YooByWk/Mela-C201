@@ -4,7 +4,7 @@ import TeamspaceTeam from "../components/TeamspaceTeam"
 import TeamspaceAudio from "../components/TeamspaceAudio"
 import TeamspaceFile from "../components/TeamspaceFile"
 import TeamspaceManage from "../components/TeamspaceManage"
-import DefaultButton from '../components/DefaultButton';
+import TeamspaceInviteModal from '../components/Modals/TeamspaceInviteModal';
 
 const TabMenu = styled.ul`
     color: white;
@@ -32,9 +32,6 @@ const TabMenu = styled.ul`
         text-decoration: underline;
         text-decoration-color: #254EF8;
     }
-`
-const CustomButton = styled(DefaultButton)`
-    padding-left: 200px;
 `
 
 function TeamspaceDetail () {
@@ -65,15 +62,7 @@ function TeamspaceDetail () {
                     </li>
                 ))}
             </TabMenu>
-
-            <CustomButton
-                text={'+ Invite'}
-                backgroundcolor={'#254ef8'}
-                fontcolor={'white'}
-                width={'5rem'}
-                height={'2rem'}
-                // onClick={goPortfolioAdd}
-            />
+            <TeamspaceInviteModal />
             {menuArr[currentTab].content}
         </div>
         </>
