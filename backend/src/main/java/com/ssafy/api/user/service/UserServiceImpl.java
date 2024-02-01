@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -314,5 +315,14 @@ public class UserServiceImpl implements UserService {
 
 		return followRepositorySupport.findUserFollowee(userRepository.findByEmailId(emailId).get());
 
+	}
+
+	@Override
+	public List<Notification> getNotification(User nowLoginUser) {
+		Optional<List<Notification>> notiList = notificationRepository.findByUserIdx(nowLoginUser);
+		if(notiList.isPresent()){
+			return notiList.get();
+		}
+		return null;
 	}
 }

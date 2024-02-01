@@ -2,6 +2,7 @@ package com.ssafy.api.user.service;
 
 import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
+import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.User;
 
 import javax.mail.MessagingException;
@@ -50,4 +51,6 @@ public interface UserService {
 	List<User> getFollower(String emailId);
 
 	List<User> getFollowee(String emailId);
+
+	List<Notification> getNotification(User nowLoginUser);
 }
