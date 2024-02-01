@@ -60,6 +60,6 @@ export const checkDupNickname = async ({
 }
 
 // 로그아웃
-export const logout = async () => {
-    AuthApi.get(`/auth/logout`)
-}
+// export const logout = async () => {
+//     AuthApi.get(`/auth/logout`)
+// }

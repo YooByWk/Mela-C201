@@ -5,7 +5,7 @@ import { redirect } from "react-router-dom";
 import { create } from "zustand";
 
 const useStore = create(set => ({
-  islogined: false,
+  islogined: localStorage.accessToken ? true : false,
   setIsLogined : (logined) => set({ islogined: logined}),
   user : null,
   fetchUser: async () => {
@@ -21,13 +21,25 @@ const useStore = create(set => ({
       console.error(error)
     }
   },
-  logout : () => {
-    set({user: null})
-    localStorage.clear()
-    set({islogined: false})
-    // window.alert('로그아웃')
-    // window.location.href = `/`
+
+  logout : async () => {
+  
+    try {
+      await axios.get('http://localhost:8080/api/v1/auth/logout', {
+        headers : {
+          'Authorization' :`Bearer ${localStorage.accessToken}`
+        }
+      });
+      set({user: null});
+      localStorage.clear();
+      set({islogined: false});
+      alert('로그아웃');
+      window.location.href = `/`
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
   },
 }))
+
 
 export default useStore

@@ -20,4 +20,10 @@ export const BoardList = async({page, size, sortKey, word}) => {
   return response
 }
 
+export const BoardDetail = async({boardIdx}) => {
+  const response = await BoardAPI.get(`/${boardIdx}`)
+  return response
+}
+
+
 export const BoardPost = () => {}
