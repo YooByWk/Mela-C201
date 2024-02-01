@@ -16,6 +16,7 @@ import CommunityDetail from "./components/community/CommunityDetail";
 import CommunityHome from "./components/community/CommunityHome";
 
 import TeamspaceMain from "./pages/TeamspaceMain";
+import CommunityEdit from "./components/community/CommunityEdit";
 
 const StyledAppRouter = styled(AppRouter)`
   /* background-color: blue; */
@@ -67,6 +68,7 @@ function App() {
           <Route path='/community' exact element={<CommunityHome/>} />
         <Route path='/community/create' element={<CommunityCreate/>} />
         <Route path='/community/:boardIdx' element={<CommunityDetail/>} />
+        <Route path='/community/:boardIdx/edit' element={<CommunityEdit/>} />
           </Route>
           <Route
             path="*"

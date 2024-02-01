@@ -3,13 +3,13 @@ import useStore from "../../status/store";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SigninModal from "../Modals/SigninModal";
-
+import { BoardCreate } from "../../API/BoardAPI";
 function CommunityCreate() {
   const Navigate = useNavigate()
 
   const islogined = useStore((state) => state.islogined);
   const [showLoginModal, setshowLoginModal] = useState(false)
-
+  
   useEffect(()=> {
     if (!islogined) {
       setshowLoginModal(true)    
@@ -21,16 +21,22 @@ function CommunityCreate() {
     content: '',
   })
 
-  const SubmitHandler = (event)=> {
-    event.preventDefault()
+  const SubmitHandler = async (event)=> {
+    event.preventDefault();
     if (event.key === 'Enter') {
-      event.preventDefault()
+      event.preventDefault();
     }
-    console.log('제출')
-    console.log(userinput)
-    //axios 호출 추가하기
+    console.log('제출');
+    console.log(userinput);
+    
+    try {
+      const response = await BoardCreate({content: userinput.content, title: userinput.title});
+      console.log(response,'res');
+    } catch (error) {
+      console.error(error);
+    }
   }
-
+  
   const handleChange = async (event) => {
     setUserInput({
       ...userinput,
@@ -46,7 +52,7 @@ function CommunityCreate() {
           <h2>Title</h2>
           <input type="text" id='title' onChange={handleChange}/>
           <h2>Content</h2>
-          <input type="text" id='content' onChange={handleChange}/>
+          <textarea type="text" id='content' onChange={handleChange}/>
           <input type="submit" />
         </form>
       </>
