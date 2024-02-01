@@ -46,7 +46,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void updateBoard(BoardUpdatePutReq updateInfo, Long boardIdx, Long userIdx) {
+    public Board updateBoard(BoardUpdatePutReq updateInfo, Long boardIdx, Long userIdx) {
         Board board = boardRepository.getOne(boardIdx);
         board.setTitle(updateInfo.getTitle());
         board.setContent(updateInfo.getContent());
@@ -54,7 +54,7 @@ public class BoardServiceImpl implements BoardService {
         board.setNickname(userRepository.getOne(userIdx).getNickname());
         board.setUpdateDate(LocalDateTime.now());
 
-        boardRepository.save(board);
+        return boardRepository.save(board);
     }
 
     @Override

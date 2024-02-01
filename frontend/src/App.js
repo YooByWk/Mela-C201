@@ -15,6 +15,7 @@ import CommunityCreate from "./components/community/CommunityCreate";
 import CommunityDetail from "./components/community/CommunityDetail";
 import CommunityHome from "./components/community/CommunityHome";
 
+import TeamspaceMain from "./pages/TeamspaceMain";
 
 const StyledAppRouter = styled(AppRouter)`
   /* background-color: blue; */
@@ -61,6 +62,7 @@ function App() {
         <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/teamspace" element={<TeamspaceMain/>} />
           <Route path='/community' element={<Community />}>
           <Route path='/community' exact element={<CommunityHome/>} />
         <Route path='/community/create' element={<CommunityCreate/>} />

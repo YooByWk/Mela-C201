@@ -1,6 +1,6 @@
 package com.ssafy.api.board.request;
 
-import com.ssafy.db.entity.Position;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -20,18 +20,19 @@ public class RecruitRegisterPostReq {
     String content;
 
     @ApiModelProperty(name="마감일", example="2000-01-01")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     LocalDate endDate;
 
     @ApiModelProperty(name="장르1", example="Pop")
-    String genreIdx1;
+    String genreName1;
 
     @ApiModelProperty(name="장르2", example="Rock")
-    String genreIdx2;
+    String genreName2;
     
     @ApiModelProperty(name="장르3", example="Etc")
-    String genreIdx3;
+    String genreName3;
 
     @ApiModelProperty(name="포지션 리스트")
-    List<Position> positions;
+    List<String> positions;
 
 }

@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface BoardService {
     Board registBoard(BoardRegisterPostReq registInfo, User user);
-    void updateBoard(BoardUpdatePutReq updateInfo, Long boardIdx, Long userIdx);
+    Board updateBoard(BoardUpdatePutReq updateInfo, Long boardIdx, Long userIdx);
     void deleteBoard(Long boardIdx);
     Board getBoard(Long boardIdx) throws Exception;
     List<Board> getBoardList(BoardGetListReq getListInfo);

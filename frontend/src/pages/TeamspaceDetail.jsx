@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import styled from "styled-components";
-import TeamspaceTeam from "../components/TeamspaceTeam"
-import TeamspaceAudio from "../components/TeamspaceAudio"
-import TeamspaceFile from "../components/TeamspaceFile"
-import TeamspaceManage from "../components/TeamspaceManage"
+import TeamspaceTeam from "../components/teamspace/TeamspaceTeam"
+import TeamspaceAudio from "../components/teamspace/TeamspaceAudio"
+import TeamspaceFile from "../components/teamspace/TeamspaceFile"
+import TeamspaceManage from "../components/teamspace/TeamspaceManage"
 import TeamspaceInviteModal from '../components/Modals/TeamspaceInviteModal';
 
 const TabMenu = styled.ul`

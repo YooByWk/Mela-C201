@@ -107,14 +107,14 @@ const ModalContent = styled('div')(
     font-weight: 500;
     text-align: start;
     position: relative;
-    display: flex;
-    flex-direction: column;
     gap: 8px;
     overflow: hidden;
     border-radius: 8px;
-    border: solid 1px #254EF8;
     padding: 24px;
     color: white;
+    background-color: #151C2C;
+    width: 80%;
+    height: 60%;
 
     & .modal-title {
       text-align: center;
@@ -129,13 +129,6 @@ const ModalContent = styled('div')(
       line-height: 1.5rem;
       font-weight: 400;
       margin-bottom: 4px;
-    }
-
-    & .find-password {
-      margin: 0;
-      font-weight: 200;
-      margin-bottom: 4px;
-      color: gray;
     }
   `,
 )
@@ -154,10 +147,8 @@ const TriggerButton = styled('button')(
   /* Rectangle 1 */
 
   position: fixed;
-  left: 12.5%;
-  right: 12.5%;
-  top: 12.5%;
-  bottom: 12.5%;
+  margin-left: 20%;
+  margin-top: 15%;
   font-size: xx-large;
   color: #254EF8;
 
@@ -181,10 +172,8 @@ const TriggerButton = styled('button')(
       /* Rectangle 1 */
 
       position: fixed;
-      left: 12.5%;
-      right: 12.5%;
-      top: 12.5%;
-      bottom: 12.5%;
+      margin-left: 20%;
+      margin-top: 15%;
       font-size: xx-large;
       color: white;
 
