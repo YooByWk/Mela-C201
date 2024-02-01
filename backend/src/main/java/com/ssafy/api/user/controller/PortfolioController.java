@@ -19,16 +19,11 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
-//@Slf4j
-//@Api(value = "포트폴리오 API", tags = {"Portfolio"})
-//@RestController
-//@RequestMapping("/api/v1/users")
-
 @Slf4j
+@Api(value = "포트폴리오 API", tags = {"Portfolio"})
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
-//@Tag(name = "Portfolio", description = "포트폴리오 API")
+
 public class PortfolioController {
     @Autowired
     FileService fileService;
@@ -36,7 +31,6 @@ public class PortfolioController {
     @Autowired
     PortfolioService portfolioService;
 
-//    @PostMapping(value = "/music", consumes = MULTIPART_FORM_DATA_VALUE)
     @PostMapping(value = "/music", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "포트폴리오 음악 등록", notes = "포트폴리오 음악을 등록한다.")
     @ApiResponses({
@@ -47,22 +41,27 @@ public class PortfolioController {
 
     public ResponseEntity<? extends BaseResponseBody> addPortfolioMusic (
             @ApiIgnore Authentication authentication,
-//            @RequestPart @ApiParam(value="portfolioMusicPostReq", required = true) PortfolioMusicPostReq portfolioMusicPostReq,
-            @RequestPart (value="portfolioMusicPostReq", required = true) PortfolioMusicPostReq portfolioMusicPostReq,
+            @RequestPart @ApiParam(value="portfolioMusicPostReq", required = true) PortfolioMusicPostReq portfolioMusicPostReq,
             @RequestPart(value = "file", required = true) MultipartFile[] multipartFile) {
 
         PortfolioMusic portfolioMusic = new PortfolioMusic();
-        String fileDescription = portfolioMusicPostReq.getFileDescription();
+//        String fileDescription = portfolioMusicPostReq.getFileDescription();
 
-        //토큰으로부터 사용자 확인
+        //TODO: 토큰 유효성 확인
+
+        System.err.println("받은 파일 이름");
+        for(MultipartFile mf : multipartFile) {
+            System.err.println(mf.getOriginalFilename());
+        }
+
+        //토큰으로부터 사용자 확인 후 VO에 설정
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-
         portfolioMusic.setUserIdx(userDetails.getUser());
 
         //2. Amazon S3에 파일 저장
-        if(fileService.addPortfolioMusic(portfolioMusic, multipartFile, fileDescription)) {       //파일 정상 저장 (Response 200)
+        if(fileService.addPortfolioMusic(portfolioMusic, multipartFile, portfolioMusicPostReq)) {         //파일 정상 저장 (Response 200)
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-        } else {                                                                //파일 저장 실패 (Response 500)
+        } else {                                                                                    //파일 저장 실패 (Response 500)
             return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
         }
     }

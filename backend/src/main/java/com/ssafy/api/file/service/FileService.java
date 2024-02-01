@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileService {
     void saveFileTest(MultipartFile multipartFile);
     com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription);
-    boolean addPortfolioMusic(PortfolioMusic portfolioMusic, MultipartFile[] multipartFile, String fileDescription);
+    boolean addPortfolioMusic(PortfolioMusic portfolioMusic, MultipartFile[] multipartFile, PortfolioMusicPostReq portfolioMusicPostReq);
 //    Stream<Path> loadAll();
 //    Path getFilename(String filename);
     Resource loadAsResource(String filename);
