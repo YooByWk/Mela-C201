@@ -1,0 +1,103 @@
+import axios from 'axios';
+
+
+
+
+export const TeamspaceAPI = axios.create({
+  baseURL: 'http://localhost:8080/api/v1/teamspaces'
+})
+
+// 나의 팀스페이스 조회
+export const TeamspaceList = async() => {
+  
+  const response = TeamspaceAPI.get(`/`)
+  console.log(response.data)
+  return response.data
+}
+
+// 팀스페이스 생성
+export const TeamspaceGenerate = async({
+    endDate,
+    startDate,
+    teamDescription,
+    teamName,
+    // teamspace_picture_file_idx
+}) => {
+    const data = {
+        endDate,
+        startDate,
+        teamDescription,
+        teamName,
+        // teamspace_picture_file_idx
+    }
+    const response = await TeamspaceAPI.post(`/`, data)
+    console.log(response.data)
+    return response.data
+}
+
+// 특정 팀스페이스 조회
+export const TeamspaceInfo = async(teamspaceId) => {
+    const response = TeamspaceAPI.get(`/${teamspaceId}`)
+    console.log(response.data)
+    return response.data
+}
+
+// 팀스페이스 정보 수정
+export const TeamspaceUpdate = async({
+    teamspaceId,
+    endDate,
+    startDate,
+    teamDescription,
+    teamName,
+    // teamspace_background_picture_file_idx,
+    // teamspace_picture_file_idx
+}) => {
+    const data = {
+        teamspaceId,
+        endDate,
+        startDate,
+        teamDescription,
+        teamName,
+        // teamspace_background_picture_file_idx,
+        // teamspace_picture_file_idx
+    }
+
+    const response = await TeamspaceAPI.put(`/${teamspaceId}`, data)
+
+    console.log(response.data)
+    return response.data
+}
+
+//팀스페이스 삭제
+export const TeamspaceDelete = async(teamspaceId) => {
+    TeamspaceAPI.delete(`/${teamspaceId}`)
+}
+
+//팀스페이스 멤버 조회
+export const TeamspaceMember = async(teamspaceId) => {
+    const response = TeamspaceAPI.get(`/${teamspaceId}/users`)
+    console.log(response.data)
+    return response.data
+}
+
+//팀스페이스 멤버 탈퇴
+export const TeamspaceMemberDelete = async(teamspaceId) => {
+    TeamspaceAPI.delete(`/${teamspaceId}/users`)
+}
+
+//팀스페이스 멤버 추가
+export const TeamspaceMemberInvite = async({
+    teamspaceId,
+    userId
+}) => {
+    const data = {
+        teamspaceId,
+        userId
+    }
+
+    const response = TeamspaceAPI.post(`/${teamspaceId}/users/${userId}`, data)
+
+    console.log(response.data)
+
+    return response.data
+}
