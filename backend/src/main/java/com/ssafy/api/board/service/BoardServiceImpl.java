@@ -116,7 +116,7 @@ public class BoardServiceImpl implements BoardService {
 
         if (board.getUserIdx().getUserIdx() != user.getUserIdx()) {
             String message = board.getTitle();
-            if (message.length() >= 6) {
+            if (message.length() >= 7) {
                 message = message.substring(0, 7) + "..";
             }
 
