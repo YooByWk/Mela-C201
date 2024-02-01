@@ -6,10 +6,11 @@ import com.ssafy.db.entity.Position;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface BoardRecruitPositionRepository extends JpaRepository<BoardRecruitPosition, Long> {
-    Optional<BoardRecruitPosition> findByBoardRecruitIdx(BoardRecruit boardRecruitIdx);
+    List<BoardRecruitPosition> findByBoardRecruitIdx(BoardRecruit boardRecruitIdx);
     Optional<BoardRecruitPosition> findByBoardRecruitIdxAndPositionIdx(BoardRecruit boardRecruitIdx, Position positionIdx);
 }
