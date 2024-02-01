@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { FaSearch } from "react-icons/fa";
 import React, { useState, useEffect } from 'react';
-import { BoardList } from "../API/BoardAPI";
+import { BoardList } from "../../API/BoardAPI";
 import { useNavigate } from "react-router-dom";
 
 

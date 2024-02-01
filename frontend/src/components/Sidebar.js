@@ -7,7 +7,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import { MdOutlineLocalFireDepartment, MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
 import { fetchUser, follower, followee } from "../API/UserAPI";
-import { logout } from "../API/AuthAPI";
+import useStore from "../status/store";
 
 const SideContainer = styled.div`
   /* width: 10%;
@@ -39,18 +39,20 @@ const CustomLink = styled(Link)`
 `
 
 function Sidebar({ className, paddingtop }) {
-  const [currentUser, setCurrentUser] = useState(null)
+  const [currentUser, setCurrentUser] = useState([])
 
-  useEffect(() => {
-    const loadCurrentUser = async() => {     
-      try {
-          const loginUser = await fetchUser()
-          setCurrentUser(loginUser)
-          console.log(currentUser.nickname)
-      } catch (err) {
-          console.error(err)
-      }
-    }; loadCurrentUser()
+  const logout = useStore(state => state.logout)
+
+  // useEffect(() => {
+  //   const loadCurrentUser = async() => {     
+  //     try {
+  //         const loginUser = await fetchUser()
+  //         setCurrentUser(loginUser)
+  //         console.log(currentUser.nickname)
+  //     } catch (err) {
+  //         console.error(err)
+  //     }
+  //   }; loadCurrentUser()
 
   //   const getFollowList = async() => {
   //     try {
@@ -62,18 +64,8 @@ function Sidebar({ className, paddingtop }) {
   //       console.error(err)
   //     }
   //   }; getFollowList()
-  }, [])
+  // }, [])
 
-  const handleLogout = () => {
-    logout()
-    .then((res) => {
-      localStorage.removeItem('accessToken')
-      console.log(res)
-      window.location.href = '/'
-    }).catch((err) => {
-      console.log(err)
-    })
-  }
 
   return (
     <div className={className}>
@@ -114,7 +106,7 @@ function Sidebar({ className, paddingtop }) {
               <ListItemPrefix>
                 <MdOutlineLogout />
               </ListItemPrefix>
-              <span className="wd" onClick={handleLogout}>Logout</span>
+              <span className="wd" onClick={logout()}>Logout</span>
             </ListItem>
           </List>
         </Card>
