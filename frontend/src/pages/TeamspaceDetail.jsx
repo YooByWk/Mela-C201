@@ -4,6 +4,7 @@ import TeamspaceTeam from "../components/TeamspaceTeam"
 import TeamspaceAudio from "../components/TeamspaceAudio"
 import TeamspaceFile from "../components/TeamspaceFile"
 import TeamspaceManage from "../components/TeamspaceManage"
+import DefaultButton from '../components/DefaultButton';
 
 const TabMenu = styled.ul`
     color: white;
@@ -14,19 +15,26 @@ const TabMenu = styled.ul`
     margin-top: 20px;
     margin-bottom: 10px;
 
+    // 메뉴 css
     .submenu {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        align-items: center;
         width: 200px;
         height: 30px;
         padding: 10px;
         font-size: 20px;
+        cursor: pointer;
     }
 
+    // 선택한 메뉴 css
     .focused {
         text-decoration: underline;
         text-decoration-color: #254EF8;
     }
+`
+const CustomButton = styled(DefaultButton)`
+    padding-left: 200px;
 `
 
 function TeamspaceDetail () {
@@ -50,12 +58,22 @@ function TeamspaceDetail () {
         <div>
             <TabMenu>
                 {menuArr.map((el, index) => (
-                    <li className={index === currentTab ? "submenu focused" : "submenu" }
-                    onClick={() => clickMenuHandler(index)}>
+                    <li className={index === currentTab ? "submenu focused" : "submenu" }>
+                    <span onClick={() => clickMenuHandler(index)}>
                         {el.name}
+                    </span>
                     </li>
                 ))}
             </TabMenu>
+
+            <CustomButton
+                text={'+ Invite'}
+                backgroundcolor={'#254ef8'}
+                fontcolor={'white'}
+                width={'5rem'}
+                height={'2rem'}
+                // onClick={goPortfolioAdd}
+            />
             {menuArr[currentTab].content}
         </div>
         </>
