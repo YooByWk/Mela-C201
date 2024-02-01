@@ -6,6 +6,7 @@ import com.ssafy.api.user.response.UserRes;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -186,6 +187,7 @@ public class UserController {
 	@ApiOperation(value = "랜덤 닉네임 생성", notes = "중복되지 않는 랜덤 닉네임을 생성한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<String> generateRandomNickname() {
@@ -211,7 +213,8 @@ public class UserController {
 	@ApiOperation(value = "특정 사용자를 팔로우", notes = "특정 사용자를 팔로우한다")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
-			@ApiResponse(code= 500, message = "서버 오류")
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<? extends BaseResponseBody> followUser(
 			@ApiIgnore Authentication authentication,
@@ -229,7 +232,8 @@ public class UserController {
 	@ApiOperation(value = "사용자가 팔로우한 사람들 목록", notes = "특정 사용자가 팔로우한 사람들 목록을 보여준다")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
-			@ApiResponse(code= 500, message = "서버 오류")
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<List<User>> getFollower(
 			@PathVariable String userId) {
@@ -251,6 +255,64 @@ public class UserController {
 		List<User> followeeList = userService.getFollowee(userId);
 
 		return ResponseEntity.status(200).body(followeeList);
+	}
+
+
+	@GetMapping("/notification")
+	@ApiOperation(value = "알람 가져오기", notes = "로그인 한 사용자의 알람을 보여주기 위해 가져온다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<List<Notification>> getNotification(
+			@ApiIgnore Authentication authentication) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userEmail = userDetails.getUsername();
+		User nowLoginUser = userService.getUserByEmail(userEmail);
+
+		List<Notification> notiList = userService.getNotification(nowLoginUser);
+
+		return ResponseEntity.status(200).body(notiList);
+	}
+
+	@GetMapping("/noticheck/{notiid}")
+	@ApiOperation(value = "알람 확인하기", notes = "로그인 한 사용자가 확인한 알람을 체크한다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<String> checkNotification(
+			@ApiIgnore Authentication authentication,
+			@PathVariable Long notiid) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userEmail = userDetails.getUsername();
+		User nowLoginUser = userService.getUserByEmail(userEmail);
+
+		String message = userService.checkNotification(nowLoginUser, notiid);
+		System.out.println(message);
+
+		return ResponseEntity.status(200).body(message);
+	}
+
+	@DeleteMapping("/notidelete/{notiid}")
+	@ApiOperation(value = "알람 삭제하기", notes = "로그인 한 사용자가 선택한 알람을 삭제한다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> deleteNotification(
+			@ApiIgnore Authentication authentication,
+			@PathVariable Long notiid) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userEmail = userDetails.getUsername();
+		User nowLoginUser = userService.getUserByEmail(userEmail);
+
+		userService.deleteNotification(nowLoginUser, notiid);
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 }
 

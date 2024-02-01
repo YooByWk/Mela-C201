@@ -4,7 +4,7 @@ import styled from "styled-components";
 import DefaultButton from "../components/DefaultButton";
 import { MdLockOutline } from "react-icons/md";
 import { CgDanger } from "react-icons/cg";
-import { fetchUser, updateUser } from "../components/API/UserAPI";
+import { fetchUser, updateUser } from "../API/UserAPI";
 
 
 const Container = styled.div`

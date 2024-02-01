@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
-import { signup, checkDupNickname } from '../API/AuthAPI'
+import { signup, checkDupNickname } from '../../API/AuthAPI'
 //Gender Dropdown
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
