@@ -71,13 +71,14 @@ public class BoardController {
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
 
+        Board board;
         try{
-            boardService.registBoard(registInfo, user);
+            board = boardService.registBoard(registInfo, user);
         } catch (Exception e) {
             return ResponseEntity.status(400).body(BaseResponseBody.of(404, "not found"));
         }
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, board.getBoardIdx() + ""));
     }
 
     @PutMapping("/{boardid}")

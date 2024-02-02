@@ -52,8 +52,10 @@ function SignupModal({className, fontSize, padding}) {
   }
 
   // 이메일 아이디 중복 확인
-  const checkEmailId = () => {
+  const checkEmailId = (e) => {
+    e.preventDefault()
     emailCheck(values.emailId)
+
     .then((res) => {
       console.log(res)
       console.log(values.emailId)
@@ -68,6 +70,23 @@ function SignupModal({className, fontSize, padding}) {
       else {
         console.error(err)
       }
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    email(values.emailId)
+
+    .then((res) => {
+      console.log(values.emailId)
+      if (res.statusCode === 200) {
+        alert('이메일 인증을 진행해주세요.')
+        navigate('/verify')
+      }
+      
+    })
+    .catch ((err) => {
+      console.log(err)
     })
   }
 
@@ -99,19 +118,6 @@ function SignupModal({className, fontSize, padding}) {
       [e.target.id]: e.target.checked,})
       console.log(e.target.checked)
     }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    try {
-      await email(values.emailId)
-      console.log(values.emailId)
-      alert('이메일 인증을 진행해주세요.')
-      navigate('/')
-    } catch (err) {
-      console.log(err)
-    }
-  }
 
   return (
     <div>

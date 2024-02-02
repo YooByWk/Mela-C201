@@ -61,7 +61,7 @@ public class TeamspaceController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<? extends  BaseResponseBody> updateTeamspace(
-            @RequestBody @ApiParam(value="회원가입 정보", required = true) TeamspaceUpdatePutReq updateInfo,
+            @RequestBody @ApiParam(value="팀스페이스 수정 정보", required = true) TeamspaceUpdatePutReq updateInfo,
             @PathVariable(name = "teamspaceid") Long teamspaceId
     ) {
         try{
@@ -83,10 +83,10 @@ public class TeamspaceController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<? extends BaseResponseBody> deleteTeamspace(
-            @PathVariable(name = "teamspaceid") String teamspaceId
+            @PathVariable(name = "teamspaceid") Long teamspaceId
     ) {
         try {
-            Teamspace teamspace = teamspaceService.getTeamspaceById(Long.valueOf(teamspaceId));
+            Teamspace teamspace = teamspaceService.getTeamspaceById(teamspaceId);
             teamspaceService.deleteTeamspace(teamspace);
         } catch (Exception e) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(404, "not found"));
@@ -95,17 +95,17 @@ public class TeamspaceController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
-    @GetMapping(value = "/{teamspaceid}", name = "teamspaceId")
+    @GetMapping(value = "/{teamspaceid}")
     @ApiOperation(value = "팀스페이스 정보 조회", notes ="<string>팀스페이스 아이디<strong>를 통해 팀스페이스 정보를 조회한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 404, message = "존재하지 않는 팀스페이스"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<TeamspaceRes> getTeamspace(@PathVariable String teamspaceId) {
+    public ResponseEntity<TeamspaceRes> getTeamspace(@PathVariable(name = "teamspaceid") Long teamspaceId) {
         Teamspace teamspace = null;
         try {
-            teamspace = teamspaceService.getTeamspaceById(Long.valueOf(teamspaceId));
+            teamspace = teamspaceService.getTeamspaceById(teamspaceId);
 
             return ResponseEntity.status(200).body(TeamspaceRes.of(teamspace));
         } catch (Exception e) {

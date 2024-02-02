@@ -58,10 +58,13 @@ export const logout = async () => {
 }
 
 // 이메일 인증 전송
-export const email = async (emailId) => {
-    const data = { emailId }
-    const response = await AuthApi.post(`/auth/email`, data)
-
+export const email = async ({emailId}) => {
+    const response = await AuthApi.post(`/auth/email`, {
+        params: {
+            emailId
+        }
+    })
+    console.log(response.data)
     return response.data
 }
 
