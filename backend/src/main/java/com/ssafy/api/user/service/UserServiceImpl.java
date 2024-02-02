@@ -270,7 +270,6 @@ public class UserServiceImpl implements UserService {
 				try{
 					// 토큰 유효성 확인
 					JwtTokenUtil.handleError(token);
-					System.out.println("token 유효성");
 
 					// 인증 회원으로 전환
 					user.setUserType("auth");
@@ -301,7 +300,7 @@ public class UserServiceImpl implements UserService {
 		helper.setSubject("[Mela!] 비밀번호 재설정");
 
 		// TODO: 비밀번호 재설정 프론트 주소 입력
-		String addr = "http://" + "token=sdfsdfjsdjlsdkfj";
+		String addr = "http://localhost:3000/changepassword?token=" + token;
 
 		String htmlContent = "<html><body>";
 		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
