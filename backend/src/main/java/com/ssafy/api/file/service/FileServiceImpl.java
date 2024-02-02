@@ -211,6 +211,8 @@ public class FileServiceImpl implements FileService {
             httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             httpHeaders.setContentLength(bytes.length);
             httpHeaders.setContentDispositionFormData("attachment", fileName);
+            objectInputStream.close();
+            o.close();
 
             return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
         } catch(Exception e) {
