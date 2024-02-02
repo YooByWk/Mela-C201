@@ -93,9 +93,23 @@ export const CommentDelete = async ({boardIdx, commentIdx}) => {
   console.log(res, '삭제 스토어')
   return res
 }
+
 // export const Delete
-export const chekcBoardLike = async({boardIdx}) => {
-  const response = await BoardAPI.get
+export const checkBoardLike = async({boardIdx, currentUserIdx}) => {
+  const response = await BoardAPI.get(`/${boardIdx}/like/${currentUserIdx}`)
+  console.log(response)
+  return response
+}
+
+export const BoardLike = async({boardIdx, currentUserIdx}) => {
+  const response = await BoardAPI.put(`/${boardIdx}/like`, {
+    currentUserIdx
+  }, {
+    headers : {'Authorization' : `Bearer ${localStorage.accessToken}`}
+  })
+  console.log(response)
+  
+  return response
 }
 
 

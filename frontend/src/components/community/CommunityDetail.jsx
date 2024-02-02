@@ -1,14 +1,15 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { BoardDetail, GetComment, CreateComment, BoardDelete, CommentDelete } from "../../API/BoardAPI";
+import { BoardDetail, GetComment, CreateComment, BoardDelete, CommentDelete, BoardLike } from "../../API/BoardAPI";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import useStore from "../../status/store";
+import { checkBoardLike } from './../../API/BoardAPI';
 
 function CommunityDetail() {
   const [data, setData] = useState(null);
   const { boardIdx } = useParams();
   const [comments, setComments] = useState(null);
-  // const CommentDelete = useStore(s => s.CommentDelete)
+  const [isLiked, setIsLiked] = useState(null)
   const [userInput, setUserInput] = useState("");
   const Navigate = useNavigate()
   const currentUserIdx = useStore(s => s.user ? s.user.userIdx : null)
@@ -25,21 +26,24 @@ function CommunityDetail() {
     }
   }
 
+  
   useEffect(() => {
     const detailData = async () => {
       const response = await BoardDetail({ boardIdx });
       setData(response.data);
       const Comments = await GetComment({ boardIdx });
       setComments(Comments.data);
-      console.log(Comments);
+      // console.log(Comments);
     };
     detailData();
   }, []);
+
 
   const hanleUserInput = async (event) => {
     setUserInput(event.target.value);
   };
   
+
   const handleSubmit = async (event) => {
     event.preventDefault(); 
     await CreateComment({ boardIdx, content: userInput });
@@ -49,24 +53,21 @@ function CommunityDetail() {
     setUserInput('')
   };
   
+
   const postDeleteHanlder = async (e) => {
     e.preventDefault()
     const Check = window.confirm('삭제하시겠습니까?')
-    if (Check) { const response = await BoardDelete({boardIdx})
+    if (Check) { await BoardDelete({boardIdx})
     Navigate('../')
-  } 
+    } 
   }
   const postEditHanlder= (e) => {
     e.preventDefault()
     // console.log()
     Navigate('./edit')
   }
-  // 댓글삭제
-  // 게시글 삭제
 
-
-  let idx, content, nickname, registDate, title, updateDate, userIdx, viewNum;
-
+  let idx, content, nickname, registDate, title, updateDate, userIdx, viewNum, likeNum;
   if (data) {
     ({
       idx,
@@ -77,17 +78,50 @@ function CommunityDetail() {
       updateDate,
       userIdx,
       viewNum,
+      likeNum
     } = data);
-    // console.log(data)
-  }
-  if (comments) {
-    // console.log(comments,'ㅁㄴㅇ')
+  } 
+  useEffect (()=> {
+    if (currentUserIdx === null) {return}
+      const check = async () => {
+        const response = await checkBoardLike({boardIdx,currentUserIdx})
+        console.log('response: ', response);
+
+      }
+      check()
+    }, [boardIdx, currentUserIdx])
+
+    useEffect(() => {
+      // 유저 누구인지 알 때
+      if (currentUserIdx === null) {return}
+      // 유저가 좋아요를 했는가 확인하고
+      const check = async ()=> {
+        console.log(isLiked)
+        const res = await checkBoardLike({boardIdx,currentUserIdx})
+        // console.log(response.data.message==='true')
+        if (res.data.message === 'true') {
+          setIsLiked(false) // 상태 업데이트를 true로 직접 설정
+        } else {
+          setIsLiked(true) // 상태 업데이트를 false로 직접 설정
+        }
+      }    
+      check()
+      // 좋아요 했다면 true
+      // 아니라면 false
+    }, [boardIdx, currentUserIdx])
+  const [likeCount, setLikeCount] = useState(0);
+  const BoardLikeHandler = async ()=> {
+    const res = await BoardLike({boardIdx})
+    setLikeCount(res.data.likeNum)
+    setIsLiked(!isLiked)
   }
   return (
     <MainDiv>
       <hr />
-      <button> 좋아요</button>
-      <button> 좋아요 취소</button>
+      {isLiked ? <button onClick={BoardLikeHandler}>좋아요</button> :     
+        <button onClick={BoardLikeHandler}> 좋아요 취소</button>
+      }      
+
       
       <p>해당 글의 인덱스</p>
       {data && (
@@ -100,18 +134,18 @@ function CommunityDetail() {
           <p>updateDate : {updateDate}</p>
           <p>userIdx : {userIdx}</p>
           <p>조회수 : {viewNum}</p>
+          <p>좋아요 : {likeNum}</p>
           {userIdx === currentUserIdx  && (<button onClick={postDeleteHanlder}>삭제</button>)}
           {userIdx === currentUserIdx  && (<button onClick={postEditHanlder}>수정</button>)}
         </>
       )}
-      <hr />
+      <hr key='' />
       댓글
       <ul>
         {comments && comments.length > 0? (
 comments.reverse().map((comment)=> {
-  {/* console.log(comment.commentIdx,'코멘트') */}
   return (
-    <li >
+    <li key={comment.commentIdx}>
       작성자 :{comment.nickname} ||
       내용 : {comment.content}
       작성일 : {comment.registDate}
