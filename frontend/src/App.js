@@ -17,7 +17,7 @@ import CommunityHome from "./components/community/CommunityHome";
 
 import TeamspaceMain from "./pages/TeamspaceMain";
 import CommunityEdit from "./components/community/CommunityEdit";
-
+import EmailVerify from "./pages/EmailVerify";
 const StyledAppRouter = styled(AppRouter)`
   /* background-color: blue; */
   /* color: blue; */
@@ -64,6 +64,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/teamspace" element={<TeamspaceMain/>} />
+        <Route path='/signup/:emailId' element={<EmailVerify />}/>
           <Route path='/community' element={<Community />}>
           <Route path='/community' exact element={<CommunityHome/>} />
         <Route path='/community/create' element={<CommunityCreate/>} />

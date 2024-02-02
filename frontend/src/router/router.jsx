@@ -7,7 +7,6 @@ import Gather from '../pages/Gather';
 import UserUpdate from '../pages/UserUpdate';
 import PortfolioAll from '../pages/PortfolioAll';
 import Message from '../pages/Message';
-import EmailVerify from '../pages/EmailVerify';
 import TeamspaceTeam from '../components/teamspace/TeamspaceTeam';
 import TeamspaceAudio from '../components/teamspace/TeamspaceAudio';
 import TeamspaceFile from '../components/teamspace/TeamspaceFile';
@@ -68,10 +67,6 @@ function AppRouter({ className }) {
           <Route
             path='/message' element={<Message />}
             />
-
-          <Route 
-            path='/verify' element={<EmailVerify />}
-          />
         </Routes>
     </div>
   );

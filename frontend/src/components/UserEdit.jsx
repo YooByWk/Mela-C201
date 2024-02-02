@@ -20,38 +20,21 @@ const Title = styled.h3`
 function UserEdit(props) {
     const [values, setValues] = useState([])
     const [isFollowed, setIsFollowed] = useState(false)
-    const [currentUser, setCurrentUser] = useState({}) 
+    // const [currentUser, setCurrentUser] = useState({}) 
 
+    const currentNickname = props.currentUser
+    const loginUser = props.loginUser
     const navigate = useNavigate()
 
     const goUpdate = () => {
         navigate('/users')
     }
 
-    useEffect(()=> {
-        const getUserInfo = async() => {
-            try {
-                const res = await fetchUser()
-                setValues(res)
-            } catch (err) {
-                console.error(err)
-            }
-        }; getUserInfo()
-
-        const loadCurrentUser = async() => {     
-            try {
-                const loginUser = await fetchUser()
-                setCurrentUser(loginUser)
-            } catch (err) {
-                console.error(err)
-            }
-        }; loadCurrentUser()
-    }, [])
-
     const handleFollow = async() => {
-        if (values && currentUser && values.emailId !== currentUser.emailId) {
+        // 만약 현재 로그인 한 사용자의 이메일 아이디와 주소창의 닉네임이 다르다면
+        if (loginUser && currentNickname && loginUser.nickname !== currentNickname) {
             try {
-                await followUser(values.emailId)
+                await followUser(loginUser.emailId)
                 setIsFollowed(!isFollowed)
             } catch(err) {
                 console.error(err)
@@ -61,18 +44,18 @@ function UserEdit(props) {
 
     return (
         <Container>
-            <Title>{values.nickname}</Title>
-            {values && currentUser && (
+            <Title>{loginUser.nickname}</Title>
+            {loginUser && currentNickname && (
                 <div>
-                    {currentUser.emailId === values.emailId ? (
+                    {currentNickname === loginUser.nickname ? (
                         <>
-                            <p>{ values.name }</p>
+                            {/* <p>{ values.name }</p>
                             <p>Gender : { values.gender }</p>
                             <p>Birth : { values.birth }</p>
                             <p>Like genre : </p>
                             <p>Position : </p>
                             <p>SNS</p>
-                            <p>{values.searchAllow}</p>
+                            <p>{values.searchAllow}</p> */}
 
                             <DefaultButton 
                                 text={'Edit'}

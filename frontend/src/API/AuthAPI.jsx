@@ -1,7 +1,5 @@
 import axios from "axios";
 
-let ACCESS_TOKEN = localStorage.getItem("accessToken");
-
 /** CREATE CUSTOM AXIOS INSTANCE */
 export const AuthApi = axios.create({
     baseURL: 'http://localhost:8080/api/v1',
@@ -58,12 +56,9 @@ export const logout = async () => {
 
 // 이메일 인증 전송
 export const email = async ({emailId}) => {
-    const response = await AuthApi.post(`/auth/email`, {
-        params: {
-            emailId
-        }
-    })
-    console.log(response.data)
+    console.log(emailId)
+    const data = {emailId}
+    const response = await AuthApi.post(`/auth/email`, data)
     return response.data
 }
 

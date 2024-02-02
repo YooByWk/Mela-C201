@@ -39,11 +39,8 @@ function SigninModal({className, fontSize, padding}) {
       console.log(IsLogined)
       fetchUser().then(() => {
         console.log(userInfo, '유저 정보')
+        movePage('/profile')
       })
-      movePage('/profile')
-    })
-    .then(() => {
-
     })
     .catch((err) => {
       console.log(err)
