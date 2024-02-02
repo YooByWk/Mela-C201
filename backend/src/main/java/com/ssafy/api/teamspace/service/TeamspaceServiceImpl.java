@@ -7,6 +7,7 @@ import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
 import com.ssafy.api.teamspace.response.TeamspaceListRes;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
 import com.ssafy.api.teamspace.response.TeamspaceRes;
+import com.ssafy.common.util.NotificationUtil;
 import com.ssafy.db.entity.Schedule;
 import com.ssafy.db.entity.Teamspace;
 import com.ssafy.db.entity.TeamspaceMember;
@@ -21,6 +22,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service("teamspaceService")
 public class TeamspaceServiceImpl implements TeamspaceService{
 
@@ -49,8 +51,10 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     @Autowired
     ScheduleRepositorySupport scheduleRepositorySupport;
 
+    @Autowired
+    NotificationUtil notificationUtil;
+
     @Override
-    @Transactional
     public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx) {
         // 팀 스페이스 썸네일 저장
         // 팀 스페이스 썸네일 사진 파일 idx 얻기
@@ -135,6 +139,18 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         teamspaceMember.setTeamspaceIdx(teamspaceRepository.getOne(teamspaceIdx));
         teamspaceMember.setUserIdx(userRepository.getOne(userIdx));
         teamspaceMemberRepository.save(teamspaceMember);
+
+        if (teamspaceMember.getUserIdx().getUserIdx() != teamspaceRepository.getOne(teamspaceIdx).getHost().getUserIdx()) {
+
+            String message = teamspaceRepository.getOne(teamspaceIdx).getTeamName();
+            if(message.length() >= 7) {
+                message = message.substring(0, 7) + "..";
+            }
+
+            message = "'" + message + "' 팀스페이스에 초대되었습니다.";
+
+            notificationUtil.sendNotification(message, userRepository.getOne(userIdx));
+        }
     }
 
     @Override
@@ -163,6 +179,19 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         schedule.setStartTime(registInfo.getStartTime());
         schedule.setEndTime(registInfo.getEndTime());
         scheduleRepository.save(schedule);
+
+        List<TeamspaceMemberListRes> lists = getTeamspaceMemberList(teamspaceIdx);
+        for (TeamspaceMemberListRes list : lists) {
+            User user = userRepository.getOne(list.getUserIdx());
+            // TODO:
+
+            String message = schedule.getContent();
+            if (message.length() >= 7) {
+                message = message.substring(0, 7) + "..";
+            }
+            message = "팀스페이스에 '" + message + "' 일정이 추가되었습니다.";
+            notificationUtil.sendNotification(message, user);
+        }
     }
 
     @Override

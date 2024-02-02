@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Bean;
 
-/**
- * 유저 로그인 API ([POST] /api/v1/auth/login) 요청에 필요한 리퀘스트 바디 정의.
- */
 @Getter
 @Setter
 @ApiModel("UserLoginPostRequest")

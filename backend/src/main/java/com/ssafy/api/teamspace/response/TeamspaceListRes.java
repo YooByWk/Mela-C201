@@ -14,14 +14,29 @@ import java.time.LocalDate;
 @Setter
 @ApiModel("TeamspaceListResponse")
 public class TeamspaceListRes {
+    @ApiModelProperty(name="teamspace idx")
     Long teamspaceIdx;
+
+    @ApiModelProperty(name="team name")
     String teamName;
+
+    @ApiModelProperty(name="start date", example = "2000-02-02")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     LocalDate startDate;
+
+    @ApiModelProperty(name="end date", example = "2000-02-02")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     LocalDate endDate;
+
+    @ApiModelProperty(name="teams description")
     String teamDescription;
+
+    @ApiModelProperty(name="host")
     User host;
+
+    @ApiModelProperty(name="teamspace picture file")
     File teamspacePictureFileIdx;
+
+    @ApiModelProperty(name="teamspace background picture File")
     File teamspaceBackgroundPictureFileIdx;
 }

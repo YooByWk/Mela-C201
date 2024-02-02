@@ -4,7 +4,7 @@ import styled from "styled-components";
 import DefaultButton from "../components/DefaultButton";
 import { MdLockOutline } from "react-icons/md";
 import { CgDanger } from "react-icons/cg";
-import { fetchUser, updateUser } from "../components/API/UserAPI";
+import { fetchUser, updateUser, deleteUser } from "../API/UserAPI";
 
 
 const Container = styled.div`
@@ -109,6 +109,17 @@ function UserUpdateForm(props) {
         } catch (err) {
             console.error(err)
         }
+    }
+
+    const handleDelete = async() => {
+        deleteUser()
+        
+        .then((res) => {
+            alert('그동안 이용해주셔서 감사합니다.')
+            window.location.href = '/'
+        }).catch((err) => {
+            console.log(err)
+        })
     }
 
     const navigate = useNavigate()
@@ -232,7 +243,7 @@ function UserUpdateForm(props) {
                 <MdLockOutline />
                 Change password
             </Span>
-            <Span>
+            <Span onClick={handleDelete}>
                 <CgDanger />
                 회원 탈퇴
             </Span>

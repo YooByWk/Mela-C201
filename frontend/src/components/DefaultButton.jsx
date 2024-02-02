@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    height : 50px;
+    height : ${(props) => props.height};
     width: ${(props) => props.width};
     display: flex;
     justify-content: center;
@@ -28,6 +28,7 @@ const DefaultButton = (props) => {
             backgroundcolor={props.backgroundcolor}
             fontcolor={props.fontcolor}
             width={props.width}
+            height={props.height}
             onClick={props.onClick}
         >
             <Text>
@@ -43,6 +44,7 @@ DefaultButton.defaultProps={
     backgroundcolor: '#254ef8',
     fontcolor: 'white',
     width: '1rem',
+    height: '50px',
     onClick: () => {}
 }
 

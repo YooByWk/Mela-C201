@@ -1,11 +1,34 @@
 // 커뮤니티 게시판 메인
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
-import Sidebar from "./../components/Sidebar";
+import Sidebar from "../components/Sidebar";
 import { FaSearch } from "react-icons/fa";
-import axios from 'axios';
+import { BoardList } from "../API/BoardAPI";
+import { Routes, Outlet } from "react-router-dom";
 
+const Community = () => {
+  //
+  const [isWriting, setIsWriting] = useState(false);
+
+
+  return (
+    <CommunityContainer>
+ 
+        <SideDiv>
+          <Sidebar paddingtop="6vh" />
+        </SideDiv>
+
+      <MainDiv>
+        <Navbar backcolour="10" />
+        <Outlet />
+      </MainDiv>
+      {!isWriting && <RSideDiv>3</RSideDiv>}
+    </CommunityContainer>
+  );
+};
+
+export default Community;
 
 const CommunityContainer = styled.div`
   background-color: ${(props) => props.theme.colours.primary};
@@ -70,56 +93,5 @@ const MainDiv = styled.div`
 `;
 
 const RSideDiv = styled.div`
-  width: 15%;
+  width: 12.5%;
 `;
-
-console.log();
-
-//
-const BoardList = () => {
-  const getBoardList = async () => {
-    const response = (await axios.get('http://localhost:8080/recruit')).data
-    console.log(response.data)
-  }
-}
-
-
-// const UserApi = axios.create({
-//   baseURL: 'http://localhost:8080',
-//   headers: {
-//       // 'Content-Type': 'application/json',
-//       'Authorization': `${TOKEN_TYPE} ${ACCESS_TOKEN}`,
-//       'REFRESH_TOKEN': REFRESH_TOKEN,
-//   },
-// })
-
-const Community = () => {
-  return (
-    <CommunityContainer>
-      <SideDiv>
-        <Sidebar paddingtop="6vh" />
-      </SideDiv>
-      <MainDiv>
-        <Navbar backcolour="10" />
-        <div className="Container">
-          <h1>자유게시판</h1>
-          <div className="BoardSearch">
-            <span className="SearchContainer">
-              <FaSearch />
-              <input type="text" placeholder="검색어를 입력해주세요" />
-            </span>
-            <div>
-              <button>최신순</button>
-              <button>조회수순</button>
-              <button>좋아요순</button>
-            </div>
-          </div>
-          <p>여기에 이제 글 쓰십시오.</p>
-        </div>
-      </MainDiv>
-      <RSideDiv>3</RSideDiv>
-    </CommunityContainer>
-  );
-};
-
-export default Community;

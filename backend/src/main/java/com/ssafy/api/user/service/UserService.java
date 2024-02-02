@@ -2,6 +2,8 @@ package com.ssafy.api.user.service;
 
 import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
+import com.ssafy.db.entity.Feed;
+import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.User;
 
 import javax.mail.MessagingException;
@@ -41,13 +43,25 @@ public interface UserService {
 
 	void saveEmailAuthToken(Long userIdx, String token);
 
-	void sendEmail(Long userIdx, String token) throws MessagingException;
+	void sendAuthEmail(Long userIdx, String token) throws MessagingException;
 
 	boolean verifyEmail(Long userIdx, String token);
+
+	void sendFindPasswordEmail(Long userIdx, String token) throws MessagingException;
+
+	void deleteAuthToken(User user);
 
 	void followUser(User nowLoginUser, String userId);
 
 	List<User> getFollower(String emailId);
 
 	List<User> getFollowee(String emailId);
+
+	List<Notification> getNotification(User nowLoginUser);
+
+	String checkNotification(User nowLoginUser, Long notiId);
+
+	void deleteNotification(User nowLoginUser, Long notiId);
+
+	List<Feed> getFeed(User user);
 }
