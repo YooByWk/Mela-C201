@@ -3,27 +3,37 @@ import { FaSearch } from "react-icons/fa";
 import React, { useState, useEffect } from 'react';
 import { BoardList } from "../../API/BoardAPI";
 import { useNavigate, Link } from "react-router-dom";
-
+import CoSigninModal from "./CoSigninModal";
+import useStore from "../../status/store";
 
 function CommunityHome() {
+  const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState(null);
   const [boardInput, setBoardInput] = useState('');
   const movePage = useNavigate()
-
+  const [open, setOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   // page는 현재 페이지
   // column 이름으로 sort
   // size : results at 1 page
   useEffect(() => {
     const fetchData = async () => {
-      const response = await BoardList({ page: 1, size: 20 });
+      const response = await BoardList({ page: currentPage, size: 20 });
       // console.log(response, 'fetch log')
       setData(response.data);
-      console.log(data);
+      // console.log(data);
       // 패칭한 데이터를 상태에 저장
     };
     fetchData();
-    console.log(data, "리스트 조회 완료");
-  }, []);
+    // console.log(data, "리스트 조회 완료");
+  }, [currentPage]);
+
+  const NextPage = () => {
+    setCurrentPage(prevPage => prevPage +1 )
+  }
+  const PrevPage = () => {
+    setCurrentPage(prevPage => prevPage > 1 ? prevPage -1 : prevPage)
+  }
 
   const ViewSorted = async () => {
     const response = await BoardList({ page: 1, size: 20, sortKey: "viewNum", word :boardInput? boardInput : '' });
@@ -31,9 +41,10 @@ function CommunityHome() {
   };
 
   const LikeSorted = async () => {
-    window.alert('좋아요 순 대신 최신순으로 정렬되었습니다.')
-    const response = await BoardList({ page: 1, size: 20,word :boardInput? boardInput : '' });
-    setData(response.data);
+    const response = await BoardList({ page: 1, size: 20, word : boardInput? boardInput : '', });
+    const sortedData = response.data.sort((a, b) => b.likeNum - a.likeNum); 
+    setData(sortedData);
+    console.log('sortedData: ', sortedData);
   };
 
   const LastedSorted = async () => {
@@ -43,15 +54,24 @@ function CommunityHome() {
       setData(response.data);
     } 
   };
+  const islogined = useStore((state) => state.islogined);
+  console.log(islogined,'로그인여부')
 
-  const Create = () => {
+  const Create = (e) => {
+    e.preventDefault()
+    console.log(islogined,'로그인여부')
+    if (islogined){
     movePage('/community/create')
+    }
+    else {
+      setShowLoginModal(true)
+      setOpen(true)
+    }
   };
 
   const SearchKeyword = async (event) => {
     setBoardInput(event.target.value)
     console.log(event.target.value)
-    
   }
 
   const SortByKey =  async(event)=> {
@@ -66,7 +86,9 @@ function CommunityHome() {
 
   }
 
+
   return (
+    <>
     <MainDiv>
       <div className="Container">
         <h1>자유게시판</h1>
@@ -108,7 +130,11 @@ function CommunityHome() {
 <br />
         <button onClick={Create}>작성</button>
       </div>
+      <button onClick={PrevPage} disabled={currentPage === 1}>이전 페이지</button>
+        <button onClick={NextPage}>다음 페이지</button>
     </MainDiv>
+    {showLoginModal && <CoSigninModal open={open} setOpen={setOpen} />}
+    </>
   );
 }
 

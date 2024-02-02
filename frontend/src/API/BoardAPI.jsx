@@ -17,7 +17,7 @@ export const BoardList = async({page, size, sortKey, word}) => {
       word
     }
   })
-  console.log(response)
+  // console.log(response)
   return response
 }
 
@@ -45,9 +45,9 @@ export const BoardCreate = async ({content, title}) => {
 
 export const GetComment = async ({boardIdx}) => {
   const url = `/${boardIdx}/comments`;
-  console.log('Request URL: ', url);  
+  // console.log('Request URL: ', url);  
   const Comments = await BoardAPI.get(url);
-  console.log('Comments: ', Comments);
+  // console.log('Comments: ', Comments);
   return Comments;
 }
 
@@ -73,5 +73,44 @@ export const BoardUpdate = async ({ boardIdx, title, content }) => {
   });
   return response;
 };
+
+export const BoardDelete = async ({boardIdx}) => {
+  const response = await BoardAPI.delete(`/${boardIdx}`,{
+    headers : {
+      'Authorization' : `Baerer ${localStorage.accessToken}`
+    }
+  })
+  return response
+}
+
+export const CommentDelete = async ({boardIdx, commentIdx}) => {
+  const res = await BoardAPI.delete(`/${boardIdx}/comments/${commentIdx}`, {
+    headers : {
+      'Authorization' : `Barer ${localStorage.accessToken}`
+    }
+  })
+  console.log(commentIdx)
+  console.log(res, '삭제 스토어')
+  return res
+}
+
+// export const Delete
+export const checkBoardLike = async({boardIdx, currentUserIdx}) => {
+  const response = await BoardAPI.get(`/${boardIdx}/like/${currentUserIdx}`)
+  console.log(response)
+  return response
+}
+
+export const BoardLike = async({boardIdx, currentUserIdx}) => {
+  const response = await BoardAPI.put(`/${boardIdx}/like`, {
+    currentUserIdx
+  }, {
+    headers : {'Authorization' : `Bearer ${localStorage.accessToken}`}
+  })
+  console.log(response)
+  
+  return response
+}
+
 
 export const BoardPost = () => {}
