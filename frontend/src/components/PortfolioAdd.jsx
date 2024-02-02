@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import DefaultButton from "./DefaultButton";
 import { IoMdClose } from "react-icons/io";
 import { FaFileUpload } from "react-icons/fa";
 import { Dialog, DialogHeader, DialogBody } from '@material-tailwind/react'
-
+import { musicUpload } from "../API/PortfolioAPI";
 
 const CloseButton = styled.button`
     background: none;
@@ -42,9 +42,41 @@ const CustomBody = styled(DialogBody)`
 
 function PortfolioAdd() {
     const [open, setOpen] = useState(false)
+    const [file, setFile] = useState({})
+    const [pinFixed, setPinFixed] = useState(false)
+    const [fileDescription, setFileDescription] = useState('')
+    const [tilte, setTitle] = useState('')
+
+    const handleChangeFile = (e) => {
+        e.preventDefault()
+        
+        if (e.target.files[0]) {
+            setFile(e.target.files[0])
+        }
+    }
    
     const handleModal = () => {
         setOpen(!open)
+    }
+
+    const handleUpload = async () => {
+        if (!file) {
+            alert('파일을 선택해주세요')
+            return
+        }
+
+        try {
+            const response = await musicUpload({
+                pinFixed,
+                fileDescription,
+                tilte,
+                file
+            })
+            console.log(response)
+            alert('업로드 성공~!')
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     return (
@@ -64,9 +96,16 @@ function PortfolioAdd() {
                     </CloseButton>
                 </CustomHeader>
                 <CustomBody>
-                    <input type="file" />
+                    <input type="file"
+                        id="file"
+                        multiple="multiple"
+                        onChange={handleChangeFile}
+                    />
                     <FaFileUpload size={80}/>
-                </CustomBody>                 
+                </CustomBody>
+                <button onClick={handleUpload}>
+                    업로드
+                </button>                 
             </CustomDialog>
         </>
     )
