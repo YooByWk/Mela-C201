@@ -73,6 +73,23 @@ function SignupModal({className, fontSize, padding}) {
     })
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    email(values.emailId)
+
+    .then((res) => {
+      console.log(values.emailId)
+      if (res.statusCode === 200) {
+        alert('이메일 인증을 진행해주세요.')
+        navigate('/verify')
+      }
+      
+    })
+    .catch ((err) => {
+      console.log(err)
+    })
+  }
+
   const handleChange = async (e) => {
     setValues({...values,
       [e.target.id]: e.target.value,})
@@ -101,19 +118,6 @@ function SignupModal({className, fontSize, padding}) {
       [e.target.id]: e.target.checked,})
       console.log(e.target.checked)
     }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
-    try {
-      await email(values.emailId)
-      console.log(values.emailId)
-      alert('이메일 인증을 진행해주세요.')
-      navigate('/')
-    } catch (err) {
-      console.log(err)
-    }
-  }
 
   return (
     <div>
