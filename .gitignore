@@ -315,4 +315,8 @@ $RECYCLE.BIN/
 # generated 폴더 제외
 /backend/src/main/generated
 
+# 
+*.gz
+
+
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java,node,windows,vuejs
