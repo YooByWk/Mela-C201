@@ -37,6 +37,7 @@ public class TeamspaceRes {
     public static TeamspaceRes of(Teamspace teamspace) {
         TeamspaceRes res = new TeamspaceRes();
         res.setTeamspaceIdx(teamspace.getTeamspaceIdx());
+        res.setTeamName(teamspace.getTeamName());
         res.setStartDate(teamspace.getStartDate());
         res.setEndDate(teamspace.getEndDate());
         res.setTeamDescription(teamspace.getTeamDescription());
