@@ -7,6 +7,7 @@ import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -53,6 +54,11 @@ public class UserServiceImpl implements UserService {
 	Random random = new Random();
 	CSVParser frontWords = new CSVParser("front_words");
 	CSVParser backWords = new CSVParser("back_words");
+
+	@Value("${server.address}")
+	String serverAddress;
+	@Value("${server.port}")
+	String serverPort;
 
 	@Override
 	public User createUser(UserRegisterPostReq userRegisterInfo) {
@@ -234,12 +240,13 @@ public class UserServiceImpl implements UserService {
 		helper.setFrom("Mela!");
 		helper.setSubject("[Mela!] 이메일 계정을 인증해주세요");
 
-		// TODO: localhost 변수로 빼야해요
+		String addr = serverAddress + ":" + serverPort;
+
 		String htmlContent = "<html><body>";
 		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
 		htmlContent += "<p>Mela!를 정상적으로 이용하기 위해서는 이메일 인증을 해주세요</p>";
 		htmlContent += "<p>아래 링크를 누르시면 인증이 완료됩니다.</p>";
-		htmlContent += "<a href=\"http://localhost:8080/api/v1/auth/verify?token=" + token + "\">인증 링크</a>";
+		htmlContent += "<a href=\"http://" + addr + "/api/v1/auth/verify?token=" + token + "\">인증 링크</a>";
 		htmlContent += "</body></html>";
 
 		helper.setText(htmlContent, true);
