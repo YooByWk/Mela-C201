@@ -52,8 +52,10 @@ function SignupModal({className, fontSize, padding}) {
   }
 
   // 이메일 아이디 중복 확인
-  const checkEmailId = () => {
+  const checkEmailId = (e) => {
+    e.preventDefault()
     emailCheck(values.emailId)
+
     .then((res) => {
       console.log(res)
       console.log(values.emailId)
