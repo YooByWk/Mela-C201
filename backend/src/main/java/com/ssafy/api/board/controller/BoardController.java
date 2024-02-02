@@ -4,6 +4,7 @@ import com.ssafy.api.board.request.BoardGetListReq;
 import com.ssafy.api.board.request.BoardRegisterPostReq;
 import com.ssafy.api.board.request.BoardUpdatePutReq;
 import com.ssafy.api.board.request.CommentRegisterPostReq;
+import com.ssafy.api.board.response.BoardListRes;
 import com.ssafy.api.board.response.BoardRes;
 import com.ssafy.api.board.response.CommentRes;
 import com.ssafy.api.board.service.BoardService;
@@ -39,7 +40,7 @@ public class BoardController {
 
     @GetMapping("")
     @ApiOperation(value = "게시글 리스트 조회", notes = "<string>페이지번호(page), 페이지당 글 수(size), 검색어(word), 정렬조건(sortKey) </string>에 따라 게시글을 조회한다.")
-    public ResponseEntity<List<BoardRes>> getBoardList(
+    public ResponseEntity<BoardListRes> getBoardList(
             @ApiParam(value = "페이지 번호 (1부터 시작)", example = "1") @RequestParam int page,
             @ApiParam(value = "페이지당 글 수", example = "10") @RequestParam int size,
             @ApiParam(value = "검색어", example = "검색내용") @RequestParam(required = false) String word,
@@ -54,12 +55,12 @@ public class BoardController {
         boardGetListReq.setSortKey(sortKey);
 
         List<Board> boards = boardService.getBoardList(boardGetListReq);
-        List<BoardRes> res = new ArrayList<>();
+        List<BoardRes> boardRes = new ArrayList<>();
         for (Board board : boards) {
-            res.add(BoardRes.of(board, boardService.getBoardLikeNum(board.getBoardIdx())));
+            boardRes.add(BoardRes.of(board, boardService.getBoardLikeNum(board.getBoardIdx())));
         }
 
-        return ResponseEntity.status(200).body(res);
+        return ResponseEntity.status(200).body(BoardListRes.of(boardRes, boardService.getBoardTotalCount()));
     }
 
     @PostMapping("")

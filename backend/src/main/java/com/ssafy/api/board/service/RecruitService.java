@@ -17,6 +17,7 @@ public interface RecruitService {
     void deleteBoard(Long recruitIdx);
     BoardRecruitRes getBoard(Long recruitIdx) throws Exception;
     List<BoardRecruit> getBoardList(RecruitGetListReq getListInfo);
+    int getBoardTotalCount();
     void createBoardRecruitPosition(BoardRecruit boardRecruit, List<String> genres);
     void deleteBoardRecruitPosition(BoardRecruit boardRecruit);
     List<Position> getPositions(Long recruitIdx);
