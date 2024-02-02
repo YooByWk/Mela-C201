@@ -1,27 +1,22 @@
 package com.ssafy.api.file.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.ssafy.api.shorts.request.ShortsPostReq;
-import com.ssafy.api.user.request.PortfolioMusicPostReq;
+import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.IOUtils;
 import com.ssafy.api.user.service.PortfolioService;
-import com.ssafy.db.entity.PortfolioMusic;
-import com.ssafy.db.entity.Shorts;
 import com.ssafy.db.repository.FileRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
+import java.io.*;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -189,7 +184,7 @@ public class FileServiceImpl implements FileService {
             //PublicRead 권한으로 Amazon S3 업로드
             amazonS3Client.putObject(new PutObjectRequest(bucket, saveFilename, convertedFile).withCannedAcl(CannedAccessControlList.PublicRead));
 
-            file.setSavePath(savePath.toString());                                              //1. 파일 경로
+            file.setSavePath(savePath.toString().replace("\\", "/"));           //1. 파일 경로
             file.setOriginalFilename(multipartFile.getOriginalFilename());                      //2. 원본 파일 명
             file.setSaveFilename(uuid.toString() + "_" + multipartFile.getOriginalFilename());  //3. 저장되는 파일 명
             file.setFileDescription(fileDescription);                                           //4. 파일 설명
@@ -204,8 +199,57 @@ public class FileServiceImpl implements FileService {
         return file;
     }
 
+    //TODO: 테스트 코드임
+    public ResponseEntity<byte[]> getObject(String storedFileName) throws IOException{
+        S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, storedFileName));
+        S3ObjectInputStream objectInputStream = o.getObjectContent();
+        byte[] bytes = IOUtils.toByteArray(objectInputStream);
+
+        String fileName = URLEncoder.encode(storedFileName, "UTF-8").replaceAll("\\+", "%20");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        httpHeaders.setContentLength(bytes.length);
+        httpHeaders.setContentDispositionFormData("attachment", fileName);
+
+        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+    }
+
     @Override
-    public Resource loadAsResource(String filePath) {
+    public byte[] loadAsResource(String filePath) {
+        S3Object s3Object = amazonS3Client.getObject(new GetObjectRequest(bucket, filePath));
+        S3ObjectInputStream objectInputStream = s3Object.getObjectContent();
+
+        s3Object = amazonS3Client.getObject(bucket, filePath);
+        S3ObjectInputStream inputStream = s3Object.getObjectContent();
+        try {
+            return IOUtils.toByteArray(inputStream);
+        } catch (IOException e) {
+//            throw new Exception("File Download Failed");
+            return null;
+        }
+
+        /*
+        try {
+            //서버에 File Stream 생성
+            FileOutputStream fos = new FileOutputStream(new File(fileName));
+            byte[] read_buf = new byte[1024];
+            int read_len = 0;
+            //파일 저장
+            while ((read_len = file.read(read_buf)) > 0) {
+                fos.write(read_buf, 0, read_len);
+            }
+            objectInputStream.close();
+            fos.close();
+        } catch (AmazonServiceException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+
+        /*
         try {
             Resource resource = new UrlResource(filePath);
             Path root = Paths.get(filePath);
@@ -221,6 +265,7 @@ public class FileServiceImpl implements FileService {
         System.err.println("Should Never Reach Here! - FileServiceImpl.java");
 
         return null;
+        */
     }
 
     @Override

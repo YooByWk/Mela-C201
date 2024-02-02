@@ -36,9 +36,6 @@ public class ShortsServiceImpl implements  ShortsService {
     public int uploadShorts(Shorts shorts, MultipartFile multipartFile, ShortsPostReq shortsPostReq) {
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());                            //클라이언트가 업로드한 파일의 확장자 추출
 
-        System.err.println("extension: " + extension);
-        System.err.println("!isValidVideoExtension(extension): " + !isValidVideoExtension(extension));
-
         //1. 지원하는 비디오 확장자인지 검사
         if(!isValidVideoExtension(extension)) {
             //TODO: 메시지 잘 적기 (기존 415 메시지와 달라야 함!)
