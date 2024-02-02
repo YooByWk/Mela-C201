@@ -33,7 +33,7 @@ function SignupModal({className, fontSize, padding}) {
   
   // 닉네임 중복 확인
   const checkNickname = () => {
-    checkDupNickname(values.nickname)
+    checkDupNickname({nickname: values.nickname})
     .then((res) => {
       console.log(values.nickname)
       console.log(res)
@@ -54,7 +54,8 @@ function SignupModal({className, fontSize, padding}) {
   // 이메일 아이디 중복 확인
   const checkEmailId = (e) => {
     e.preventDefault()
-    emailCheck(values.emailId)
+    console.log(values.emailId)
+    emailCheck({emailId: values.emailId})
 
     .then((res) => {
       console.log(res)
@@ -64,26 +65,20 @@ function SignupModal({className, fontSize, padding}) {
       }
     })
     .catch((err) => {
-      if (err.statusCode === 409) {
-        alert('이미 있는 아이디입니다.')
-      }
-      else {
         console.error(err)
-      }
+        if (err.statusCode === 409) {
+          alert('이미 있는 아이디입니다.')
+        }
     })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    email(values.emailId)
-
+    console.log(values.emailId)
+    signup(values)
     .then((res) => {
-      console.log(values.emailId)
-      if (res.statusCode === 200) {
-        alert('이메일 인증을 진행해주세요.')
-        navigate('/verify')
-      }
-      
+      alert('이메일 인증을 진행해주세요.')
+      navigate(`/signup/${values.emailId}`)
     })
     .catch ((err) => {
       console.log(err)

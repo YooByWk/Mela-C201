@@ -153,6 +153,17 @@ public class BoardServiceImpl implements BoardService {
         }
     }
 
+    @Override
+    public boolean isLikeBoard(Long boardIdx, Long userIdx) {
+        Optional<BoardLike> boardLike = boardLikeRepository.findByUserIdxAndBoardIdx(userRepository.getOne(userIdx), boardRepository.getOne(boardIdx));
+
+        if (boardLike.isPresent()) {
+            return true;
+        }
+
+        return false;
+    }
+
 
     @Override
     public void createLikeBoard(Long boardIdx, User user) {
