@@ -35,7 +35,8 @@ function TeamspaceMain () {
       myTeamspaceList()
       
     },[])
-    
+  
+
   return ( 
     <TeamspaceContainer>
       <SideDiv>
@@ -52,7 +53,7 @@ function TeamspaceMain () {
             title={value.teamName}
             content={value.teamDescription}
             day={value.endDate}
-            // onClick: () => {}
+            onClick={window.location.href = `/teamspace/${value.teamspaceIdx}/team`}
         />
         ))}
       </MainDiv>
@@ -60,6 +61,7 @@ function TeamspaceMain () {
     </TeamspaceContainer>
    );
 }
+
 
 export default TeamspaceMain ;
 
