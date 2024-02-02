@@ -3,13 +3,15 @@ import { FaSearch } from "react-icons/fa";
 import React, { useState, useEffect } from 'react';
 import { BoardList } from "../../API/BoardAPI";
 import { useNavigate, Link } from "react-router-dom";
-
+import CoSigninModal from "./CoSigninModal";
+import useStore from "../../status/store";
 
 function CommunityHome() {
   const [data, setData] = useState(null);
   const [boardInput, setBoardInput] = useState('');
   const movePage = useNavigate()
-
+  const [open, setOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   // page는 현재 페이지
   // column 이름으로 sort
   // size : results at 1 page
@@ -43,9 +45,19 @@ function CommunityHome() {
       setData(response.data);
     } 
   };
+  const islogined = useStore((state) => state.islogined);
+  console.log(islogined,'로그인여부')
 
-  const Create = () => {
+  const Create = (e) => {
+    e.preventDefault()
+    console.log(islogined,'로그인여부')
+    if (islogined){
     movePage('/community/create')
+    }
+    else {
+      setShowLoginModal(true)
+      setOpen(true)
+    }
   };
 
   const SearchKeyword = async (event) => {
@@ -67,6 +79,7 @@ function CommunityHome() {
   }
 
   return (
+    <>
     <MainDiv>
       <div className="Container">
         <h1>자유게시판</h1>
@@ -109,6 +122,8 @@ function CommunityHome() {
         <button onClick={Create}>작성</button>
       </div>
     </MainDiv>
+    {showLoginModal && <CoSigninModal open={open} setOpen={setOpen} />}
+    </>
   );
 }
 
