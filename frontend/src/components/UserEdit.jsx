@@ -29,6 +29,7 @@ function UserEdit(props) {
     }
 
     useEffect(()=> {
+
         const getUserInfo = async() => {
             try {
                 const res = await fetchUser()
