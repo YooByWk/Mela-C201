@@ -3,9 +3,11 @@ package com.ssafy.api.file.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.api.shorts.request.ShortsPostReq;
 import com.ssafy.api.user.request.PortfolioMusicPostReq;
 import com.ssafy.api.user.service.PortfolioService;
 import com.ssafy.db.entity.PortfolioMusic;
+import com.ssafy.db.entity.Shorts;
 import com.ssafy.db.repository.FileRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -59,7 +60,8 @@ public class FileServiceImpl implements FileService {
         return file;
     }
 
-    private void removeFile(File targetFile) { // 로컬파일 삭제
+    @Override
+    public void removeFile(File targetFile) { // 로컬파일 삭제
         if (targetFile.exists()) {
             if (targetFile.delete()) {
                 //System.out.println("파일이 삭제되었습니다.");
@@ -130,40 +132,6 @@ public class FileServiceImpl implements FileService {
             e.printStackTrace();
         }
 
-    }
-
-    public boolean addPortfolioMusic(PortfolioMusic portfolioMusic, MultipartFile[] multipartFile, PortfolioMusicPostReq portfolioMusicPostReq) {
-        for(MultipartFile mf : multipartFile) {
-            String extension = FilenameUtils.getExtension(mf.getOriginalFilename());                            //클라이언트가 업로드한 파일의 확장자 추출
-            com.ssafy.db.entity.File file;                                                                      //Amazon S3에 업로드한 파일에 관한 정보를 담고 있는 객체 (파일 경로, 원본 파일 명, 저장되는 파일 명, 파일 설명, 용량)
-
-            try {
-                //TODO: swith-case 문으로 수정 가능
-                if (extension.equals("mp3") || extension.equals("flac")) {                                       //2-4-1. 음원 파일 (mp3, flac)
-                    file = saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusic.setMusicFileIdx(file);
-                } else if (extension.equals("pdf") || extension.equals("xml")) {                                 //2-4-2. 가사 파일 (pdf, xml)
-                    file = saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusic.setLyricFileIdx(file);
-                } else if (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")) {     //2-4-3. 앨범 아트(jpg, jpeg, png)
-                    file = saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusic.setAlbumArtFileIdx(file);
-                } else {
-                    throw new Exception("지원하지 않는 파일 형식입니다.");
-                }
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        portfolioMusic.setTitle(portfolioMusic.getTitle());
-        portfolioMusic.setPinFixed(portfolioMusicPostReq.isPinFixed());
-        portfolioService.addPortfolioMusic(portfolioMusic);                                          //3. Service 구현체를 통해 포트폴리오 음악 추가
-
-        return true;
     }
 
     @Override

@@ -53,7 +53,7 @@ public class PortfolioController {
         portfolioMusic.setUserIdx(userDetails.getUser());
 
         //2. Amazon S3에 파일 저장
-        if(fileService.addPortfolioMusic(portfolioMusic, multipartFile, portfolioMusicPostReq)) {           //파일 정상 저장 (Response 200)
+        if(portfolioService.addPortfolioMusic(portfolioMusic, multipartFile, portfolioMusicPostReq)) {           //파일 정상 저장 (Response 200)
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
         } else {                                                                                            //파일 저장 실패 (Response 500)
             return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
