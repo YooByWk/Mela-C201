@@ -177,4 +177,15 @@ public class BoardController {
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
+
+    @GetMapping("/{boardid}/like/{userid}")
+    @ApiOperation(value = "게시글 좋아요 여부 확인")
+    public ResponseEntity<? extends BaseResponseBody> isLikeBoard(
+            @PathVariable(name = "boardid") Long boardIdx,
+            @PathVariable(name = "userid") Long userIdx
+    ) {
+        String message = boardService.isLikeBoard(boardIdx, userIdx) + "";
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, message));
+    }
 }
