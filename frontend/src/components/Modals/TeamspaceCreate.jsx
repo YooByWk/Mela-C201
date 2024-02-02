@@ -3,17 +3,30 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
+import { TeamspaceGenerate } from '../../API/TeamspaceAPI'
 
 function TeamspaceCreateModal({className, fontSize, padding}) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  
+  // 시작 날짜는 오늘 날짜
+  const today = new Date()
+  // oooo-oo-oo 형식 맞추기
+  let todayMonth = (today.getMonth() + 1) > 9 ? (today.getMonth() + 1) : '0' + (today.getMonth() + 1)
+  let todayDay = (today.getDate()) > 9 ? (today.getDate()) : '0' + (today.getDate())
+  const formattedDate = `${today.getFullYear()}-${todayMonth}-${todayDay}`
+  
+  console.log(formattedDate)
   const [values, setValues] = React.useState({
-    title: "", 
-    content: "",
-    members: [], 
+    endDate: "", 
+    startDate: formattedDate,
+    teamDescription: "",
+    teamName: "",
+    // teamspacePictureFileIdx: {} 
   })
   
+  console.log(values)
   const handleChange = async (e) => {
     setValues({...values,
     [e.target.id]: e.target.value,
@@ -22,6 +35,7 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    TeamspaceGenerate(values)
     .then((res) => {
       console.log(res)
     })
@@ -48,13 +62,13 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
           </h2>
           <form onSubmit={handleSubmit}> 
           <div id="modal-description" className="modal-description">
-            <input type="file" />
-            <input type="date" />
+            <input type="file" id='teamspacePictureFileIdx' onChange={handleChange}/>
+            <input type="date" id='endDate' onChange={handleChange}/>
             <br/>
             팀 스페이스
-            <input type='text' placeholder='팀 스페이스 이름을 입력해주세요. (최대 30자)' id='title' onChange={handleChange} />
+            <input type='text' placeholder='팀 스페이스 이름을 입력해주세요. (최대 30자)' id='teamName' onChange={handleChange} />
             <br/>
-            <input type='text' placeholder='팀 스페이스 설명을 입력해주세요.' id='content' onChange={handleChange} />
+            <input type='text' placeholder='팀 스페이스 설명을 입력해주세요.' id='teamDescription' onChange={handleChange} />
             <br />
             <button type='submit'>
               Create

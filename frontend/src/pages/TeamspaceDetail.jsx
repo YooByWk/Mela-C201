@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useParams } from 'react-router-dom';
 import styled from "styled-components";
 import TeamspaceTeam from "../components/teamspace/TeamspaceTeam"
 import TeamspaceAudio from "../components/teamspace/TeamspaceAudio"
@@ -35,6 +36,7 @@ const TabMenu = styled.ul`
 `
 
 function TeamspaceDetail () {
+
     // 현재 어느 메뉴가 선택 되었는가?
     const [currentTab, clickTab] = useState(0)
 
@@ -53,7 +55,7 @@ function TeamspaceDetail () {
     return(
         <>
         <div>
-            <TabMenu>
+            <TabMenu >
                 {menuArr.map((el, index) => (
                     <li className={index === currentTab ? "submenu focused" : "submenu" }>
                     <span onClick={() => clickMenuHandler(index)}>
