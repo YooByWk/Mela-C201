@@ -23,11 +23,13 @@ public class QFile extends EntityPathBase<File> {
 
     public final NumberPath<Long> fileIdx = createNumber("fileIdx", Long.class);
 
-    public final StringPath originalFolder = createString("originalFolder");
+    public final NumberPath<Long> fileSize = createNumber("fileSize", Long.class);
 
-    public final StringPath saveFile = createString("saveFile");
+    public final StringPath originalFilename = createString("originalFilename");
 
-    public final StringPath saveFolder = createString("saveFolder");
+    public final StringPath saveFilename = createString("saveFilename");
+
+    public final StringPath savePath = createString("savePath");
 
     public QFile(String variable) {
         super(File.class, forVariable(variable));

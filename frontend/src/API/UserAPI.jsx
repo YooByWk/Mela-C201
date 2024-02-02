@@ -63,8 +63,13 @@ export const followUser = async (userId) => {
 }
 
 // 이메일 중복 확인
-export const emailCheck = async (userId) => {
-    const response = await UserApi.get(`/api/v1/users/emailId/${userId}`)
-    console.log(response.data)
+export const emailCheck = async ({emailId}) => {
+    const response = await axios.get(`http://localhost:8080/api/v1/users/emailid/${emailId}`, {
+        params: {
+            emailId
+        }
+    })
+    console.log(response)
+    
     return response.data
 }

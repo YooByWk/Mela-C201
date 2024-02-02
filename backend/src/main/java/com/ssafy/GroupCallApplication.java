@@ -12,7 +12,11 @@ import java.nio.charset.StandardCharsets;
 
 @SpringBootApplication
 public class GroupCallApplication {
-	public static void main(String[] args) {
+    //에러 1) java.net.SocketException: Network is unreachable (https://velog.io/@mingsound21/SpringBoot-AWS-S3%EB%A1%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C)
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
+    public static void main(String[] args) {
         SpringApplication.run(GroupCallApplication.class, args);
     }
 
