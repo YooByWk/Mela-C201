@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Portfolio from "../pages/Portfolio"
 import SigninModal from '../components/Modals/SigninModal';
 import SignupModal from '../components/Modals/SignupModal';
-import TeamspaceMain from '../pages/TeamspaceMain';
 import TeamspaceDetail from '../pages/TeamspaceDetail'
 import Gather from '../pages/Gather';
 import UserUpdate from '../pages/UserUpdate';
