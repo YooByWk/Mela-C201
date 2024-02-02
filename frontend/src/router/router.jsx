@@ -68,10 +68,6 @@ function AppRouter({ className }) {
           <Route
             path='/message' element={<Message />}
             />
-
-          <Route 
-            path='/verify' element={<EmailVerify />}
-          />
         </Routes>
     </div>
   );
