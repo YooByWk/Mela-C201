@@ -201,17 +201,24 @@ public class FileServiceImpl implements FileService {
 
     //TODO: 테스트 코드임
     public ResponseEntity<byte[]> getObject(String storedFileName) throws IOException{
-        S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, storedFileName));
-        S3ObjectInputStream objectInputStream = o.getObjectContent();
-        byte[] bytes = IOUtils.toByteArray(objectInputStream);
+        try {
+            S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, storedFileName));
+            S3ObjectInputStream objectInputStream = o.getObjectContent();
+            byte[] bytes = IOUtils.toByteArray(objectInputStream);
 
-        String fileName = URLEncoder.encode(storedFileName, "UTF-8").replaceAll("\\+", "%20");
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        httpHeaders.setContentLength(bytes.length);
-        httpHeaders.setContentDispositionFormData("attachment", fileName);
+            String fileName = URLEncoder.encode(storedFileName, "UTF-8").replaceAll("\\+", "%20");
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            httpHeaders.setContentLength(bytes.length);
+            httpHeaders.setContentDispositionFormData("attachment", fileName);
 
-        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        //요청한 파일을 찾을 수 없는 경우
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @Override
