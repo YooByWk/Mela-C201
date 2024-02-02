@@ -23,7 +23,6 @@ const useStore = create(set => ({
   },
 
   logout : async () => {
-  
     try {
       await axios.get('http://localhost:8080/api/v1/auth/logout', {
         headers : {
