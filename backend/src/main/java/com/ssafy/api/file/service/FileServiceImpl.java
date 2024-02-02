@@ -1,5 +1,6 @@
 package com.ssafy.api.file.service;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
@@ -199,82 +200,24 @@ public class FileServiceImpl implements FileService {
         return file;
     }
 
-    //TODO: 테스트 코드임
-    public ResponseEntity<byte[]> getObject(String storedFileName) throws IOException{
-        try {
-            S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, storedFileName));
-            S3ObjectInputStream objectInputStream = o.getObjectContent();
-            byte[] bytes = IOUtils.toByteArray(objectInputStream);
+//    public ResponseEntity<byte[]> getFile(String filePath) throws IOException {
+    public byte[] getFile(String filePath) throws IOException {
+        S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, filePath));
+        S3ObjectInputStream objectInputStream = o.getObjectContent();
+        byte[] bytes = IOUtils.toByteArray(objectInputStream);
 
-            String fileName = URLEncoder.encode(storedFileName, "UTF-8").replaceAll("\\+", "%20");
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            httpHeaders.setContentLength(bytes.length);
-            httpHeaders.setContentDispositionFormData("attachment", fileName);
-            objectInputStream.close();
-            o.close();
+        objectInputStream.close();
+        o.close();
 
-            return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        //요청한 파일을 찾을 수 없는 경우
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return bytes;
     }
 
-    @Override
-    public byte[] loadAsResource(String filePath) {
-        S3Object s3Object = amazonS3Client.getObject(new GetObjectRequest(bucket, filePath));
-        S3ObjectInputStream objectInputStream = s3Object.getObjectContent();
-
-        s3Object = amazonS3Client.getObject(bucket, filePath);
-        S3ObjectInputStream inputStream = s3Object.getObjectContent();
+    public void deleteFile(String filePath) throws IOException {
         try {
-            return IOUtils.toByteArray(inputStream);
-        } catch (IOException e) {
-//            throw new Exception("File Download Failed");
-            return null;
-        }
-
-        /*
-        try {
-            //서버에 File Stream 생성
-            FileOutputStream fos = new FileOutputStream(new File(fileName));
-            byte[] read_buf = new byte[1024];
-            int read_len = 0;
-            //파일 저장
-            while ((read_len = file.read(read_buf)) > 0) {
-                fos.write(read_buf, 0, read_len);
-            }
-            objectInputStream.close();
-            fos.close();
-        } catch (AmazonServiceException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            amazonS3Client.deleteObject(bucket, filePath);
+        } catch (SdkClientException e) {
             e.printStackTrace();
         }
-        */
-
-        /*
-        try {
-            Resource resource = new UrlResource(filePath);
-            Path root = Paths.get(filePath);
-
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            }
-
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("파일을 읽을 수 없습니다. : " + filePath, e);
-        }
-
-        System.err.println("Should Never Reach Here! - FileServiceImpl.java");
-
-        return null;
-        */
     }
 
     @Override

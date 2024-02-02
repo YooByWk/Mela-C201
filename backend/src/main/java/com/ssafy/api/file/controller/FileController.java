@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,6 +59,19 @@ public class FileController {
     @GetMapping(value = "/download")
     @ApiOperation(value = "파일 다운로드", notes = "파일을 다운로드합니다.")
     public ResponseEntity<byte[]> downloadFile(String filePath) throws IOException { // 객체 다운  fileUrl : 폴더명/파일네임.파일확장자
-        return fileService.getObject(filePath);
+        try {
+            byte[] bytes = fileService.getFile(filePath);
+
+            String fileName = URLEncoder.encode(filePath, "UTF-8").replaceAll("\\+", "%20");
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            httpHeaders.setContentLength(bytes.length);
+            httpHeaders.setContentDispositionFormData("attachment", fileName);
+
+            return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+        } catch (Exception e) {
+            //요청한 파일을 찾을 수 없는 경우
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

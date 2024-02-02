@@ -14,7 +14,7 @@ public interface FileService {
 
     void saveFileTest(MultipartFile multipartFile);
     com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription);
-    byte[] loadAsResource(String filename);
     com.ssafy.db.entity.File addTableRecord(com.ssafy.db.entity.File file);
-    ResponseEntity<byte[]> getObject(String storedFileName) throws IOException;
+    byte[] getFile(String storedFileName) throws IOException;
+    void deleteFile(String filePath) throws IOException;
 }
