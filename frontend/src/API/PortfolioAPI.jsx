@@ -1,28 +1,15 @@
 import axios from 'axios';
 
-let ACCESS_TOKEN = localStorage.getItem('accessToken')
-
-export const PortfolioAPI = axios.create({
-  baseURL: 'http://localhost:8080/api/v1/users',
-  headers: {
-    'Content-Type': 'multipart/form-data',
-    'Authorization': `Bearer ${ACCESS_TOKEN}`,
-},
+export const PortfolioApi = axios.create({
+    baseURL: 'http://localhost:8080/api/v1',
+    headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${
+            localStorage.getItem('accessToken')
+        }`,
+    },
 })
 
-// 포트폴리오 파일 등록
-export const musicUpload = async ({
-    pinFixed,
-    fileDescription,
-    title,
-    file
-}) => {
-    const formData = new FormData()
-    formData.append('pinFixed', pinFixed)
-    formData.append('fileDescription', fileDescription)
-    formData.append('tilte', title)
-    formData.append('file', file)
-    const response = await PortfolioAPI.post(`/musics`, formData)
-    console.log(response.data)
-    return response.data
+export const registerFile = async (data) => {
+    return await PortfolioApi.post('/users/musics', data)
 }

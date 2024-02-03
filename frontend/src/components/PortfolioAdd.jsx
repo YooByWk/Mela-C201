@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import DefaultButton from "./DefaultButton";
 import { IoMdClose } from "react-icons/io";
-import { FaFileUpload } from "react-icons/fa";
-import { Dialog, DialogHeader, DialogBody } from '@material-tailwind/react'
-import { musicUpload } from "../API/PortfolioAPI";
+import { Dialog, DialogHeader, DialogBody, input } from '@material-tailwind/react'
+import { registerFile } from "../API/PortfolioAPI";
 
 const CloseButton = styled.button`
     background: none;
@@ -42,43 +41,63 @@ const CustomBody = styled(DialogBody)`
 
 function PortfolioAdd() {
     const [open, setOpen] = useState(false)
-    const [file, setFile] = useState({})
-    const [pinFixed, setPinFixed] = useState(false)
-    const [fileDescription, setFileDescription] = useState('')
-    const [tilte, setTitle] = useState('')
-
-    const handleChangeFile = (e) => {
-        e.preventDefault()
-        
-        if (e.target.files[0]) {
-            setFile(e.target.files[0])
-        }
-    }
-   
+    const [data, setData] = useState({
+        pinFixed: '',
+        fileDescription: '',
+        title: '',
+    })
+    
     const handleModal = () => {
         setOpen(!open)
     }
 
-    const handleUpload = async () => {
-        if (!file) {
-            alert('파일을 선택해주세요')
-            return
-        }
+    const handleChange = (e) => {
+        console.log(e.target.files[0])
 
-        try {
-            const response = await musicUpload({
-                pinFixed,
-                fileDescription,
-                tilte,
-                file
-            })
-            console.log(response)
-            alert('업로드 성공~!')
-        } catch (err) {
-            console.error(err)
+        if (e.target.name === "file") {
+            setData({
+                ...data,
+                files: e.target.files,
+            });
+        } else {
+            setData({
+                ...data,
+                [e.target.name]: e.target.value,
+            });
         }
     }
 
+    const handleRegister = () => {
+        let formData = new FormData()
+
+        if (data.files) {
+            for (let i = 0; i < data.files.length; i++) {
+                formData.append('multipartFile', data.files[i])
+            }
+        }
+        formData.append(
+            'portfolioMusicPostReq',
+            new Blob(
+                [
+                    JSON.stringify({
+                        pinFixed: data.pinFixed,
+                        fileDescription: data.fileDescription,
+                        title: data.title,
+                    }),
+                ],
+                { type: 'application/json'}
+            )
+        )
+        registerFile(formData)
+        .then(() => {
+            console.log('업로드 성공')
+        })
+        .catch((e) => {
+            console.error(e)
+            alert('업로드 실패')
+        })
+    }
+    
     return (
         <>
             <DefaultButton 
@@ -96,16 +115,26 @@ function PortfolioAdd() {
                     </CloseButton>
                 </CustomHeader>
                 <CustomBody>
-                    <input type="file"
-                        id="file"
-                        multiple="multiple"
-                        onChange={handleChangeFile}
+                    <input
+                        onChange={handleChange}
+                        value={data.title}
+                        name='title'
+                        placeholder="제목을 입력하세요."
                     />
-                    <FaFileUpload size={80}/>
+                    <input
+                        onChange={handleChange}
+                        value={data.fileDescription}
+                        name='fileDescription'
+                        placeholder="파일 설명"
+                    />
+                    <input type="file" 
+                        onChange={handleChange}
+                        name="file"
+                    />
                 </CustomBody>
-                <button onClick={handleUpload}>
+                <button onClick={handleRegister}>
                     업로드
-                </button>                 
+                </button>
             </CustomDialog>
         </>
     )

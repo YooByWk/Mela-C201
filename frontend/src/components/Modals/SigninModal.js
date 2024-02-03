@@ -71,9 +71,6 @@ function SigninModal({className, fontSize, padding}) {
             Password
             <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} />
             <br />
-            <input type='checkbox' />
-              Remember me
-            <br />
             <button type='submit'>
               Log in
             </button>
