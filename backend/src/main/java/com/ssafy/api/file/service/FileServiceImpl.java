@@ -9,15 +9,13 @@ import com.ssafy.db.repository.FileRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.net.URLEncoder;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -67,6 +65,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    //FIXME: 테스트 코드이므로 file 테이블에 삽입 작업 없음 (코드 재사용 유의)
     @Override
     public void saveFileTest(MultipartFile multipartFile) {
         com.ssafy.db.entity.File file;
@@ -82,8 +81,6 @@ public class FileServiceImpl implements FileService {
 
         //2. 파일 업로드
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            //TODO: 컨트롤러 서버에 파일 저장되는지 확인
-
             //2-1. UUID 생성 (같은 이름의 파일 (확장자 포함) 업로드 충돌 방지)
             UUID uuid = UUID.randomUUID();
 
@@ -145,8 +142,6 @@ public class FileServiceImpl implements FileService {
 
         //2. 파일 업로드
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            //TODO: 컨트롤러 서버에 파일 저장되는지 확인
-
             //2-1. UUID 생성 (같은 이름의 파일 (확장자 포함) 업로드 충돌 방지)
             UUID uuid = UUID.randomUUID();
 
@@ -200,7 +195,6 @@ public class FileServiceImpl implements FileService {
         return file;
     }
 
-//    public ResponseEntity<byte[]> getFile(String filePath) throws IOException {
     public byte[] getFile(String filePath) throws IOException {
         S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, filePath));
         S3ObjectInputStream objectInputStream = o.getObjectContent();
@@ -212,16 +206,37 @@ public class FileServiceImpl implements FileService {
         return bytes;
     }
 
-    public void deleteFile(String filePath) throws IOException {
+    //FIXME: 테스트 코드이므로 file 테이블에서 관련 파일 삭제하지 않음
+    public boolean deleteFileTest(String filePath) throws IOException {
         try {
             amazonS3Client.deleteObject(bucket, filePath);
+            int lastSlashIndex = filePath.lastIndexOf("/");
+            String filedir = filePath.substring(0, lastSlashIndex);
+            String filename = filePath.substring(lastSlashIndex + 1, filePath.length());
+
+            com.ssafy.db.entity.File file = getFileBySaveFilenameAndSavePath(filename, filedir);
+
+            fileRepository.delete(file);
+
+            return true;
         } catch (SdkClientException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        return false;
     }
 
     @Override
     public com.ssafy.db.entity.File addTableRecord(com.ssafy.db.entity.File file) {
         return fileRepository.save(file);
+    }
+
+    @Override
+    public com.ssafy.db.entity.File getFileBySaveFilenameAndSavePath(String saveFilename, String savePath) {
+        com.ssafy.db.entity.File file = fileRepository.findBySaveFilenameAndSavePath(saveFilename, savePath).get();
+
+        return file;
     }
 }

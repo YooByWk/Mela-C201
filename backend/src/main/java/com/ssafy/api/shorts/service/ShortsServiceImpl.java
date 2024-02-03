@@ -21,9 +21,6 @@ public class ShortsServiceImpl implements  ShortsService {
     String[] supportedVideoExtension = {"MKV", "MP4", "AVI"};
 
     boolean isValidVideoExtension(String extension) {
-        System.err.println("isValidVideoExtension 메소드 extension: " + extension);
-
-        //TODO: 소문자 검사!
         for(String s : supportedVideoExtension) {
             if(extension.equals(s.toUpperCase()) || extension.equals(s.toLowerCase())) {
                 return true;
@@ -38,7 +35,6 @@ public class ShortsServiceImpl implements  ShortsService {
 
         //1. 지원하는 비디오 확장자인지 검사
         if(!isValidVideoExtension(extension)) {
-            //TODO: 메시지 잘 적기 (기존 415 메시지와 달라야 함!)
             return 415; //Not Supported Type
         }
 

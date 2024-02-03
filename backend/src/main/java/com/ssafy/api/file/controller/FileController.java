@@ -1,10 +1,6 @@
 package com.ssafy.api.file.controller;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.util.IOUtils;
 import com.ssafy.api.file.service.FileService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
@@ -13,7 +9,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +20,6 @@ import java.io.IOException;
 import java.net.URLEncoder;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
-import static org.springframework.web.servlet.function.RequestPredicates.contentType;
 
 @Slf4j
 @Api(value = "파일 서비스 API", tags = {"File"})
@@ -58,7 +52,7 @@ public class FileController {
 
     @GetMapping(value = "/download")
     @ApiOperation(value = "파일 다운로드", notes = "파일을 다운로드합니다.")
-    public ResponseEntity<byte[]> downloadFile(String filePath) throws IOException { // 객체 다운  fileUrl : 폴더명/파일네임.파일확장자
+    public ResponseEntity<byte[]> downloadFile(String filePath) throws IOException {
         try {
             byte[] bytes = fileService.getFile(filePath);
 
@@ -72,6 +66,21 @@ public class FileController {
         } catch (Exception e) {
             //요청한 파일을 찾을 수 없는 경우
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping(value = "/delete")
+    @ApiOperation(value = "파일 삭제", notes = "파일을 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "삭제 성공"),
+            @ApiResponse(code = 403, message = "삭제 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> deleteloadFile(String filePath) throws IOException {
+        if(fileService.deleteFileTest(filePath)) {  //파일 정상 삭제
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Delete success"));
+        } else {                                    //파일 삭제 중 오류
+            return ResponseEntity.status(401).body(BaseResponseBody.of(403, "Delete fail"));
         }
     }
 }

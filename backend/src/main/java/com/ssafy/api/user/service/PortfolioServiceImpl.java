@@ -22,7 +22,7 @@ public class PortfolioServiceImpl implements PortfolioService {
             com.ssafy.db.entity.File file;                                                                      //Amazon S3에 업로드한 파일에 관한 정보를 담고 있는 객체 (파일 경로, 원본 파일 명, 저장되는 파일 명, 파일 설명, 용량)
 
             try {
-                //TODO: swith-case 문으로 수정 가능
+                //FIXME: swith-case 문으로 수정 가능
                 if (extension.equals("mp3") || extension.equals("flac")) {                                       //2-4-1. 음원 파일 (mp3, flac)
                     file = fileService.saveFile(mf, portfolioMusicPostReq.getFileDescription());
                     file = fileService.addTableRecord(file);                                                                 //file 재할당 필요 없을지도
