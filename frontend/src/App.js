@@ -18,6 +18,8 @@ import CommunityHome from "./components/community/CommunityHome";
 import TeamspaceMain from "./pages/TeamspaceMain";
 import CommunityEdit from "./components/community/CommunityEdit";
 import EmailVerify from "./pages/EmailVerify";
+import ChangePassword from "./pages/ChangePassword";
+
 const StyledAppRouter = styled(AppRouter)`
   /* background-color: blue; */
   /* color: blue; */
@@ -64,13 +66,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/teamspace" element={<TeamspaceMain/>} />
-        <Route path='/signup/:emailId' element={<EmailVerify />}/>
+          <Route path='/signup/:emailId' element={<EmailVerify />}/>
           <Route path='/community' element={<Community />}>
-          <Route path='/community' exact element={<CommunityHome/>} />
-        <Route path='/community/create' element={<CommunityCreate/>} />
-        <Route path='/community/:boardIdx' element={<CommunityDetail/>} />
-        <Route path='/community/:boardIdx/edit' element={<CommunityEdit/>} />
+            <Route path='/community' exact element={<CommunityHome/>} />
+            <Route path='/community/create' element={<CommunityCreate/>} />
+            <Route path='/community/:boardIdx' element={<CommunityDetail/>} />
+            <Route path='/community/:boardIdx/edit' element={<CommunityEdit/>} />
           </Route>
+          <Route path='/changepassword' element={<ChangePassword />}/>
           <Route
             path="*"
             element={
