@@ -7,4 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ShortsService {
     int uploadShorts(Shorts shorts, MultipartFile multipartFile, ShortsPostReq shortsPostReq);
+    long getFileIndexByShortsIdx(Long shortsIdx);
+    com.ssafy.db.entity.File getFileInstanceByShortsIdx(Long shortsIdx);
 }

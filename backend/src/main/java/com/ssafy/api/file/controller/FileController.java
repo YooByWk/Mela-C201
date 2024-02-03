@@ -52,7 +52,7 @@ public class FileController {
 
     @GetMapping(value = "/download")
     @ApiOperation(value = "파일 다운로드", notes = "파일을 다운로드합니다.")
-    public ResponseEntity<byte[]> downloadFile(String filePath) throws IOException {
+    public ResponseEntity<byte[]> downloadFile(String filePath) {
         try {
             byte[] bytes = fileService.getFile(filePath);
 
@@ -73,14 +73,15 @@ public class FileController {
     @ApiOperation(value = "파일 삭제", notes = "파일을 삭제합니다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "삭제 성공"),
-            @ApiResponse(code = 403, message = "삭제 실패"),
-            @ApiResponse(code = 500, message = "서버 오류")
+            @ApiResponse(code = 500, message = "삭제 실패"),
     })
-    public ResponseEntity<? extends BaseResponseBody> deleteloadFile(String filePath) throws IOException {
-        if(fileService.deleteFileTest(filePath)) {  //파일 정상 삭제
+    public ResponseEntity<? extends BaseResponseBody> deleteFileByFilePath(String filePath) throws IOException {
+        boolean returnState = fileService.deleteFileByFilePath(filePath);
+
+        if(returnState) {   //파일 정상 삭제
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Delete success"));
-        } else {                                    //파일 삭제 중 오류
-            return ResponseEntity.status(401).body(BaseResponseBody.of(403, "Delete fail"));
+        } else {            //파일 삭제 중 오류
+            return ResponseEntity.status(401).body(BaseResponseBody.of(500, "Delete fail"));
         }
     }
 }

@@ -48,7 +48,7 @@ public class PortfolioController {
 
         //TODO: 토큰 유효성 확인
 
-        //토큰으로부터 사용자 확인 후 VO에 설정
+        //1. 토큰으로부터 사용자 확인 후 VO에 설정
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         portfolioMusic.setUserIdx(userDetails.getUser());
 

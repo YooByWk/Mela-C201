@@ -75,7 +75,7 @@ public class FileServiceImpl implements FileService {
             if (multipartFile.isEmpty()) {
                 throw new Exception("Empty file -FileServiceImpl.java");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -121,7 +121,7 @@ public class FileServiceImpl implements FileService {
 
             //MultipartFile -> File로 변환하면서 로컬에 저장된 파일 삭제
             removeFile(convertedFile);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -136,7 +136,7 @@ public class FileServiceImpl implements FileService {
             if (multipartFile.isEmpty()) {
                 throw new Exception("Empty file -FileServiceImpl.java");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -188,11 +188,16 @@ public class FileServiceImpl implements FileService {
 
             //MultipartFile -> File로 변환하면서 로컬에 저장된 파일 삭제
             removeFile(convertedFile);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return file;
+    }
+
+    @Override
+    public com.ssafy.db.entity.File addTableRecord(com.ssafy.db.entity.File file) {
+        return fileRepository.save(file);
     }
 
     public byte[] getFile(String filePath) throws IOException {
@@ -206,31 +211,36 @@ public class FileServiceImpl implements FileService {
         return bytes;
     }
 
-    //FIXME: 테스트 코드이므로 file 테이블에서 관련 파일 삭제하지 않음
-    public boolean deleteFileTest(String filePath) throws IOException {
+    @Override
+    public boolean deleteFileByFilePath(String filePath) throws IOException {
         try {
             amazonS3Client.deleteObject(bucket, filePath);
             int lastSlashIndex = filePath.lastIndexOf("/");
             String filedir = filePath.substring(0, lastSlashIndex);
             String filename = filePath.substring(lastSlashIndex + 1, filePath.length());
-
             com.ssafy.db.entity.File file = getFileBySaveFilenameAndSavePath(filename, filedir);
-
             fileRepository.delete(file);
-
             return true;
         } catch (SdkClientException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
     @Override
-    public com.ssafy.db.entity.File addTableRecord(com.ssafy.db.entity.File file) {
-        return fileRepository.save(file);
+    public boolean deleteFileByFileInstance(com.ssafy.db.entity.File file) {
+        try {
+            //Amazon S3에서 삭제
+            deleteFileByFilePath(file.getSavePath() + "/" + file.getSaveFilename());
+
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return false;
+        }
     }
 
     @Override
