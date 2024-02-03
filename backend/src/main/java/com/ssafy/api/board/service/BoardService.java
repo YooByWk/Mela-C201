@@ -16,6 +16,7 @@ public interface BoardService {
     void deleteBoard(Long boardIdx);
     Board getBoard(Long boardIdx) throws Exception;
     List<Board> getBoardList(BoardGetListReq getListInfo);
+    int getBoardTotalCount();
 
     void registComment(CommentRegisterPostReq registInfo, Board board, User user);
     void deleteComment(Long commentIdx);

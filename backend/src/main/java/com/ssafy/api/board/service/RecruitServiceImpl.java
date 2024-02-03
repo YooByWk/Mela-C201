@@ -151,6 +151,11 @@ public class RecruitServiceImpl implements RecruitService {
     }
 
     @Override
+    public int getBoardTotalCount() {
+        return (int) recruitRepository.count();
+    }
+
+    @Override
     public void createBoardRecruitPosition(BoardRecruit boardRecruit, List<String> positions) {
         for (String position : positions) {
             BoardRecruitPosition boardRecruitPosition = new BoardRecruitPosition();

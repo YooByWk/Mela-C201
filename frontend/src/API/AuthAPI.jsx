@@ -15,7 +15,6 @@ export const signin = async ({
     }
 
     const response = await AuthApi.post(`/auth/login`, data)
-
     return response.data
 }
 

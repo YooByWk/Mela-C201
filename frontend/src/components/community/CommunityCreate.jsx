@@ -2,24 +2,24 @@ import axios from "axios";
 import useStore from "../../status/store";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SigninModal from "../Modals/SigninModal";
 import { BoardCreate } from "../../API/BoardAPI";
+import CosigninModal from './CoSigninModal'
+
+
 function CommunityCreate() {
   const Navigate = useNavigate()
-
   const islogined = useStore((state) => state.islogined);
   const [showLoginModal, setshowLoginModal] = useState(false)
-  
-  useEffect(()=> {
-    if (!islogined) {
-      setshowLoginModal(true)    
-    }
-  }, [islogined, Navigate])
+  const [open, setOpen] = useState(false)
+
+  // 로그인 여부에 따라서.
+
 
   const [userinput, setUserInput]  = useState({
     title: '',
     content: '',
   })
+
 
   const SubmitHandler = async (event)=> {
     event.preventDefault();
@@ -32,6 +32,7 @@ function CommunityCreate() {
     try {
       const response = await BoardCreate({content: userinput.content, title: userinput.title});
       console.log(response,'res');
+      Navigate(`../${response.data.message}`)
     } catch (error) {
       console.error(error);
     }
@@ -57,8 +58,6 @@ function CommunityCreate() {
         </form>
       </>
     );
-  } else if (showLoginModal) {
-    return <SigninModal />
   }
 }
 
