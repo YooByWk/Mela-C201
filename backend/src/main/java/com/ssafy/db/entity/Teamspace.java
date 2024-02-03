@@ -43,10 +43,10 @@ public class Teamspace {
     @ManyToOne
     @JoinColumn(name="TEAMSPACE_PICTURE_FILE_IDX", referencedColumnName="fileIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    File teamspace_picture_file_idx;
+    File teamspacePictureFileIdx;
 
     @ManyToOne
     @JoinColumn(name="TEAMSPACE_BACKGROUND_PICTURE_FILE_IDX", referencedColumnName="fileIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    File teamspace_background_picture_file_idx;
+    File teamspaceBackgroundPictureFileIdx;
 }

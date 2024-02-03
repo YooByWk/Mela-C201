@@ -315,7 +315,7 @@ $RECYCLE.BIN/
 # generated 폴더 제외
 /backend/src/main/generated
 
-# 
+#
 *.gz
 
 

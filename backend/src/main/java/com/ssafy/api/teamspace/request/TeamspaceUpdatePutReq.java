@@ -13,8 +13,6 @@ import java.time.LocalDate;
 @Setter
 @ApiModel("TeamspaceUpdatePutRequest")
 public class TeamspaceUpdatePutReq {
-//    @ApiModelProperty(name = "팀 스페이스 idx", example = "1")
-//    Long teamspaceIdx;
 
     @ApiModelProperty(name = "팀 스페이스 team_name", example="team_name")
     String teamName;

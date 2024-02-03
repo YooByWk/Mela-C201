@@ -1,36 +1,98 @@
 // 커뮤니티 게시판 메인
-import React from 'react';
-import Navbar from '../components/Navbar';
-import styled from 'styled-components';
-import Sidebar from './../components/Sidebar';
+import React, { useState, useEffect } from "react";
+import Navbar from "../components/Navbar";
+import styled from "styled-components";
+import Sidebar from "../components/Sidebar";
+import { FaSearch } from "react-icons/fa";
+import { BoardList } from "../API/BoardAPI";
+import { Routes, Outlet } from "react-router-dom";
 
-// import { mainTheme } from './../styles/theme';
-
-
-const CommunityContainer = styled.body`
-  background-color: ${props => props.theme.colours.primary};
-  /* color : white; */
-  display: flex;
-  flex-direction: row;
-  height: 70rem;
-  & > Sidebar {
-    margin-right: 15%;
-  }
-  padding-top: 2.5% ;
-  hr {
-    color: white;
-  }
-`;
 const Community = () => {
-  return (
-    <>
+  //
+  const [isWriting, setIsWriting] = useState(false);
 
-        <h1>
-        Community : 이러면 안되는 개발의 표본
-        </h1>
-<hr />
-    </>
+
+  return (
+    <CommunityContainer>
+ 
+        <SideDiv>
+          <Sidebar paddingtop="6vh" />
+        </SideDiv>
+
+      <MainDiv>
+        <Navbar backcolour="10" />
+        <Outlet />
+      </MainDiv>
+      {!isWriting && <RSideDiv>3</RSideDiv>}
+    </CommunityContainer>
   );
 };
 
 export default Community;
+
+const CommunityContainer = styled.div`
+  background-color: ${(props) => props.theme.colours.primary};
+  display: flex;
+  /* flex-direction: column; */
+  height: 60rem;
+  color: white;
+  padding-top: 3%;
+  justify-content: space-evenly;
+  padding-left: 3%;
+  
+`;
+
+const SideDiv = styled.div`
+  width: 10%;
+  padding-left: 2.5%;
+`;
+
+const MainDiv = styled.div`
+  width: 70%;
+  background-color: ${(props) => props.theme.colours.point};
+  border-radius: 50px;
+  overflow-x: hidden;
+  padding-top: 1%;
+  padding-left: 2%;
+  display: flex;
+  flex-direction: column;
+  
+  .Container {
+    margin-top: 5%;
+    h1 {
+      margin-bottom: 3vh;
+    }
+    .SearchContainer {
+      display: flex;
+      align-items: center;
+      input {
+        height: 100%;
+        margin-left: 7.5%;
+        width: 15rem;
+        background-color: ${(props) => props.theme.colours.point};
+        border-top: none;
+        border-right: none;
+        border-left: none;
+        color: white;
+        text-align: center;
+        outline: none;
+        font-size: medium;
+        &:active {
+          border: none;
+        }
+      }
+    }
+    .BoardSearch {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3%;
+      button {
+        margin-right: 20px;
+      }
+    }
+  }
+`;
+
+const RSideDiv = styled.div`
+  width: 12.5%;
+`;
