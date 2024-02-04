@@ -13,7 +13,6 @@ import TeamspaceFile from '../components/teamspace/TeamspaceFile';
 import TeamspaceManage from '../components/teamspace/TeamspaceManage';
 import TeamspaceDetail from '../pages/TeamspaceDetail';
 
-
 function AppRouter({ className }) {
   return (  
     <div className={className}>
