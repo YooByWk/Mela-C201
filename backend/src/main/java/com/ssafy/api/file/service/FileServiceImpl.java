@@ -244,6 +244,24 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public boolean deleteFilesByFileInstances(com.ssafy.db.entity.File[] files) {
+        try {
+            for(com.ssafy.db.entity.File file : files) {
+                if(file != null) {
+                    //Amazon S3에서 삭제
+                    deleteFileByFilePath(file.getSavePath() + "/" + file.getSaveFilename());
+                }
+            }
+
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+    @Override
     public com.ssafy.db.entity.File getFileBySaveFilenameAndSavePath(String saveFilename, String savePath) {
         com.ssafy.db.entity.File file = fileRepository.findBySaveFilenameAndSavePath(saveFilename, savePath).get();
 

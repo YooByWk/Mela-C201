@@ -66,7 +66,6 @@ public class ShortsController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "삭제 실패"),
     })
-
     public ResponseEntity<? extends BaseResponseBody> deleteShorts (
             @ApiIgnore Authentication authentication,
             @PathVariable(name = "shortsid") Long shortsid) {

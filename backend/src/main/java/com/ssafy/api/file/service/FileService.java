@@ -22,6 +22,8 @@ public interface FileService {
     boolean deleteFileByFilePath(String filePath) throws IOException;
     //Amazon S3에 저장된 파일을 file 테이블 인스턴스로 삭제
     boolean deleteFileByFileInstance(com.ssafy.db.entity.File file);
+    //Amazon S3에 저장된 파일들을 file 테이블 인스턴스로 삭제 #테스트 중
+    boolean deleteFilesByFileInstances(com.ssafy.db.entity.File[] files);
     //파일 이름과 경로로부터 file 인스턴스 리턴
     com.ssafy.db.entity.File getFileBySaveFilenameAndSavePath(String saveFilename, String savePath);
 }

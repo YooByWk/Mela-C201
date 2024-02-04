@@ -2,7 +2,6 @@ package com.ssafy.api.shorts.service;
 
 import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.shorts.request.ShortsPostReq;
-import com.ssafy.db.entity.File;
 import com.ssafy.db.entity.Shorts;
 import com.ssafy.db.repository.ShortsRepository;
 import org.apache.commons.io.FilenameUtils;
@@ -54,11 +53,6 @@ public class ShortsServiceImpl implements  ShortsService {
 
         //6. 정상 업로드: 200 리턴
         return 200;
-    }
-
-    @Override
-    public long getFileIndexByShortsIdx(Long shortsIdx) {
-        return shortsRepository.findByShortsIdx(shortsIdx).get().getShortsPathFileIdx().getFileIdx();
     }
 
     @Override

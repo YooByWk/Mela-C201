@@ -29,9 +29,6 @@ public class FileController {
     @Autowired
     FileService fileService;
 
-    @Autowired
-    AmazonS3 amazonS3Client;
-
     @PostMapping(value = "/upload", consumes = MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "파일 업로드", notes = "파일을 업로드합니다.")
     @ApiResponses({

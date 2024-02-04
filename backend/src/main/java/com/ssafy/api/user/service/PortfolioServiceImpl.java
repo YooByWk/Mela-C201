@@ -25,15 +25,15 @@ public class PortfolioServiceImpl implements PortfolioService {
                 //FIXME: swith-case 문으로 수정 가능
                 if (extension.equals("mp3") || extension.equals("flac")) {                                       //2-4-1. 음원 파일 (mp3, flac)
                     file = fileService.saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = fileService.addTableRecord(file);                                                                 //file 재할당 필요 없을지도
+                    file = fileService.addTableRecord(file);
                     portfolioMusic.setMusicFileIdx(file);
                 } else if (extension.equals("pdf") || extension.equals("xml")) {                                 //2-4-2. 가사 파일 (pdf, xml)
                     file = fileService.saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = fileService.addTableRecord(file);                                                                 //file 재할당 필요 없을지도
+                    file = fileService.addTableRecord(file);
                     portfolioMusic.setLyricFileIdx(file);
                 } else if (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")) {     //2-4-3. 앨범 아트(jpg, jpeg, png)
                     file = fileService.saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = fileService.addTableRecord(file);                                                                 //file 재할당 필요 없을지도
+                    file = fileService.addTableRecord(file);
                     portfolioMusic.setAlbumArtFileIdx(file);
                 } else {
                     throw new Exception("지원하지 않는 파일 형식입니다.");
@@ -54,5 +54,10 @@ public class PortfolioServiceImpl implements PortfolioService {
         portfolioRepository.save(portfolioMusic);
 
         return true;
+    }
+
+    @Override
+    public PortfolioMusic getPortfolioMusicInstanceByPortfolioMusicIdx(long PortfolioMusicIdx) {
+        return portfolioRepository.findById(PortfolioMusicIdx).get();
     }
 }
