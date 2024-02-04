@@ -16,19 +16,19 @@ import java.time.LocalDateTime;
 @Setter
 @ApiModel("UserUpdatePostRequest")
 public class UserUpdatePostReq {
-    @ApiModelProperty(name="유저 name")
+    @ApiModelProperty(name="유저 name", example = "Soham Kim")
     String name;
 
-    @ApiModelProperty(name="유저 nickname")
+    @ApiModelProperty(name="유저 nickname", example = "Soham")
     String nickname;
 
-    @ApiModelProperty(name="유저 gender")
+    @ApiModelProperty(name="유저 gender", example = "Woman")
     String gender;
 
-    @ApiModelProperty(name="유저 birth")
+    @ApiModelProperty(name="유저 birth", example = "1992-12-25")
     LocalDate birth;
 
-    @ApiModelProperty(name="유저 search_allow")
+    @ApiModelProperty(name="유저 search_allow", example = "true")
     boolean searchAllow;
 
 

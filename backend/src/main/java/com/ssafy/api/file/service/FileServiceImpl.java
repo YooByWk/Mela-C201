@@ -180,7 +180,7 @@ public class FileServiceImpl implements FileService {
             //PublicRead 권한으로 Amazon S3 업로드
             amazonS3Client.putObject(new PutObjectRequest(bucket, saveFilename, convertedFile).withCannedAcl(CannedAccessControlList.PublicRead));
 
-            file.setSavePath(savePath.toString().replace("\\", "/"));           //1. 파일 경로
+            file.setSavePath(savePath.toString().replace("\\", "/"));          //1. 파일 경로
             file.setOriginalFilename(multipartFile.getOriginalFilename());                      //2. 원본 파일 명
             file.setSaveFilename(uuid.toString() + "_" + multipartFile.getOriginalFilename());  //3. 저장되는 파일 명
             file.setFileDescription(fileDescription);                                           //4. 파일 설명

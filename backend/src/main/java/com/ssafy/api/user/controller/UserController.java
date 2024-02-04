@@ -3,10 +3,7 @@ package com.ssafy.api.user.controller;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.ssafy.api.user.request.UserFindPasswordPutReq;
-import com.ssafy.api.user.request.UserRegisterPostReq;
-import com.ssafy.api.user.request.UserSendEmailPostReq;
-import com.ssafy.api.user.request.UserUpdatePostReq;
+import com.ssafy.api.user.request.*;
 import com.ssafy.api.user.response.FeedRes;
 import com.ssafy.api.user.response.UserLoginPostRes;
 import com.ssafy.api.user.response.UserRes;
@@ -24,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.mail.MessagingException;
@@ -31,6 +29,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -103,6 +103,29 @@ public class UserController {
 		User user = userService.getUserByEmail(userEmail);
 
 		userService.updateUser(user, userUpdateInfo);
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	@PutMapping(value = "/myinfo1", consumes = MULTIPART_FORM_DATA_VALUE)
+	@ApiOperation(value = "회원 본인 정보 수정1", notes = "로그인한 회원 본인의 정보를 수정한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> updateUser1(
+			@ApiIgnore Authentication authentication,
+			//문제 생기면 @ApiParam value 빼보기
+//			@RequestPart @ApiParam(value="회원정보 수정 정보1", required = false) UserUpdatePostReq userUpdateInfo,
+//			@RequestPart @ApiParam(value="회원 포트폴리오 수정 정보1", required = false) PortfolioAbstractPostReq portfolioAbstractPostReq,
+			@RequestPart(required = false) @ApiParam(value="회원정보 수정 정보1") UserUpdatePostReq userUpdateInfo,
+			@RequestPart(required = false) @ApiParam(value="회원 포트폴리오 수정 정보1") PortfolioAbstractPostReq portfolioAbstractPostReq,
+			@RequestPart(required = false) MultipartFile portfolioPicture) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+
+		userService.updateUser1(userDetails.getUser(), userUpdateInfo, portfolioAbstractPostReq, portfolioPicture);
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}

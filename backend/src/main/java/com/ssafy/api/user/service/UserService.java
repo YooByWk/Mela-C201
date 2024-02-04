@@ -1,11 +1,13 @@
 package com.ssafy.api.user.service;
 
+import com.ssafy.api.user.request.PortfolioAbstractPostReq;
 import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
 import com.ssafy.db.entity.Feed;
 import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.PortfolioAbstract;
 import com.ssafy.db.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import java.util.List;
@@ -27,6 +29,10 @@ public interface UserService {
 	void logoutSaveJwt(String userId);
 
 	User updateUser(User user, UserUpdatePostReq userUpdateInfo);
+
+	PortfolioAbstract createUserPortfolioAbstract(User user, PortfolioAbstractPostReq portfolioAbstractPostReq);
+
+	User updateUser1(User user, UserUpdatePostReq userUpdateInfo, PortfolioAbstractPostReq portfolioAbstractPostReq, MultipartFile portfolioPicture);
 
 	void deleteUser(User user);
 

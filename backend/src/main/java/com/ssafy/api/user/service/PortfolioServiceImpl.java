@@ -4,6 +4,7 @@ import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.user.request.PortfolioMusicPostReq;
 import com.ssafy.db.entity.PortfolioAbstract;
 import com.ssafy.db.entity.PortfolioMusic;
+import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.PortfolioAbstractRepository;
 import com.ssafy.db.repository.PortfolioMusicRepository;
 import org.apache.commons.io.FilenameUtils;
@@ -67,7 +68,7 @@ public class PortfolioServiceImpl implements PortfolioService {
     }
 
     @Override
-    public PortfolioAbstract getPortfolioAbstractByUserIdx(long userIdx) {
-        return portfolioAbstractRepository.findPortfolioAbstractByUserIdx(userIdx).get();
+    public PortfolioAbstract getPortfolioAbstractByUserIdx(User user) {
+        return portfolioAbstractRepository.findByUserIdx(user).get();
     }
 }
