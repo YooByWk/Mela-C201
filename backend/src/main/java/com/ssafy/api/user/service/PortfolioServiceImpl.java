@@ -2,8 +2,10 @@ package com.ssafy.api.user.service;
 
 import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.user.request.PortfolioMusicPostReq;
+import com.ssafy.db.entity.PortfolioAbstract;
 import com.ssafy.db.entity.PortfolioMusic;
-import com.ssafy.db.repository.PortfolioRepository;
+import com.ssafy.db.repository.PortfolioAbstractRepository;
+import com.ssafy.db.repository.PortfolioMusicRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,10 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Autowired
     FileService fileService;
     @Autowired
-    PortfolioRepository portfolioRepository;
+    PortfolioMusicRepository portfolioMusicRepository;
+
+    @Autowired
+    PortfolioAbstractRepository portfolioAbstractRepository;
 
     public boolean addPortfolioMusic(PortfolioMusic portfolioMusic, MultipartFile[] multipartFile, PortfolioMusicPostReq portfolioMusicPostReq) {
         for(MultipartFile mf : multipartFile) {
@@ -51,13 +56,18 @@ public class PortfolioServiceImpl implements PortfolioService {
         portfolioMusic.setLyricFileIdx(portfolioMusic.getLyricFileIdx());
         portfolioMusic.setAlbumArtFileIdx(portfolioMusic.getAlbumArtFileIdx());
 
-        portfolioRepository.save(portfolioMusic);
+        portfolioMusicRepository.save(portfolioMusic);
 
         return true;
     }
 
     @Override
     public PortfolioMusic getPortfolioMusicInstanceByPortfolioMusicIdx(long PortfolioMusicIdx) {
-        return portfolioRepository.findById(PortfolioMusicIdx).get();
+        return portfolioMusicRepository.findById(PortfolioMusicIdx).get();
+    }
+
+    @Override
+    public PortfolioAbstract getPortfolioAbstractByUserIdx(long userIdx) {
+        return portfolioAbstractRepository.findPortfolioAbstractByUserIdx(userIdx).get();
     }
 }

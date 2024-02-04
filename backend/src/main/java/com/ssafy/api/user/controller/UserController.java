@@ -16,6 +16,7 @@ import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.Feed;
 import com.ssafy.db.entity.Notification;
+import com.ssafy.db.entity.PortfolioAbstract;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -73,6 +74,8 @@ public class UserController {
 		/**
 		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
 		 * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
+		 *
+		 * Swagger UI에서 테스트 해보니 500 Error 뜨네요 (java.lang.NullPointerException: null) 발생 원인: SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		 */
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 
@@ -393,6 +396,42 @@ public class UserController {
 		}
 
 		return ResponseEntity.status(200).body(res);
+	}
+
+	//TODO: 테스트 필요!
+	@GetMapping("/{userid}/portfolio")
+	@ApiOperation(value = "포트폴리오 조회", notes = "포트폴리오 정보를 응답한다. (타인의 포트폴리오 조회 가능)")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			//@ApiResponse(code = 401, message = "인증 실패"),	//로그인하지 않고 포트폴리오 조회 요청 시 응답
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<?> browsePortfolioAbstract(@ApiIgnore Authentication authentication, @PathVariable(name = "userid") String userid) {
+//	public ResponseEntity<? extends BaseResponseBody> browsePortfolioAbstract(@ApiIgnore Authentication authentication, @PathVariable(name = "userid") String userid) {
+		/**
+		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
+		 * 액세스 토큰이 없이 요청하는 경우, 401 에러 발생.
+		 */
+
+		//FIXME: 로그인이 필요한 기능이라면 토큰 확인 절차 주석 풀기
+		/*
+		SsafyUserDetails userDetails = null;
+
+		try {
+			userDetails = (SsafyUserDetails) authentication.getDetails();
+		} catch(NullPointerException e) {
+			e.printStackTrace();
+
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Authentication failed!"));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		*/
+
+		PortfolioAbstract portfolioAbstract = userService.browsePortfolioAbstract(userid);
+
+		return ResponseEntity.status(200).body(portfolioAbstract);
 	}
 }
 

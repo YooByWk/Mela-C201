@@ -9,13 +9,11 @@ import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,9 +44,10 @@ public class UserServiceImpl implements UserService {
 	FeedRepository feedRepository;
 	@Autowired
 	FeedRepositorySupport feedRepositorySupport;
-
 	@Autowired
 	private JavaMailSender mailSender;
+	@Autowired
+	PortfolioAbstractRepository portfolioAbstractRepository;
 
 	Random random = new Random();
 	CSVParser frontWords = new CSVParser("front_words");
@@ -385,4 +384,11 @@ public class UserServiceImpl implements UserService {
 
 		return feeds;
 	}
+
+	//TODO: 테스트 필요!
+	@Override
+	public PortfolioAbstract browsePortfolioAbstract(String userId) {
+		return portfolioAbstractRepository.findPortfolioAbstractByUserIdx(userRepository.findByEmailId(userId).get().getUserIdx()).get();
+	}
+
 }
