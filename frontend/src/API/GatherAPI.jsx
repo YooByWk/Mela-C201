@@ -24,10 +24,6 @@ export const GatherList = async({page, size, sortKey, word}) => {
   return response
 }
 
-export const RecruitDetail = async({GatherIdx}) => {
-  const response = await GatherAPI.get(`detail/${GatherIdx}`)
-  return response
-}
 
 
 export const GatherPost = async (data) => {
@@ -45,16 +41,23 @@ export const GatherPost = async (data) => {
   }
 }
 
+///////////////////////////
 
-export const GetComment = async ({GatherIdx}) => {
-  const url = `/${GatherIdx}/comments`;
-  const Comments = await GatherAPI.get(url);
-  return Comments;
-} 
+export const RecruitDetail = async({gatherIdx}) => {
+  const response = await GatherAPI.get(`/${gatherIdx}`)
+  return response
+}
 
 
-export const CreateComment = async ({GatherIdx, content}) => {
-  const response = await GatherAPI.post(`${URL}/${GatherIdx}/comments`,{
+// export const GetComment = async ({gatherIdx}) => {
+//   const url = `/${gatherIdx}/comments`;
+//   const Comments = await GatherAPI.get(url);
+//   return Comments;
+// } 
+
+
+export const CreateComment = async ({gatherIdx, content}) => {
+  const response = await GatherAPI.post(`${URL}/${gatherIdx}/comments`,{
     content
   }, {
     headers : { 'Authorization' : `Bearer ${localStorage.accessToken}` }
@@ -63,8 +66,22 @@ export const CreateComment = async ({GatherIdx, content}) => {
 }
 
 
-export const GatherDelete = async ({GatherIdx}) => {
-  const response = await GatherAPI.delete(`${URL}/${GatherIdx}`, {
+export const GatherDelete = async ({gatherIdx}) => {
+  const response = await GatherAPI.delete(`${URL}/${gatherIdx}`, {
+    headers : { 'Authorization' : `Bearer ${localStorage.accessToken}` }
+  })
+  return response;
+}
+
+export const CommentDelete = async ({gatherIdx, commentIdx}) => {
+  const response = await GatherAPI.delete(`${URL}/${gatherIdx}/comments/${commentIdx}`, {
+    headers : { 'Authorization' : `Bearer ${localStorage.accessToken}` }
+  })
+  return response;
+}
+
+export const GatherUpdate = async (data) => {
+  const response = await GatherAPI.put(`${URL}/${data.gatherIdx}`, data, {
     headers : { 'Authorization' : `Bearer ${localStorage.accessToken}` }
   })
   return response;

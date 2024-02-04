@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useStore from "../../status/store";
 import styled from "styled-components";
 import {GatherPost} from "../../API/GatherAPI";
-
+import GatherCal from './GatherCal';
 
 function GatherCreate() {
   const genres = [
@@ -31,6 +31,7 @@ function GatherCreate() {
   const [userInput, setUserInput] = useState({
     title: "",
     content: "",
+    endDate: '',
   });
 
 
@@ -75,7 +76,7 @@ function GatherCreate() {
       window.alert("장르를 선택해주세요.");
       return}
     if (event.key === "Enter") {event.preventDefault();}
-    console.log("제출");console.log(userInput);console.log(selectedGenres);console.log(selectedPositions)
+    console.log("제출");console.log(userInput);console.log(selectedGenres);console.log(selectedPositions);console.log()
     const genreName1 = selectedGenres[0]
     const genreName2 = selectedGenres[1] 
     const genreName3 = selectedGenres[2]
@@ -86,7 +87,6 @@ function GatherCreate() {
       genreName2,
       genreName3,
       positions,
-      endDate : '2000-01-01'
     }
     console.log(data)
     try {
@@ -97,7 +97,7 @@ function GatherCreate() {
   }
 }
 
-// 보내줘 내가 쓴 글 번호 . . .
+// 보내줘 내가 쓴 글 번호 . .
 
 
 if (isLogined)
@@ -137,7 +137,12 @@ if (isLogined)
           ))}
         </GenreContainer>
         <input type="submit" value="등록" />
+        <input type="date" />
+        <GatherCal onDateChange={(date) => setUserInput({ ...userInput, endDate: date })} />
       </form>
+            
+
+            
     </CreateDiv>
   )} else {
     return (

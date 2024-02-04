@@ -32,7 +32,7 @@ function App() {
             <Route path="/signup/:emailId" element={<EmailVerify />} />
             <Route path="/gather" element={<Boards />}>
               <Route index element={<GatherHome />} />
-              <Route path=":gatherIdx/edit" element={<GatherEdit />} />
+              <Route path="edit/:gatherIdx" element={<GatherEdit />} />
               <Route path=":pageNumber" element={<GatherHome />} />
               <Route path="create" element={<GatherCreate />} />
               <Route path="detail/:gatherIdx" element={<GatherDetail />} />
