@@ -12,7 +12,7 @@ import com.ssafy.db.entity.User;
 import java.util.List;
 
 public interface RecruitService {
-    void registBoard(RecruitRegisterPostReq registInfo, User user);
+    BoardRecruit registBoard(RecruitRegisterPostReq registInfo, User user);
     void updateBoard(RecruitUpdatePutReq updateInfo, Long recruitIdx, User user);
     void deleteBoard(Long recruitIdx);
     BoardRecruitRes getBoard(Long recruitIdx) throws Exception;

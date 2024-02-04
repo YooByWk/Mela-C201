@@ -39,6 +39,8 @@ public class BoardRecruitRes {
     @ApiModelProperty(name="like number")
     int likeNum;
 
+    @ApiModelProperty(name="board_recruit idx")
+    Long boardRecruitIdx;
     @ApiModelProperty(name="마감일", example="2000-01-01")
     LocalDate endDate;
     @ApiModelProperty(name="장르1", example="Pop")
@@ -62,6 +64,7 @@ public class BoardRecruitRes {
         res.setUserIdx(board.getUserIdx().getUserIdx());
         res.setLikeNum(likeNum);
 
+        res.setBoardRecruitIdx(boardRecruit.getBoardRecruitIdx());
         res.setEndDate(boardRecruit.getEndDate());
         if (boardRecruit.getGenreIdx1() != null) {
             res.setGenreName1(boardRecruit.getGenreIdx1().getGenreName());

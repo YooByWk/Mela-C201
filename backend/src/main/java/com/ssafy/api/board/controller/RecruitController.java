@@ -75,13 +75,14 @@ public class RecruitController {
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
 
+        BoardRecruit boardRecruit;
         try{
-            recruitService.registBoard(registInfo, user);
+            boardRecruit = recruitService.registBoard(registInfo, user);
         } catch (Exception e) {
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "not found"));
         }
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, boardRecruit.getBoardRecruitIdx() + ""));
     }
 
     @PutMapping("/{recruitid}")
