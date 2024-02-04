@@ -19,6 +19,7 @@ import GatherHome from "./components/gather/GatherHome";
 import GatherCreate from "./components/gather/GatherCreate";
 import GatherDetail from "./components/gather/GatherDetail";
 import GatherEdit from "./components/gather/GatherEdit";
+import ChangePassword from "./pages/ChangePassword";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
                 element={<CommunityEdit />}
               />
             </Route>
+            <Route path='/changepassword' element={<ChangePassword />}/>
             <Route
               path="*"
               element={

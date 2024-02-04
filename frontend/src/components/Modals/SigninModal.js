@@ -5,7 +5,7 @@ import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
 import { signin } from '../../API/AuthAPI'
 import useStore from '../../status/store'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 function SigninModal({className, fontSize, padding}) {
   const setIsLogined = useStore(state => state.setIsLogined)
@@ -20,7 +20,7 @@ function SigninModal({className, fontSize, padding}) {
     id: "", 
     password: "", 
   })
-  
+
   const handleChange = async (e) => {
     setValues({...values,
     [e.target.id]: e.target.value,
@@ -65,22 +65,22 @@ function SigninModal({className, fontSize, padding}) {
           </h2>
           <form onSubmit={handleSubmit}> 
           <div id="modal-description" className="modal-description">
-            Email
-            <input type='email' placeholder='ssafy@gmail.com' id='id' onChange={handleChange} />
-            <br/>
-            Password
-            <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} />
-            <br />
-            <input type='checkbox' />
-              Remember me
-            <br />
-            <button type='submit'>
+            <div className='inputWrapper'>
+              <label className='label'>Email</label>
+              <input type='email' className='input' placeholder='ssafy@gmail.com' id='id' onChange={handleChange} />
+            </div>
+            <div className='inputWrapper'>
+              <label className='label'>Password</label>
+              <input type='password' className='input' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} />
+            </div>
+            <button type='submit' className='button'>
               Log in
             </button>
-            <br />
-            <div id='find-password' className='find-password'>
-              Forgot password
-            </div>
+            <Link to='/forgotPassword'>
+              <div id='find-password' className='find-password'>
+                Forgot password
+              </div>
+            </Link>
           </div>
           </form>
         </ModalContent>
@@ -133,13 +133,14 @@ const ModalContent = styled('div')(
     gap: 8px;
     overflow: hidden;
     border-radius: 8px;
-    border: solid 1px #254EF8;
-    padding: 24px;
+    padding: 4rem;
+    color: white;
+    background: linear-gradient(180deg, #0C0A15 0%, #171930 100%);
 
     & .modal-title {
       text-align: center;
       line-height: 1.5rem;
-      margin-bottom: 8px;
+      margin-bottom: 2rem;
       text-decoration: underline;
       text-decoration-color: #254EF8;
     }
@@ -156,6 +157,40 @@ const ModalContent = styled('div')(
       font-weight: 200;
       margin-bottom: 4px;
       color: gray;
+    }
+
+    & .button {
+      background-color: #254EF8;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      width: 100%;
+      height: 2.5rem;
+      font-size: medium;
+      margin-top: 10px;
+    }
+
+    & .input {
+      background-color: #151c2c;
+      border: none;
+      height: 2.5rem;
+      color: white;
+      flex-grow: 1;
+    }
+
+    & .label {
+      color: #254EF8;
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    & .inputWrapper {
+      background-color: #151c2c;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   `,
 )

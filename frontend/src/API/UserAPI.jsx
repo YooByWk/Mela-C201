@@ -70,3 +70,10 @@ export const emailCheck = async ({emailId}) => {
     
     return response.data
 }
+
+// 새로운 비밀번호 설정(잃어버렸을 때)
+export const newPassword = async (data) => {
+    const response = await UserApi.put(`api/v1/users/users/newpassword`, data)
+    console.log(response)
+    return response.data
+}

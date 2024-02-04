@@ -68,3 +68,11 @@ export const verify = async (accessToken) => {
     console.log(response.data)
     return response.data
 }
+
+// 비밀번호 변경 링크 이메일 전송
+export const changePassword = async ({emailId}) => {
+    console.log(emailId)
+    const data = {emailId}
+    const response = await AuthApi.post(`/users/email`, data)
+    return response.data
+}
