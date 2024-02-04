@@ -3,7 +3,6 @@ import useStore from "../../status/store";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BoardCreate } from "../../API/BoardAPI";
-import CosigninModal from './CoSigninModal'
 
 
 function CommunityCreate() {
@@ -19,6 +18,7 @@ function CommunityCreate() {
     title: '',
     content: '',
   })
+  
 
 
   const SubmitHandler = async (event)=> {
