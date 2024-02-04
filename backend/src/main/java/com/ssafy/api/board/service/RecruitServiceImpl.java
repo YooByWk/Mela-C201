@@ -46,7 +46,7 @@ public class RecruitServiceImpl implements RecruitService {
     BoardService boardService;
 
     @Override
-    public void registBoard(RecruitRegisterPostReq registInfo, User user) {
+    public BoardRecruit registBoard(RecruitRegisterPostReq registInfo, User user) {
         BoardRegisterPostReq boardInfo = new BoardRegisterPostReq();
         boardInfo.setTitle(registInfo.getTitle());
         boardInfo.setContent(registInfo.getContent());
@@ -71,6 +71,7 @@ public class RecruitServiceImpl implements RecruitService {
         // 포지션 저장
         createBoardRecruitPosition(boardRecruit, registInfo.getPositions());
 
+        return boardRecruit;
     }
 
     @Override
