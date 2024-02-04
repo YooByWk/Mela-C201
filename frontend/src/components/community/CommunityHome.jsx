@@ -13,15 +13,16 @@ function CommunityHome() {
   const movePage = useNavigate()
   const [open, setOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  // page는 현재 페이지
-  // column 이름으로 sort
-  // size : results at 1 page
+  const [totalPageCount, setTotalPageCount] = useState(1);
+
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await BoardList({ page: currentPage, size: 20 });
       // console.log(response, 'fetch log')
-      setData(response.data);
-      // console.log(data);
+      setData(response.data.boardResList);
+      setTotalPageCount(response.data.totalPageCount);
+      console.log(totalPageCount)
       // 패칭한 데이터를 상태에 저장
     };
     fetchData();
@@ -37,21 +38,22 @@ function CommunityHome() {
 
   const ViewSorted = async () => {
     const response = await BoardList({ page: 1, size: 20, sortKey: "viewNum", word :boardInput? boardInput : '' });
-    setData(response.data);
+    setData(response.data.boardResList);
   };
 
   const LikeSorted = async () => {
     const response = await BoardList({ page: 1, size: 20, word : boardInput? boardInput : '', });
-    const sortedData = response.data.sort((a, b) => b.likeNum - a.likeNum); 
+    const sortedData = response.data.boardResList.sort((a, b) => b.likeNum - a.likeNum); 
     setData(sortedData);
     console.log('sortedData: ', sortedData);
   };
 
   const LastedSorted = async () => {
     const response = await BoardList({ page: 1, size: 20, word :boardInput? boardInput : '' });
-    if (response.data.length>1) {
+    console.log(response.data.boardResList,'boardresData')
+    if (response.data.boardResList.length>1) {
       console.log(response.data.length)
-      setData(response.data);
+      setData(response.data.boardResList);
     } 
   };
   const islogined = useStore((state) => state.islogined);
@@ -86,10 +88,25 @@ function CommunityHome() {
 
   }
 
+  const pages = [];
+  for (let i = 1; i <= Math.ceil(totalPageCount/20); i++) {
+    pages.push(
+      <button
+        onClick={() => setCurrentPage(i)}
+        className={currentPage === i ? 'active' : ''}
+      >
+        {i}
+      </button>
+    );
+  }
+
 
   return (
     <>
     <MainDiv>
+    <div className="pagination">
+      {pages}
+    </div>
       <div className="Container">
         <h1>자유게시판</h1>
         <div className="BoardSearch">

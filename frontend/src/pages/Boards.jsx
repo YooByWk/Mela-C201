@@ -1,11 +1,9 @@
 // 커뮤니티 게시판 메인
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import Sidebar from "../components/Sidebar";
-import { FaSearch } from "react-icons/fa";
-import { BoardList } from "../API/BoardAPI";
-import { Routes, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 const Community = () => {
   //

@@ -17,7 +17,6 @@ export const BoardList = async({page, size, sortKey, word}) => {
       word
     }
   })
-  // console.log(response)
   return response
 }
 
