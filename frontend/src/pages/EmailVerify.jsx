@@ -27,16 +27,40 @@ function EmailVerify() {
 
     return (
         <>
-            <DefaultButton 
-            text="전송하기"
-            onClick={sendEmail}
-            />
-            <DefaultButton 
-            text="메인으로"
-            onClick={mainHandle}
-            />
+        <Container>
+            <h1>이메일 인증을 완료해주세요</h1>
+            <div className="buttonWrapper">
+                <DefaultButton 
+                text="인증메일 전송"
+                onClick={sendEmail}
+                width='8rem'
+                />
+            </div>
+            <div className="buttonWrapper">
+                <DefaultButton 
+                text="메인으로"
+                onClick={mainHandle}
+                width='8rem'
+                backgroundcolor='#873ffa'
+                />
+            </div>
+        </Container>
         </>
     )
 }
 
 export default EmailVerify
+
+const Container = styled.div`
+    background-color: #0C0A15;
+    height: 30rem;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .buttonWrapper {
+        margin: 1rem;
+    }
+`
