@@ -126,74 +126,81 @@ function SignupModal({className, fontSize, padding}) {
         onClose={handleClose}
         slots={{ backdrop: StyledBackdrop }}
       >
-        <ModalContent sx={{ width: 400 }}>
+        <ModalContent sx={{ width: 500, height: 500 }}>
           <h2 id="unstyled-modal-title" className="modal-title">
             SIGN UP
           </h2>
           <form  onSubmit={handleSubmit}>
-          <div id="unstyled-modal-description" className="modal-description">
-            Email
-            <input type='text' placeholder='ssafy' id='emailId' onChange={handleChange} />
-            @
-            <input type='text' palceholder='gmail.com' id='emailDomain' onChange={handleChange} />
-            <input type='button' onClick={checkEmailId} value='중복 확인' />
-            <br/>
-            Password
-            <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange}/>
-            <br/>
-            Password again
-            <input type='password' id='password2' onChange={handlePasswordCheck} value={passwordConfirm}/>
-            {passwordConfirm && (isPasswordConfirm
-              ? <p style={{ color: 'green'}}>비밀번호가 일치합니다.</p>
-              : <p style={{ color: 'red'}}>비밀번호가 다릅니다.</p>
-            )}
-            <br/>
-            Name
-            <input type='text' placeholder='홍길동' id='name' onChange={handleChange}/>
-            <br/>
-            Nickname
-            <input type='text' placeholder='최대 32자' id='nickname' onChange={handleChange}/>
-            <input type='button' onClick={checkNickname} value='중복 확인' />
-            <br/>
-            <div className='gender-birth'>
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    Gender
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={values.gender}
-                    label="Gender"
-                    onChange={handleGenderChange}
-                    name='gender'
-                    className='select'
-                  >
-                    <MenuItem value='Etc'>
-                      Etc
-                    </MenuItem>
-                    <MenuItem value='Male'>
-                      Male
-                    </MenuItem>
-                    <MenuItem value='Female'>
-                      Female
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
+            <div id="unstyled-modal-description" className="modal-description">
+              <div className='inputWrapper'>
+                <label className='label'>Email</label>
+                <input type='text' placeholder='ssafy' id='emailId' onChange={handleChange} className='input'/>
+                <span>@</span>
+                <input type='text' palceholder='gmail.com' id='emailDomain' onChange={handleChange} className='input'/>
+                <input type='button' onClick={checkEmailId} value='중복 확인' className='checkButton'/>
+              </div>
+              <div className='inputWrapper'>
+                <label className='label'>Password</label>
+                <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} className='input'/>
+              </div>
+              <div className='inputWrapper'>
+                <label className='label'>Password again</label>
+                <input type='password' id='password2' onChange={handlePasswordCheck} value={passwordConfirm} className='input'/>
+              </div>
+              {passwordConfirm && (isPasswordConfirm
+                ? <p style={{ color: 'green'}}>비밀번호가 일치합니다.</p>
+                : <p style={{ color: 'red'}}>비밀번호가 다릅니다.</p>
+              )}
+              <div className='inputWrapper'>
+                <label className='label'>Name</label>
+                <input type='text' placeholder='홍길동' id='name' onChange={handleChange} className='input'/>
+              </div>
+              <div className='inputWrapper'>
+                <label className='label'>Nickname</label>
+                <input type='text' placeholder='최대 32자' id='nickname' onChange={handleChange} className='input'/>
+                <input type='button' onClick={checkNickname} value='중복 확인' className='checkButton' />
+              </div>
+              <div className='gender-birth'>
+                <Box sx={{ width: 200 }}>
+                  <FormControl fullWidth>
+                    <div className='inputWrapper'>
+                    <label className='label'>Gender</label>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={values.gender}
+                      label="Gender"
+                      onChange={handleGenderChange}
+                      name='gender'
+                      className='gender'
+                    >
+                      <MenuItem value='Etc'>
+                        Etc
+                      </MenuItem>
+                      <MenuItem value='Male'>
+                        Male
+                      </MenuItem>
+                      <MenuItem value='Female'>
+                        Female
+                      </MenuItem>
+                    </Select>
+                    </div>
+                  </FormControl>
+                </Box>
+                <div className='blank' />
+                <div className='inputWrapper'>
+                  <label className='label'>Birth</label>
+                  <input type='date' id='birth' onChange={handleChange} className='birth'/>
+                </div>
+              </div>
               <br/>
-              Birth
-              <input type='date' id='birth' onChange={handleChange} className='select'/>
+              <input type='checkbox' id='searchAllow' onChange={handleSearchAllowChange}/>
+                다른 회원의 검색 조건에 노출을 허용합니다.
+              <br />
+              <button type='submit' className='button'>
+                Create an account
+              </button>
             </div>
-            <br/>
-            <input type='checkbox' id='searchAllow' onChange={handleSearchAllowChange}/>
-              다른 회원의 검색 조건에 노출을 허용합니다.
-            <br />
-            <button type='submit'>
-              Create an account
-            </button>
-          </div>
           </form>
         </ModalContent>
       </Modal>
@@ -217,6 +224,7 @@ Backdrop.propTypes = {
   open: PropTypes.bool,
 }
 
+
 const Modal = styled(BaseModal)`
   position: fixed;
   z-index: 1300;
@@ -230,7 +238,7 @@ const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
   position: fixed;
   inset: 0;
-  background-color: rgb(0 0 0 / 0.5);
+  background-color: rgb(0 0 0 / 0.8);
   -webkit-tap-highlight-color: transparent;
 `
 
@@ -245,14 +253,14 @@ const ModalContent = styled('div')(
     gap: 8px;
     overflow: hidden;
     border-radius: 8px;
-    border: solid 1px #254EF8;
-    padding: 24px;
+    padding: 4rem;
     color: white;
+    background: linear-gradient(180deg, #0C0A15 0%, #171930 100%);
 
     & .modal-title {
       text-align: center;
       line-height: 1.5rem;
-      margin-bottom: 8px;
+      margin-bottom: 2rem;
       text-decoration: underline;
       text-decoration-color: #254EF8;
     }
@@ -268,9 +276,64 @@ const ModalContent = styled('div')(
       display: flex;
     }
 
-    & .select {
+    & .button {
+      background-color: #254EF8;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      width: 100%;
+      height: 2.5rem;
+      font-size: medium;
+      margin-top: 10px;
+    }
+
+    & .input {
+      background-color: #151c2c;
+      border: none;
+      height: 2.5rem;
+      color: white;
+      flex-grow: 1;
+    }
+
+    & .label {
+      color: #254EF8;
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    & .inputWrapper {
+      background-color: #151c2c;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    & .checkButton {
+      background-color: #254EF8;
+      border: none;
+      color: white;
+      border-radius: 10px;
+      width: 4.5rem;
+      height: 2rem;
+      margin-right: 5px;
+    }
+
+    & .gender {
+      width: 7rem;
+    }
+
+    & .birth {
       background-color: #151c2c;
       color: white;
+      border: none;
+      text-align: center;
+      width: 8rem;
+    }
+
+    & .blank {
+      margin: 2rem;
     }
   `,
 )
