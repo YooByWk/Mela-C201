@@ -1,4 +1,5 @@
 import axios from "axios";
+import { GetComment } from './BoardAPI';
 
 const URL = 'http://localhost:8080/api/v1/recruit'
 
@@ -47,13 +48,6 @@ export const RecruitDetail = async({gatherIdx}) => {
   const response = await GatherAPI.get(`/${gatherIdx}`)
   return response
 }
-
-
-// export const GetComment = async ({gatherIdx}) => {
-//   const url = `/${gatherIdx}/comments`;
-//   const Comments = await GatherAPI.get(url);
-//   return Comments;
-// } 
 
 
 export const CreateComment = async ({gatherIdx, content}) => {

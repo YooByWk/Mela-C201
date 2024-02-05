@@ -72,9 +72,23 @@ function GatherCreate() {
 
   const submitHandler = async (event) => {
     event.preventDefault();
+    console.log(userInput.endDate, "마감일")
+    console.log(userInput.title.length, "제목길이")
     if (selectedGenres.length < 1) { 
       window.alert("장르를 선택해주세요.");
       return}
+    if (userInput.title.length < 1) {
+      window.alert("제목을 입력해주세요.");
+      return;
+    }
+    if (userInput.content.length < 1) {
+      window.alert("내용을 입력해주세요.");
+      return;
+    }
+    if (!userInput.endDate) {
+      window.alert("마감일을 입력해주세요.");
+      return;
+    }
     if (event.key === "Enter") {event.preventDefault();}
     console.log("제출");console.log(userInput);console.log(selectedGenres);console.log(selectedPositions);console.log()
     const genreName1 = selectedGenres[0]
@@ -92,6 +106,7 @@ function GatherCreate() {
     try {
       const response = await GatherPost(data)
       console.log(response, "res");
+      Navigate(`../detail/${response.data.message}`);
   } catch (error) {
     console.error(error);
   }

@@ -54,6 +54,15 @@ const MainDiv = styled.div`
   padding-left: 2%;
   display: flex;
   flex-direction: column;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  a {
+    text-decoration: none;
+    color : rgb(19, 160, 0)
+  }
   
   .Container {
     margin-top: 5%;
