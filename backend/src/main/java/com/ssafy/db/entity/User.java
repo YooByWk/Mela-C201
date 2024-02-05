@@ -63,4 +63,20 @@ public class User {
 
     String jwtToken;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "userIdx=" + userIdx +
+                ", emailId='" + emailId + '\'' +
+                ", emailDomain='" + emailDomain + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birth=" + birth +
+                ", userType='" + userType + '\'' +
+                ", searchAllow=" + searchAllow +
+                ", jwtToken='" + jwtToken + '\'' +
+                '}';
+    }
 }

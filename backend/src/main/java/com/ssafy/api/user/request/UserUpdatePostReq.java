@@ -31,5 +31,14 @@ public class UserUpdatePostReq {
     @ApiModelProperty(name="유저 search_allow", example = "true")
     boolean searchAllow;
 
-
+    @Override
+    public String toString() {
+        return "UserUpdatePostReq{" +
+                "name='" + name + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birth=" + birth +
+                ", searchAllow=" + searchAllow +
+                '}';
+    }
 }

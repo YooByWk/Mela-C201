@@ -74,6 +74,10 @@ public class UserServiceImpl implements UserService {
 		// boolean은 isXXX으로 getter 만들어짐!!
 		user.setSearchAllow(userRegisterInfo.isSearchAllow());
 
+		PortfolioAbstract portfolioAbstract = new PortfolioAbstract();
+		portfolioAbstract.setUserIdx(user);
+		portfolioAbstractRepository.save(portfolioAbstract);
+
 		return userRepository.save(user);
 	}
 
@@ -128,20 +132,29 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public PortfolioAbstract createUserPortfolioAbstract(User user, PortfolioAbstractPostReq portfolioAbstractPostReq) {
+//	public PortfolioAbstract createUserPortfolioAbstract(User user, PortfolioAbstractPostReq portfolioAbstractPostReq) {
+	public PortfolioAbstract createUserPortfolioAbstract(PortfolioAbstractPostReq portfolioAbstractPostReq) {
 		PortfolioAbstract portfolioAbstract = new PortfolioAbstract();
 
 		portfolioAbstract.setInstagram(portfolioAbstractPostReq.getInstagram());		//instagram
 		portfolioAbstract.setSelfIntro(portfolioAbstractPostReq.getSelfIntro());		//self_intro
 		portfolioAbstract.setYoutube(portfolioAbstractPostReq.getYoutube());			//youtube
-		portfolioAbstract.setUserIdx(user);												//user_idx
+//		portfolioAbstract.setUserIdx(user);												//user_idx
 
 		return portfolioAbstract;
 	}
 
 	@Override
-	public User updateUser1(User user, UserUpdatePostReq userUpdateInfo, PortfolioAbstractPostReq portfolioAbstractPostReq, MultipartFile portfolioPicture) {
+	public void updateUser1(User user, UserUpdatePostReq userUpdateInfo, PortfolioAbstractPostReq portfolioAbstractPostReq, MultipartFile portfolioPicture) {
 		// TODO: 수정 사항 추가 필요!! (포트폴리오)
+		/*
+		User tmp = userRepository.getOne(1L);
+		PortfolioAbstract portfolioAbstract = new PortfolioAbstract();
+		portfolioAbstract.setUserIdx(tmp);
+		portfolioAbstract.setYoutube("sjdlkdj");
+		portfolioAbstractRepository.save(portfolioAbstract);
+		*/
+
 		if(userUpdateInfo != null) {
 			System.err.println("userUpdateInfo: " + userUpdateInfo);
 
@@ -150,23 +163,44 @@ public class UserServiceImpl implements UserService {
 			user.setBirth(userUpdateInfo.getBirth());
 			user.setGender(userUpdateInfo.getGender());
 			user.setSearchAllow(userUpdateInfo.isSearchAllow());
+
+//			userRepository.save(user);
+			userRepository.saveAndFlush(user);
 		}
 
 		if(portfolioAbstractPostReq != null) {
 			//portfolio_abstract 테이블에 유저식별번호 (user_idx) 일치하는 레코드 검색
 			PortfolioAbstract portfolioAbstract = null;
 			try {
+				System.err.println("portfolioAbstractPostReq.getInstagram(): " + portfolioAbstractPostReq.getInstagram());
+				System.err.println("portfolioAbstractPostReq.getSelfIntro(): " + portfolioAbstractPostReq.getSelfIntro());
+				System.err.println("portfolioAbstractPostReq.getYoutube(): " + portfolioAbstractPostReq.getYoutube());
+
 				portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user).get();
+
+				//portfolioAbstractPostReq.getInstagram() != null or portfolioAbstractPostReq.getInstagram().equals("") 이면 실행
+//				portfolioAbstract.setInstagram(portfolioAbstractPostReq.getInstagram());		//instagram
+//				portfolioAbstract.setSelfIntro(portfolioAbstractPostReq.getSelfIntro());		//self_intro
+//				portfolioAbstract.setYoutube(portfolioAbstractPostReq.getYoutube());			//youtube
+			} catch(NoSuchElementException e) {													//portfolio_abstract 테이블에 유저식별번호 (user_idx) 일치하는 레코드 없음 -> 생성
+				portfolioAbstract = new PortfolioAbstract();
+//				portfolioAbstract = createUserPortfolioAbstract(new PortfolioAbstractPostReq());
+//				portfolioAbstract = createUserPortfolioAbstract(portfolioAbstractPostReq);
+				System.err.println("user1: " + user);
+				portfolioAbstract.setUserIdx(user);												//transient 예외 원인?
+				//e.printStackTrace();
+			} finally {
+//				portfolioAbstract.setUserIdx(user);												//transient 예외 원인?
+				System.err.println("user2: " + user);
 
 				portfolioAbstract.setInstagram(portfolioAbstractPostReq.getInstagram());		//instagram
 				portfolioAbstract.setSelfIntro(portfolioAbstractPostReq.getSelfIntro());		//self_intro
 				portfolioAbstract.setYoutube(portfolioAbstractPostReq.getYoutube());			//youtube
-			} catch(NoSuchElementException e) {													//portfolio_abstract 테이블에 유저식별번호 (user_idx) 일치하는 레코드 없음 -> 생성
-				portfolioAbstract = new PortfolioAbstract();
-				//e.printStackTrace();
-			} finally {
-				portfolioAbstract.setUserIdx(user);												//transient 예외 원인?
-				portfolioAbstractRepository.save(portfolioAbstract);
+
+				System.err.println("portfolioAbstract: " + portfolioAbstract);
+
+//				portfolioAbstractRepository.save(portfolioAbstract);
+				portfolioAbstractRepository.saveAndFlush(portfolioAbstract);
 			}
 		}
 
@@ -175,20 +209,22 @@ public class UserServiceImpl implements UserService {
 			System.err.println("portfolioPicture null 아님!");
 			//1. 프로필 사진 저장 (Amazon S3, file 테이블)
 			com.ssafy.db.entity.File file = fileService.saveFile(portfolioPicture, "");
-			PortfolioAbstract portfolioAbstract;
+			PortfolioAbstract portfolioAbstract = null;
 
 			try {
 				//2. portfolio_abstract 테이블에 유저식별번호 (user_idx) 일치하는 레코드 검색
 				portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user).get();
 
 				//3-1. 일치하는 레코드가 있으면 프로필사진 파일 식별번호 업데이트 (portfolio_picture_file_idx)
-				portfolioAbstract.setPortfolio_picture_file_idx(file);
-				portfolioAbstractRepository.save(portfolioAbstract);
+//				portfolioAbstract.setPortfolio_picture_file_idx(file);
+//				portfolioAbstractRepository.save(portfolioAbstract);
 				//3-2. 일치하는 레코드가 없는 경우
 			} catch(NoSuchElementException e) {
 				//TODO: 아래 코드 작동 확인 필요
-				portfolioAbstract = createUserPortfolioAbstract(user, new PortfolioAbstractPostReq());
-				portfolioAbstract.setPortfolio_picture_file_idx(file);							//프로필사진 파일 식별번호 업데이트 (portfolio_picture_file_idx)
+//				portfolioAbstract = createUserPortfolioAbstract(new PortfolioAbstractPostReq());
+				portfolioAbstract = new PortfolioAbstract();
+				portfolioAbstract.setUserIdx(user);
+//				portfolioAbstract.setPortfolio_picture_file_idx(file);							//프로필사진 파일 식별번호 업데이트 (portfolio_picture_file_idx)
 
 //				portfolioAbstract = new PortfolioAbstract();
 
@@ -203,14 +239,21 @@ public class UserServiceImpl implements UserService {
 //				//3-2-2. 클라이언트로부터 portfolioAbstractPostReq를 받지 않은 경우: 별도 처리 필요 없음
 //
 //				portfolioAbstract.setUserIdx(user);												//user_idx
-				portfolioAbstractRepository.save(portfolioAbstract);
+//				portfolioAbstractRepository.save(portfolioAbstract);
 				//e.printStackTrace();
 			} catch(Exception e) {
 				e.printStackTrace();
+			} finally {
+				System.err.println("file.getFileIdx() : " + file.getFileIdx());
+				portfolioAbstract.setPortfolio_picture_file_idx(file);							//프로필사진 파일 식별번호 업데이트 (portfolio_picture_file_idx)
+				System.err.println("portfolioAbstract: " + portfolioAbstract);
+				portfolioAbstractRepository.save(portfolioAbstract);
+
+//				userRepository.save(user);
+				userRepository.saveAndFlush(user);
 			}
 		}
 
-		return userRepository.save(user);
 	}
 
 	@Override
