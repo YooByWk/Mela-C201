@@ -4,7 +4,8 @@ import DefaultButton from "./DefaultButton";
 import { IoMdClose } from "react-icons/io";
 import { FaFileUpload } from "react-icons/fa";
 import { Dialog, DialogHeader, DialogBody } from '@material-tailwind/react'
-import { musicUpload } from "../API/PortfolioAPI";
+import { musicUpload } from '../API/PortfolioAPI'
+import defaultimage from '../assets/images/default-image'
 
 const CloseButton = styled.button`
     background: none;
@@ -45,34 +46,85 @@ function PortfolioAdd() {
     const [file, setFile] = useState({})
     const [pinFixed, setPinFixed] = useState(false)
     const [fileDescription, setFileDescription] = useState('')
-    const [tilte, setTitle] = useState('')
+    const [title, setTitle] = useState('')
 
-    const handleChangeFile = (e) => {
+    // 음원 제목
+    const handleTitle = (e) => {
+        e.preventDefault()
+        setTitle(e.target.value)
+    }
+
+    // 음원 설명
+    const handleDescription = (e) => {
+        e.preventDefault()
+        setFileDescription(e.target.value)
+    }
+
+    // 앨범 커버 (jpg, jpeg, png)
+    const handleImgFile = (e) => {
         e.preventDefault()
         
         if (e.target.files[0]) {
             setFile(e.target.files[0])
         }
+        else {
+            setFile(defaultimage)
+        }
     }
    
+    // 음원 (mp3, flac)
+    const handleMusicFile = (e) => {
+        e.preventDefault()
+
+        if (e.target.files[1]) {
+            setFile(e.target.files[1])
+        }
+    }
+
+    // 가사 (pdf, xml)
+    const handleLyricFile = (e) => {
+        e.preventDefault()
+
+        if (e.target.files[2]) {
+            setFile(e.target.files[2])
+        }
+    }
+
+    const handlePin = (e) => {
+        e.preventDefault()
+        setPinFixed(e.target.checked)
+    }
+
     const handleModal = () => {
         setOpen(!open)
     }
 
-    const handleUpload = async () => {
+    const handleUpload = async (e) => {
+        e.preventDefault()
+        
         if (!file) {
             alert('파일을 선택해주세요')
             return
         }
 
+        const formData = new FormData()
+        const body = JSON.stringify({
+            pinFixed: pinFixed,
+            fileDescription: fileDescription,
+            title: title
+        })
+        formData.append('portfolioMusicPostReq', body)
+        formData.append('file', file)
+        // for (let i = 0; i < file.length; i++) {
+        //     formData.append('file', file[i]);
+        // }
+
+        for (let key of formData.keys()) {
+            console.log(key, ":", formData.get(key));
+        }
+
         try {
-            const response = await musicUpload({
-                pinFixed,
-                fileDescription,
-                tilte,
-                file
-            })
-            console.log(response)
+            musicUpload(formData)
             alert('업로드 성공~!')
         } catch (err) {
             console.error(err)
@@ -96,12 +148,31 @@ function PortfolioAdd() {
                     </CloseButton>
                 </CustomHeader>
                 <CustomBody>
+                    음원 제목
+                    <input type="text" onChange={handleTitle}/>
+                    음원 설명
+                    <input type="text" onChange={handleDescription}/>
+                    앨범 커버 (jpg, jpeg, png)
                     <input type="file"
-                        id="file"
-                        multiple="multiple"
-                        onChange={handleChangeFile}
+                        // multiple="multiple"
+                        onChange={handleImgFile}
                     />
-                    <FaFileUpload size={80}/>
+                    음원 (mp3, flac)
+                    <input type="file"
+                        // multiple="multiple"
+                        onChange={handleMusicFile}
+                    />
+                    가사 (pdf, xml)
+                    <input type="file"
+                        // multiple="multiple"
+                        onChange={handleLyricFile}
+                    />
+                    pin고정
+                    <input 
+                    type="checkbox"
+                    onChange={handlePin}
+                    />
+                    {/* <FaFileUpload size={80}/> */}
                 </CustomBody>
                 <button onClick={handleUpload}>
                     업로드
