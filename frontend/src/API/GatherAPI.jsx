@@ -59,8 +59,8 @@ export const GatherDelete = async ({gatherIdx}) => {
   return response;
 }
 
-export const GatherUpdate = async (data) => {
-  const response = await GatherAPI.put(`${URL}/${data.gatherIdx}`, data, {
+export const GatherUpdate = async ({gatherIdx, data}) => {
+  const response = await GatherAPI.put(`${URL}/${gatherIdx}`, data, {
     headers : { 'Authorization' : `Bearer ${localStorage.accessToken}` }
   })
   return response;

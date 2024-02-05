@@ -6,25 +6,26 @@ import { useEffect, useState } from "react";
 import { RecruitDetail } from "../../API/GatherAPI";
 import useStore from "../../status/store";
 import { useNavigate, useParams } from "react-router-dom";
-import { GetComment, CreateComment,BoardDelete, CommentDelete} from "../../API/BoardAPI";
+import { GetComment, CreateComment,BoardDelete, CommentDelete, checkBoardLike, BoardLike} from "../../API/BoardAPI";
 
 const GatherDetail = () => {
   const [data, setData] = useState(null);
   const { gatherIdx } = useParams();
   const [comments, setComments] = useState(null);
+  const [likeCount, setLikeCount] = useState(0)
   const [userInput, setUserInput] = useState("");
   const Navigate = useNavigate();
   const currentUserIdx = useStore((s) => (s.user ? s.user.userIdx : null));
   const [boardIndex, setBoardIndex] = useState(null);
-
   useEffect(() => {
     const detailData = async () => {
       const response = await RecruitDetail({ gatherIdx });
       setData(response.data);
       setBoardIndex(response.data.boardIdx);
+      setLikeCount(response.data.likeNum);
     };
     detailData();
-  }, [gatherIdx]);
+  }, [gatherIdx,likeCount]);
 
 useEffect(() => {
     const getComments = async () => {
@@ -56,6 +57,10 @@ useEffect(() => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (userInput.length < 1) {
+      window.alert("댓글을 입력해주세요");
+      return;
+    }
     await CreateComment({ boardIdx: boardIndex, content: userInput });
     setUserInput("");
     const Comments = await GetComment({ boardIdx: boardIndex });
@@ -77,14 +82,42 @@ useEffect(() => {
 
   const isAuthor = data ? data.userIdx === currentUserIdx : null;
 
+  const [isLiked, setIsLiked] = useState(null)
+  useEffect (()=> {
+    if (currentUserIdx === null) { return}
+    if (boardIndex === null) {return}
+    const Likecheck = async() => {
+      const res = await checkBoardLike({boardIdx:boardIndex, currentUserIdx})
+      if (res.data.message ==='true') {
+        setIsLiked(false)
+      } else {
+        setIsLiked(true)
+      }
+    }
+    Likecheck()
+    console.log(isLiked, "좋아요 확인")
+  }, [boardIndex, currentUserIdx])
+
+
+  const BoardLikeHandler = async ()=> {
+    const res = await BoardLike({boardIdx:boardIndex, currentUserIdx })
+    setLikeCount(res.data.likeNum)
+    setIsLiked(!isLiked)
+  }
+
+  ////////////
   if (data) {
   return (
     <DetailMain>
       <button onClick={() => console.log(isAuthor,boardIndex,comments, "작성자 확인")}>
         작성자 확인
       </button>
-      <button>수정 </button>
-      <button onClick={deleteHandler}>삭제 </button>
+     {isAuthor && <button onClick={() => Navigate(`../edit/${gatherIdx}`)}>수정</button> }
+     {isAuthor && <button onClick={deleteHandler}>삭제 </button>}
+     {isLiked ? <button onClick={BoardLikeHandler}>좋아요</button> :     
+        <button onClick={BoardLikeHandler}> 좋아요 취소</button>
+      }      
+
       <hr />
       <h1>GatherDetail</h1>
       <p>글 번호 : {gatherIdx}</p>
@@ -96,9 +129,18 @@ useEffect(() => {
       {data.genreName1 && <h3># {data.genreName1}</h3>}
       {data.genreName2 && <h3># {data.genreName2}</h3>}
       {data.genreName3 && <h3># {data.genreName3}</h3>}
-      <h3>{data.position}</h3>
+      <h3>{data.positions}</h3>
+      <hr />
+      <h1>포지션 번호</h1>
+      {data.positions.length > 1 &&
+      data.positions.map((position, i) => {
+        i = i + 1;
+        return  <span>{i} : {position}</span>;
+      })}
+      <p>좋아요 : {likeCount}</p>
       <div>
-        <p>댓글</p>
+      <hr />
+        <p>댓글 : <span>{comments && comments.length}개</span></p>
         <form action="" onSubmit={handleSubmit}>
           <input
             type="text"
