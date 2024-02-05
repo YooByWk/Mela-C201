@@ -3,12 +3,15 @@ package com.ssafy.api.file.controller;
 import com.amazonaws.services.s3.AmazonS3;
 import com.ssafy.api.file.service.FileService;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.db.entity.File;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -80,5 +84,13 @@ public class FileController {
         } else {            //파일 삭제 중 오류
             return ResponseEntity.status(401).body(BaseResponseBody.of(500, "Delete fail"));
         }
+    }
+
+    //FIXME: 테스트 중
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource showImage(@PathVariable String filename) throws  MalformedURLException {
+//        return new UrlResource("file:" + file.getFullPath(filename));
+        return new UrlResource(filename);
     }
 }
