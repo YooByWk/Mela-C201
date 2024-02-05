@@ -130,7 +130,7 @@ function PortfolioAdd() {
             console.error(err)
         }
     }
-
+    
     return (
         <>
             <DefaultButton 
@@ -174,9 +174,9 @@ function PortfolioAdd() {
                     />
                     {/* <FaFileUpload size={80}/> */}
                 </CustomBody>
-                <button onClick={handleUpload}>
+                <button onClick={handleRegister}>
                     업로드
-                </button>                 
+                </button>
             </CustomDialog>
         </>
     )
