@@ -23,6 +23,11 @@ function CommunityCreate() {
 
   const SubmitHandler = async (event)=> {
     event.preventDefault();
+    console.log(userinput.title.length, '제목길이')
+    if (userinput.title.length < 1 ) { 
+      window.alert('제목을 입력해주세요')
+      return;
+     }
     if (event.key === 'Enter') {
       event.preventDefault();
     }

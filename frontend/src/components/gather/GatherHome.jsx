@@ -73,7 +73,7 @@ const GatherHome = () => {
       <ul>
         {gathers.map((gather) => (
           <li key={gather.gatherIdx}>
-            <p><Link to={`/gather/detail/${gather.boardIdx}`}>{gather.title}</Link></p>
+            <p><Link to={`/gather/detail/${gather.boardRecruitIdx}`}>{gather.title}</Link></p>
             <p>{gather.content}</p>
             <p>{gather.createdAt}</p>
             <p>{gather.updatedAt}</p>

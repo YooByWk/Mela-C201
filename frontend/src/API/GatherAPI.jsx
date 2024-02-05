@@ -1,4 +1,5 @@
 import axios from "axios";
+import { GetComment } from './BoardAPI';
 
 const URL = 'http://localhost:8080/api/v1/recruit'
 
@@ -49,21 +50,6 @@ export const RecruitDetail = async({gatherIdx}) => {
 }
 
 
-// export const GetComment = async ({gatherIdx}) => {
-//   const url = `/${gatherIdx}/comments`;
-//   const Comments = await GatherAPI.get(url);
-//   return Comments;
-// } 
-
-
-export const CreateComment = async ({gatherIdx, content}) => {
-  const response = await GatherAPI.post(`${URL}/${gatherIdx}/comments`,{
-    content
-  }, {
-    headers : { 'Authorization' : `Bearer ${localStorage.accessToken}` }
-  })
-  return response;
-}
 
 
 export const GatherDelete = async ({gatherIdx}) => {
@@ -73,15 +59,8 @@ export const GatherDelete = async ({gatherIdx}) => {
   return response;
 }
 
-export const CommentDelete = async ({gatherIdx, commentIdx}) => {
-  const response = await GatherAPI.delete(`${URL}/${gatherIdx}/comments/${commentIdx}`, {
-    headers : { 'Authorization' : `Bearer ${localStorage.accessToken}` }
-  })
-  return response;
-}
-
-export const GatherUpdate = async (data) => {
-  const response = await GatherAPI.put(`${URL}/${data.gatherIdx}`, data, {
+export const GatherUpdate = async ({gatherIdx, data}) => {
+  const response = await GatherAPI.put(`${URL}/${gatherIdx}`, data, {
     headers : { 'Authorization' : `Bearer ${localStorage.accessToken}` }
   })
   return response;
