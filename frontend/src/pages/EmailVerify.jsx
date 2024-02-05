@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useSearchParams, useParams } from "react-router-dom";
-import { verify } from "../API/AuthAPI";
 import { email } from "../API/AuthAPI";
 import DefaultButton from "../components/DefaultButton";
-import { Link } from "react-router-dom";
+
 function EmailVerify() {
     const [searchParams] = useSearchParams()
     const token = searchParams.get('accessToken')
@@ -26,37 +25,42 @@ function EmailVerify() {
         window.location.href="/"
     }
 
-    // useEffect(() => {
-    //     email(emailId)
-    //     if (token) {
-    //         verify(token)
-    //         .then(response => {
-    //             console.log(response)
-    //             console.log('인증성공')
-    //         })
-    //         .catch(error => {
-    //             console.log(error)
-    //         })
-    //     }
-    // }, [token])
-
     return (
         <>
-            <DefaultButton 
-            text="전송하기"
-            onClick={sendEmail}
-            />
-            <DefaultButton 
-            text="메인으로"
-            onClick={mainHandle}
-            />
-            {/* <P>이메일 인증이 완료되었습니다</P> */}
+        <Container>
+            <h1>이메일 인증을 완료해주세요</h1>
+            <div className="buttonWrapper">
+                <DefaultButton 
+                text="인증메일 전송"
+                onClick={sendEmail}
+                width='8rem'
+                />
+            </div>
+            <div className="buttonWrapper">
+                <DefaultButton 
+                text="메인으로"
+                onClick={mainHandle}
+                width='8rem'
+                backgroundcolor='#873ffa'
+                />
+            </div>
+        </Container>
         </>
     )
 }
 
 export default EmailVerify
 
-const P = styled.p`
+const Container = styled.div`
+    background-color: #0C0A15;
+    height: 30rem;
     color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .buttonWrapper {
+        margin: 1rem;
+    }
 `

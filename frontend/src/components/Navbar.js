@@ -88,6 +88,7 @@ function Navbar({backcolour, radius}) {
     console.log(event, '홈으로 이동합니다.')
     navigate('/')
   }
+  
   return (
     < >
       <Container $backcolour={backcolour}>
@@ -98,7 +99,7 @@ function Navbar({backcolour, radius}) {
           </SearchBar>
       <div className='MenuContainer'>
         <span><NavLink
-        style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/gather'>Gather</NavLink></span>
+        style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/gather/1'>Gather</NavLink></span>
         <span><NavLink
         style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/teamspace'>Team Space</NavLink></span>
         <span><NavLink

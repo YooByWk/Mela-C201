@@ -46,7 +46,7 @@ public class RecruitServiceImpl implements RecruitService {
     BoardService boardService;
 
     @Override
-    public void registBoard(RecruitRegisterPostReq registInfo, User user) {
+    public BoardRecruit registBoard(RecruitRegisterPostReq registInfo, User user) {
         BoardRegisterPostReq boardInfo = new BoardRegisterPostReq();
         boardInfo.setTitle(registInfo.getTitle());
         boardInfo.setContent(registInfo.getContent());
@@ -71,6 +71,7 @@ public class RecruitServiceImpl implements RecruitService {
         // 포지션 저장
         createBoardRecruitPosition(boardRecruit, registInfo.getPositions());
 
+        return boardRecruit;
     }
 
     @Override
@@ -148,6 +149,24 @@ public class RecruitServiceImpl implements RecruitService {
         page = recruitRepository.findByTitleContainingOrContentContaining(getListInfo.getWord(), pageable);
 
         return page.getContent();
+    }
+
+    @Override
+    public List<BoardRecruit> getMyBoardList(RecruitGetMyListReq getListInfo, User user) {
+        Pageable pageable;
+        Page<BoardRecruit> page;
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "boardIdx");
+
+        pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
+        page = recruitRepository.findByUserIdx(user, pageable);
+
+        return page.getContent();
+    }
+
+    @Override
+    public int getMyBoardTotalCount(User user) {
+        return recruitRepositorySupport.countByMyRecruitBoards(user);
     }
 
     @Override

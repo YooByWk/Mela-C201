@@ -19,11 +19,11 @@ public class BoardRepositorySupport {
     public int countByBoards() {
         int count = (int) jpaQueryFactory
                 .selectFrom(qBoard)
-                .where(qBoard.boardIdx
-                        .notIn((Number) JPAExpressions
-                                .select(qBoardRecruit.boardIdx)
+                .where(JPAExpressions
+                                .selectOne()
                                 .from(qBoardRecruit)
-                        )
+                                .where(qBoardRecruit.boardIdx.eq(qBoard))
+                                .notExists()
                 )
                 .fetchCount();
 

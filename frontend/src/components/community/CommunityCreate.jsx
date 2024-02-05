@@ -3,7 +3,6 @@ import useStore from "../../status/store";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BoardCreate } from "../../API/BoardAPI";
-import CosigninModal from './CoSigninModal'
 
 
 function CommunityCreate() {
@@ -19,10 +18,16 @@ function CommunityCreate() {
     title: '',
     content: '',
   })
+  
 
 
   const SubmitHandler = async (event)=> {
     event.preventDefault();
+    console.log(userinput.title.length, '제목길이')
+    if (userinput.title.length < 1 ) { 
+      window.alert('제목을 입력해주세요')
+      return;
+     }
     if (event.key === 'Enter') {
       event.preventDefault();
     }

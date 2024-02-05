@@ -86,7 +86,6 @@ function CommunityDetail() {
       const check = async () => {
         const response = await checkBoardLike({boardIdx,currentUserIdx})
         console.log('response: ', response);
-
       }
       check()
     }, [boardIdx, currentUserIdx])

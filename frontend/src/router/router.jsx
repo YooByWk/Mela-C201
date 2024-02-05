@@ -12,7 +12,7 @@ import TeamspaceAudio from '../components/teamspace/TeamspaceAudio';
 import TeamspaceFile from '../components/teamspace/TeamspaceFile';
 import TeamspaceManage from '../components/teamspace/TeamspaceManage';
 import TeamspaceDetail from '../pages/TeamspaceDetail';
-
+import ForgotPassword from '../pages/ForgotPassword';
 
 function AppRouter({ className }) {
   return (  
@@ -66,6 +66,10 @@ function AppRouter({ className }) {
 
           <Route
             path='/message' element={<Message />}
+            />
+
+          <Route
+            path='/forgotPassword' element={<ForgotPassword />}
             />
         </Routes>
     </div>
