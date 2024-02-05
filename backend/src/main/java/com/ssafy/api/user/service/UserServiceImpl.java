@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService {
 		user.setNickname(userRegisterInfo.getNickname());
 		user.setGender(userRegisterInfo.getGender());
 		user.setBirth(userRegisterInfo.getBirth());
+		user.setUserType("unauth");
 
 		// boolean은 isXXX으로 getter 만들어짐!!
 		user.setSearchAllow(userRegisterInfo.isSearchAllow());
