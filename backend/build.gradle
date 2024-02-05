@@ -48,7 +48,7 @@ repositories {
 
 group 'com.ssafy'
 version '1.0-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '11'
 
 node {
     download = true
@@ -214,6 +214,10 @@ dependencies {
 
     // Redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+    //OpenVidu
+    implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.29.0'
+
 }
 
 test {
