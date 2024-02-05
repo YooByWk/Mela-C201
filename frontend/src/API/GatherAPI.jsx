@@ -50,25 +50,10 @@ export const RecruitDetail = async({gatherIdx}) => {
 }
 
 
-export const CreateComment = async ({gatherIdx, content}) => {
-  const response = await GatherAPI.post(`${URL}/${gatherIdx}/comments`,{
-    content
-  }, {
-    headers : { 'Authorization' : `Bearer ${localStorage.accessToken}` }
-  })
-  return response;
-}
 
 
 export const GatherDelete = async ({gatherIdx}) => {
   const response = await GatherAPI.delete(`${URL}/${gatherIdx}`, {
-    headers : { 'Authorization' : `Bearer ${localStorage.accessToken}` }
-  })
-  return response;
-}
-
-export const CommentDelete = async ({gatherIdx, commentIdx}) => {
-  const response = await GatherAPI.delete(`${URL}/${gatherIdx}/comments/${commentIdx}`, {
     headers : { 'Authorization' : `Bearer ${localStorage.accessToken}` }
   })
   return response;

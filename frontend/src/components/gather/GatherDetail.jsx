@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { RecruitDetail } from "../../API/GatherAPI";
 import useStore from "../../status/store";
 import { useNavigate, useParams } from "react-router-dom";
-import { GetComment, CreateComment,BoardDelete} from "../../API/BoardAPI";
+import { GetComment, CreateComment,BoardDelete, CommentDelete} from "../../API/BoardAPI";
 
 const GatherDetail = () => {
   const [data, setData] = useState(null);
@@ -38,8 +38,21 @@ useEffect(() => {
 
   const hanleUserInput = async (event) => {
     setUserInput(event.target.value);
+    console.log(userInput);
   }
 
+  const commentDeleteHandler = async (commentIdx) => {
+    try {
+      console.log(commentIdx);
+      await CommentDelete({ boardIdx: boardIndex, commentIdx });
+      console.log("삭제중");
+      const response = await GetComment({ boardIdx: boardIndex });
+      setComments(response.data);
+    }
+    catch (error) {
+      console.error("댓글 삭제 중 오류 발생:", error);
+    }
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -67,7 +80,7 @@ useEffect(() => {
   if (data) {
   return (
     <DetailMain>
-      <button onClick={() => console.log(isAuthor,boardIndex, "작성자 확인")}>
+      <button onClick={() => console.log(isAuthor,boardIndex,comments, "작성자 확인")}>
         작성자 확인
       </button>
       <button>수정 </button>
@@ -95,6 +108,18 @@ useEffect(() => {
           />
           <button type="submit">등록</button>
         </form>
+      </div>
+      <div>
+        {comments && comments.map((comment) => {
+          return (
+            <div key={comment.commentIdx}>
+              <h3>{comment.nickname}</h3>
+              <p>{comment.content}</p>
+              <p>{comment.registDate}</p>
+              <button onClick={()=>commentDeleteHandler(comment.commentIdx)}>삭제</button>
+            </div>
+          );
+        })}
       </div>
     </DetailMain>
   );}
