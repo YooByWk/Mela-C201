@@ -174,7 +174,7 @@ function PortfolioAdd() {
                     />
                     {/* <FaFileUpload size={80}/> */}
                 </CustomBody>
-                <button onClick={handleRegister}>
+                <button onClick={handleUpload}>
                     업로드
                 </button>
             </CustomDialog>
