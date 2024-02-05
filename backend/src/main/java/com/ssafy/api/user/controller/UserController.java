@@ -3,6 +3,12 @@ package com.ssafy.api.user.controller;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.ssafy.api.board.request.RecruitGetListReq;
+import com.ssafy.api.board.request.RecruitGetMyListReq;
+import com.ssafy.api.board.response.BoardRecruitListRes;
+import com.ssafy.api.board.response.BoardRecruitRes;
+import com.ssafy.api.board.service.BoardService;
+import com.ssafy.api.board.service.RecruitService;
 import com.ssafy.api.user.request.UserFindPasswordPutReq;
 import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserSendEmailPostReq;
@@ -14,9 +20,7 @@ import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
-import com.ssafy.db.entity.Feed;
-import com.ssafy.db.entity.Notification;
-import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +46,10 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+	@Autowired
+	BoardService boardService;
+	@Autowired
+	RecruitService recruitService;
 
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드 ...를</strong>를 통해 회원가입 한다.")
@@ -394,5 +402,33 @@ public class UserController {
 
 		return ResponseEntity.status(200).body(res);
 	}
+
+	@GetMapping("/recruit")
+	public ResponseEntity<?> getRecruitList(
+			@ApiIgnore Authentication authentication,
+			@ApiParam(value = "페이지 번호 (1부터 시작)", example = "1") @RequestParam int page,
+			@ApiParam(value = "페이지당 글 수", example = "10") @RequestParam int size
+	) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userEmail = userDetails.getUsername();
+		User user = userService.getUserByEmail(userEmail);
+
+		page-=1; // 1부터 시작하도록 함
+
+		RecruitGetMyListReq recruitGetListReq = new RecruitGetMyListReq();
+		recruitGetListReq.setPage(page);
+		recruitGetListReq.setSize(size);
+
+		List<BoardRecruit> recruits = recruitService.getMyBoardList(recruitGetListReq, user);
+		List<BoardRecruitRes> res = new ArrayList<>();
+		for (BoardRecruit board : recruits) {
+			List<Position> positions = recruitService.getPositions(board.getBoardRecruitIdx());
+			res.add(BoardRecruitRes.of(board.getBoardIdx(), board, positions, boardService.getBoardLikeNum(board.getBoardIdx().getBoardIdx())));
+		}
+
+		// 내 글 개수 세기
+		return ResponseEntity.status(200).body(BoardRecruitListRes.of(res, recruitService.getMyBoardTotalCount(user)));
+	}
+
 }
 
