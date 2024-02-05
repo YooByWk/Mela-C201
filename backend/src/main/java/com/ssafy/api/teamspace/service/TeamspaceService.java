@@ -9,12 +9,13 @@ import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
 import com.ssafy.api.teamspace.response.TeamspaceRes;
 import com.ssafy.db.entity.Schedule;
 import com.ssafy.db.entity.Teamspace;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 public interface TeamspaceService {
-    Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx);
+    Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx, MultipartFile teamspacePicture);
 
     Teamspace getTeamspaceById(Long id) throws Exception;
 

@@ -1,5 +1,6 @@
 package com.ssafy.api.teamspace.service;
 
+import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.teamspace.request.ScheduleRegisterPostReq;
 import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
@@ -17,6 +18,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -54,12 +56,18 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     @Autowired
     NotificationUtil notificationUtil;
 
+    @Autowired
+    FileService fileService;
+
     @Override
-    public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx) {
+    public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx, MultipartFile teamspacePicture) {
         // 팀 스페이스 썸네일 저장
         // 팀 스페이스 썸네일 사진 파일 idx 얻기
         // ...
         System.out.println("파일: " +  registerInfo.getTeamspace_picture_file_idx());
+
+        //팀 스페이스 썸네일 저장
+        com.ssafy.db.entity.File file = fileService.saveFile(teamspacePicture, "");
 
         // 팀 스페이스 생성
         Teamspace teamspace = new Teamspace();
@@ -69,6 +77,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         teamspace.setHost(userRepository.getOne(userIdx));
         teamspace.setTeamDescription(registerInfo.getTeamDescription());
         teamspace.setTeamspacePictureFileIdx(registerInfo.getTeamspace_picture_file_idx());
+        teamspace.setTeamspacePictureFileIdx(file);
         teamspaceRepository.save(teamspace);
 
         // host 팀 멤버로 추가

@@ -1,5 +1,6 @@
 package com.ssafy.api.teamspace.controller;
 
+import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
@@ -16,9 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
+
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @Slf4j
 @Api(value = "팀스페이스 API", tags = {"Teamspace"})
@@ -31,7 +35,7 @@ public class TeamspaceController {
     @Autowired
     UserService userService;
 
-    @PostMapping()
+    @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "팀스페이스 생성", notes = "<strong>팀스페이스 이름, 시작일, 종료일, 팀스페이스 설명, 썸네일을</strong>를 통해 팀스페이스를 생성한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -41,14 +45,15 @@ public class TeamspaceController {
     })
     public ResponseEntity<? extends BaseResponseBody> register(
             @RequestBody @ApiParam(value="팀스페이스 생성 정보", required = true) TeamspaceRegisterPostReq registerInfo,
-            @ApiIgnore Authentication authentication) {
+            @ApiIgnore Authentication authentication,
+            @RequestPart(required = false) MultipartFile teamspacePicture) {
 
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
 
-        Teamspace teamspace = teamspaceService.createTeamspace(registerInfo, user.getUserIdx());
+        Teamspace teamspace = teamspaceService.createTeamspace(registerInfo, user.getUserIdx(), teamspacePicture);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
