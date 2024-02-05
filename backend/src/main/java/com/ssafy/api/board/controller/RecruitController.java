@@ -1,6 +1,7 @@
 package com.ssafy.api.board.controller;
 
 import com.ssafy.api.board.request.*;
+import com.ssafy.api.board.response.BoardRecruitListRes;
 import com.ssafy.api.board.response.BoardRecruitRes;
 import com.ssafy.api.board.response.BoardRes;
 import com.ssafy.api.board.service.BoardService;
@@ -39,7 +40,7 @@ public class RecruitController {
 
     @GetMapping("")
     @ApiOperation(value = "구인글 리스트 조회", notes = "<string>페이지번호(page), 페이지당 글 수(size), 검색어(word), 정렬조건(sortKey) </string>에 따라 게시글을 조회한다.")
-    public ResponseEntity<List<BoardRecruitRes>> getBoardList(
+    public ResponseEntity<BoardRecruitListRes> getBoardList(
             @ApiParam(value = "페이지 번호 (1부터 시작)", example = "1") @RequestParam int page,
             @ApiParam(value = "페이지당 글 수", example = "10") @RequestParam int size,
             @ApiParam(value = "검색어", example = "검색내용") @RequestParam(required = false) String word,
@@ -61,7 +62,8 @@ public class RecruitController {
             res.add(BoardRecruitRes.of(board.getBoardIdx(), board, positions, boardService.getBoardLikeNum(board.getBoardIdx().getBoardIdx())));
         }
 
-        return ResponseEntity.status(200).body(res);
+
+        return ResponseEntity.status(200).body(BoardRecruitListRes.of(res, recruitService.getBoardTotalCount()));
     }
 
     @PostMapping("")
@@ -73,13 +75,14 @@ public class RecruitController {
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
 
+        BoardRecruit boardRecruit;
         try{
-            recruitService.registBoard(registInfo, user);
+            boardRecruit = recruitService.registBoard(registInfo, user);
         } catch (Exception e) {
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "not found"));
         }
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, boardRecruit.getBoardRecruitIdx() + ""));
     }
 
     @PutMapping("/{recruitid}")
@@ -119,6 +122,6 @@ public class RecruitController {
         } catch (Exception e) {
             return ResponseEntity.status(400).body(null);
         }
-
     }
+
 }

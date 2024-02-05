@@ -1,7 +1,6 @@
 // 스토어를 만들어야 합니다. 괴도 ㅇㅂㅇ
 
 import axios from "axios";
-import { redirect } from "react-router-dom";
 import { create } from "zustand";
 
 const useStore = create(set => ({
@@ -9,6 +8,9 @@ const useStore = create(set => ({
   setIsLogined : (logined) => set({ islogined: logined}),
   user : null,
   fetchUser: async () => {
+    if (!localStorage.accessToken) {
+      console.log('로그인되지 않음')
+      return}
     try {
       const response = await axios.get(`http://localhost:8080/api/v1/users/myinfo`,{
         headers : {
@@ -23,7 +25,6 @@ const useStore = create(set => ({
   },
 
   logout : async () => {
-  
     try {
       await axios.get('http://localhost:8080/api/v1/auth/logout', {
         headers : {

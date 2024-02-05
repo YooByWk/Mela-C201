@@ -1,7 +1,5 @@
 import axios from "axios";
 
-let ACCESS_TOKEN = localStorage.getItem("accessToken");
-
 /** CREATE CUSTOM AXIOS INSTANCE */
 export const AuthApi = axios.create({
     baseURL: 'http://localhost:8080/api/v1',
@@ -17,7 +15,6 @@ export const signin = async ({
     }
 
     const response = await AuthApi.post(`/auth/login`, data)
-
     return response.data
 }
 
@@ -58,10 +55,10 @@ export const logout = async () => {
 }
 
 // 이메일 인증 전송
-export const email = async (emailId) => {
-    const data = { emailId }
+export const email = async ({emailId}) => {
+    console.log(emailId)
+    const data = {emailId}
     const response = await AuthApi.post(`/auth/email`, data)
-
     return response.data
 }
 
@@ -69,5 +66,13 @@ export const email = async (emailId) => {
 export const verify = async (accessToken) => {
     const response = await AuthApi.get(`/auth/verify?token=${accessToken}`)
     console.log(response.data)
+    return response.data
+}
+
+// 비밀번호 변경 링크 이메일 전송
+export const changePassword = async ({emailId}) => {
+    console.log(emailId)
+    const data = {emailId}
+    const response = await AuthApi.post(`/users/email`, data)
     return response.data
 }

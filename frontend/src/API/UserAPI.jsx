@@ -63,8 +63,17 @@ export const followUser = async (userId) => {
 }
 
 // 이메일 중복 확인
-export const emailCheck = async (userId) => {
-    const response = await UserApi.get(`/api/v1/users/emailId/${userId}`)
-    console.log(response.data)
+export const emailCheck = async ({emailId}) => {
+    console.log(emailId)
+    const response = await axios.get(`http://localhost:8080/api/v1/users/emailid/${emailId}`)
+    console.log(response)
+    
+    return response.data
+}
+
+// 새로운 비밀번호 설정(잃어버렸을 때)
+export const newPassword = async (data) => {
+    const response = await UserApi.put(`api/v1/users/users/newpassword`, data)
+    console.log(response)
     return response.data
 }

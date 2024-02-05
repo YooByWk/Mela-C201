@@ -1,11 +1,9 @@
 // 커뮤니티 게시판 메인
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import Sidebar from "../components/Sidebar";
-import { FaSearch } from "react-icons/fa";
-import { BoardList } from "../API/BoardAPI";
-import { Routes, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 const Community = () => {
   //
@@ -39,6 +37,7 @@ const CommunityContainer = styled.div`
   padding-top: 3%;
   justify-content: space-evenly;
   padding-left: 3%;
+  
 `;
 
 const SideDiv = styled.div`
@@ -50,12 +49,21 @@ const MainDiv = styled.div`
   width: 70%;
   background-color: ${(props) => props.theme.colours.point};
   border-radius: 50px;
-  overflow: hidden;
+  overflow-x: hidden;
   padding-top: 1%;
   padding-left: 2%;
   display: flex;
   flex-direction: column;
-
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  a {
+    text-decoration: none;
+    color : rgb(19, 160, 0)
+  }
+  
   .Container {
     margin-top: 5%;
     h1 {

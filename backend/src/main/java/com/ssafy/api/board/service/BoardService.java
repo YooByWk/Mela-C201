@@ -16,12 +16,14 @@ public interface BoardService {
     void deleteBoard(Long boardIdx);
     Board getBoard(Long boardIdx) throws Exception;
     List<Board> getBoardList(BoardGetListReq getListInfo);
+    int getBoardTotalCount();
 
     void registComment(CommentRegisterPostReq registInfo, Board board, User user);
     void deleteComment(Long commentIdx);
     List<Comment> listComment(Long boardIdx);
 
     void likeBoard(Long boardIdx, User user);
+    boolean isLikeBoard(Long boardIdx, Long userIdx);
     void createLikeBoard(Long boardIdx, User user);
     void deleteLikeBoard(Long boardIdx, User user);
     int getBoardLikeNum(Long boardIdx);

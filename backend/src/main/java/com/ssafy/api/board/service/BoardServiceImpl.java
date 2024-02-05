@@ -91,22 +91,19 @@ public class BoardServiceImpl implements BoardService {
         Pageable pageable;
         Page<Board> page;
 
-        //TODO: 좋아요 순 정렬
-        
         // 기본 정렬: 최신순
         Sort sort = (getListInfo.getSortKey() != null)
                 ? Sort.by(Sort.Direction.DESC, getListInfo.getSortKey())
                 : Sort.by(Sort.Direction.DESC, "boardIdx");
 
-        if (getListInfo.getWord() == null) {
-            pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
-            page = boardRepository.findAll(pageable);
-        } else {
-            pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
-            page = boardRepository.findByTitleContainingOrContentContaining(getListInfo.getWord(), getListInfo.getWord(), pageable);
-        }
+        pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
+        page = boardRepository.findByTitleContainingOrContentContaining(getListInfo.getWord(), pageable);
 
         return page.getContent();
+    }
+
+    public int getBoardTotalCount() {
+        return boardRepositorySupport.countByBoards();
     }
 
     @Override
@@ -151,6 +148,17 @@ public class BoardServiceImpl implements BoardService {
         } else {
             createLikeBoard(boardIdx, user);
         }
+    }
+
+    @Override
+    public boolean isLikeBoard(Long boardIdx, Long userIdx) {
+        Optional<BoardLike> boardLike = boardLikeRepository.findByUserIdxAndBoardIdx(userRepository.getOne(userIdx), boardRepository.getOne(boardIdx));
+
+        if (boardLike.isPresent()) {
+            return true;
+        }
+
+        return false;
     }
 
 

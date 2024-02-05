@@ -4,6 +4,16 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssafy.api.user.request.*;
+import com.ssafy.api.board.request.RecruitGetListReq;
+import com.ssafy.api.board.request.RecruitGetMyListReq;
+import com.ssafy.api.board.response.BoardRecruitListRes;
+import com.ssafy.api.board.response.BoardRecruitRes;
+import com.ssafy.api.board.service.BoardService;
+import com.ssafy.api.board.service.RecruitService;
+import com.ssafy.api.user.request.UserFindPasswordPutReq;
+import com.ssafy.api.user.request.UserRegisterPostReq;
+import com.ssafy.api.user.request.UserSendEmailPostReq;
+import com.ssafy.api.user.request.UserUpdatePostReq;
 import com.ssafy.api.user.response.FeedRes;
 import com.ssafy.api.user.response.UserLoginPostRes;
 import com.ssafy.api.user.response.UserRes;
@@ -15,6 +25,7 @@ import com.ssafy.db.entity.Feed;
 import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.PortfolioAbstract;
 import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +54,10 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+	@Autowired
+	BoardService boardService;
+	@Autowired
+	RecruitService recruitService;
 
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드 ...를</strong>를 통해 회원가입 한다.")
@@ -57,7 +72,6 @@ public class UserController {
 
 		//임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
 		User user = userService.createUser(registerInfo);
-		user.setUserType("unauth");
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
@@ -431,5 +445,32 @@ public class UserController {
 
 		return ResponseEntity.status(200).body(portfolioAbstract);
 	}
+	@GetMapping("/recruit")
+	public ResponseEntity<?> getRecruitList(
+			@ApiIgnore Authentication authentication,
+			@ApiParam(value = "페이지 번호 (1부터 시작)", example = "1") @RequestParam int page,
+			@ApiParam(value = "페이지당 글 수", example = "10") @RequestParam int size
+	) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userEmail = userDetails.getUsername();
+		User user = userService.getUserByEmail(userEmail);
+
+		page-=1; // 1부터 시작하도록 함
+
+		RecruitGetMyListReq recruitGetListReq = new RecruitGetMyListReq();
+		recruitGetListReq.setPage(page);
+		recruitGetListReq.setSize(size);
+
+		List<BoardRecruit> recruits = recruitService.getMyBoardList(recruitGetListReq, user);
+		List<BoardRecruitRes> res = new ArrayList<>();
+		for (BoardRecruit board : recruits) {
+			List<Position> positions = recruitService.getPositions(board.getBoardRecruitIdx());
+			res.add(BoardRecruitRes.of(board.getBoardIdx(), board, positions, boardService.getBoardLikeNum(board.getBoardIdx().getBoardIdx())));
+		}
+
+		// 내 글 개수 세기
+		return ResponseEntity.status(200).body(BoardRecruitListRes.of(res, recruitService.getMyBoardTotalCount(user)));
+	}
+
 }
 
