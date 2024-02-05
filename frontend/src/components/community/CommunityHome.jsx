@@ -5,8 +5,15 @@ import { BoardList } from "../../API/BoardAPI";
 import { useNavigate, Link } from "react-router-dom";
 import CoSigninModal from "./CoSigninModal";
 import useStore from "../../status/store";
+import DefaultButton from '../DefaultButton';
+import { GoDotFill } from "react-icons/go";
+import moment from 'moment'
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
+
 
 function CommunityHome() {
+  const [sortType, setSortType] = useState('')
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState(null);
   const [boardInput, setBoardInput] = useState('');
@@ -18,7 +25,7 @@ function CommunityHome() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await BoardList({ page: currentPage, size: 20 });
+      const response = await BoardList({ page: currentPage, size: 10 });
       // console.log(response, 'fetch log')
       setData(response.data.boardResList);
       setTotalPageCount(response.data.totalPageCount);
@@ -37,19 +44,22 @@ function CommunityHome() {
   }
 
   const ViewSorted = async () => {
-    const response = await BoardList({ page: 1, size: 20, sortKey: "viewNum", word :boardInput? boardInput : '' });
+    setSortType('view')
+    const response = await BoardList({ page: 1, size: 10, sortKey: "viewNum", word :boardInput? boardInput : '' });
     setData(response.data.boardResList);
   };
 
   const LikeSorted = async () => {
-    const response = await BoardList({ page: 1, size: 20, word : boardInput? boardInput : '', });
+    setSortType('like')
+    const response = await BoardList({ page: 1, size: 10, word : boardInput? boardInput : '', });
     const sortedData = response.data.boardResList.sort((a, b) => b.likeNum - a.likeNum); 
     setData(sortedData);
     console.log('sortedData: ', sortedData);
   };
 
   const LastedSorted = async () => {
-    const response = await BoardList({ page: 1, size: 20, word :boardInput? boardInput : '' });
+    setSortType('latest')
+    const response = await BoardList({ page: 1, size: 10, word :boardInput? boardInput : '' });
     console.log(response.data.boardResList,'boardresData')
     if (response.data.boardResList.length>1) {
       console.log(response.data.length)
@@ -78,7 +88,7 @@ function CommunityHome() {
 
   const SortByKey =  async(event)=> {
     event.preventDefault()
-    const response =  await BoardList({page:1, size:20, word:boardInput})
+    const response =  await BoardList({page:1, size:10, word:boardInput})
     if (response.data.length > 1) {
     setData(response.data)
     console.log(response.data.length) }
@@ -89,7 +99,7 @@ function CommunityHome() {
   }
 
   const pages = [];
-  for (let i = 1; i <= Math.ceil(totalPageCount/20); i++) {
+  for (let i = 1; i <= Math.ceil(totalPageCount/10); i++) {
     pages.push(
       <button
         onClick={() => setCurrentPage(i)}
@@ -117,38 +127,80 @@ function CommunityHome() {
             </form>
           </span>
           <div>
-            <button onClick={LastedSorted}>최신순</button>
-            <button onClick={ViewSorted}>조회수순</button>
-            <button onClick={LikeSorted}>좋아요순</button>
+            <button onClick={LastedSorted} className={`sort-btn ${sortType === "latest" ? "active-sort" : ""}`}>
+              <GoDotFill />
+              최신순
+            </button>
+            <button onClick={ViewSorted} className={`sort-btn ${sortType === "view" ? "active-sort" : ""}`}>
+              <GoDotFill />
+              조회수순
+            </button>
+            <button onClick={LikeSorted} className={`sort-btn ${sortType === "like" ? "active-sort" : ""}`}>
+              <GoDotFill />
+              인기순
+            </button>
           </div>
         </div>
-        <p>여기에 이제 글 쓰십시오.</p>
-        <ul>
-          {data && data.length > 0 ?(
-            data.map((article) => {
-              return (
-                <li key={article.boardIdx}>
-                  {article.boardIdx}
-                  || 제목 : <Link to={`/community/${article.boardIdx}`}>{article.title} </Link>
-                  || 작성자 : {article.nickname}
-                  || 조회수 : {article.viewNum}
-                  || 좋아요 : {article.likeNum}
-                </li>
-              );
-            }) )
-            : (
-              <p>게시글이 없습니다.</p>
-            ) 
-            }
-        </ul>
+        <div className="header">
+          <span>NO</span>
+          <span>제목</span>
+          <span>작성자</span>
+          <span>날짜</span>
+          <span>조회수</span>
+        </div>
+        <div className="listWrapper">
+          <ul className="content">
+            {data && data.length > 0 ?(
+              data.map((article) => {
+                return (
+                  <li key={article.boardIdx} className="list">
+                    <div>
+                      {article.boardIdx}
+                    </div>
+                    <div>
+                      <Link to={`/community/${article.boardIdx}`}>
+                        {article.title.length < 20
+                          ? article.title
+                          : article.title.slice(0, 18) + '...'}
+                      </Link>
+                    </div>
+                    <div>
+                      {article.nickname}
+                    </div>
+                    <div>
+                      {moment(article.registDate).format('YY-MM-DD')}
+                    </div>
+                    <div>
+                      {article.viewNum}
+                    </div>
+                  </li>
+                );
+              }) )
+              : (
+                <p>게시글이 없습니다.</p>
+              ) 
+              }
+              
+          </ul>
+        </div>
 <br />
-<br />
-<br />
-<br />
-        <button onClick={Create}>작성</button>
+        <div className="buttonWrapper">
+          <DefaultButton
+            onClick={Create}
+            text='글쓰기'
+            width='4rem'
+            height='2rem'
+          />
+        </div>
       </div>
-      <button onClick={PrevPage} disabled={currentPage === 1}>이전 페이지</button>
-        <button onClick={NextPage}>다음 페이지</button>
+      <div className="footer">
+        <div className="page-btn" onClick={PrevPage} disabled={currentPage === 1}> 
+          <IoIosArrowBack />
+        </div>
+        <div className="page-btn" onClick={NextPage}>
+          <IoIosArrowForward />
+        </div>
+      </div>
     </MainDiv>
     {showLoginModal && <CoSigninModal open={open} setOpen={setOpen} />}
     </>
@@ -161,10 +213,97 @@ export default CommunityHome;
 const MainDiv = styled.div`
   a {
     text-decoration: none;
-    color : rgb(19, 160, 0)
+    color: white;
   }
+
+  .header {
+    display: flex;
+    background-color: #1e40c6;
+    justify-content: space-between;
+    height: 2rem;
+    border-radius: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .listWrapper {
+    background-color: #202C44;
+    border-radius: 10px;
+    height: 100%;
+    min-height: 2.5rem;
+    align-items: center;
+    display: flex;
+  }
+
+  .list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #254EF8;
+    text-align: center;
+  }
+
+  .list:last-child {
+    border-bottom: none;
+  }
+
+  .header span {
+    flex: 1;
+    text-align: center;
+  }
+
+  .header span:nth-child(1), .list div:nth-child(1) { flex: 0.5; } /* NO */
+  .header span:nth-child(2), .list div:nth-child(2) { flex: 3; } /* 제목 */
+  .header span:nth-child(3), .list div:nth-child(3) { flex: 1; } /* 작성자 */
+  .header span:nth-child(4), .list div:nth-child(4) { flex: 1; } /* 날짜 */
+  .header span:nth-child(5), .list div:nth-child(5) { flex: 1; } /* 조회수 */
+
+
+  .sort-btn {
+    color: #6C7383;
+    background-color: #151C2C;
+    border: none;
+    cursor: pointer;
+  }
+
+  .sort-btn.active-sort {
+    color: #254EF8;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+  }
+  
+  .buttonWrapper {
+    position: absolute;
+    right: 20px;
+  }
+
+  .page-btn {
+    background-color: #202C44;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .footer {
+    display: flex;
+  }
+
   .Container {
     margin-top: 5%;
+    padding: 10px;
+    margin-right: 15px;
+    position: relative;
+
     h1 {
       margin-bottom: 3vh;
     }

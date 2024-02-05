@@ -3,6 +3,7 @@ import styled from "styled-components"
 import TeamspaceMemberCard from "./TeamspaceMemberCard"
 import { TeamspaceInfo,TeamspaceMember } from "../../API/TeamspaceAPI"
 import { useParams } from "react-router-dom"
+import TeamspaceVideo from "./TeamspaceVideo"
 
 const H1 = styled.h1`
     color: white;
@@ -57,6 +58,7 @@ function TeamspaceTeam () {
             position={member.position}
         />
         ))}
+        <TeamspaceVideo />
         </>
     )
 }
