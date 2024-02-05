@@ -85,7 +85,7 @@ public class UserController {
 		return ResponseEntity.status(200).body(UserRes.of(user));
 	}
 
-	@PutMapping("/myinfo")
+	@PutMapping(value = "/myinfo", consumes = MULTIPART_FORM_DATA_VALUE)
 	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인한 회원 본인의 정보를 수정한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -95,37 +95,12 @@ public class UserController {
 	})
 	public ResponseEntity<? extends BaseResponseBody> updateUser(
 			@ApiIgnore Authentication authentication,
-			@RequestBody @ApiParam(value="회원정보 수정 정보", required = true) UserUpdatePostReq userUpdateInfo){
-		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-
-
-		String userEmail = userDetails.getUsername();
-		User user = userService.getUserByEmail(userEmail);
-
-		userService.updateUser(user, userUpdateInfo);
-
-		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-	}
-
-	@PutMapping(value = "/myinfo1", consumes = MULTIPART_FORM_DATA_VALUE)
-	@ApiOperation(value = "회원 본인 정보 수정1", notes = "로그인한 회원 본인의 정보를 수정한다.")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "성공"),
-			@ApiResponse(code = 401, message = "인증 실패"),
-			@ApiResponse(code = 404, message = "사용자 없음"),
-			@ApiResponse(code = 500, message = "서버 오류")
-	})
-	public ResponseEntity<? extends BaseResponseBody> updateUser1(
-			@ApiIgnore Authentication authentication,
-			//문제 생기면 @ApiParam value 빼보기
-//			@RequestPart @ApiParam(value="회원정보 수정 정보1", required = false) UserUpdatePostReq userUpdateInfo,
-//			@RequestPart @ApiParam(value="회원 포트폴리오 수정 정보1", required = false) PortfolioAbstractPostReq portfolioAbstractPostReq,
 			@RequestPart(required = false) @ApiParam(value="회원정보 수정 정보1") UserUpdatePostReq userUpdateInfo,
 			@RequestPart(required = false) @ApiParam(value="회원 포트폴리오 수정 정보1") PortfolioAbstractPostReq portfolioAbstractPostReq,
 			@RequestPart(required = false) MultipartFile portfolioPicture) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 
-		userService.updateUser1(userDetails.getUser(), userUpdateInfo, portfolioAbstractPostReq, portfolioPicture);
+		userService.updateUser(userDetails.getUser(), userUpdateInfo, portfolioAbstractPostReq, portfolioPicture);
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}

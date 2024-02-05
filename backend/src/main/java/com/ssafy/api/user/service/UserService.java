@@ -28,13 +28,7 @@ public interface UserService {
 
 	void logoutSaveJwt(String userId);
 
-	User updateUser(User user, UserUpdatePostReq userUpdateInfo);
-
-//	PortfolioAbstract createUserPortfolioAbstract(User user, PortfolioAbstractPostReq portfolioAbstractPostReq);
-	PortfolioAbstract createUserPortfolioAbstract(PortfolioAbstractPostReq portfolioAbstractPostReq);
-
-//	void updateUser1(User user, UserUpdatePostReq userUpdateInfo, PortfolioAbstractPostReq portfolioAbstractPostReq, MultipartFile portfolioPicture);
-	void updateUser1(User user, UserUpdatePostReq userUpdateInfo, PortfolioAbstractPostReq portfolioAbstractPostReq, MultipartFile portfolioPicture);
+	void updateUser(User user, UserUpdatePostReq userUpdateInfo, PortfolioAbstractPostReq portfolioAbstractPostReq, MultipartFile portfolioPicture);
 
 	void deleteUser(User user);
 
