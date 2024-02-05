@@ -3,6 +3,7 @@ package com.ssafy.api.user.controller;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.ssafy.api.user.request.*;
 import com.ssafy.api.board.request.RecruitGetListReq;
 import com.ssafy.api.board.request.RecruitGetMyListReq;
 import com.ssafy.api.board.response.BoardRecruitListRes;
@@ -20,6 +21,10 @@ import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
+import com.ssafy.db.entity.Feed;
+import com.ssafy.db.entity.Notification;
+import com.ssafy.db.entity.PortfolioAbstract;
+import com.ssafy.db.entity.User;
 import com.ssafy.db.entity.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.mail.MessagingException;
@@ -34,6 +40,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -80,6 +88,8 @@ public class UserController {
 		/**
 		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
 		 * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
+		 *
+		 * Swagger UI에서 테스트 해보니 500 Error 뜨네요 (java.lang.NullPointerException: null) 발생 원인: SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		 */
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 
@@ -89,7 +99,7 @@ public class UserController {
 		return ResponseEntity.status(200).body(UserRes.of(user));
 	}
 
-	@PutMapping("/myinfo")
+	@PutMapping(value = "/myinfo", consumes = MULTIPART_FORM_DATA_VALUE)
 	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인한 회원 본인의 정보를 수정한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -99,14 +109,12 @@ public class UserController {
 	})
 	public ResponseEntity<? extends BaseResponseBody> updateUser(
 			@ApiIgnore Authentication authentication,
-			@RequestBody @ApiParam(value="회원정보 수정 정보", required = true) UserUpdatePostReq userUpdateInfo){
+			@RequestPart(required = false) @ApiParam(value="회원정보 수정 정보1") UserUpdatePostReq userUpdateInfo,
+			@RequestPart(required = false) @ApiParam(value="회원 포트폴리오 수정 정보1") PortfolioAbstractPostReq portfolioAbstractPostReq,
+			@RequestPart(required = false) MultipartFile portfolioPicture) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 
-
-		String userEmail = userDetails.getUsername();
-		User user = userService.getUserByEmail(userEmail);
-
-		userService.updateUser(user, userUpdateInfo);
+		userService.updateUser(userDetails.getUser(), userUpdateInfo, portfolioAbstractPostReq, portfolioPicture);
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
@@ -402,6 +410,41 @@ public class UserController {
 		return ResponseEntity.status(200).body(res);
 	}
 
+	//TODO: 테스트 필요!
+	@GetMapping("/{userid}/portfolio")
+	@ApiOperation(value = "포트폴리오 조회", notes = "포트폴리오 정보를 응답한다. (타인의 포트폴리오 조회 가능)")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			//@ApiResponse(code = 401, message = "인증 실패"),	//로그인하지 않고 포트폴리오 조회 요청 시 응답
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<?> browsePortfolioAbstract(@ApiIgnore Authentication authentication, @PathVariable(name = "userid") String userid) {
+//	public ResponseEntity<? extends BaseResponseBody> browsePortfolioAbstract(@ApiIgnore Authentication authentication, @PathVariable(name = "userid") String userid) {
+		/**
+		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
+		 * 액세스 토큰이 없이 요청하는 경우, 401 에러 발생.
+		 */
+
+		//FIXME: 로그인이 필요한 기능이라면 토큰 확인 절차 주석 풀기
+		/*
+		SsafyUserDetails userDetails = null;
+
+		try {
+			userDetails = (SsafyUserDetails) authentication.getDetails();
+		} catch(NullPointerException e) {
+			e.printStackTrace();
+
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Authentication failed!"));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		*/
+
+		PortfolioAbstract portfolioAbstract = userService.browsePortfolioAbstract(userid);
+
+		return ResponseEntity.status(200).body(portfolioAbstract);
+	}
 	@GetMapping("/recruit")
 	public ResponseEntity<?> getRecruitList(
 			@ApiIgnore Authentication authentication,
