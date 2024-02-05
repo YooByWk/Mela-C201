@@ -159,7 +159,7 @@ public class FileServiceImpl implements FileService {
             }
         }
 
-        portfolioMusic.setTitle(portfolioMusic.getTitle());
+        portfolioMusic.setTitle(portfolioMusicPostReq.getTitle());
         portfolioMusic.setPinFixed(portfolioMusicPostReq.isPinFixed());
         portfolioService.addPortfolioMusic(portfolioMusic);                                          //3. Service 구현체를 통해 포트폴리오 음악 추가
 

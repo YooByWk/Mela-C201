@@ -6,6 +6,7 @@ import { FaFileUpload } from "react-icons/fa";
 import { Dialog, DialogHeader, DialogBody } from '@material-tailwind/react'
 import { musicUpload } from '../API/PortfolioAPI'
 import defaultimage from '../assets/images/default-image.png'
+import { Link } from "react-router-dom";
 
 const CloseButton = styled.button`
     background: none;
@@ -84,10 +85,12 @@ const CustomBody = styled(DialogBody)`
 
 function PortfolioAdd() {
     const [open, setOpen] = useState(false)
-    const [file, setFile] = useState([defaultimage])
     const [pinFixed, setPinFixed] = useState(false)
-    const [fileDescription, setFileDescription] = useState('')
+    // const [fileDescription, setFileDescription] = useState('')
     const [title, setTitle] = useState('')
+    const [imgFile, setImgFile] = useState(defaultimage)
+    const [musicFile, setMusicFile] = useState()
+    const [lyricFile, setLyricFile] = useState()
 
     // 음원 제목
     const handleTitle = (e) => {
@@ -96,17 +99,17 @@ function PortfolioAdd() {
     }
 
     // 음원 설명
-    const handleDescription = (e) => {
-        e.preventDefault()
-        setFileDescription(e.target.value)
-    }
+    // const handleDescription = (e) => {
+    //     e.preventDefault()
+    //     setFileDescription(e.target.value)
+    // }
 
     // 앨범 커버 (jpg, jpeg, png)
     const handleImgFile = (e) => {
         e.preventDefault()
         
         if (e.target.files[0]) {
-            setFile(e.target.files[0])
+            setImgFile(e.target.files[0])
         }
     }
    
@@ -114,8 +117,8 @@ function PortfolioAdd() {
     const handleMusicFile = (e) => {
         e.preventDefault()
 
-        if (e.target.files[1]) {
-            setFile.push(e.target.files[1])
+        if (e.target.files[0]) {
+            setMusicFile(e.target.files[0])
         }
     }
 
@@ -123,8 +126,8 @@ function PortfolioAdd() {
     const handleLyricFile = (e) => {
         e.preventDefault()
 
-        if (e.target.files[2]) {
-            setFile(e.target.files[2])
+        if (e.target.files[0]) {
+            setLyricFile(e.target.files[0])
         }
     }
 
@@ -140,30 +143,36 @@ function PortfolioAdd() {
     const handleUpload = async (e) => {
         e.preventDefault()
         
-        if (!file) {
-            alert('파일을 선택해주세요')
+        if ( musicFile === '' ) {
+            alert('음원파일을 선택해주세요')
             return
         }
 
         const formData = new FormData()
         const body = JSON.stringify({
             pinFixed: pinFixed,
-            fileDescription: fileDescription,
+            // fileDescription: fileDescription,
             title: title
         })
+
         formData.append('portfolioMusicPostReq', body)
-        // formData.append('file', file)
-        for (let i = 0; i < file.length; i++) {
-            formData.append('file', file[i]);
-        }
+        formData.append('file', imgFile)
+        formData.append('file', musicFile)
+        formData.append('file', lyricFile)
 
         for (let key of formData.keys()) {
             console.log(key, ":", formData.get(key));
         }
 
         try {
-            musicUpload(formData)
+            await musicUpload(formData)
             alert('업로드가 완료되었습니다.')
+            setTitle('')
+            setPinFixed(false)
+            setImgFile(defaultimage)
+            setMusicFile('')
+            setLyricFile('')
+            setOpen(!open)
         } catch (err) {
             console.error(err)
         }
@@ -190,21 +199,21 @@ function PortfolioAdd() {
                     <label className='label'>Title</label>
                     <input type='text' className='input' placeholder='제목' onChange={handleTitle} />
                 </div>
-                <div className='inputWrapper'>
+                {/* <div className='inputWrapper'>
                     <label className='label'>Content</label>
                     <input type='text' className='input' placeholder='설명' onChange={handleDescription} />
-                </div>
+                </div> */}
                 <div className='inputWrapper'>
                     <label className='label'>앨범 커버 (jpg, jpeg, png)</label>
-                    <input type='file' className='input' onChange={handleImgFile} />
+                    <input type='file' className='input' onChange={handleImgFile} multiple="multiple" />
                 </div>
                 <div className='inputWrapper'>
                     <label className='label'>음원 (mp3, flac)</label>
-                    <input type='file' className='input' onChange={handleMusicFile} />
+                    <input type='file' className='input' onChange={handleMusicFile} multiple="multiple" />
                 </div>
                 <div className='inputWrapper'>
                     <label className='label'>가사 (txt, xml)</label>
-                    <input type='file' className='input' onChange={handleLyricFile} />
+                    <input type='file' className='input' onChange={handleLyricFile} multiple="multiple" />
                 </div>
                 <div className='inputWrapper'>
                     <label className='label'>pin고정</label>
@@ -213,9 +222,11 @@ function PortfolioAdd() {
                     {/* <FaFileUpload size={80}/> */}
                 </CustomBody>
                 <br/>
+                <Link to='/musics'>
                 <button onClick={handleUpload}>
                     업로드
                 </button>
+            </Link>
             </CustomDialog>
         </>
     )
