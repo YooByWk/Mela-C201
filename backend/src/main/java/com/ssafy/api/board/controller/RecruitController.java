@@ -122,6 +122,6 @@ public class RecruitController {
         } catch (Exception e) {
             return ResponseEntity.status(400).body(null);
         }
-
     }
+
 }

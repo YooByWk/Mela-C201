@@ -76,7 +76,7 @@ export const BoardUpdate = async ({ boardIdx, title, content }) => {
 export const BoardDelete = async ({boardIdx}) => {
   const response = await BoardAPI.delete(`/${boardIdx}`,{
     headers : {
-      'Authorization' : `Baerer ${localStorage.accessToken}`
+      'Authorization' : `Bearer ${localStorage.accessToken}`
     }
   })
   return response

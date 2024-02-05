@@ -152,6 +152,24 @@ public class RecruitServiceImpl implements RecruitService {
     }
 
     @Override
+    public List<BoardRecruit> getMyBoardList(RecruitGetMyListReq getListInfo, User user) {
+        Pageable pageable;
+        Page<BoardRecruit> page;
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "boardIdx");
+
+        pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
+        page = recruitRepository.findByUserIdx(user, pageable);
+
+        return page.getContent();
+    }
+
+    @Override
+    public int getMyBoardTotalCount(User user) {
+        return recruitRepositorySupport.countByMyRecruitBoards(user);
+    }
+
+    @Override
     public int getBoardTotalCount() {
         return (int) recruitRepository.count();
     }
