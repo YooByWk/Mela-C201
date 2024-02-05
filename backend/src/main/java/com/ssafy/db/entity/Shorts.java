@@ -19,7 +19,7 @@ public class Shorts {
 
 
     @ManyToOne
-    @JoinColumn(name="user_idx", referencedColumnName="userIdx")
+    @JoinColumn(name = "user_idx", referencedColumnName = "userIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     User userIdx;

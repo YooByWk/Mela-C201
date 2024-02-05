@@ -3,9 +3,14 @@ package com.ssafy.api.shorts.controller;
 import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.shorts.request.ShortsPostReq;
 import com.ssafy.api.shorts.service.ShortsService;
+import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.Shorts;
+import com.ssafy.db.entity.ShortsLike;
+import com.ssafy.db.entity.User;
+import com.ssafy.db.repository.NotificationRepository;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +31,11 @@ public class ShortsController {
 
     @Autowired
     ShortsService shortsService;
+
+    @Autowired
+    UserService userService;
+
+
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "쇼츠 동영상 등록", notes = "쇼츠 동영상을 등록한다.")
@@ -83,5 +93,43 @@ public class ShortsController {
         } else {
             return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
         }
+    }
+
+    @PostMapping("/{shortsid}/like")
+    @ApiOperation(value = "쇼츠 동영상 좋아요", notes = "쇼츠 동영상을 좋아요 표시한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> likeShorts (
+            @ApiIgnore Authentication authentication,
+            @PathVariable(name = "shortsid") Long shortsid)
+    {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userEmail = userDetails.getUsername();
+        User user = userService.getUserByEmail(userEmail);
+        shortsService.setShortsLike(user, shortsid);
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    @PostMapping("/{shortsid}/dislike")
+    @ApiOperation(value = "쇼츠 동영상 싫어요", notes = "쇼츠 동영상을 싫어요 표시한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> dislikeShorts (
+            @ApiIgnore Authentication authentication,
+            @PathVariable(name = "shortsid") Long shortsid)
+    {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userEmail = userDetails.getUsername();
+        User user = userService.getUserByEmail(userEmail);
+        shortsService.setShortsDislike(user, shortsid);
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 }

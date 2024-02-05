@@ -2,12 +2,17 @@ package com.ssafy.api.shorts.service;
 
 import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.shorts.request.ShortsPostReq;
-import com.ssafy.db.entity.Shorts;
+import com.ssafy.db.entity.*;
+import com.ssafy.db.repository.NotificationRepository;
+import com.ssafy.db.repository.ShortsDislikeRepository;
+import com.ssafy.db.repository.ShortsLikeRepository;
 import com.ssafy.db.repository.ShortsRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
 
 @Service("shortsService")
 public class ShortsServiceImpl implements  ShortsService {
@@ -16,6 +21,14 @@ public class ShortsServiceImpl implements  ShortsService {
 
     @Autowired
     ShortsRepository shortsRepository;
+
+    @Autowired
+    ShortsLikeRepository shortsLikeRepository;
+
+    @Autowired
+    ShortsDislikeRepository shortsDislikeRepository;
+    @Autowired
+    NotificationRepository notificationRepository;
 
     //지원하는 동영상 확장자 ArrayList
     String[] supportedVideoExtension = {"MKV", "MP4", "AVI"};
@@ -58,5 +71,32 @@ public class ShortsServiceImpl implements  ShortsService {
     @Override
     public com.ssafy.db.entity.File getFileInstanceByShortsIdx(Long shortsIdx) {
         return shortsRepository.findByShortsIdx(shortsIdx).get().getShortsPathFileIdx();
+    }
+
+    @Override
+    public void setShortsLike(User user, Long shortsId) {
+        Shorts shorts = shortsRepository.getOne(shortsId);
+        ShortsLike shortsLike = new ShortsLike();
+        shortsLike.setUserIdx(user);
+        shortsLike.setShortsIdx(shorts);
+        shortsLikeRepository.save(shortsLike);
+
+        User getAlarmUser = shortsRepository.findByShortsIdx(shortsId).get().getUserIdx();
+
+        Notification notification = new Notification();
+        notification.setUserIdx(getAlarmUser);    //알람을 받을 사용자; User 객체 타입
+        notification.setAlarmContent(getAlarmUser.getNickname()+"님이 당신의 쇼츠 "+ shorts.getComment() +" 에 좋아요를 눌렀습니다.");
+        notification.setChecked(false);
+        notification.setAlarmDate(LocalDateTime.now());
+        notificationRepository.save(notification);
+    }
+
+    @Override
+    public void setShortsDislike(User user, Long shortsId) {
+        Shorts shorts = shortsRepository.getOne(shortsId);
+        ShortsDislike shortsDislike = new ShortsDislike();
+        shortsDislike.setUserIdx(user);
+        shortsDislike.setShortsIdx(shorts);
+        shortsDislikeRepository.save(shortsDislike);
     }
 }
