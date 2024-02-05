@@ -17,8 +17,8 @@ public class ShortsServiceImpl implements  ShortsService {
     @Autowired
     ShortsRepository shortsRepository;
 
-    //지원하는 동영상 확장자 ArrayList
-    String[] supportedVideoExtension = {"MKV", "MP4", "AVI"};
+    //지원하는 동영상 확장자 배열
+    private String[] supportedVideoExtension = {"MKV", "MP4", "AVI"};
 
     boolean isValidVideoExtension(String extension) {
         for(String s : supportedVideoExtension) {

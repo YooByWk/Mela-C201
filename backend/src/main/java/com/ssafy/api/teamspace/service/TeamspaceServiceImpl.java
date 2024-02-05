@@ -15,6 +15,7 @@ import com.ssafy.db.entity.TeamspaceMember;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.*;
 import lombok.extern.java.Log;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,15 +60,49 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     @Autowired
     FileService fileService;
 
+    //지원하는 동영상 확장자 배열
+    private String[] supportedImageExtensions = {"png", "jpg", "jpeg"};
+
+    boolean isValidImageExtension(String extension) {
+        for(String s : supportedImageExtensions) {
+            if(extension.equals(s.toUpperCase()) || extension.equals(s.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
-    public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx, MultipartFile teamspacePicture) {
+    public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx, MultipartFile teamspacePicture, MultipartFile teamspaceBackgroundPicture) {
         // 팀 스페이스 썸네일 저장
         // 팀 스페이스 썸네일 사진 파일 idx 얻기
         // ...
         System.out.println("파일: " +  registerInfo.getTeamspace_picture_file_idx());
 
-        //팀 스페이스 썸네일 저장
-        com.ssafy.db.entity.File file = fileService.saveFile(teamspacePicture, "");
+        com.ssafy.db.entity.File teamspacePictureRecord = null;
+        com.ssafy.db.entity.File teamspaceBackgroundPictureRecord = null;
+
+        //팀 스페이스 메인 이미지 저장
+        if(teamspacePicture != null) {
+            //클라이언트가 업로드한 파일의 확장자 추출
+            String extension = FilenameUtils.getExtension(teamspacePicture.getOriginalFilename());
+
+            if(isValidImageExtension(extension)) {
+                teamspacePictureRecord = fileService.saveFile(teamspacePicture, "");
+                teamspacePictureRecord = fileService.addTableRecord(teamspacePictureRecord);
+            }
+        }
+
+        //팀 스페이스 배경 이미지 저장
+        if(teamspaceBackgroundPicture != null) {
+            //클라이언트가 업로드한 파일의 확장자 추출
+            String extension = FilenameUtils.getExtension(teamspaceBackgroundPicture.getOriginalFilename());
+
+            if(isValidImageExtension(extension)) {
+                teamspaceBackgroundPictureRecord = fileService.saveFile(teamspaceBackgroundPicture, "");
+                teamspaceBackgroundPictureRecord = fileService.addTableRecord(teamspaceBackgroundPictureRecord);
+            }
+        }
 
         // 팀 스페이스 생성
         Teamspace teamspace = new Teamspace();
@@ -76,8 +111,9 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         teamspace.setEndDate(registerInfo.getEndDate());
         teamspace.setHost(userRepository.getOne(userIdx));
         teamspace.setTeamDescription(registerInfo.getTeamDescription());
+        registerInfo.setTeamspace_picture_file_idx(teamspacePictureRecord);
         teamspace.setTeamspacePictureFileIdx(registerInfo.getTeamspace_picture_file_idx());
-        teamspace.setTeamspacePictureFileIdx(file);
+        teamspace.setTeamspaceBackgroundPictureFileIdx(teamspaceBackgroundPictureRecord);
         teamspaceRepository.save(teamspace);
 
         // host 팀 멤버로 추가

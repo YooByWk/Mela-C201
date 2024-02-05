@@ -15,7 +15,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 public interface TeamspaceService {
-    Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx, MultipartFile teamspacePicture);
+    Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx, MultipartFile teamspacePicture, MultipartFile teamspaceBackgroundPicture);
 
     Teamspace getTeamspaceById(Long id) throws Exception;
 
