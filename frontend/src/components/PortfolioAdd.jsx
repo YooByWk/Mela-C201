@@ -84,7 +84,7 @@ const CustomBody = styled(DialogBody)`
 
 function PortfolioAdd() {
     const [open, setOpen] = useState(false)
-    const [file, setFile] = useState({})
+    const [file, setFile] = useState([defaultimage])
     const [pinFixed, setPinFixed] = useState(false)
     const [fileDescription, setFileDescription] = useState('')
     const [title, setTitle] = useState('')
@@ -108,9 +108,6 @@ function PortfolioAdd() {
         if (e.target.files[0]) {
             setFile(e.target.files[0])
         }
-        else {
-            setFile(defaultimage)
-        }
     }
    
     // 음원 (mp3, flac)
@@ -118,11 +115,11 @@ function PortfolioAdd() {
         e.preventDefault()
 
         if (e.target.files[1]) {
-            setFile(e.target.files[1])
+            setFile.push(e.target.files[1])
         }
     }
 
-    // 가사 (pdf, xml)
+    // 가사 (txt, xml)
     const handleLyricFile = (e) => {
         e.preventDefault()
 
@@ -155,10 +152,10 @@ function PortfolioAdd() {
             title: title
         })
         formData.append('portfolioMusicPostReq', body)
-        formData.append('file', file)
-        // for (let i = 0; i < file.length; i++) {
-        //     formData.append('file', file[i]);
-        // }
+        // formData.append('file', file)
+        for (let i = 0; i < file.length; i++) {
+            formData.append('file', file[i]);
+        }
 
         for (let key of formData.keys()) {
             console.log(key, ":", formData.get(key));
@@ -166,7 +163,7 @@ function PortfolioAdd() {
 
         try {
             musicUpload(formData)
-            alert('업로드 성공~!')
+            alert('업로드가 완료되었습니다.')
         } catch (err) {
             console.error(err)
         }
@@ -206,7 +203,7 @@ function PortfolioAdd() {
                     <input type='file' className='input' onChange={handleMusicFile} />
                 </div>
                 <div className='inputWrapper'>
-                    <label className='label'>가사 (pdf, xml)</label>
+                    <label className='label'>가사 (txt, xml)</label>
                     <input type='file' className='input' onChange={handleLyricFile} />
                 </div>
                 <div className='inputWrapper'>
