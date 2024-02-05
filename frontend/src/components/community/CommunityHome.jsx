@@ -25,7 +25,7 @@ function CommunityHome() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await BoardList({ page: currentPage, size: 20 });
+      const response = await BoardList({ page: currentPage, size: 10 });
       // console.log(response, 'fetch log')
       setData(response.data.boardResList);
       setTotalPageCount(response.data.totalPageCount);
@@ -45,13 +45,13 @@ function CommunityHome() {
 
   const ViewSorted = async () => {
     setSortType('view')
-    const response = await BoardList({ page: 1, size: 20, sortKey: "viewNum", word :boardInput? boardInput : '' });
+    const response = await BoardList({ page: 1, size: 10, sortKey: "viewNum", word :boardInput? boardInput : '' });
     setData(response.data.boardResList);
   };
 
   const LikeSorted = async () => {
     setSortType('like')
-    const response = await BoardList({ page: 1, size: 20, word : boardInput? boardInput : '', });
+    const response = await BoardList({ page: 1, size: 10, word : boardInput? boardInput : '', });
     const sortedData = response.data.boardResList.sort((a, b) => b.likeNum - a.likeNum); 
     setData(sortedData);
     console.log('sortedData: ', sortedData);
@@ -59,7 +59,7 @@ function CommunityHome() {
 
   const LastedSorted = async () => {
     setSortType('latest')
-    const response = await BoardList({ page: 1, size: 20, word :boardInput? boardInput : '' });
+    const response = await BoardList({ page: 1, size: 10, word :boardInput? boardInput : '' });
     console.log(response.data.boardResList,'boardresData')
     if (response.data.boardResList.length>1) {
       console.log(response.data.length)
@@ -88,7 +88,7 @@ function CommunityHome() {
 
   const SortByKey =  async(event)=> {
     event.preventDefault()
-    const response =  await BoardList({page:1, size:20, word:boardInput})
+    const response =  await BoardList({page:1, size:10, word:boardInput})
     if (response.data.length > 1) {
     setData(response.data)
     console.log(response.data.length) }
@@ -99,7 +99,7 @@ function CommunityHome() {
   }
 
   const pages = [];
-  for (let i = 1; i <= Math.ceil(totalPageCount/20); i++) {
+  for (let i = 1; i <= Math.ceil(totalPageCount/10); i++) {
     pages.push(
       <button
         onClick={() => setCurrentPage(i)}
@@ -137,7 +137,7 @@ function CommunityHome() {
             </button>
             <button onClick={LikeSorted} className={`sort-btn ${sortType === "like" ? "active-sort" : ""}`}>
               <GoDotFill />
-              좋아요순
+              인기순
             </button>
           </div>
         </div>
@@ -158,7 +158,11 @@ function CommunityHome() {
                       {article.boardIdx}
                     </div>
                     <div>
-                      <Link to={`/community/${article.boardIdx}`}>{article.title} </Link>
+                      <Link to={`/community/${article.boardIdx}`}>
+                        {article.title.length < 20
+                          ? article.title
+                          : article.title.slice(0, 18) + '...'}
+                      </Link>
                     </div>
                     <div>
                       {article.nickname}
@@ -209,13 +213,13 @@ export default CommunityHome;
 const MainDiv = styled.div`
   a {
     text-decoration: none;
-    color : rgb(19, 160, 0)
+    color: white;
   }
 
   .header {
     display: flex;
     background-color: #1e40c6;
-    justify-content: space-around;
+    justify-content: space-between;
     height: 2rem;
     border-radius: 10px;
     align-items: center;
@@ -226,19 +230,35 @@ const MainDiv = styled.div`
     background-color: #202C44;
     border-radius: 10px;
     height: 100%;
+    min-height: 2.5rem;
+    align-items: center;
+    display: flex;
   }
 
   .list {
     display: flex;
-    justify-content: space-evenly;
     align-items: center;
+    justify-content: space-between;
     padding: 10px 0;
     border-bottom: 1px solid #254EF8;
+    text-align: center;
   }
 
   .list:last-child {
     border-bottom: none;
   }
+
+  .header span {
+    flex: 1;
+    text-align: center;
+  }
+
+  .header span:nth-child(1), .list div:nth-child(1) { flex: 0.5; } /* NO */
+  .header span:nth-child(2), .list div:nth-child(2) { flex: 3; } /* 제목 */
+  .header span:nth-child(3), .list div:nth-child(3) { flex: 1; } /* 작성자 */
+  .header span:nth-child(4), .list div:nth-child(4) { flex: 1; } /* 날짜 */
+  .header span:nth-child(5), .list div:nth-child(5) { flex: 1; } /* 조회수 */
+
 
   .sort-btn {
     color: #6C7383;
@@ -255,6 +275,7 @@ const MainDiv = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    flex: 1;
   }
   
   .buttonWrapper {

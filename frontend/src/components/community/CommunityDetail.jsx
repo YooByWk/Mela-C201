@@ -4,6 +4,14 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import useStore from "../../status/store";
 import { checkBoardLike } from './../../API/BoardAPI';
+import { GoHeart, GoHeartFill, GoBell } from "react-icons/go";
+import { FaRegClock } from "react-icons/fa6";
+import { FaTrashAlt } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
+import { LuEye } from "react-icons/lu";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import profile from '../../assets/images/test.jpg';
+
 
 function CommunityDetail() {
   const [data, setData] = useState(null);
@@ -25,7 +33,6 @@ function CommunityDetail() {
       console.error('댓글 삭제 중 오류 발생:', error);
     }
   }
-
   
   useEffect(() => {
     const detailData = async () => {
@@ -38,12 +45,10 @@ function CommunityDetail() {
     detailData();
   }, []);
 
-
   const hanleUserInput = async (event) => {
     setUserInput(event.target.value);
   };
   
-
   const handleSubmit = async (event) => {
     event.preventDefault(); 
     await CreateComment({ boardIdx, content: userInput });
@@ -53,7 +58,6 @@ function CommunityDetail() {
     setUserInput('')
   };
   
-
   const postDeleteHanlder = async (e) => {
     e.preventDefault()
     const Check = window.confirm('삭제하시겠습니까?')
@@ -61,10 +65,15 @@ function CommunityDetail() {
     Navigate('../')
     } 
   }
+
   const postEditHanlder= (e) => {
     e.preventDefault()
     // console.log()
     Navigate('./edit')
+  }
+
+  const goHome = async () => {
+    Navigate('/community')
   }
 
   let idx, content, nickname, registDate, title, updateDate, userIdx, viewNum, likeNum;
@@ -78,7 +87,7 @@ function CommunityDetail() {
       updateDate,
       userIdx,
       viewNum,
-      likeNum
+      likeNum,
     } = data);
   } 
   useEffect (()=> {
@@ -116,53 +125,103 @@ function CommunityDetail() {
   }
   return (
     <MainDiv>
+      <div className="header">
+        {data && (
+          <>
+          <div className="title">
+            <h1>{title}</h1>
+            <IoMdArrowRoundBack size='30' className="back-btn" onClick={goHome}/>
+          </div>
+          <div>
+            <div className="profile">
+              <img src={profile} alt="" className="image"/>
+              <h3>{nickname}</h3>
+              <div className="info">
+                <div className="registdate">
+                  <FaRegClock className="icon"/>
+                  {registDate}
+                </div>
+                <div className="viewCount">
+                  <LuEye className="icon" size='20' />
+                  {viewNum}
+                </div>
+                <p>
+                  최근 수정 {updateDate}
+                </p>
+              </div>
+            </div>
+          </div>
+          </>
+        )}
+      </div>
       <hr />
-      {isLiked ? <button onClick={BoardLikeHandler}>좋아요</button> :     
-        <button onClick={BoardLikeHandler}> 좋아요 취소</button>
-      }      
-
-      
-      <p>해당 글의 인덱스</p>
       {data && (
-        <>
-          <p>idx : {boardIdx}</p>
-          <p>content : {content}</p>
-          <p>nickname : {nickname}</p>
-          <p>registDate : {registDate}</p>
-          <p>title : {title}</p>
-          <p>updateDate : {updateDate}</p>
-          <p>userIdx : {userIdx}</p>
-          <p>조회수 : {viewNum}</p>
-          <p>좋아요 : {likeNum}</p>
-          {userIdx === currentUserIdx  && (<button onClick={postDeleteHanlder}>삭제</button>)}
-          {userIdx === currentUserIdx  && (<button onClick={postEditHanlder}>수정</button>)}
-        </>
+      <>
+        <div className="content-box">
+          <div className="content">
+            <p>{content}</p>
+          </div>
+          <br />
+          <br />
+          <div className="edit-del">
+            {userIdx === currentUserIdx  && (<span><FaTrashAlt onClick={postDeleteHanlder} className="icon"/>삭제</span>)}
+            {userIdx === currentUserIdx  && (<span><MdEdit onClick={postEditHanlder} className="icon"/>수정</span>)}
+          </div>
+        </div>
+        <span>
+          {likeNum}
+          {isLiked ? <span><GoHeartFill onClick={BoardLikeHandler} className="icon"/>좋아요 취소</span> :     
+            <span><GoHeart onClick={BoardLikeHandler} className="icon"/>좋아요</span>}
+        </span>
+        <div className="comment-title">
+          <GoBell className="icon"/>
+          댓글
+        </div>
+        <hr key='' />
+      </>
       )}
-      <hr key='' />
-      댓글
-      <ul>
-        {comments && comments.length > 0? (
-comments.reverse().map((comment)=> {
-  return (
-    <li key={comment.commentIdx}>
-      작성자 :{comment.nickname} ||
-      내용 : {comment.content}
-      작성일 : {comment.registDate}
-      {comment.userIdx === currentUserIdx &&
-        <button onClick={() => CommentDeleteHandler(comment.commentIdx)}>삭제</button> }
-    </li>
-  )
-})
-        )
-        : (
-          <p>댓글없음</p>
-        )
-        }
-      </ul>
+      <div className="comment-list">
+        <ul>
+          {comments && comments.length > 0? (
+            comments.reverse().map((comment)=> {
+              return (
+                <>
+                <br />
+                  <li key={comment.commentIdx}>
+                    <div>
+                      {comment.nickname}
+                    </div>
+                    <div className="comment-date">
+                      {comment.registDate}
+                    </div>
+                    <div>
+                      {comment.content}
+                      {comment.userIdx === currentUserIdx &&
+                        <FaTrashAlt 
+                          onClick={() => CommentDeleteHandler(comment.commentIdx)}
+                        >
+                          삭제
+                        </FaTrashAlt>
+                      }
+                    </div>
+                    <br />
+                    <hr />
+                  </li>
+                </>
+              )
+            })
+          ) : ( <p>댓글없음</p> )}
+        </ul>
+      </div>
 
-      <form action="" onSubmit={handleSubmit}>
-        <input type="text" name="" id="" onChange={hanleUserInput} value={userInput} />
-        <input type="submit" value="댓글달기" />
+      <form action="" onSubmit={handleSubmit} className="comment">
+        <input type="text" name="" id=""
+          onChange={hanleUserInput}
+          value={userInput}
+          className="input"
+          placeholder="댓글을 입력해주세요"
+        />
+        <input type="submit" value="등 록" className="button"/>
       </form>
     </MainDiv>
   );
@@ -172,5 +231,110 @@ export default CommunityDetail;
 
 const MainDiv = styled.div`
   margin-top: 5%;
+  padding: 1rem;
 
+  .content-box {
+    position: relative;
+  }
+
+  .back-btn {
+    background-color: #6C7383;
+    border-radius: 10px;
+    width: 3rem;
+  }
+
+  .title {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .profile {
+    display: flex;
+  }
+
+  .image {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    margin-right: 1rem;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    
+  }
+
+  .info > p {
+    color: gray;
+  }
+
+  .header {
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content {
+    font-size: large;
+    padding: 2rem 0;
+  }
+
+  .icon {
+    margin-right: 0.5rem;
+  }
+
+  .registdate {
+    display: flex;
+  }
+
+  .viewCount {
+    display: flex;
+  }
+
+  .comment-title {
+    margin-top: 2rem;
+    margin-bottom: 10px;
+  }
+
+  .comment {
+    background-color: #202C44;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    margin-top: 1rem;
+  }
+
+  .comment-date {
+    color: gray;
+  }
+
+  .input {
+    background-color: #202C44;
+    border: none;
+    height: 2.5rem;
+    color: white;
+    flex-grow: 1;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  .button {
+    background-color: #254EF8;
+    border: none;
+    margin-right: 1rem;
+    width: 3.5rem;
+    height: 2rem;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .edit-del {
+    display: flex;
+    flex-direction: column;
+    color: gray;
+  }
 `;
