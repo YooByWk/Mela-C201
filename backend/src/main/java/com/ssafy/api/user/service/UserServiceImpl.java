@@ -1,0 +1,395 @@
+package com.ssafy.api.user.service;
+
+import com.ssafy.api.user.request.UserRegisterPostReq;
+import com.ssafy.api.user.request.UserUpdatePostReq;
+import com.ssafy.common.util.CSVParser;
+import com.ssafy.common.util.JwtTokenUtil;
+import com.ssafy.db.entity.*;
+import com.ssafy.db.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.swing.text.html.Option;
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+
+/**
+ *	유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
+ */
+@Transactional
+@Service("userService")
+public class UserServiceImpl implements UserService {
+	@Autowired
+	UserRepository userRepository;
+	@Autowired
+    UserRepositorySupport userRepositorySupport;
+	@Autowired
+	EmailAuthRepository emailAuthRepository;
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	@Autowired
+	FollowRepository followRepository;
+	@Autowired
+	FollowRepositorySupport followRepositorySupport;
+	@Autowired
+	NotificationRepository notificationRepository;
+	@Autowired
+	FeedRepository feedRepository;
+	@Autowired
+	FeedRepositorySupport feedRepositorySupport;
+
+	@Autowired
+	private JavaMailSender mailSender;
+
+	Random random = new Random();
+	CSVParser frontWords = new CSVParser("front_words");
+	CSVParser backWords = new CSVParser("back_words");
+
+	@Value("${server.address}")
+	String serverAddress;
+	@Value("${server.port}")
+	String serverPort;
+
+	@Override
+	public User createUser(UserRegisterPostReq userRegisterInfo) {
+		User user = new User();
+		user.setEmailId(userRegisterInfo.getEmailId());
+		user.setEmailDomain(userRegisterInfo.getEmailDomain());
+		// 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
+		user.setPassword(passwordEncoder.encode(userRegisterInfo.getPassword()));
+		user.setName(userRegisterInfo.getName());
+		user.setNickname(userRegisterInfo.getNickname());
+		user.setGender(userRegisterInfo.getGender());
+		user.setBirth(userRegisterInfo.getBirth());
+		user.setUserType("unauth");
+
+		// boolean은 isXXX으로 getter 만들어짐!!
+		user.setSearchAllow(userRegisterInfo.isSearchAllow());
+
+		return userRepository.save(user);
+	}
+
+	@Override
+	public User getUserByEmail(String email) {
+		String emailId = email.substring(0, email.indexOf('@'));
+		String emailDomain = email.substring(email.indexOf('@')+1);
+		User user = userRepository.findByEmailIdAndEmailDomain(emailId, emailDomain).get();
+		return user;
+	}
+
+	@Override
+	public User getUserByEmailId(String emailId) {
+		User user = userRepository.findByEmailId(emailId).get();
+		return user;
+	}
+
+
+	@Override
+	public User getUserByEmailIdAndEmailDomain(String emailId, String emailDomain) {
+		User user = userRepository.findByEmailIdAndEmailDomain(emailId, emailDomain).get();
+		return user;
+	}
+
+	@Override
+	public void loginSaveJwt(String userId, String jwtToken){
+		User user = userRepository.findByEmailId(userId).get();
+		user.setJwtToken(jwtToken);
+		userRepository.save(user);
+	}
+
+	@Override
+	public void logoutSaveJwt(String email) {
+		String emailId = email.substring(0, email.indexOf('@'));
+		User user = userRepository.findByEmailId(emailId).get();
+		user.setJwtToken(null);
+		userRepository.save(user);
+	}
+
+	@Override
+	public User updateUser(User user, UserUpdatePostReq userUpdateInfo) {
+		// TODO: 수정 사항 추가 필요!! (포트폴리오)
+		user.setName(userUpdateInfo.getName());
+		user.setNickname(userUpdateInfo.getNickname());
+		user.setBirth(userUpdateInfo.getBirth());
+		user.setGender(userUpdateInfo.getGender());
+		user.setSearchAllow(userUpdateInfo.isSearchAllow());
+
+		System.out.println(userUpdateInfo.isSearchAllow());
+
+		return userRepository.save(user);
+	}
+
+	@Override
+	public void deleteUser(User user) {
+		userRepository.delete(user);
+	}
+
+	@Override
+	public boolean idDupCheck(String emailId) {
+		if (userRepository.findByEmailId(emailId).isPresent()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	public boolean checkPassword(String password, User user) {
+		//입력받은 패스워드를 암호화 하여 DB에 저장된 패스워드와 대조
+		return passwordEncoder.matches(password, user.getPassword());
+	}
+
+	@Override
+	public void updatePassword(String password, User user) {
+		user.setPassword(passwordEncoder.encode(password));
+		userRepository.save(user);
+		
+		deleteAuthToken(user); // 이메일을 통한 비밀번호 재설정인 경우
+	}
+
+	@Override
+	public void deleteAuthToken(User user) {
+		Optional<EmailAuth> emailAuth = emailAuthRepository.findByUserIdx(user);
+
+		if (emailAuth.isPresent()) {
+			emailAuthRepository.delete(emailAuth.get());
+		}
+	}
+
+	@Override
+	public boolean nicknameDupCheck(String nickName) {
+		boolean result = userRepository.findByNickname(nickName).isPresent();
+
+		return result;
+	}
+
+	public String generateRandomNickname() {
+		int randomIndex = 0;
+		String randomNickname = null;
+
+		random.setSeed(System.currentTimeMillis() * 10_000);
+		randomIndex = random.nextInt(frontWords.getSize());
+		randomNickname = frontWords.getWord(randomIndex);
+
+		random.setSeed(System.currentTimeMillis() * 20_000);
+		randomIndex = random.nextInt(backWords.getSize());
+		randomNickname += backWords.getWord(randomIndex);
+
+		return randomNickname;
+	}
+
+	/**
+	 *
+	 * @param userIdx
+	 * @return false : emailAuth 테이블에 존재하는 유저 /  true : emailAuth 테이블에 존재하지 않는 유저
+	 */
+	@Override
+	public boolean checkEmailAuthToken(Long userIdx) {
+		User user = userRepository.getOne(userIdx);
+		Optional<EmailAuth> emailAuth = emailAuthRepository.findByUserIdx(user);
+
+		if(emailAuth.isPresent()) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public void saveEmailAuthToken(Long userIdx, String token) {
+		// 1. 조회 -> 이미 발급받은 token이 있는지 db에서 조회
+		if(checkEmailAuthToken(userIdx)) {
+			// 2-1. db에 결과값이 없으면 새로 입력
+			EmailAuth emailAuth = new EmailAuth();
+			emailAuth.setUserIdx(userRepository.getOne(userIdx));
+			emailAuth.setToken(token);
+
+			emailAuthRepository.save(emailAuth);
+		} else {
+			// 2-2. db에 결과값이 있으면 token 값 변경
+			User user = userRepository.getOne(userIdx);
+			EmailAuth emailAuth = emailAuthRepository.findByUserIdx(user).get();
+			emailAuth.setToken(token);
+
+			emailAuthRepository.save(emailAuth);
+		}
+	}
+
+//	@Async
+	@Override
+	public void sendAuthEmail(Long userIdx, String token) throws MessagingException {
+		saveEmailAuthToken(userIdx, token);
+
+		// 이메일 발송
+		MimeMessage mimeMessage = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+		User user = userRepository.getOne(userIdx);
+		String email = user.getEmailId()+"@"+user.getEmailDomain();
+
+		helper.setTo(email);
+		helper.setFrom("Mela!");
+		helper.setSubject("[Mela!] 이메일 계정을 인증해주세요");
+
+		String addr = serverAddress + ":" + serverPort;
+
+		String htmlContent = "<html><body>";
+		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
+		htmlContent += "<p>Mela!를 정상적으로 이용하기 위해서는 이메일 인증을 해주세요</p>";
+		htmlContent += "<p>아래 링크를 누르시면 인증이 완료됩니다.</p>";
+		htmlContent += "<a href=\"http://" + addr + "/api/v1/auth/verify?token=" + token + "\">인증 링크</a>";
+		htmlContent += "</body></html>";
+
+		helper.setText(htmlContent, true);
+
+		mailSender.send(mimeMessage);
+	}
+
+	/**
+	 * 
+	 * @param userIdx
+	 * @param token
+	 * @return true: 인증됨 / false: 인증 안됨
+	 */
+	@Override
+	public boolean verifyEmail(Long userIdx, String token) {
+		User user = userRepository.getOne(userIdx);
+		Optional<EmailAuth> emailAuth = emailAuthRepository.findByUserIdx(user);
+
+		if(emailAuth.isPresent()) {
+			if(emailAuth.get().getToken().equals(token)) {
+				try{
+					// 토큰 유효성 확인
+					JwtTokenUtil.handleError(token);
+
+					// 인증 회원으로 전환
+					user.setUserType("auth");
+					userRepository.save(user);
+					return true;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public void sendFindPasswordEmail(Long userIdx, String token) throws MessagingException {
+		saveEmailAuthToken(userIdx, token);
+
+		// 이메일 발송
+		MimeMessage mimeMessage = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+		User user = userRepository.getOne(userIdx);
+		String email = user.getEmailId()+"@"+user.getEmailDomain();
+
+		helper.setTo(email);
+		helper.setFrom("Mela!");
+		helper.setSubject("[Mela!] 비밀번호 재설정");
+
+		// TODO: 비밀번호 재설정 프론트 주소 입력
+		String addr = "http://localhost:3000/changepassword?token=" + token;
+
+		String htmlContent = "<html><body>";
+		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
+		htmlContent += "<p>아래 링크를 통해 비밀번호를 재설정해주세요</p>";
+		htmlContent += "<a href=" + addr + "\">비밀번호 재설정</a>";
+		htmlContent += "</body></html>";
+
+		helper.setText(htmlContent, true);
+
+		mailSender.send(mimeMessage);
+	}
+
+	@Override
+	public void followUser(User nowLoginUser, String userId) {
+		User followedUser = userRepository.findByEmailId(userId).get();
+		Optional<Follow> isFollowed = followRepository.findByFollowerAndFollowe(nowLoginUser, followedUser);
+		Notification notification = new Notification();
+		notification.setUserIdx(followedUser);	//알람을 받을 사용자; User 객체 타입
+
+		if(isFollowed.isPresent()){
+			isFollowed.get().setFollower(nowLoginUser);
+			isFollowed.get().setFollowe(followedUser);
+			followRepository.delete(isFollowed.get());
+
+			notification.setAlarmContent(nowLoginUser.getNickname()+"님이 당신을 팔로우 취소 하였습니다.");
+		}
+		else{
+			Follow follow = new Follow();
+			follow.setFollower(nowLoginUser);
+			follow.setFollowe(followedUser);
+			followRepository.save(follow);
+
+			notification.setAlarmContent(nowLoginUser.getNickname()+"님이 당신을 팔로우 하였습니다.");
+		}
+
+		notification.setChecked(false);
+		notification.setAlarmDate(LocalDateTime.now());
+		notificationRepository.save(notification);
+	}
+
+	@Override
+	public List<User> getFollower(String emailId) {
+		return followRepositorySupport.findUserFollower(userRepository.findByEmailId(emailId).get());
+	}
+
+	@Override
+	public List<User> getFollowee(String emailId) {
+
+		return followRepositorySupport.findUserFollowee(userRepository.findByEmailId(emailId).get());
+
+	}
+
+	@Override
+	public List<Notification> getNotification(User nowLoginUser) {
+		Optional<List<Notification>> notiList = notificationRepository.findByUserIdx(nowLoginUser);
+		if(notiList.isPresent()){
+			return notiList.get();
+		}
+		return null;
+	}
+
+	@Override
+	public String checkNotification(User nowLoginUser, Long notiId) {
+		Optional<Notification> notification = notificationRepository.findByNotificationIdxAndUserIdx(notiId, nowLoginUser);
+
+		if(notification.isPresent()){
+			if(!notification.get().getChecked()){
+				notification.get().setChecked(true);
+				notificationRepository.save(notification.get());
+				return "알람을 확인했습니다";
+			}else{
+				return "이미 확인한 알람입니다";
+			}
+		}
+		else{
+			return "알람이 없습니다";
+		}
+	}
+
+	@Override
+	public void deleteNotification(User nowLoginUser, Long notiId) {
+		notificationRepository.deleteByNotificationIdxAndUserIdx(notiId, nowLoginUser);
+	}
+
+	@Override
+	public List<Feed> getFeed(User user) {
+		List<Feed> feeds = feedRepositorySupport.getFeed(user);
+
+		return feeds;
+	}
+}
