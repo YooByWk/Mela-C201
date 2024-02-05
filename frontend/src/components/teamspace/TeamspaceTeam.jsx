@@ -3,6 +3,7 @@ import styled from "styled-components"
 import TeamspaceMemberCard from "./TeamspaceMemberCard"
 import { TeamspaceInfo,TeamspaceMember } from "../../API/TeamspaceAPI"
 import { useParams } from "react-router-dom"
+import CalendarBox from "./calendar/CalendarBox"
 
 const H1 = styled.h1`
     color: white;
@@ -49,6 +50,7 @@ function TeamspaceTeam () {
         <>
         <H1>{values.teamName}</H1>
         <BackgroundImage></BackgroundImage>
+        <CalendarBox />
         <H1>Members</H1>
         {Object.entries(members).map(([key, member]) => (
         <TeamspaceMemberCard 
