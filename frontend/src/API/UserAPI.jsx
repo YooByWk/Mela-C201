@@ -32,7 +32,7 @@ export const fetchUser = async () => {
 // 회원수정
 export const updateUser = async (formdata) => {
     try {
-        const response = await axios.post('http://localhost:8080/api/v1/users/myinfo', formdata, {
+        const response = await axios.put('http://localhost:8080/api/v1/users/myinfo', formdata, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization' : `Bearer ${localStorage.accessToken}`
