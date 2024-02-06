@@ -127,40 +127,6 @@ public class FileServiceImpl implements FileService {
 
     }
 
-    public boolean addPortfolioMusic(PortfolioMusic portfolioMusic, MultipartFile[] multipartFile, PortfolioMusicPostReq portfolioMusicPostReq) {
-        for(MultipartFile mf : multipartFile) {
-            String extension = FilenameUtils.getExtension(mf.getOriginalFilename());                            //클라이언트가 업로드한 파일의 확장자 추출
-            com.ssafy.db.entity.File file;                                                                      //Amazon S3에 업로드한 파일에 관한 정보를 담고 있는 객체 (파일 경로, 원본 파일 명, 저장되는 파일 명, 파일 설명, 용량)
-
-            try {
-                //TODO: swith-case 문으로 수정 가능
-                if (extension.equals("mp3") || extension.equals("flac")) {                                       //2-4-1. 음원 파일 (mp3, flac)
-                    file = saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusic.setMusicFileIdx(file);
-                } else if (extension.equals("txt") || extension.equals("xml")) {                                 //2-4-2. 가사 파일 (pdf, xml)
-                    file = saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusic.setLyricFileIdx(file);
-                } else if (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")) {     //2-4-3. 앨범 아트(jpg, jpeg, png)
-                    file = saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusic.setAlbumArtFileIdx(file);
-                } else {
-                    throw new Exception("지원하지 않는 파일 형식입니다.");
-                }
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        portfolioMusic.setTitle(portfolioMusicPostReq.getTitle());
-        portfolioMusic.setPinFixed(portfolioMusicPostReq.isPinFixed());
-        portfolioService.addPortfolioMusic(portfolioMusic);                                          //3. Service 구현체를 통해 포트폴리오 음악 추가
-
-        return true;
-    }
-
     @Override
     public com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription) {
         com.ssafy.db.entity.File file = new com.ssafy.db.entity.File();

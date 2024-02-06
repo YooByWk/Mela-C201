@@ -7,60 +7,6 @@ import { CgDanger } from "react-icons/cg";
 import { fetchUser, updateUser, deleteUser } from "../API/UserAPI";
 
 
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-`
-
-const Title = styled.h1`
-    margin-bottom: 20px;
-    color: white;
-`
-
-const Label = styled.span`
-    color: #254ef8;
-    font-weight: bolder;
-    margin-bottom: 10px;
-`
-
-const Form = styled.div`
-`
-
-const ProfileImageWrapper = styled.img`
-    width: 50px;
-    height: 50px;
-    border-radius: 100%;
-`
-
-const InputWrapper = styled.div`
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-`
-
-const Input = styled.input`
-    background-color: #151c2c;
-    color: white;
-    border: none;
-`
-
-const ButtonWrapper = styled.div`
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    padding: 5px 10px;
-    font-size: 0.8rem;
-`
-
-const Span = styled.span`
-    color: white;
-    padding: 5px;
-`
-
 function UserUpdateForm(props) {
     const [values, setValues] = useState({
         name: '',
@@ -252,3 +198,58 @@ function UserUpdateForm(props) {
 }
 
 export default UserUpdateForm
+
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+`
+
+const Title = styled.h1`
+    margin-bottom: 20px;
+    color: white;
+`
+
+const Label = styled.span`
+    color: #254ef8;
+    font-weight: bolder;
+    margin-bottom: 10px;
+`
+
+const Form = styled.div`
+`
+
+const ProfileImageWrapper = styled.img`
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+`
+
+const InputWrapper = styled.div`
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+`
+
+const Input = styled.input`
+    background-color: #151c2c;
+    color: white;
+    border: none;
+`
+
+const ButtonWrapper = styled.div`
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+`
+
+const Span = styled.span`
+    color: white;
+    padding: 5px;
+`
