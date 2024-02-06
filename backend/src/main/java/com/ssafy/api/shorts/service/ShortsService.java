@@ -5,7 +5,11 @@ import com.ssafy.db.entity.Shorts;
 import com.ssafy.db.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface ShortsService {
+
+    List<Shorts> getShortsList(User nowLoginUser);
     int uploadShorts(Shorts shorts, MultipartFile multipartFile, ShortsPostReq shortsPostReq);
     com.ssafy.db.entity.File getFileInstanceByShortsIdx(Long shortsIdx);
 

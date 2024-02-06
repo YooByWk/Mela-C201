@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.List;
+
 @Slf4j
 @Api(value = "쇼츠 API", tags = {"Shorts"})
 @RestController
@@ -36,6 +38,22 @@ public class ShortsController {
     UserService userService;
 
 
+    @GetMapping()
+    @ApiOperation(value = "쇼츠 동영상 리스트", notes = "자신이 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 리스트를 가져온다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "삭제 실패"),
+    })
+    public ResponseEntity<List<Shorts>> shortList (
+            @ApiIgnore Authentication authentication)
+    {
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        String userEmail = userDetails.getUsername();
+        User nowLoginUser = userService.getUserByEmail(userEmail);
+        List<Shorts> shortsList = shortsService.getShortsList(nowLoginUser);
+
+        return ResponseEntity.status(200).body(shortsList);
+    }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "쇼츠 동영상 등록", notes = "쇼츠 동영상을 등록한다.")

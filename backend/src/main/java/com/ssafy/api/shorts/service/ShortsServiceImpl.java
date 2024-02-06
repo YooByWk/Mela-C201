@@ -3,16 +3,15 @@ package com.ssafy.api.shorts.service;
 import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.shorts.request.ShortsPostReq;
 import com.ssafy.db.entity.*;
-import com.ssafy.db.repository.NotificationRepository;
-import com.ssafy.db.repository.ShortsDislikeRepository;
-import com.ssafy.db.repository.ShortsLikeRepository;
-import com.ssafy.db.repository.ShortsRepository;
+import com.ssafy.db.repository.*;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("shortsService")
 public class ShortsServiceImpl implements  ShortsService {
@@ -27,8 +26,13 @@ public class ShortsServiceImpl implements  ShortsService {
 
     @Autowired
     ShortsDislikeRepository shortsDislikeRepository;
+
     @Autowired
     NotificationRepository notificationRepository;
+
+    @Autowired
+    UserGenreRepository userGenreRepository;
+
 
     //지원하는 동영상 확장자 ArrayList
     String[] supportedVideoExtension = {"MKV", "MP4", "AVI"};
@@ -40,6 +44,44 @@ public class ShortsServiceImpl implements  ShortsService {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<Shorts> getShortsList(User nowLoginUser) {
+        //1. 현재 사용자의 선호장르, 싫어요 표시한 쇼츠의 리스트를 가져오기
+        List<Genre> preferedGenre = userGenreRepository.findGenreIdxByUserIdx(nowLoginUser).get();  //사용자의 선호장르
+        List<Shorts> dislikedShorts = shortsDislikeRepository.findShortsIdxByUserIdx(nowLoginUser).get();   //사용자가 싫어요 표시한 쇼츠 리스트
+
+        //1.1 싫어요 표시한 쇼츠의 idx값을 가져오기
+        List<Long> dislikedShortsIdx = new ArrayList<>();
+        for(Shorts disShort : dislikedShorts){
+            dislikedShortsIdx.add(disShort.getShortsIdx());
+        }
+
+        //2. 사용자가 싫어요 표시한 쇼츠를 제외하고 쇼츠리스트 전체를 가져오기
+        List<Shorts> shortsList = shortsRepository.findByShortsIdxNotIn(dislikedShortsIdx).get();
+
+        //3. 가져온 쇼츠 리스트에서 쇼츠를 올린 사람의 장르를, 현재 사용자의 선호장르와 비교하여 쇼츠 리스트를 추출함
+        List<Shorts> selectedShortsList = new ArrayList<>();
+        boolean isShortsAdd;
+        for(Shorts shorts : shortsList){
+            //쇼츠업로더의 userIdx
+            User shortsUploaderUserIdx = shorts.getUserIdx();
+            List<Genre> uploaderPreferedGenre = userGenreRepository.findGenreIdxByUserIdx(shortsUploaderUserIdx).get();
+            isShortsAdd = false;
+            for(int i=0; i<preferedGenre.size(); i++){
+                for(int j=0; j<uploaderPreferedGenre.size(); j++){
+                    if(preferedGenre.get(i).getGenreIdx() == uploaderPreferedGenre.get(j).getGenreIdx()){
+                        selectedShortsList.add(shorts);
+                        isShortsAdd = true;
+                        break;
+                    }
+                }
+                if(isShortsAdd) break;
+            }
+        }
+
+        return selectedShortsList;
     }
 
     @Override
