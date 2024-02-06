@@ -53,13 +53,18 @@ public class ShortsServiceImpl implements  ShortsService {
         List<Shorts> dislikedShorts = shortsDislikeRepository.findShortsIdxByUserIdx(nowLoginUser).get();   //사용자가 싫어요 표시한 쇼츠 리스트
 
         //1.1 싫어요 표시한 쇼츠의 idx값을 가져오기
-        List<Long> dislikedShortsIdx = new ArrayList<>();
+        List<Shorts> dislikedShortsIdx = new ArrayList<>();
         for(Shorts disShort : dislikedShorts){
-            dislikedShortsIdx.add(disShort.getShortsIdx());
+            dislikedShortsIdx.add(disShort);
         }
 
         //2. 사용자가 싫어요 표시한 쇼츠를 제외하고 쇼츠리스트 전체를 가져오기
-        List<Shorts> shortsList = shortsRepository.findByShortsIdxNotIn(dislikedShortsIdx).get();
+//        List<Shorts> shortsList = shortsRepository.findByShortsIdxNotIn(dislikedShortsIdx).get();
+//        System.out.println("++++++++++++++++++++++++++++++++");
+//        System.out.println(dislikedShortsIdx.size());
+//        System.out.println(shortsList.size());
+//        System.out.println("++++++++++++++++++++++++++++++++");
+        List<Shorts> shortsList = shortsRepository.findAll();
 
         //3. 가져온 쇼츠 리스트에서 쇼츠를 올린 사람의 장르를, 현재 사용자의 선호장르와 비교하여 쇼츠 리스트를 추출함
         List<Shorts> selectedShortsList = new ArrayList<>();
@@ -69,6 +74,18 @@ public class ShortsServiceImpl implements  ShortsService {
             User shortsUploaderUserIdx = shorts.getUserIdx();
             List<Genre> uploaderPreferedGenre = userGenreRepository.findGenreIdxByUserIdx(shortsUploaderUserIdx).get();
             isShortsAdd = false;
+            //사용자가 싫어요 표시한 쇼츠라면 반환리스트에서 제외
+            if(dislikedShortsIdx.contains(shorts.getShortsIdx())){
+                continue;
+            }
+
+            //업로드한 사용자의 선호 장르가 없다면 일단 반환리스트에 추가
+            if(uploaderPreferedGenre.size() == 0){
+                selectedShortsList.add(shorts);
+                continue;
+            }
+
+            //업로드한 사용자의 선호장르가 있다면, 로그인한 사용자의 선호장르와 비교하여 반환리스트에 추가
             for(int i=0; i<preferedGenre.size(); i++){
                 for(int j=0; j<uploaderPreferedGenre.size(); j++){
                     if(preferedGenre.get(i).getGenreIdx() == uploaderPreferedGenre.get(j).getGenreIdx()){
@@ -82,6 +99,7 @@ public class ShortsServiceImpl implements  ShortsService {
         }
 
         return selectedShortsList;
+//        return shortsList;
     }
 
     @Override
@@ -100,7 +118,8 @@ public class ShortsServiceImpl implements  ShortsService {
         file = fileService.addTableRecord(file);
 
         //4. shorts VO 설정
-        shorts.setComment(shortsPostReq.getFileDescription());
+        shorts.setTitle(shortsPostReq.getTitle());
+        shorts.setDescription(shortsPostReq.getFileDescription());
         shorts.setShortsPathFileIdx(file);
 
         //5. shorts 테이블에 관련 정보 저장
@@ -121,26 +140,31 @@ public class ShortsServiceImpl implements  ShortsService {
         ShortsLike shortsLike = new ShortsLike();
         shortsLike.setUserIdx(user);
         shortsLike.setShortsIdx(shorts);
+        shortsLike.setUploaderUserIdx(shorts.getUserIdx());
         shortsLikeRepository.save(shortsLike);
 
-//        User getAlarmUser = shortsRepository.findByShortsIdx(shortsId).get().getUserIdx();
 
         User getAlarmUser = shortsLike.getUploaderUserIdx();
 
         Notification notification = new Notification();
         notification.setUserIdx(getAlarmUser);    //알람을 받을 사용자; User 객체 타입
-        notification.setAlarmContent(getAlarmUser.getNickname()+"님이 당신의 쇼츠 "+ shorts.getComment() +" 에 좋아요를 눌렀습니다.");
+        notification.setAlarmContent(user.getNickname()+"님이 당신의 쇼츠 "+ shorts.getTitle() +" 에 좋아요를 눌렀습니다.");
         notification.setChecked(false);
         notification.setAlarmDate(LocalDateTime.now());
         notificationRepository.save(notification);
 
-        if(shortsLikeRepository.findByUserIdxAndUploaderUserIdx(getAlarmUser,user).isPresent()){
+        System.out.println("++++++++++++++++++++++++++++++++++++++");
+        System.out.println(shortsLikeRepository.findByUserIdxAndUploaderUserIdx(user,getAlarmUser).get().size());
+        System.out.println(shortsLikeRepository.findByUserIdxAndUploaderUserIdx(getAlarmUser,user).get().size());
+        System.out.println("++++++++++++++++++++++++++++++++++++++");
+
+        if(shortsLikeRepository.findByUserIdxAndUploaderUserIdx(getAlarmUser,user).get().size() == 1){
             Notification notification1 = new Notification();
             Notification notification2 = new Notification();
             notification1.setUserIdx(getAlarmUser);    //알람을 받을 사용자; User 객체 타입
             notification2.setUserIdx(user);    //알람을 받을 사용자; User 객체 타입
-            notification1.setAlarmContent(getAlarmUser.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다.");
-            notification2.setAlarmContent(user.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다.");
+            notification1.setAlarmContent(user.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다.");
+            notification2.setAlarmContent(getAlarmUser.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다.");
             notification1.setChecked(false);
             notification2.setChecked(false);
             notification1.setAlarmDate(LocalDateTime.now());

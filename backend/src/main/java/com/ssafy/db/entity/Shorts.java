@@ -24,8 +24,9 @@ public class Shorts {
     @NotNull
     User userIdx;
 
-    String comment;
+    String title;
 
+    String description;
 
     @ManyToOne
     @JoinColumn(name="shorts_path_file_idx", referencedColumnName="fileIdx")
