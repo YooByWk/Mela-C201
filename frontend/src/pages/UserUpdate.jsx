@@ -97,6 +97,8 @@ function UserUpdateForm(props) {
         try {
             await updateUser(formData)
             alert('회원정보 수정이 완료되었습니다.')
+            navigate(-1)
+            // window.location.href = `/portfolio/${userValues.emailId}`
         } catch (err) {
             console.error(err)
         }
