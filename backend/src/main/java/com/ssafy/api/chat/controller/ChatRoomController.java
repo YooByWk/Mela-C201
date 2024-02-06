@@ -3,6 +3,7 @@ package com.ssafy.api.chat.controller;
 import com.ssafy.api.chat.request.ChatRoom;
 import com.ssafy.db.repository.redis.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,17 +13,12 @@ import java.util.List;
 
 // Websocket 통신 외에 채팅 화면 View 구성을 위해 필요한 Controller를 생성합니다.
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/api/v1/chat")
 public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
 
-    // 채팅 리스트 화면
-    @GetMapping("/room")
-    public String rooms(Model model) {
-        return "/chat/room";
-    }
     // 모든 채팅방 목록 반환
     @GetMapping("/rooms")
     @ResponseBody
@@ -32,14 +28,8 @@ public class ChatRoomController {
     // 채팅방 생성
     @PostMapping("/room")
     @ResponseBody
-    public ChatRoom createRoom(@RequestParam String name) {
+    public ChatRoom createRoom(@RequestBody String name) {
         return chatRoomRepository.createChatRoom(name);
-    }
-    // 채팅방 입장 화면
-    @GetMapping("/room/enter/{roomIdx}")
-    public String roomDetail(Model model, @PathVariable String roomIdx) {
-        model.addAttribute("roomIdx", roomIdx);
-        return "/chat/roomdetail";
     }
     // 특정 채팅방 조회
     @GetMapping("/room/{roomIdx}")

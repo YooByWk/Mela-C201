@@ -15,15 +15,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/pub");
     }
 
+    // ws://localhost:8080/ws-stomp
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-stomp").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/ws-stomp").setAllowedOrigins("http://localhost:3000").withSockJS();
     }
 
-    //    private final WebSocketHandler webSocketHandler;
-//
-//    @Override
-//    public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
-//        webSocketHandlerRegistry.addHandler(webSocketHandler, "/ws/chat").setAllowedOrigins("*");
-//    }
 }
