@@ -49,15 +49,10 @@ public class PortfolioServiceImpl implements PortfolioService {
             }
         }
 
-        portfolioMusic.setTitle(portfolioMusic.getTitle());         //1. 음원 제목
-        portfolioMusic.setPinFixed(portfolioMusic.getPinFixed());   //2. 핀 (고정) 여부
-        portfolioMusic.setUserIdx(portfolioMusic.getUserIdx());     //3. 유저 식별번호
+        portfolioMusic.setTitle(portfolioMusicPostReq.getTitle());          //1. 음원 제목
+        portfolioMusic.setPinFixed(portfolioMusicPostReq.isPinFixed());     //2. 핀 (고정) 여부
 
-        portfolioMusic.setMusicFileIdx(portfolioMusic.getMusicFileIdx());
-        portfolioMusic.setLyricFileIdx(portfolioMusic.getLyricFileIdx());
-        portfolioMusic.setAlbumArtFileIdx(portfolioMusic.getAlbumArtFileIdx());
-
-        portfolioMusicRepository.save(portfolioMusic);
+        portfolioMusicRepository.save(portfolioMusic);                      //테이블에 저장
 
         return true;
     }

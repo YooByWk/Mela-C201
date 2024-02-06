@@ -27,6 +27,10 @@ public class TeamspaceRegisterPostReq {
     @ApiModelProperty(name = "팀 스페이스 description", example = "팀스페이스입니다.")
     String teamDescription;
 
-    @ApiModelProperty(name = "팀 스페이스 ", example = "1134")
-    File teamspace_picture_file_idx;
+    //FIXME: 아래는 필요없을 것 같다.
+//    @ApiModelProperty(name = "팀 스페이스 ", example = "1134")
+//    File teamspace_picture_file_idx;
+
+    //전체 컬럼: teamspace_idx, end_date, start_date, team_description, team_name, host_user_idx, teamspace_background_picture_file_idx, teamspace_picture_file_idx
+    //입력 안 받음: teamspace_idx, host_user_idx, teamspace_background_picture_file_idx, teamspace_picture_file_idx
 }

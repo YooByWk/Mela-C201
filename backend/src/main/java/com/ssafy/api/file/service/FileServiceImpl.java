@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import com.ssafy.api.user.service.PortfolioService;
+import com.ssafy.common.exception.handler.NotValidExtensionException;
 import com.ssafy.db.repository.FileRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.UUID;
+
+import static com.ssafy.common.util.ExtensionUtil.isValidImageExtension;
 
 @Service("fileServiceImpl")
 public class FileServiceImpl implements FileService {
@@ -194,6 +199,37 @@ public class FileServiceImpl implements FileService {
         }
 
         return file;
+    }
+
+    @Override
+    public com.ssafy.db.entity.File getFileByFileIdx(long fileIdx) {
+        return fileRepository.findById(fileIdx).get();
+    }
+
+    @Override
+    public String getImageUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException {
+        //1. fileIdx로 file 테이블에서 일치하는 레코드 조회
+        com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
+
+        //2. 파일의 확장자가 이미지인지 체크
+        String extension = FilenameUtils.getExtension(file.getSaveFilename());
+
+        //3-1. 파일의 확장자가 이미지이면
+        if (isValidImageExtension(extension)) {
+            URL url = amazonS3Client.getUrl("my.first.mela.sss.bucket", file.getSavePath() + "/" + file.getSaveFilename());
+
+            return url.toString();
+        //3-2. 파일의 확장자가 이미지가 아니면
+        } else {
+            throw new NotValidExtensionException();
+        }
+    }
+
+    @Override
+    public String getImageUrlBySaveFilenameAndFileIdx(String saveFilename, String savePath) {
+        URL url = amazonS3Client.getUrl("my.first.mela.sss.bucket", savePath + "/" + saveFilename);
+
+        return url.toString();
     }
 
     @Override
