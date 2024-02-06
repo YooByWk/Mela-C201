@@ -22,7 +22,7 @@ UserApi.interceptors.response.use((response) => {
     return Promise.reject(error)
 })
 
-// 회원조회
+// 로그인 한 유저 조회
 export const fetchUser = async () => {
     const response = await UserApi.get(`/api/v1/users/myinfo`)
     console.log(response.data)
@@ -84,6 +84,13 @@ export const emailCheck = async ({emailId}) => {
 // 새로운 비밀번호 설정(잃어버렸을 때)
 export const newPassword = async (data) => {
     const response = await UserApi.put(`api/v1/users/users/newpassword`, data)
+    console.log(response)
+    return response.data
+}
+
+// 타인의 포트폴리오 조회
+export const othersInfo = async (emailId) => {
+    const response = await UserApi.get(`api/v1/users/users/${emailId}/portfolio`, emailId)
     console.log(response)
     return response.data
 }

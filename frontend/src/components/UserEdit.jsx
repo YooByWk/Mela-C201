@@ -20,10 +20,13 @@ const Title = styled.h3`
 function UserEdit(props) {
     const [values, setValues] = useState([])
     const [isFollowed, setIsFollowed] = useState(false)
-    // const [currentUser, setCurrentUser] = useState({}) 
+    const [currentUser, setCurrentUser] = useState({}) 
 
-    const currentNickname = props.currentUser
+    const currentUserId = props.currentUserId
     const loginUser = props.loginUser
+
+    console.log(currentUser)
+
     const navigate = useNavigate()
 
     const goUpdate = () => {
@@ -32,7 +35,7 @@ function UserEdit(props) {
 
     const handleFollow = async() => {
         // 만약 현재 로그인 한 사용자의 이메일 아이디와 주소창의 닉네임이 다르다면
-        if (loginUser && currentNickname && loginUser.nickname !== currentNickname) {
+        if (loginUser && currentUserId && loginUser.emailId !== currentUserId) {
             try {
                 await followUser(loginUser.emailId)
                 setIsFollowed(!isFollowed)
@@ -45,17 +48,17 @@ function UserEdit(props) {
     return (
         <Container>
             <Title>{loginUser.nickname}</Title>
-            {loginUser && currentNickname && (
+            {loginUser && currentUserId && (
                 <div>
-                    {currentNickname === loginUser.nickname ? (
+                    {currentUserId === loginUser.emailId ? (
                         <>
-                            {/* <p>{ values.name }</p>
-                            <p>Gender : { values.gender }</p>
-                            <p>Birth : { values.birth }</p>
+                            <p>{ loginUser.name }</p>
+                            <p>Gender : { loginUser.gender }</p>
+                            <p>Birth : { loginUser.birth }</p>
                             <p>Like genre : </p>
                             <p>Position : </p>
                             <p>SNS</p>
-                            <p>{values.searchAllow}</p> */}
+                            <p>{loginUser.searchAllow}</p>
 
                             <DefaultButton 
                                 text={'Edit'}
@@ -66,13 +69,23 @@ function UserEdit(props) {
                             />
                         </>
                     ) : (
-                        <DefaultButton 
-                            text={isFollowed ? 'Unfollow' : 'Follow'}
-                            backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
-                            fontcolor={'white'}
-                            width={'6rem'}
-                            onClick={handleFollow}
-                        />
+                            <>
+                                <p>{ currentUser.name }</p>
+                                <p>Gender : { currentUser.gender }</p>
+                                <p>Birth : { currentUser.birth }</p>
+                                <p>Like genre : </p>
+                                <p>Position : </p>
+                                <p>SNS</p>
+                                <p>{currentUser.searchAllow}</p>
+
+                                <DefaultButton 
+                                text={isFollowed ? 'Unfollow' : 'Follow'}
+                                backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
+                                fontcolor={'white'}
+                                width={'6rem'}
+                                onClick={handleFollow}
+                                />
+                    </>
                     )}
                 </div>   
             )}   
