@@ -5,7 +5,7 @@ import { IoMdClose } from "react-icons/io";
 import { FaFileUpload } from "react-icons/fa";
 import { Dialog, DialogHeader, DialogBody } from '@material-tailwind/react'
 import { musicUpload } from '../API/PortfolioAPI'
-import defaultimage from '../assets/images/default-image.png'
+// import defaultimage from '../assets/images/default-image.png'
 import { Link } from "react-router-dom";
 
 const CloseButton = styled.button`
@@ -88,7 +88,7 @@ function PortfolioAdd() {
     const [pinFixed, setPinFixed] = useState(false)
     // const [fileDescription, setFileDescription] = useState('')
     const [title, setTitle] = useState('')
-    const [imgFile, setImgFile] = useState(<img src={defaultimage} alt="기본 이미지" />)
+    const [imgFile, setImgFile] = useState('')
     const [musicFile, setMusicFile] = useState()
     const [lyricFile, setLyricFile] = useState()
 
@@ -119,9 +119,7 @@ function PortfolioAdd() {
 
         if (e.target.files[0]) {
             setMusicFile(e.target.files[0])
-        } else {
-            setMusicFile(<img src={defaultimage} alt="기본 이미지" />)
-        }
+        } 
     }
 
     // 가사 (txt, xml)
@@ -157,7 +155,6 @@ function PortfolioAdd() {
             title: title
         })
 
-        console.log(typeof(imgFile))
         formData.append('portfolioMusicPostReq', body)
         formData.append('file', imgFile)
         formData.append('file', musicFile)
@@ -172,7 +169,7 @@ function PortfolioAdd() {
             alert('업로드가 완료되었습니다.')
             setTitle('')
             setPinFixed(false)
-            setImgFile(defaultimage)
+            setImgFile('')
             setMusicFile('')
             setLyricFile('')
             setOpen(!open)

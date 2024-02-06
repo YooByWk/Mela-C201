@@ -138,7 +138,7 @@ public class FileServiceImpl implements FileService {
                     file = saveFile(mf, portfolioMusicPostReq.getFileDescription());
                     file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
                     portfolioMusic.setMusicFileIdx(file);
-                } else if (extension.equals("txt") || extension.equals("xml")) {                                 //2-4-2. 가사 파일 (pdf, xml)
+                } else if (extension.equals("txt") || extension.equals("xml")) {                                 //2-4-2. 가사 파일 (txt, xml)
                     file = saveFile(mf, portfolioMusicPostReq.getFileDescription());
                     file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
                     portfolioMusic.setLyricFileIdx(file);
