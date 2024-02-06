@@ -2,6 +2,7 @@ package com.ssafy.api.file.controller;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.ssafy.api.file.service.FileService;
+import com.ssafy.common.exception.handler.NotValidExtensionException;
 import com.ssafy.common.model.response.BaseResponseBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.NoSuchElementException;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
@@ -28,6 +30,9 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 public class FileController {
     @Autowired
     FileService fileService;
+
+    @Autowired
+    AmazonS3 amazonS3Client;
 
     @PostMapping(value = "/upload", consumes = MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "파일 업로드", notes = "파일을 업로드합니다.")
@@ -79,6 +84,29 @@ public class FileController {
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Delete success"));
         } else {            //파일 삭제 중 오류
             return ResponseEntity.status(401).body(BaseResponseBody.of(500, "Delete fail"));
+        }
+    }
+
+    //FIXME: 테스트 중
+    @GetMapping("/images/{fileIdx}")
+    @ApiOperation(value = "이미지 조회", notes = "html <img> 태그에 넣을 수 있는 이미지의 주소를 반환합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "삭제 성공"),
+            @ApiResponse(code = 400, message = "이미지 파일이 아님"),
+            @ApiResponse(code = 404, message = "파일을 찾을 수 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> getImageURLByFileIdx(@PathVariable(name = "fileIdx") long fileIdx) {
+        try {
+            String imageUrl = fileService.getImageUrlBySaveFileIdx(fileIdx);
+
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, imageUrl));
+        } catch (NotValidExtensionException e) {
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "이미지 파일이 아님"));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "파일을 찾을 수 없음"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 오류"));
         }
     }
 }

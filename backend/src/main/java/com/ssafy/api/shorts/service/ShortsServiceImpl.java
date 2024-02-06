@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.ssafy.common.util.ExtensionUtil.isValidVideoExtension;
+
 @Service("shortsService")
 public class ShortsServiceImpl implements  ShortsService {
     @Autowired
@@ -16,18 +18,6 @@ public class ShortsServiceImpl implements  ShortsService {
 
     @Autowired
     ShortsRepository shortsRepository;
-
-    //지원하는 동영상 확장자 ArrayList
-    String[] supportedVideoExtension = {"MKV", "MP4", "AVI"};
-
-    boolean isValidVideoExtension(String extension) {
-        for(String s : supportedVideoExtension) {
-            if(extension.equals(s.toUpperCase()) || extension.equals(s.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     @Override
     public int uploadShorts(Shorts shorts, MultipartFile multipartFile, ShortsPostReq shortsPostReq) {

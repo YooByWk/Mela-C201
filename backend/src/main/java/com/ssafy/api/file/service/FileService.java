@@ -1,9 +1,11 @@
 package com.ssafy.api.file.service;
 
+import com.ssafy.common.exception.handler.NotValidExtensionException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 public interface FileService {
     //org.springframework.web.multipart.MultipartFile -> java.io.File convert
@@ -14,6 +16,9 @@ public interface FileService {
     void saveFileTest(MultipartFile multipartFile);
     //Amazon S3 파일 업로드
     com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription);
+    com.ssafy.db.entity.File getFileByFileIdx(long fileIdx);
+    String getImageUrlBySaveFilenameAndFileIdx(String saveFilename, String savePath);
+    String getImageUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException;
     //Amazon S3에 업로드된 파일 정보를 file 테이블에 저장
     com.ssafy.db.entity.File addTableRecord(com.ssafy.db.entity.File file);
     //Amazon S3에 저장된 파일 다운로드
