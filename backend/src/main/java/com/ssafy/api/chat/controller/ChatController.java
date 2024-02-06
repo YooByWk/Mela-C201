@@ -7,12 +7,13 @@ import com.ssafy.db.repository.redis.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/api/v1/chat")
 public class ChatController {
     private final RedisPublisher redisPublisher;
@@ -21,7 +22,7 @@ public class ChatController {
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
-    @MessageMapping("/chat/message")
+    @MessageMapping("/message")
     public void message(ChatMessage message) {
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             chatRoomRepository.enterChatRoom(message.getRoomIdx());

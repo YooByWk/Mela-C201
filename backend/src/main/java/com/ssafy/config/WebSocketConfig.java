@@ -20,10 +20,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws-stomp").setAllowedOrigins("*").withSockJS();
     }
 
-    //    private final WebSocketHandler webSocketHandler;
-//
-//    @Override
-//    public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
-//        webSocketHandlerRegistry.addHandler(webSocketHandler, "/ws/chat").setAllowedOrigins("*");
-//    }
 }
