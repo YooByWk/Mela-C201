@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef ,useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import DefaultButton from '../components/DefaultButton';
 import styled from 'styled-components';
 import { fetchUser, followUser } from '../API/UserAPI';
+import defaultimage from '../assets/images/default-image.png'
+import { height } from "@mui/system";
 
 const Container = styled.div`
     padding: 1rem;
@@ -17,7 +19,15 @@ const Title = styled.h3`
     margin-bottom: 10px;
 `
 
+const Img = styled.img`
+    height: 30px;
+    width: 30px;
+    border-radius: 10;
+`
+
 function UserEdit(props) {
+    const [imgFile, setImgFile] = useState('')  
+    const imgRef = useRef()
     const [values, setValues] = useState([])
     const [isFollowed, setIsFollowed] = useState(false)
 
@@ -31,6 +41,15 @@ function UserEdit(props) {
 
     const goUpdate = () => {
         navigate('/users')
+    }
+
+    const profileImg = () => {
+        const file = imgRef.current.files[0]
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            setImgFile(reader.result)
+        }
     }
 
     const handleFollow = async() => {
@@ -53,6 +72,11 @@ function UserEdit(props) {
                     {currentUser.userIdx.emailId === loginUser[0].emailId ? (
                         <>
                             <p>{ loginUser[0].nickname }</p>
+                            <Img 
+                            src={imgFile ? imgFile : defaultimage} 
+                            alt="프로필 이미지"
+                            />
+                            <input type="file" onChange={profileImg} ref={imgRef}/>
                             <p>Gender : { loginUser[0].gender }</p>
                             <p>Birth : { loginUser[0].birth }</p>
                             <p>Like genre : </p>
@@ -73,6 +97,10 @@ function UserEdit(props) {
                     ) : (
                             <>
                                 <p>{ currentUser.userIdx.nickname }</p>
+                                <Img 
+                            src={imgFile ? imgFile : defaultimage} 
+                            alt="프로필 이미지"
+                            />
                                 <p>Gender : { currentUser.userIdx.gender }</p>
                                 <p>Birth : { currentUser.userIdx.birth }</p>
                                 <p>Like genre : </p>
