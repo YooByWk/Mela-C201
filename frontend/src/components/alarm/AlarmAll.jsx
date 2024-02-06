@@ -7,6 +7,17 @@ function AlarmAll () {
     const CheckContext = createContext()
     const [data, setData] = useState(null)
     const [checked, setChecked] = useState([])
+
+    const changeHandler = (check, id) => {
+        if (check) {
+            setChecked([...check, id])
+            console.log('체크')
+        } else {
+            setChecked(checked.filter(button => button != id))
+        }
+    }
+
+    const isAllChecked = checked.length == 
    
     useEffect(() => {
         const fetchData = async () => {
@@ -34,8 +45,12 @@ function AlarmAll () {
                                         <div>
                                             <input 
                                                 type="checkbox"
+                                                id='check'
                                                 checked={checked}
-                                                onChange={setChecked}
+                                                onChange={e => {
+                                                    changeHandler(e.currentTarget.checked, 'check')
+                                                }}
+                                                
                                             />
                                         </div>
                                         {alarm.checked ? <div className='dot-checked'></div>
