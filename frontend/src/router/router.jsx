@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Portfolio from "../pages/Portfolio";
@@ -43,8 +44,92 @@ function AppRouter({ className }) {
         <Route path="/message" element={<Message />} />
         <Route path="/message/:roomIdx" element={<Message />} />
       </Routes>
+=======
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Portfolio from "../pages/Portfolio"
+import SigninModal from '../components/Modals/SigninModal';
+import SignupModal from '../components/Modals/SignupModal';
+import Gather from '../pages/Gather';
+import UserUpdate from '../pages/UserUpdate';
+import PortfolioAll from '../pages/PortfolioAll';
+import Message from '../pages/Message';
+import EmailVerify from '../pages/EmailVerify';
+import TeamspaceTeam from '../components/teamspace/TeamspaceTeam';
+import TeamspaceAudio from '../components/teamspace/TeamspaceAudio';
+import TeamspaceFile from '../components/teamspace/TeamspaceFile';
+import TeamspaceManage from '../components/teamspace/TeamspaceManage';
+import TeamspaceDetail from '../pages/TeamspaceDetail';
+
+
+function AppRouter({ className }) {
+  return (  
+    <div className={className}>
+  
+        <Routes>
+
+          <Route
+            path='/portfolio/:nickname' element={<Portfolio/>}
+          />
+
+          <Route
+            path='/gather' exact element={<Gather/>}
+          /> 
+
+          <Route 
+            path='/teamspace/:teamspaceIdx' element={<TeamspaceDetail/>}
+          />
+
+          <Route 
+            path='/teamspace/:teamspaceIdx/team' element={<TeamspaceTeam/>}
+          />
+          
+          <Route 
+          path='/teamspace/:teamspaceIdx/audio' element={<TeamspaceAudio/>} 
+          />
+
+          <Route 
+          path='/teamspace/:teamspaceIdx/file' element={<TeamspaceFile/>} 
+          />
+
+          <Route 
+          path='/teamspace/:teamspaceIdx/management' element={<TeamspaceManage/>} 
+          />
+
+          <Route
+            path='/signup' element={<SignupModal />}
+            />
+
+          <Route
+            path='/login' element={<SigninModal />}
+          />
+
+          <Route
+            path='/users' element={<UserUpdate />}
+          />
+
+          <Route
+            path='/musics' element={<PortfolioAll />}
+            />
+            
+          <Route
+            path='/message/:roomIdx' element={<Message />}
+            />
+            
+            <Route
+              path='/message' element={<Message />}
+              />
+
+        </Routes>
+>>>>>>> be1f5a03c83f0803d13079696cab6c3650389398
     </div>
   );
 }
 
+<<<<<<< HEAD
 export default AppRouter;
+=======
+export default AppRouter 
+
+
+>>>>>>> be1f5a03c83f0803d13079696cab6c3650389398

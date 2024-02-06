@@ -15,21 +15,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class ChatController {
-    private final RedisPublisher redisPublisher;
-    private final ChatRoomRepository chatRoomRepository;
+    private final SimpMessageSendingOperations messagingTemplate;
 
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
-    @MessageMapping("/chat/message")
+    @MessageMapping("/message")
     public void message(ChatMessage message) {
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
-            chatRoomRepository.enterChatRoom(message.getRoomIdx());
 //            message.setMessage(message.getUserIdx() + "님이 입장하셨습니다.");
         }
 
         System.out.println("message: " + message);
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
-        redisPublisher.publish(chatRoomRepository.getTopic(message.getRoomIdx()), message);
+        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomIdx(), message);
     }
 }
