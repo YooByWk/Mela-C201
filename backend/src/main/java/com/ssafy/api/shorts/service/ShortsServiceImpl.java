@@ -123,7 +123,9 @@ public class ShortsServiceImpl implements  ShortsService {
         shortsLike.setShortsIdx(shorts);
         shortsLikeRepository.save(shortsLike);
 
-        User getAlarmUser = shortsRepository.findByShortsIdx(shortsId).get().getUserIdx();
+//        User getAlarmUser = shortsRepository.findByShortsIdx(shortsId).get().getUserIdx();
+
+        User getAlarmUser = shortsLike.getUploaderUserIdx();
 
         Notification notification = new Notification();
         notification.setUserIdx(getAlarmUser);    //알람을 받을 사용자; User 객체 타입
@@ -131,6 +133,21 @@ public class ShortsServiceImpl implements  ShortsService {
         notification.setChecked(false);
         notification.setAlarmDate(LocalDateTime.now());
         notificationRepository.save(notification);
+
+        if(shortsLikeRepository.findByUserIdxAndUploaderUserIdx(getAlarmUser,user).isPresent()){
+            Notification notification1 = new Notification();
+            Notification notification2 = new Notification();
+            notification1.setUserIdx(getAlarmUser);    //알람을 받을 사용자; User 객체 타입
+            notification2.setUserIdx(user);    //알람을 받을 사용자; User 객체 타입
+            notification1.setAlarmContent(getAlarmUser.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다.");
+            notification2.setAlarmContent(user.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다.");
+            notification1.setChecked(false);
+            notification2.setChecked(false);
+            notification1.setAlarmDate(LocalDateTime.now());
+            notification2.setAlarmDate(LocalDateTime.now());
+            notificationRepository.save(notification1);
+            notificationRepository.save(notification2);
+        }
     }
 
     @Override
