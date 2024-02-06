@@ -88,7 +88,7 @@ function PortfolioAdd() {
     const [pinFixed, setPinFixed] = useState(false)
     // const [fileDescription, setFileDescription] = useState('')
     const [title, setTitle] = useState('')
-    const [imgFile, setImgFile] = useState(defaultimage)
+    const [imgFile, setImgFile] = useState(<img src={defaultimage} alt="기본 이미지" />)
     const [musicFile, setMusicFile] = useState()
     const [lyricFile, setLyricFile] = useState()
 
@@ -119,6 +119,8 @@ function PortfolioAdd() {
 
         if (e.target.files[0]) {
             setMusicFile(e.target.files[0])
+        } else {
+            setMusicFile(<img src={defaultimage} alt="기본 이미지" />)
         }
     }
 
@@ -155,6 +157,7 @@ function PortfolioAdd() {
             title: title
         })
 
+        console.log(typeof(imgFile))
         formData.append('portfolioMusicPostReq', body)
         formData.append('file', imgFile)
         formData.append('file', musicFile)

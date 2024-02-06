@@ -318,6 +318,7 @@ $RECYCLE.BIN/
 #
 *.gz
 
+
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java,node,windows,vuejs
 
 # backend/ log files
