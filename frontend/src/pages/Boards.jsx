@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
+import Alarmbar from "../components/alarm/Alarmbar";
 
 const Community = () => {
   //
@@ -21,7 +22,9 @@ const Community = () => {
         <Navbar backcolour="10" />
         <Outlet />
       </MainDiv>
-      {!isWriting && <RSideDiv>3</RSideDiv>}
+      <RSideDiv>
+        <Alarmbar />
+      </RSideDiv>
     </CommunityContainer>
   );
 };
