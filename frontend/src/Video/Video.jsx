@@ -4,7 +4,6 @@ import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { Stream } from './../../node_modules/openvidu-browser/src/OpenVidu/Stream';
 
 
 class Video extends Component {
