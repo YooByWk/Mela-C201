@@ -87,8 +87,6 @@ function Landing() {
         <div>
           <h1> Community</h1>
         </div>
-        {/* 테스트 코드이므로 실수로 커밋되었다면 삭제해주세요 */}
-        <img src="https://s3.ap-northeast-2.amazonaws.com/my.first.mela.sss.bucket/mela/upload/2024/02/06/png/c65a3900-7de6-40dd-b0ae-6f9571aabf55_albumart.png" alt="BigCo Inc. logo"/>
       </div>
 
       

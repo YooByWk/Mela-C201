@@ -70,7 +70,8 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         // 팀 스페이스 썸네일 저장
         // 팀 스페이스 썸네일 사진 파일 idx 얻기
         // ...
-        System.out.println("파일: " +  registerInfo.getTeamspace_picture_file_idx());
+        //FIXME: 아래는 필요없을 것 같다.
+//        System.out.println("파일: " +  registerInfo.getTeamspace_picture_file_idx());
 
         com.ssafy.db.entity.File teamspacePictureRecord = null;
         com.ssafy.db.entity.File teamspaceBackgroundPictureRecord = null;
@@ -104,8 +105,10 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         teamspace.setEndDate(registerInfo.getEndDate());
         teamspace.setHost(userRepository.getOne(userIdx));
         teamspace.setTeamDescription(registerInfo.getTeamDescription());
-        registerInfo.setTeamspace_picture_file_idx(teamspacePictureRecord);
-        teamspace.setTeamspacePictureFileIdx(registerInfo.getTeamspace_picture_file_idx());
+        //FIXME: 아래는 필요없을 것 같다.
+//        registerInfo.setTeamspace_picture_file_idx(teamspacePictureRecord);
+//        teamspace.setTeamspacePictureFileIdx(registerInfo.getTeamspace_picture_file_idx());
+        teamspace.setTeamspacePictureFileIdx(teamspacePictureRecord);
         teamspace.setTeamspaceBackgroundPictureFileIdx(teamspaceBackgroundPictureRecord);
         teamspaceRepository.save(teamspace);
 
