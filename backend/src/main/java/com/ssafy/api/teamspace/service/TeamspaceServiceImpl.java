@@ -1,5 +1,6 @@
 package com.ssafy.api.teamspace.service;
 
+import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.teamspace.request.ScheduleRegisterPostReq;
 import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
@@ -14,13 +15,17 @@ import com.ssafy.db.entity.TeamspaceMember;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.*;
 import lombok.extern.java.Log;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+
+import static com.ssafy.common.util.ExtensionUtil.isValidImageExtension;
 
 @Transactional
 @Service("teamspaceService")
@@ -54,12 +59,44 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     @Autowired
     NotificationUtil notificationUtil;
 
+    @Autowired
+    FileService fileService;
+
+    //지원하는 동영상 확장자 배열
+    private String[] supportedImageExtensions = {"png", "jpg", "jpeg"};
+
     @Override
-    public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx) {
+    public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx, MultipartFile teamspacePicture, MultipartFile teamspaceBackgroundPicture) {
         // 팀 스페이스 썸네일 저장
         // 팀 스페이스 썸네일 사진 파일 idx 얻기
         // ...
-        System.out.println("파일: " +  registerInfo.getTeamspace_picture_file_idx());
+        //FIXME: 아래는 필요없을 것 같다.
+//        System.out.println("파일: " +  registerInfo.getTeamspace_picture_file_idx());
+
+        com.ssafy.db.entity.File teamspacePictureRecord = null;
+        com.ssafy.db.entity.File teamspaceBackgroundPictureRecord = null;
+
+        //팀 스페이스 메인 이미지 저장
+        if(teamspacePicture != null) {
+            //클라이언트가 업로드한 파일의 확장자 추출
+            String extension = FilenameUtils.getExtension(teamspacePicture.getOriginalFilename());
+
+            if(isValidImageExtension(extension)) {
+                teamspacePictureRecord = fileService.saveFile(teamspacePicture, "");
+                teamspacePictureRecord = fileService.addTableRecord(teamspacePictureRecord);
+            }
+        }
+
+        //팀 스페이스 배경 이미지 저장
+        if(teamspaceBackgroundPicture != null) {
+            //클라이언트가 업로드한 파일의 확장자 추출
+            String extension = FilenameUtils.getExtension(teamspaceBackgroundPicture.getOriginalFilename());
+
+            if(isValidImageExtension(extension)) {
+                teamspaceBackgroundPictureRecord = fileService.saveFile(teamspaceBackgroundPicture, "");
+                teamspaceBackgroundPictureRecord = fileService.addTableRecord(teamspaceBackgroundPictureRecord);
+            }
+        }
 
         // 팀 스페이스 생성
         Teamspace teamspace = new Teamspace();
@@ -68,7 +105,11 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         teamspace.setEndDate(registerInfo.getEndDate());
         teamspace.setHost(userRepository.getOne(userIdx));
         teamspace.setTeamDescription(registerInfo.getTeamDescription());
-        teamspace.setTeamspacePictureFileIdx(registerInfo.getTeamspace_picture_file_idx());
+        //FIXME: 아래는 필요없을 것 같다.
+//        registerInfo.setTeamspace_picture_file_idx(teamspacePictureRecord);
+//        teamspace.setTeamspacePictureFileIdx(registerInfo.getTeamspace_picture_file_idx());
+        teamspace.setTeamspacePictureFileIdx(teamspacePictureRecord);
+        teamspace.setTeamspaceBackgroundPictureFileIdx(teamspaceBackgroundPictureRecord);
         teamspaceRepository.save(teamspace);
 
         // host 팀 멤버로 추가

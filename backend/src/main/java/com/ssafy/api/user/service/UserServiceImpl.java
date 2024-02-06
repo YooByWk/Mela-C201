@@ -127,8 +127,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateUser(User user, UserUpdatePostReq userUpdateInfo, PortfolioAbstractPostReq portfolioAbstractPostReq, MultipartFile portfolioPicture) {
 		if(userUpdateInfo != null) {
-			System.err.println("userUpdateInfo: " + userUpdateInfo);
-
 			user.setName(userUpdateInfo.getName());
 			user.setNickname(userUpdateInfo.getNickname());
 			user.setBirth(userUpdateInfo.getBirth());
@@ -156,7 +154,6 @@ public class UserServiceImpl implements UserService {
 
 		//클라이언트에서 프로필 사진을 업로드 했다면 (파일이 비어있지 않다면)
 		if(portfolioPicture != null) {
-			System.err.println("portfolioPicture null 아님!");
 			//1. 프로필 사진 저장 (Amazon S3, file 테이블)
 			com.ssafy.db.entity.File file = fileService.saveFile(portfolioPicture, "");
 			PortfolioAbstract portfolioAbstract = null;
