@@ -19,6 +19,7 @@ function CommunityDetail() {
   const [comments, setComments] = useState(null);
   const [isLiked, setIsLiked] = useState(null)
   const [userInput, setUserInput] = useState("");
+  const [likeCount, setLikeCount] = useState(0)
   const Navigate = useNavigate()
   const currentUserIdx = useStore(s => s.user ? s.user.userIdx : null)
   
@@ -40,10 +41,11 @@ function CommunityDetail() {
       setData(response.data);
       const Comments = await GetComment({ boardIdx });
       setComments(Comments.data);
+      setLikeCount(response.data.likeNum);
       // console.log(Comments);
     };
     detailData();
-  }, []);
+  }, [likeCount]);
 
   const hanleUserInput = async (event) => {
     setUserInput(event.target.value);
@@ -108,16 +110,16 @@ function CommunityDetail() {
         const res = await checkBoardLike({boardIdx,currentUserIdx})
         // console.log(response.data.message==='true')
         if (res.data.message === 'true') {
-          setIsLiked(false) // 상태 업데이트를 true로 직접 설정
+          setIsLiked(true) // 상태 업데이트를 true로 직접 설정
         } else {
-          setIsLiked(true) // 상태 업데이트를 false로 직접 설정
+          setIsLiked(false) // 상태 업데이트를 false로 직접 설정
         }
       }    
       check()
       // 좋아요 했다면 true
       // 아니라면 false
     }, [boardIdx, currentUserIdx])
-  const [likeCount, setLikeCount] = useState(0);
+
   const BoardLikeHandler = async ()=> {
     const res = await BoardLike({boardIdx})
     setLikeCount(res.data.likeNum)
@@ -169,7 +171,7 @@ function CommunityDetail() {
           </div>
         </div>
         <span>
-          {likeNum}
+          {likeCount}
           {isLiked ? <span><GoHeartFill onClick={BoardLikeHandler} className="icon"/>좋아요 취소</span> :     
             <span><GoHeart onClick={BoardLikeHandler} className="icon"/>좋아요</span>}
         </span>

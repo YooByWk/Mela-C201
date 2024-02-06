@@ -21,6 +21,7 @@ import GatherDetail from "./components/gather/GatherDetail";
 import GatherEdit from "./components/gather/GatherEdit";
 import ChangePassword from "./pages/ChangePassword";
 
+import Video from "./Video/Video";
 function App() {
   return (
     <Fragment>
@@ -28,6 +29,8 @@ function App() {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
+          <Route path='video' element={<Video />} />
+
             <Route path="/" element={<Landing />} />
             <Route path="/teamspace" element={<TeamspaceMain />} />
             <Route path="/signup/:emailId" element={<EmailVerify />} />
