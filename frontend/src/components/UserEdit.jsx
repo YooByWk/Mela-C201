@@ -24,6 +24,7 @@ function UserEdit(props) {
     const currentUser = props.currentUser
     const loginUser = props.loginUser
 
+    console.log(loginUser)
     console.log(currentUser)
 
     const navigate = useNavigate()
@@ -34,9 +35,9 @@ function UserEdit(props) {
 
     const handleFollow = async() => {
         // 만약 현재 로그인 한 사용자의 이메일 아이디와 주소창의 닉네임이 다르다면
-        if (loginUser && currentUser && loginUser.emailId !== currentUser) {
+        if (loginUser && currentUser && loginUser[0].emailId !== currentUser.userIdx.emailId) {
             try {
-                await followUser(loginUser.emailId)
+                await followUser(loginUser[0].emailId)
                 setIsFollowed(!isFollowed)
             } catch(err) {
                 console.error(err)
@@ -49,15 +50,17 @@ function UserEdit(props) {
             <Title>{loginUser.nickname}</Title>
             {loginUser && currentUser && (
                 <div>
-                    {currentUser === loginUser.emailId ? (
+                    {currentUser.userIdx.emailId === loginUser[0].emailId ? (
                         <>
-                            <p>{ loginUser.name }</p>
-                            <p>Gender : { loginUser.gender }</p>
-                            <p>Birth : { loginUser.birth }</p>
+                            <p>{ loginUser[0].nickname }</p>
+                            <p>Gender : { loginUser[0].gender }</p>
+                            <p>Birth : { loginUser[0].birth }</p>
                             <p>Like genre : </p>
                             <p>Position : </p>
                             <p>SNS</p>
-                            <p>{loginUser.searchAllow}</p>
+                            <p>instagram : { loginUser[1].instagram }</p>
+                            <p>youtube : {loginUser[1].youtube }</p>
+                            {/* <p>{loginUser.searchAllow}</p> */}
 
                             <DefaultButton 
                                 text={'Edit'}
@@ -69,15 +72,15 @@ function UserEdit(props) {
                         </>
                     ) : (
                             <>
-                                <p>{ currentUser.name }</p>
-                                <p>Gender : { currentUser.gender }</p>
-                                <p>Birth : { currentUser.birth }</p>
+                                <p>{ currentUser.userIdx.nickname }</p>
+                                <p>Gender : { currentUser.userIdx.gender }</p>
+                                <p>Birth : { currentUser.userIdx.birth }</p>
                                 <p>Like genre : </p>
                                 <p>Position : </p>
                                 <p>SNS</p>
-                                <p>instagram : </p>
-                                <p>youtube : </p>
-                                <p>{currentUser.searchAllow}</p>
+                                <p>instagram : {currentUser.instagram }</p>
+                                <p>youtube : {currentUser.youtube }</p>
+                                {/* <p>{currentUser.searchAllow}</p> */}
 
                                 <DefaultButton 
                                 text={isFollowed ? 'Unfollow' : 'Follow'}
