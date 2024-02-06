@@ -1,24 +1,12 @@
-import React, { useState, useEffect, createContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { notification, checkNotification } from '../../API/UserAPI'
+import { notification, checkNotification, delNotification } from '../../API/UserAPI'
 import moment from 'moment'
 
 function AlarmAll () {
-    const CheckContext = createContext()
     const [data, setData] = useState(null)
-    const [checked, setChecked] = useState([])
+    const [checkAlarm, setCheckAlarm] = useState([])
 
-    const changeHandler = (check, id) => {
-        if (check) {
-            setChecked([...check, id])
-            console.log('체크')
-        } else {
-            setChecked(checked.filter(button => button != id))
-        }
-    }
-
-    const isAllChecked = checked.length == 
-   
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -32,9 +20,72 @@ function AlarmAll () {
         fetchData()
     }, [])
 
+    // 단일 선택
+    const handleSingleCheck = (checked, notificationIdx) => {
+        if (checked) {
+            setCheckAlarm(prev => [...prev, notificationIdx])
+        } else {
+            // 단일 선택 해제 시 체크된 아이템을 제외한 배열
+            setCheckAlarm(checkAlarm.filter((el) => el !== notificationIdx))
+        }
+    }
+
+    // 전체 선택
+    const handleAllCheck = (checked) => {
+        if (checked) {
+            const idArray = []
+            data.forEach((el) => idArray.push(el.notificationIdx))
+            setCheckAlarm(idArray)
+        } else {
+            // 해제 시 빈 배열로 업데이트
+            setCheckAlarm([])
+        }
+    }
+
+    // 읽기 체크
+    const handleRead = async () => {
+        checkAlarm.forEach(notificationIdx => {
+            checkNotification({ notificationid: notificationIdx })
+            .then(() => {
+                console.log(notificationIdx)
+                refreshNotification()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        })
+    }
+
+    // 새로고침
+    const refreshNotification = async () => {
+        try {
+            const res = await notification()
+            setData(res)
+            setCheckAlarm([])
+        } catch (err) {
+            console.log(err)
+        }
+    }
+  
+
     return (
         <>
         <Container>
+            <div className='header'>
+                <div className='all-check'>
+                    <input type="checkbox"
+                        onChange={(e) => handleAllCheck(e.target.checked)}
+                        checked={data && checkAlarm.length === data.length ? true : false }
+                    />
+                    <span>전체 선택</span>
+                </div>
+                <div className='read'>
+                    <p onClick={handleRead}>
+                        Mark all as read
+                    </p>
+                </div>
+            </div>
+        <hr className='line'/>
             <div>
                 <ul>
                     {data && data.length > 0? (
@@ -45,16 +96,12 @@ function AlarmAll () {
                                         <div>
                                             <input 
                                                 type="checkbox"
-                                                id='check'
-                                                checked={checked}
-                                                onChange={e => {
-                                                    changeHandler(e.currentTarget.checked, 'check')
-                                                }}
-                                                
+                                                checked={checkAlarm.includes(alarm.notificationIdx) ? true : false }
+                                                onChange={(e) => handleSingleCheck(e.target.checked, alarm.notificationIdx)}
                                             />
                                         </div>
-                                        {alarm.checked ? <div className='dot-checked'></div>
-                                            : <div className='dot-unchecked'></div>
+                                        {alarm.checked ? <div className='text-checked'>읽음</div>
+                                            : <div className='text-unchecked'>읽지 않음</div>
                                         }
                                         <div className='content'>
                                             {alarm.alarmContent}
@@ -64,7 +111,6 @@ function AlarmAll () {
                                         </div>
                                     </div>
                                     <hr />
-                                    
                                 </li>
                             )
                         }) )
@@ -74,7 +120,6 @@ function AlarmAll () {
                     }
                 </ul>
             </div>
-
         </Container>
         </>
     )
@@ -87,9 +132,19 @@ const Container = styled.div`
     color: white;
     margin: 20px;
 
+    .header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .read {
+        color: #254EF8;
+        cursor: pointer;
+    }
+
     .content {
-        font-size: 20px;
-        margin-bottom: 20px;
+        font-size: 18px;
+        margin-bottom: 10px;
         margin-left: 3rem;
     }
 
@@ -99,13 +154,18 @@ const Container = styled.div`
         justify-content: space-between;
     }
 
-    .dot-checked {
-        border-radius: 100%;
-        border: 10px solid #254EF8;
+    .text-checked {
+        color:#6C7383;
+        font-size: large;
     }
     
-    .dot-unchecked {
-        border-radius: 100%;
-        border: 10px solid #6C7383;
+    .text-unchecked {
+        color:#254EF8;
+        font-size: large;
+    }
+
+    .line {
+        border: 1px solid #254EF8;
+        margin-bottom: 1rem;
     }
 `

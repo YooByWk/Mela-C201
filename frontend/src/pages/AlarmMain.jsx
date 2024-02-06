@@ -6,10 +6,11 @@ import AlarmUnread from '../components/alarm/AlarmUnread'
 import DefaultButton from '../components/DefaultButton'
 import { FaRegBell } from "react-icons/fa6"
 import { LuBellDot } from "react-icons/lu"
-import { delNotification } from '../API/UserAPI'
+import { notification, delNotification } from '../API/UserAPI'
 
 
 function AlarmMain () {
+    const [data, setData] = useState(null);
     const [currentTab, setCurrentTab] = useState(0)
     const navigate = useNavigate()
 
@@ -22,9 +23,30 @@ function AlarmMain () {
         setCurrentTab(index)
     }
 
-    // const handleDelete = async () => {
-        
-    // }
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await notification()
+                setData(res)
+                console.log(res)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        fetchData()
+    }, [])
+
+    const handleDelete = async (notificationIdx) => {
+        try {
+            await delNotification({ notificationid : notificationIdx})
+            console.log(notificationIdx)
+            
+            const response = await notification()
+            setData(response)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
         <>
@@ -40,10 +62,8 @@ function AlarmMain () {
                         </span>
                     </li>
                 ))}
-                <p>Mark all as read</p>
             </TabMenu>
             <div className='main-box'>
-                <hr className='line'/>
                 {menuArr[currentTab].content}
             </div>
 
@@ -81,11 +101,6 @@ const Container = styled.div`
 
     .footer {
         display: flex;
-    }
-
-    .line {
-        border: 1px solid #254EF8;
-        width: 96%;
     }
 `
 
