@@ -267,6 +267,13 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public boolean deleteFileByFileInstance(long fileIdx) {
+        com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
+
+        return deleteFileByFileInstance(file);
+    }
+
+    @Override
     public boolean deleteFileByFileInstance(com.ssafy.db.entity.File file) {
         try {
             //Amazon S3에서 삭제

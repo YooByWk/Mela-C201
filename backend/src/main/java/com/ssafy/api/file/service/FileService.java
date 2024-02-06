@@ -25,6 +25,8 @@ public interface FileService {
     byte[] getFile(String storedFileName) throws IOException;
     //Amazon S3에 저장된 파일을 파일 경로로 삭제 (예: mela/upload/2024/02/03/mp3/9da691a4-9873-492b-a785-0d0411773a60_Variations On The Canon By Pachelbel.mp3)
     boolean deleteFileByFilePath(String filePath) throws IOException;
+    //Amazon S3에 저장된 파일을 파일 idx로 삭제 (예: 1)
+    boolean deleteFileByFileInstance(long fileIdx);
     //Amazon S3에 저장된 파일을 file 테이블 인스턴스로 삭제
     boolean deleteFileByFileInstance(com.ssafy.db.entity.File file);
     //Amazon S3에 저장된 파일들을 file 테이블 인스턴스로 삭제 #테스트 중
