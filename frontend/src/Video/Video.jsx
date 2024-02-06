@@ -24,6 +24,8 @@ class Video extends Component {
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
       publisher: undefined,
       subscribers: [],
+      isCamera : true,
+      isMic : true,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -33,6 +35,27 @@ class Video extends Component {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
+    this.handleToggle = this.handleToggle.bind(this); // 마이크 카메라 토글
+  }
+  handleToggle(target) { // 마이크 카메라 토글 입력 함수
+    switch (target) {
+      case "camera":
+        this.setState({ isCamera: !this.state.isCamera },
+          () => {
+            console.log(this.state.isCamera)
+            this.state.publisher.publishVideo(this.state.isCamera);
+          });
+
+        break;
+      case "mic":
+        this.setState({ isMic: !this.state.isMic },()=>{
+          console.log(this.state.isMic)
+          this.state.publisher.publishAudio(this.state.isMic);
+        });
+        break;
+      default:
+        break;
+    }
   }
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
@@ -302,18 +325,20 @@ class Video extends Component {
         ) : null}
         {this.state.session !== undefined ? (
           <div>
-            <div>
+            <div className="sessionHeader">
               <h1>{mySessionId}</h1>
               <input type="button" value="Leave" onClick={this.leaveSession} />
               <input type="button" value="Switch" onClick={this.switchCamera} />
+              <input type="button" value="camera" onClick={() => this.handleToggle("camera")} />
+              <input type="button" value="mic" onClick={() => this.handleToggle("mic")} />
             </div>
-            {this.state.mainStreamManager !== undefined ? (
-              <div>
+            {/* {this.state.mainStreamManager !== undefined ? (
+              <div className='VideoComponent'>
                 <UserVideoComponent
                   streamManager={this.state.mainStreamManager}
                 />
               </div>
-            ) : null}
+            ) : null} */}
             <div>
               {this.state.publisher !== undefined ? (
                 <div
@@ -330,10 +355,13 @@ class Video extends Component {
               {this.state.subscribers.map((sub, i) => (
                 <div
                   key={sub.id}
-                  className="stream-container col-md-6 col-xs-6"
+                  className=""
                   onClick={() => this.handleMainVideoStream(sub)}
                 >
                   <span>{sub.id}</span>
+                  <span>
+                  {this.state.isCamera ? <div>'카메라가 켜져있습니다'</div> : <div>'카메라가 꺼져있습니다'</div>}
+                  </span>
                   <UserVideoComponent streamManager={sub} />
                 </div>
               ))}
