@@ -20,9 +20,8 @@ const Title = styled.h3`
 function UserEdit(props) {
     const [values, setValues] = useState([])
     const [isFollowed, setIsFollowed] = useState(false)
-    const [currentUser, setCurrentUser] = useState({}) 
 
-    const currentUserId = props.currentUserId
+    const currentUser = props.currentUser
     const loginUser = props.loginUser
 
     console.log(currentUser)
@@ -35,7 +34,7 @@ function UserEdit(props) {
 
     const handleFollow = async() => {
         // 만약 현재 로그인 한 사용자의 이메일 아이디와 주소창의 닉네임이 다르다면
-        if (loginUser && currentUserId && loginUser.emailId !== currentUserId) {
+        if (loginUser && currentUser && loginUser.emailId !== currentUser) {
             try {
                 await followUser(loginUser.emailId)
                 setIsFollowed(!isFollowed)
@@ -48,9 +47,9 @@ function UserEdit(props) {
     return (
         <Container>
             <Title>{loginUser.nickname}</Title>
-            {loginUser && currentUserId && (
+            {loginUser && currentUser && (
                 <div>
-                    {currentUserId === loginUser.emailId ? (
+                    {currentUser === loginUser.emailId ? (
                         <>
                             <p>{ loginUser.name }</p>
                             <p>Gender : { loginUser.gender }</p>
@@ -76,6 +75,8 @@ function UserEdit(props) {
                                 <p>Like genre : </p>
                                 <p>Position : </p>
                                 <p>SNS</p>
+                                <p>instagram : </p>
+                                <p>youtube : </p>
                                 <p>{currentUser.searchAllow}</p>
 
                                 <DefaultButton 

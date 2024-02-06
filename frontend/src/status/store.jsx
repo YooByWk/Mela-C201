@@ -40,24 +40,6 @@ const useStore = create(set => ({
       console.error('Logout failed', error);
     }
   },
-
-  other : null,
-  otherUser: async (emailId) => {
-    if (!localStorage.accessToken) {
-      console.log('로그인되지 않음')
-      return}
-    try {
-      const response = await axios.get(`http://localhost:8080/api/v1/users/users/${emailId}/portfolio`,{
-        headers : {
-          'Authorization' :`Bearer ${localStorage.accessToken}`
-        }
-      });
-      set({other: response.data})
-    }
-     catch(error) {
-      console.error(error)
-    }
-  },
 }))
 
 

@@ -12,30 +12,28 @@ function Portfolio() {
 
     // 내가 들어간 포트폴리오
     const { emailId } = useParams()
-
-    const { currentUser, setCurrentUser } = useState()
+    const [ current, setCurrent ] = useState('')
     // 현재 로그인 한 사람
     const { fetchUser, user } = useStore()
     
     useEffect(() => {
-        const getUserInfo = async() => {
+        const info = async() => {
             try {
-                fetchUser()
-                console.log(emailId)
-                const currentInfo = await othersInfo({emailId: emailId})
-                setCurrentUser(currentInfo)
+                const userInfo = await fetchUser()
+                const otherInfo = await othersInfo(emailId)
+                setCurrent(otherInfo)
             } catch (err) {
-                console.error(err)
+                console.log(err)
             }
-        }; getUserInfo()
+        }
+        info()
+        }, [emailId])
 
-    }, [fetchUser])
-    
-    console.log(user)
-    // console.log(currentUser)
+    // console.log(emailId)
+    // console.log(current)
 
     const userProps = {
-        currentUserId: currentUser,
+        currentUser: current,
         loginUser: user
     }
     
