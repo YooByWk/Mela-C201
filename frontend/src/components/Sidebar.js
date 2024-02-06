@@ -7,7 +7,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import { MdOutlineLocalFireDepartment, MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
 import useStore from "../status/store";
-
+import {isLogined} from "../status/store";
 const SideContainer = styled.div`
   color: white;
   padding-top: ${props => props.$paddingtop || '0'};
@@ -30,16 +30,17 @@ const CustomLink = styled(Link)`
 `
 
 function Sidebar({ className, paddingtop }) {
-  const { fetchUser, user, logout} = useStore()
-
+  const { fetchUser, user, logout,} = useStore()
+  const isLogined = useStore(state => state.isLogined)
+  const [userData, setUserData] = useState({})
   useEffect(() => {
     fetchUser()
-  }, [fetchUser])
+  }, [])
 
   return (
     <div className={className}>
       <SideContainer className="contents" $paddingtop={paddingtop}>
-        {user && user.nickname ? (
+        {user && userData ? (
           <>
           <h3> {user.nickname} </h3>
           <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4">
@@ -81,7 +82,7 @@ function Sidebar({ className, paddingtop }) {
             </List>
           </Card>
           </>
-        ) : null}
+        ) : <p>유저정보가 없습니다.</p>}
       </SideContainer>
     </div>
   );
