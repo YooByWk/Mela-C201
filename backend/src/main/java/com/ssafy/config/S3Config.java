@@ -22,13 +22,13 @@ public class S3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
-    //깃허브 IO (https://europani.github.io/aws/2022/03/03/004-spring-s3.html)
     @Bean
-    public AmazonS3 amazonS3Client() {
+    public AmazonS3Client amazonS3Client() {
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
         return (AmazonS3Client) AmazonS3ClientBuilder.standard()
                 .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+                .enablePathStyleAccess()
                 .build();
     }
 

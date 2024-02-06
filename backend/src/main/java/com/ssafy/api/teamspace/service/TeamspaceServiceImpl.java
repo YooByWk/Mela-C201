@@ -25,6 +25,8 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+import static com.ssafy.common.util.ExtensionUtil.isValidImageExtension;
+
 @Transactional
 @Service("teamspaceService")
 public class TeamspaceServiceImpl implements TeamspaceService{
@@ -62,15 +64,6 @@ public class TeamspaceServiceImpl implements TeamspaceService{
 
     //지원하는 동영상 확장자 배열
     private String[] supportedImageExtensions = {"png", "jpg", "jpeg"};
-
-    boolean isValidImageExtension(String extension) {
-        for(String s : supportedImageExtensions) {
-            if(extension.equals(s.toUpperCase()) || extension.equals(s.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     @Override
     public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx, MultipartFile teamspacePicture, MultipartFile teamspaceBackgroundPicture) {
