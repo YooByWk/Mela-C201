@@ -3,6 +3,8 @@ import useStore from "../../status/store";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BoardCreate } from "../../API/BoardAPI";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import styled from "styled-components";
 
 
 function CommunityCreate() {
@@ -50,17 +52,29 @@ function CommunityCreate() {
     })
   }
 
+  const goBack = async () => {
+    Navigate(-1)
+  }
 
   if (islogined) {
     return (
       <>
+      <Container>
+      <IoMdArrowRoundBack size='30' className="back-btn" onClick={goBack}/>
         <form action="" onSubmit={SubmitHandler}>
-          <h2>Title</h2>
-          <input type="text" id='title' onChange={handleChange}/>
-          <h2>Content</h2>
-          <textarea type="text" id='content' onChange={handleChange}/>
-          <input type="submit" />
+          <div className="wrapper">
+            <label className="label">Title</label>
+            <input type="text" id='title' onChange={handleChange} className="input"/>
+          </div>
+          <div className="wrapper">
+            <label className="label">Content</label>
+            <textarea type="text" id='content' onChange={handleChange} className="input-textarea"/>
+          </div>
+          <div className="btnWrapper">
+            <input type="submit" className="button" value='작 성'/>
+          </div>
         </form>
+      </Container>
       </>
     );
   }
@@ -69,3 +83,66 @@ function CommunityCreate() {
 
 
 export default CommunityCreate;
+
+
+const Container = styled.div`
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .back-btn {
+    background-color: #6C7383;
+    border-radius: 10px;
+    width: 3rem;
+    position: absolute;
+    right: 4rem;
+    top: 1.5rem;
+  }
+
+  .label {
+    color: #254EF8;
+    font-size: x-large;
+    margin-bottom: 10px;
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .input {
+    background-color: #202C44;
+    border: none;
+    height: 2.5rem;
+    color: white;
+    flex-grow: 1;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  .input-textarea {
+    background-color: #202C44;
+    border: none;
+    height: 15rem;
+    color: white;
+    flex-grow: 1;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  .btnWrapper {
+    position: absolute;
+    right: 4rem;
+  }
+
+  .button {
+    background-color: #254EF8;
+    border: none;
+    width: 3.5rem;
+    height: 2rem;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+`

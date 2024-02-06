@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { BoardDetail, BoardUpdate } from "../../API/BoardAPI";
 import { useEffect, useState } from "react";
 import useStore from "../../status/store";
+import styled from "styled-components";
 
 function CommunityEdit() {
   const { boardIdx } = useParams();
@@ -64,17 +65,79 @@ function CommunityEdit() {
     return <div>로딩 중...</div>; // 로딩 중일 때는 로딩 메세지
   }
   return (
-    isAuthor ? ( 
-      <form onSubmit={handleSubmit}>
-        <h2>Title</h2>
-        <input type="text" id="title" value={userinput.title} onChange={handleChange} />
-        <h2>Content</h2>
-        <textarea id="content" value={userinput.content} onChange={handleChange} />
-        <input type="submit" />
-      </form>
+    isAuthor ? (
+      <Container>
+        <form onSubmit={handleSubmit}>
+          <div className="wrapper">
+            <label className="label">Title</label>
+            <input type="text" id="title" value={userinput.title} onChange={handleChange} className="input"/>
+          </div>
+          <div className="wrapper">
+            <label className="label">Content</label>
+            <textarea id="content" value={userinput.content} onChange={handleChange} className="input-textarea"/>
+          </div>
+          <div className="btnWrapper">
+            <input type="submit" className="button" value='수 정'/>
+          </div>
+        </form>
+      </Container>
     ) : ( 
       <div>당신은 이 게시글의 작성자가 아닙니다.</div> )
   )
 }
     
 export default CommunityEdit;
+
+
+const Container = styled.div`
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .input {
+    background-color: #202C44;
+    border: none;
+    height: 2.5rem;
+    color: white;
+    flex-grow: 1;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  .input-textarea {
+    background-color: #202C44;
+    border: none;
+    height: 15rem;
+    color: white;
+    flex-grow: 1;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .label {
+    color: #254EF8;
+    font-size: x-large;
+    margin-bottom: 10px;
+  }
+
+  .btnWrapper {
+    position: absolute;
+    right: 4rem;
+  }
+
+  .button {
+    background-color: #254EF8;
+    border: none;
+    width: 3.5rem;
+    height: 2rem;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+`
