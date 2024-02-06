@@ -13,6 +13,7 @@ import TeamspaceFile from '../components/teamspace/TeamspaceFile';
 import TeamspaceManage from '../components/teamspace/TeamspaceManage';
 import TeamspaceDetail from '../pages/TeamspaceDetail';
 import ForgotPassword from '../pages/ForgotPassword';
+import AlarmMain from '../pages/AlarmMain';
 
 function AppRouter({ className }) {
   return (  
@@ -71,6 +72,11 @@ function AppRouter({ className }) {
           <Route
             path='/forgotPassword' element={<ForgotPassword />}
             />
+
+          <Route
+            path='/alarm' element={<AlarmMain />}
+            />
+            
         </Routes>
     </div>
   );
