@@ -137,7 +137,7 @@ function UserUpdateForm(props) {
                         id='name'
                         value={userValues.name}
                         onChange={handleUserChange}
-                        placeholder="Name"
+                        placeholder={userValues.name}
                     />
                 </InputWrapper>
                 <InputWrapper>
@@ -149,7 +149,7 @@ function UserUpdateForm(props) {
                         id='nickname'
                         value={userValues.nickname}
                         onChange={handleUserChange}
-                        placeholder="Nickname"
+                        placeholder={userValues.nickname}
                     />
                 </InputWrapper>
                 <InputWrapper>
@@ -161,7 +161,7 @@ function UserUpdateForm(props) {
                         id='selfIntro'
                         value={portfolioValues.selfIntro}
                         onChange={handlePortfolioChange}
-                        placeholder="자기소개 문구를 입력하세요"
+                        placeholder={portfolioValues.selfIntro}
                     />
                 </InputWrapper>
                 <InputWrapper>
@@ -173,7 +173,7 @@ function UserUpdateForm(props) {
                         name='gender'
                         value={userValues.gender}
                         onChange={handleGenderChange}
-                        placeholder="Gender"
+                        placeholder={userValues.gender}
                     />
                 </InputWrapper>
                 <InputWrapper>
@@ -185,7 +185,7 @@ function UserUpdateForm(props) {
                         id='birth'
                         value={userValues.birth}
                         onChange={handleUserChange}
-                        placeholder="생년월일"
+                        placeholder={userValues.birth}
                     />
                 </InputWrapper>
                 <InputWrapper>
@@ -197,7 +197,7 @@ function UserUpdateForm(props) {
                         id='genre'
                         value={portfolioValues.genre}
                         onChange={handlePortfolioChange}
-                        placeholder="선호 장르"
+                        placeholder={portfolioValues.genre}
                     />
                 </InputWrapper>
                 <InputWrapper>
@@ -209,7 +209,7 @@ function UserUpdateForm(props) {
                         id='position'
                         value={portfolioValues.position}
                         onChange={handlePortfolioChange}
-                        placeholder="포지션"
+                        placeholder={portfolioValues.position}
                     />
                 </InputWrapper>
                 <InputWrapper>
@@ -221,7 +221,7 @@ function UserUpdateForm(props) {
                         id='instagram'
                         value={portfolioValues.instagram}
                         onChange={handlePortfolioChange}
-                        placeholder="인스타그램 링크"
+                        placeholder={portfolioValues.instagram}
                     />
                 </InputWrapper>
                 <InputWrapper>
@@ -233,7 +233,7 @@ function UserUpdateForm(props) {
                         id='youtube'
                         value={portfolioValues.youtube}
                         onChange={handlePortfolioChange}
-                        placeholder="유튜브 링크"
+                        placeholder={portfolioValues.youtube}
                     />
                 </InputWrapper>
                 <InputWrapper>
