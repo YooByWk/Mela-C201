@@ -49,7 +49,8 @@ function TeamspaceMain () {
         <h1>팀 스페이스 공간입니다.</h1>
         <TeamspaceCreateModal />
         {Object.entries(values).map(([key, value]) => (
-        <DefaultFileShape key={value.teamspaceIdx}
+        <DefaultFileShape 
+            key={value.teamspaceIdx}
             title={value.teamName}
             content={value.teamDescription}
             day={value.endDate}
