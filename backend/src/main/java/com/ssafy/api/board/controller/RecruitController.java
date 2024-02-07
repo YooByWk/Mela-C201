@@ -6,13 +6,11 @@ import com.ssafy.api.board.response.BoardRecruitRes;
 import com.ssafy.api.board.response.BoardRes;
 import com.ssafy.api.board.service.BoardService;
 import com.ssafy.api.board.service.RecruitService;
+import com.ssafy.api.user.service.PortfolioService;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
-import com.ssafy.db.entity.Board;
-import com.ssafy.db.entity.BoardRecruit;
-import com.ssafy.db.entity.Position;
-import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -38,6 +36,9 @@ public class RecruitController {
     @Autowired
     BoardService boardService;
 
+    @Autowired
+    PortfolioService portfolioService;
+
     @GetMapping("")
     @ApiOperation(value = "구인글 리스트 조회", notes = "<string>페이지번호(page), 페이지당 글 수(size), 검색어(word), 정렬조건(sortKey) </string>에 따라 게시글을 조회한다.")
     public ResponseEntity<BoardRecruitListRes> getBoardList(
@@ -46,6 +47,42 @@ public class RecruitController {
             @ApiParam(value = "검색어", example = "검색내용") @RequestParam(required = false) String word,
             @ApiParam(value = "정렬 조건", example = "viewNum") @RequestParam(required = false) String sortKey
     ) {
+        page-=1; // 1부터 시작하도록 함
+
+        RecruitGetListReq recruitGetListReq = new RecruitGetListReq();
+        recruitGetListReq.setPage(page);
+        recruitGetListReq.setSize(size);
+        recruitGetListReq.setWord(word);
+        recruitGetListReq.setSortKey(sortKey);
+
+        List<BoardRecruit> recruits = recruitService.getBoardList(recruitGetListReq);  //boardService.getBoardList(boardGetListReq);
+
+        List<BoardRecruitRes> res = new ArrayList<>();
+        for (BoardRecruit board : recruits) {
+            List<Position> positions = recruitService.getPositions(board.getBoardRecruitIdx());
+            res.add(BoardRecruitRes.of(board.getBoardIdx(), board, positions, boardService.getBoardLikeNum(board.getBoardIdx().getBoardIdx())));
+        }
+
+
+        return ResponseEntity.status(200).body(BoardRecruitListRes.of(res, recruitService.getBoardTotalCount()));
+    }
+
+    @GetMapping("/recommend")
+    @ApiOperation(value = "(나를 찾는) 구인글 리스트 조회", notes = "<string>페이지번호(page), 페이지당 글 수(size), 검색어(word), 정렬조건(sortKey) </string>에 따라 게시글을 조회한다.")
+    public ResponseEntity<BoardRecruitListRes> getRecommendedBoardList(
+            @ApiIgnore Authentication authentication,
+            @ApiParam(value = "페이지 번호 (1부터 시작)", example = "1") @RequestParam int page,
+            @ApiParam(value = "페이지당 글 수", example = "10") @RequestParam int size,
+            @ApiParam(value = "검색어", example = "검색내용") @RequestParam(required = false) String word,
+            @ApiParam(value = "정렬 조건", example = "viewNum") @RequestParam(required = false) String sortKey) {
+
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userEmail = userDetails.getUsername();
+        User user = userService.getUserByEmail(userEmail);
+        //1. user_position 테이블로부터 사용자의 희망 포지션을 가져온다.
+
+//        PortfolioAbstract portfolioAbstract = portfolioService.getPortfolioAbstractByUserIdx(user);
+
         page-=1; // 1부터 시작하도록 함
 
         RecruitGetListReq recruitGetListReq = new RecruitGetListReq();
