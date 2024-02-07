@@ -9,10 +9,7 @@ import com.ssafy.api.teamspace.response.TeamspaceListRes;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
 import com.ssafy.api.teamspace.response.TeamspaceRes;
 import com.ssafy.common.util.NotificationUtil;
-import com.ssafy.db.entity.Schedule;
-import com.ssafy.db.entity.Teamspace;
-import com.ssafy.db.entity.TeamspaceMember;
-import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import lombok.extern.java.Log;
 import org.apache.commons.io.FilenameUtils;
@@ -22,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +59,12 @@ public class TeamspaceServiceImpl implements TeamspaceService{
 
     @Autowired
     FileService fileService;
+
+    @Autowired
+    TeamspaceFileRepository teamspaceFileRepository;
+
+    @Autowired
+    TeamspaceFileRepositorySupport teamspaceFileRepositorySupport;
 
     //지원하는 동영상 확장자 배열
     private String[] supportedImageExtensions = {"png", "jpg", "jpeg"};
@@ -258,5 +262,41 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         return schedules;
     }
 
+    @Override
+    public void uploadFile(long teamspaceid, MultipartFile[] multipartFiles, String fileDescription) {
+        for(MultipartFile multipartFile : multipartFiles) {
+            if(multipartFile != null) {
+                //TODO: fileDescription 입력하지 않는 경우 ""인지 null 인지 확인 후 처리
+                //1. Amazon S3 파일 업로드
+                com.ssafy.db.entity.File file = fileService.saveFile(multipartFile, fileDescription);
+                //2. file 테이블에 저장
+                file = fileService.addTableRecord(file);
 
+                TeamspaceFile teamspaceFile = new TeamspaceFile();
+
+                teamspaceFile.setTeamspaceIdx(teamspaceRepository.findById(teamspaceid).get());
+                teamspaceFile.setFile(file);
+
+                //3. teamspace 테이블과 file 테이블을 연관 짓는 테이블에 레코드 추가 (어떤 teamspace에서 file을 업로드 했는지 정보)
+                teamspaceFileRepository.save(teamspaceFile);
+            }
+        }
+    }
+
+    @Override
+    public List<com.ssafy.db.entity.File> getFileListByTeamspaceIdx(Teamspace teamspace) {
+        List<TeamspaceFile> teamspaceFiles = teamspaceFileRepositorySupport.getFileListByTeamspaceIdx(teamspace);;
+        List<com.ssafy.db.entity.File> files = new ArrayList<>();
+
+        for(TeamspaceFile tf : teamspaceFiles) {
+            files.add(tf.getFile());
+        }
+
+        return files;
+    }
+
+    @Override
+    public Teamspace findById(Long teamspaceIdx) {
+        return teamspaceRepository.findById(teamspaceIdx).get();
+    }
 }

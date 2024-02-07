@@ -6,11 +6,13 @@ import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
 import com.ssafy.api.teamspace.response.TeamspaceRes;
 import com.ssafy.api.teamspace.service.TeamspaceService;
+import com.ssafy.api.user.request.FilePostReq;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Teamspace;
 import com.ssafy.db.entity.User;
+import com.ssafy.db.repository.TeamspaceFileRepository;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,12 @@ public class TeamspaceController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    FileService fileService;
+
+    @Autowired
+    TeamspaceFileRepository teamspaceFileRepository;
 
     @PostMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "팀스페이스 생성", notes = "<strong>팀스페이스 이름, 시작일, 종료일, 팀스페이스 설명, 썸네일을</strong>를 통해 팀스페이스를 생성한다.")
@@ -112,10 +120,24 @@ public class TeamspaceController {
         Teamspace teamspace = null;
         try {
             teamspace = teamspaceService.getTeamspaceById(teamspaceId);
+            TeamspaceRes teamspaceRes = TeamspaceRes.of(teamspace);
 
-            return ResponseEntity.status(200).body(TeamspaceRes.of(teamspace));
+            try {
+                String teamspacePictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspace.getTeamspacePictureFileIdx().getFileIdx());
+                String teamspaceBackgroundPictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspace.getTeamspaceBackgroundPictureFileIdx().getFileIdx());
+
+                teamspaceRes.setTeamspacePictureFileURL(teamspacePictureFileURL);
+                teamspaceRes.setTeamspaceBackgroundPictureFileURL(teamspaceBackgroundPictureFileURL);
+            } catch (NullPointerException e) {
+                //e.printStackTrace();
+                //기본 이미지가 없는 경우
+                teamspaceRes.setTeamspacePictureFileURL(fileService.getDefaultTeamspacePictureImageUrl());
+                teamspaceRes.setTeamspaceBackgroundPictureFileURL(fileService.getDefaultTeamspaceBackgroundPictureImageUrl());
+            }
+
+            return ResponseEntity.status(200).body(teamspaceRes);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(500).body(null);
         }
     }
 
@@ -196,6 +218,103 @@ public class TeamspaceController {
         List<TeamspaceMemberListRes> users = teamspaceService.getTeamspaceMemberList(teamspaceIdx);
 
         return ResponseEntity.status(200).body(users);
+    }
+
+    @PostMapping(value = "/{teamspaceid}/file", consumes = MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "팀스페이스 파일 업로드", notes = "팀스페이스에서 파일을 업로드 한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 403, message = "없는 팀 스페이스 Idx"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> uploadFile (
+            @ApiIgnore Authentication authentication,
+            @PathVariable(name = "teamspaceid") long teamspaceid,
+            @RequestPart @ApiParam(value="filePostReq", required = true) FilePostReq filePostReq,
+            @RequestPart(value = "file", required = true) MultipartFile[] multipartFiles) {
+
+        SsafyUserDetails userDetails = null;
+
+        //1-1. 로그인한 사용자 체크 (토큰 확인)
+		try {
+			userDetails = (SsafyUserDetails) authentication.getDetails();
+		} catch(NullPointerException e) {
+			e.printStackTrace();
+
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Authentication failed!"));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+        //2. file 테이블에 있는 teamspace idx인지 확인
+        try {
+            teamspaceService.findById(teamspaceid);
+        } catch (Exception e) {
+            return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Invalid teamspace idx"));
+        }
+
+        //3. 파일 업로드
+        teamspaceService.uploadFile(teamspaceid, multipartFiles, filePostReq.getFileDescription());
+
+        //4. 응답
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    //FIXME: 작업 중
+    @GetMapping("/{teamspaceid}/file")
+    @ApiOperation(value = "팀스페이스 파일 조회", notes = "html <img> 태그에 넣을 수 있는 이미지의 주소를 반환합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "삭제 성공"),
+            @ApiResponse(code = 400, message = "이미지 파일이 아님"),
+            @ApiResponse(code = 404, message = "파일을 찾을 수 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<?> getFileListByFileTeamspaceIdx(
+            @PathVariable(name = "teamspaceid") Long teamspaceid) {
+
+        //1. file 테이블에 있는 teamspace idx인지 확인
+        Teamspace teamspace = null;
+        try {
+            teamspace = teamspaceService.findById(teamspaceid);
+        } catch (Exception e) {
+            return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Invalid teamspace idx"));
+        }
+
+        List<com.ssafy.db.entity.File> list = teamspaceService.getFileListByTeamspaceIdx(teamspace);
+
+        if(!list.isEmpty()) {
+            return ResponseEntity.status(200).body(list);
+        } else {
+            return ResponseEntity.status(200).body(BaseResponseBody.of(404, "File not found!"));
+        }
+    }
+
+    @DeleteMapping(value = "/{teamspaceid}/file/{fileid}")
+    @ApiOperation(value = "팀스페이스 파일 삭제", notes = "파일을 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "삭제 성공"),
+            @ApiResponse(code = 404, message = "파일을 찾을 수 없음"),
+            @ApiResponse(code = 500, message = "삭제 실패"),
+    })
+    public ResponseEntity<? extends BaseResponseBody> deleteFileByFilePath(
+            //FIXME: pathVariable teamspaceid 필요 없음
+            @PathVariable(name = "teamspaceid") Long teamspaceid,
+            @PathVariable(name = "fileid") Long fileid) {
+
+        //1. file 테이블에 있는 teamspace idx인지 확인
+        Teamspace teamspace = null;
+        try {
+            teamspace = teamspaceService.findById(teamspaceid);
+        } catch (Exception e) {
+            return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Invalid teamspace idx"));
+        }
+
+        if(fileService.deleteFileByFileInstance(fileid)) {  //파일 정상 삭제
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Delete success"));
+        } else {                                            //파일 삭제 중 오류
+            return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Delete fail"));
+        }
     }
 
 }

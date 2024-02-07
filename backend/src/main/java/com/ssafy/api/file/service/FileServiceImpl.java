@@ -26,6 +26,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static com.ssafy.common.util.ExtensionUtil.isValidImageExtension;
+import static com.ssafy.common.util.ExtensionUtil.isValidVideoExtension;
 
 @Service("fileServiceImpl")
 public class FileServiceImpl implements FileService {
@@ -208,18 +209,36 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String getImageUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException {
+        URL url = null;
+
+        com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
+
+        //2. 파일의 확장자가 이미지인지 체크
+        String extension = FilenameUtils.getExtension(file.getSaveFilename());
+
+        if (isValidImageExtension(extension)) {     //3-1. 파일의 확장자가 이미지이면
+            url = amazonS3Client.getUrl("my.first.mela.sss.bucket", file.getSavePath() + "/" + file.getSaveFilename());
+        } else {                                    //3-2. 파일의 확장자가 이미지가 아니면
+            throw new NotValidExtensionException();
+        }
+
+        return url.toString();
+    }
+
+    @Override
+    public String getVideoUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException {
         //1. fileIdx로 file 테이블에서 일치하는 레코드 조회
         com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
 
         //2. 파일의 확장자가 이미지인지 체크
         String extension = FilenameUtils.getExtension(file.getSaveFilename());
 
-        //3-1. 파일의 확장자가 이미지이면
-        if (isValidImageExtension(extension)) {
+        //3-1. 파일의 확장자가 동영상이면
+        if (isValidVideoExtension(extension)) {
             URL url = amazonS3Client.getUrl("my.first.mela.sss.bucket", file.getSavePath() + "/" + file.getSaveFilename());
 
             return url.toString();
-        //3-2. 파일의 확장자가 이미지가 아니면
+            //3-2. 파일의 확장자가 동영상이 아니면
         } else {
             throw new NotValidExtensionException();
         }
@@ -228,6 +247,20 @@ public class FileServiceImpl implements FileService {
     @Override
     public String getImageUrlBySaveFilenameAndFileIdx(String saveFilename, String savePath) {
         URL url = amazonS3Client.getUrl("my.first.mela.sss.bucket", savePath + "/" + saveFilename);
+
+        return url.toString();
+    }
+
+    @Override
+    public String getDefaultTeamspacePictureImageUrl() {
+        URL url = amazonS3Client.getUrl("my.second.mela.sss.bucket", "teamspacePicture.png");
+
+        return url.toString();
+    }
+
+    @Override
+    public String getDefaultTeamspaceBackgroundPictureImageUrl() {
+        URL url = amazonS3Client.getUrl("my.second.mela.sss.bucket", "teamspaceBackgroundPicture.png");
 
         return url.toString();
     }
@@ -264,6 +297,13 @@ public class FileServiceImpl implements FileService {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public boolean deleteFileByFileInstance(long fileIdx) {
+        com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
+
+        return deleteFileByFileInstance(file);
     }
 
     @Override

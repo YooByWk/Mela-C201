@@ -35,15 +35,14 @@ public class FileController {
     AmazonS3 amazonS3Client;
 
     @PostMapping(value = "/upload", consumes = MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation(value = "파일 업로드", notes = "파일을 업로드합니다.")
+    @ApiOperation(value = "파일 업로드 (테스트용)", notes = "파일을 업로드합니다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 401, message = "인증 실패"),
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<? extends BaseResponseBody> uploadFile(
-            @RequestPart(value = "file", required = true) MultipartFile[] files) {
+    public ResponseEntity<? extends BaseResponseBody> uploadFile (@RequestPart(value = "file", required = true) MultipartFile[] files) {
 
         for(MultipartFile file : files) {
             fileService.saveFileTest(file);
@@ -71,8 +70,8 @@ public class FileController {
         }
     }
 
-    @DeleteMapping(value = "/delete")
-    @ApiOperation(value = "파일 삭제", notes = "파일을 삭제합니다.")
+    @DeleteMapping(value = "/deleteFileByFilePath")
+    @ApiOperation(value = "파일 삭제 (전체 파일 경로)", notes = "파일을 삭제합니다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "삭제 성공"),
             @ApiResponse(code = 500, message = "삭제 실패"),
@@ -83,11 +82,25 @@ public class FileController {
         if(returnState) {   //파일 정상 삭제
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Delete success"));
         } else {            //파일 삭제 중 오류
-            return ResponseEntity.status(401).body(BaseResponseBody.of(500, "Delete fail"));
+            return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Delete fail"));
         }
     }
 
-    //FIXME: 테스트 중
+    @DeleteMapping(value = "/delete")
+    @ApiOperation(value = "파일 삭제 (파일 Idx)", notes = "파일을 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "삭제 성공"),
+            @ApiResponse(code = 500, message = "삭제 실패"),
+    })
+    public ResponseEntity<? extends BaseResponseBody> deleteFileByFileIdx(long fileIdx) throws IOException {
+
+        if(fileService.deleteFileByFileInstance(fileIdx)) {     //파일 정상 삭제
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Delete success"));
+        } else {                                                //파일 삭제 중 오류
+            return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Delete fail"));
+        }
+    }
+
     @GetMapping("/images/{fileIdx}")
     @ApiOperation(value = "이미지 조회", notes = "html <img> 태그에 넣을 수 있는 이미지의 주소를 반환합니다.")
     @ApiResponses({
@@ -103,6 +116,29 @@ public class FileController {
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, imageUrl));
         } catch (NotValidExtensionException e) {
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "이미지 파일이 아님"));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "파일을 찾을 수 없음"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 오류"));
+        }
+    }
+
+    //FIXME: 테스트 중
+    @GetMapping("/videos/{fileIdx}")
+    @ApiOperation(value = "동영상 조회", notes = "html <video> 태그에 넣을 수 있는 동영상의 주소를 반환합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "삭제 성공"),
+            @ApiResponse(code = 400, message = "동영상 파일이 아님"),
+            @ApiResponse(code = 404, message = "파일을 찾을 수 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> getVideoURLByFileIdx(@PathVariable(name = "fileIdx") long fileIdx) {
+        try {
+            String imageUrl = fileService.getVideoUrlBySaveFileIdx(fileIdx);
+
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, imageUrl));
+        } catch (NotValidExtensionException e) {
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "동영상 파일이 아님"));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "파일을 찾을 수 없음"));
         } catch (Exception e) {
