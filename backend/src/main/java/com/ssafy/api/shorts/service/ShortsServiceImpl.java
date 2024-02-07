@@ -13,6 +13,7 @@ import static com.ssafy.common.util.ExtensionUtil.isValidVideoExtension;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service("shortsService")
 public class ShortsServiceImpl implements  ShortsService {
@@ -138,6 +139,14 @@ public class ShortsServiceImpl implements  ShortsService {
     @Override
     public void setShortsLike(User user, Long shortsId) {
         Shorts shorts = shortsRepository.getOne(shortsId);
+
+        Optional<ShortsLike> isShortsLiked = shortsLikeRepository.findByShortsIdxAndUserIdx(shorts,user);
+        if(isShortsLiked.isPresent()){
+            shortsLikeRepository.delete(isShortsLiked.get());
+            System.out.println("좋아요 취소됐습니다");
+            return ;
+        }
+
         ShortsLike shortsLike = new ShortsLike();
         shortsLike.setUserIdx(user);
         shortsLike.setShortsIdx(shorts);
@@ -154,10 +163,6 @@ public class ShortsServiceImpl implements  ShortsService {
         notification.setAlarmDate(LocalDateTime.now());
         notificationRepository.save(notification);
 
-        System.out.println("++++++++++++++++++++++++++++++++++++++");
-        System.out.println(shortsLikeRepository.findByUserIdxAndUploaderUserIdx(user,getAlarmUser).get().size());
-        System.out.println(shortsLikeRepository.findByUserIdxAndUploaderUserIdx(getAlarmUser,user).get().size());
-        System.out.println("++++++++++++++++++++++++++++++++++++++");
 
         if(shortsLikeRepository.findByUserIdxAndUploaderUserIdx(getAlarmUser,user).get().size() == 1){
             Notification notification1 = new Notification();
@@ -178,6 +183,14 @@ public class ShortsServiceImpl implements  ShortsService {
     @Override
     public void setShortsDislike(User user, Long shortsId) {
         Shorts shorts = shortsRepository.getOne(shortsId);
+
+        Optional<ShortsDislike> isShortsDisliked = shortsDislikeRepository.findByShortsIdxAndUserIdx(shorts,user);
+        if(isShortsDisliked.isPresent()){
+            shortsDislikeRepository.delete(isShortsDisliked.get());
+            System.out.println("싫어요 취소됐습니다");
+            return ;
+        }
+
         ShortsDislike shortsDislike = new ShortsDislike();
         shortsDislike.setUserIdx(user);
         shortsDislike.setShortsIdx(shorts);
