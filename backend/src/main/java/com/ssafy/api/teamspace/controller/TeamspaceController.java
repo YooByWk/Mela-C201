@@ -64,7 +64,7 @@ public class TeamspaceController {
 
         Teamspace teamspace = teamspaceService.createTeamspace(registerInfo, user.getUserIdx(), teamspacePicture, teamspaceBackgroundPicture);
 
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, teamspace.getTeamspaceIdx() + ""));
     }
 
     @PutMapping(value = "/{teamspaceid}", consumes = MULTIPART_FORM_DATA_VALUE)
