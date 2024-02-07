@@ -22,6 +22,8 @@ public class QTeamspace extends EntityPathBase<Teamspace> {
 
     public static final QTeamspace teamspace = new QTeamspace("teamspace");
 
+    public final StringPath chatRoomIdx = createString("chatRoomIdx");
+
     public final DatePath<java.time.LocalDate> endDate = createDate("endDate", java.time.LocalDate.class);
 
     public final QUser host;
