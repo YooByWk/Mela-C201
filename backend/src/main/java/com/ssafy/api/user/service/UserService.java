@@ -72,4 +72,6 @@ public interface UserService {
 
 	//TODO: 테스트 필요!
 	PortfolioAbstract browsePortfolioAbstract(String userId);
+
+	int isAllowedToBrowsePortfolioAbstract(String userEmail, User targetUser);
 }
