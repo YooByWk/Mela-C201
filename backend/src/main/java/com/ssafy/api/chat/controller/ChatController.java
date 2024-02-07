@@ -33,6 +33,6 @@ public class ChatController {
 
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomIdx(), message);
-
+        chatService.saveMessage(message);
     }
 }
