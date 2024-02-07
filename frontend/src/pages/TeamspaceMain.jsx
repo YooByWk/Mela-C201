@@ -3,15 +3,14 @@ import TeamspaceCreateModal from "../components/Modals/TeamspaceCreate";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import styled from "styled-components";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { TeamspaceList } from "../API/TeamspaceAPI";
 import Alarmbar from "../components/alarm/Alarmbar";
 
-
 function TeamspaceMain () {
   const [isWriting, setIsWriting] = useState(false);
-  
+  const Navi = useNavigate()
   const [values, setValues] = useState({
     endDate: "",
     host: {}, 
@@ -54,7 +53,7 @@ function TeamspaceMain () {
             title={value.teamName}
             content={value.teamDescription}
             day={value.endDate}
-            onClick={window.location.href = `/teamspace/${value.teamspaceIdx}/team`}
+            onClick={(event) => Navi(`/teamspace/${value.teamspaceIdx}`)}
         />
         ))}
       </MainDiv>

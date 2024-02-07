@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from "styled-components";
 import TeamspaceTeam from "../components/teamspace/TeamspaceTeam"
@@ -36,6 +36,7 @@ const TabMenu = styled.ul`
 `
 
 function TeamspaceDetail () {
+    const teamspaceId = useParams()
 
     // 현재 어느 메뉴가 선택 되었는가?
     const [currentTab, clickTab] = useState(0)

@@ -43,7 +43,7 @@ function TeamspaceTeam () {
         }
 
         info()
-    },[])
+    },[teamspaceIdx])
 
 
     return(

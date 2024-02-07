@@ -23,7 +23,7 @@ function AppRouter({ className }) {
         <Routes>
 
           <Route
-            path='/portfolio/:nickname' element={<Portfolio/>}
+            path='/portfolio/:emailId' element={<Portfolio/>}
           />
 
           <Route

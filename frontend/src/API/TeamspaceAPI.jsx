@@ -40,7 +40,7 @@ export const TeamspaceGenerate = async({
 // 특정 팀스페이스 조회
 export const TeamspaceInfo = async(teamspaceId) => {
     const response = await TeamspaceAPI.get(`/${teamspaceId}`)
-    console.log(response.data)
+    // console.log(response.data)
     return response.data
 }
 
@@ -78,7 +78,7 @@ export const TeamspaceDelete = async(teamspaceId) => {
 //팀스페이스 멤버 조회
 export const TeamspaceMember = async(teamspaceId) => {
     const response = await TeamspaceAPI.get(`/${teamspaceId}/users`)
-    console.log(response.data)
+    // console.log(response.data)
     return response.data
 }
 

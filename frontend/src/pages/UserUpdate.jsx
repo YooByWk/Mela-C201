@@ -8,7 +8,9 @@ import { fetchUser, updateUser, deleteUser } from "../API/UserAPI";
 
 
 function UserUpdateForm(props) {
-    const [values, setValues] = useState({
+    const [imgFile, setImgFile] = useState('')
+
+    const [userValues, setUserValues] = useState({
         name: '',
         nickname: '',
         gender: '',
@@ -16,11 +18,17 @@ function UserUpdateForm(props) {
         searchAllow: ''
     })
 
+    const [portfolioValues, setPortfolioValues] = useState({
+        instagram: '',
+        selfIntro:'',
+        youtube:''
+    })
+
     useEffect(()=> {
         const getUserInfo = async() => {
             try {
                 const res = await fetchUser()
-                setValues(res)
+                setUserValues(res)
             } catch (err) {
                 console.error(err)
             }
@@ -28,30 +36,69 @@ function UserUpdateForm(props) {
        
     }, [])
 
-    const handleChange = async (e) => {
-        setValues({...values,
+    const handleImgFile = (e) => {
+        e.preventDefault()
+        
+        if (e.target.files[0]) {
+            setImgFile(e.target.files[0])
+        }
+    }
+
+    const handleUserChange = async (e) => {
+        setUserValues({...userValues,
+            [e.target.id]: e.target.value
+        })
+    }
+
+    const handlePortfolioChange = async (e) => {
+        setPortfolioValues({...portfolioValues,
             [e.target.id]: e.target.value
         })
     }
 
     const handleGenderChange = async (e) => {
-        setValues({...values,
+        setUserValues({...userValues,
             [e.target.name]: e.target.value
         })
     }
 
     const handleSearchAllowChange = async (e) => {
-        setValues({...values,
+        setUserValues({...userValues,
             [e.target.id]: e.target.checked
         })
     }
 
     const handleSubmit = async(e) => {
         e.preventDefault()
+        
+        const formData = new FormData()
+        const user = JSON.stringify({
+            name: userValues.name,
+            nickname: userValues.nickname,
+            gender: userValues.gender,
+            birth: userValues.birth,
+            searchAllow: userValues.searchAllow
+        })
+
+        const portfolio = JSON.stringify({
+            instagram: portfolioValues.instagram,
+            selfIntro: portfolioValues.selfIntro,
+            youtube: portfolioValues.youtube
+        })
+
+        formData.append('userUpdateInfo', user)
+        formData.append('portfolioAbstractPostReq', portfolio)
+        formData.append('portfolioPicture', imgFile)
+
+        for (let key of formData.keys()) {
+            console.log(key, ":", formData.get(key));
+        }
+
         try {
-            const updatedUser = await updateUser(values)
-            console.log(updatedUser)
-            navigate('/portfolio')
+            await updateUser(formData)
+            alert('회원정보 수정이 완료되었습니다.')
+            navigate(-1)
+            // window.location.href = `/portfolio/${userValues.emailId}`
         } catch (err) {
             console.error(err)
         }
@@ -80,6 +127,8 @@ function UserUpdateForm(props) {
                 Profile Settings
             </Title>
             <Form onSubmit={handleSubmit}>
+            프로필 사진
+            <input type='file'onChange={handleImgFile} />
                 <InputWrapper>
                     <ProfileImageWrapper />
                     <Label>
@@ -88,9 +137,9 @@ function UserUpdateForm(props) {
                     <Input
                         type="text"
                         id='name'
-                        value={values.name}
-                        onChange={handleChange}
-                        placeholder="Name"
+                        value={userValues.name}
+                        onChange={handleUserChange}
+                        placeholder={userValues.name}
                     />
                 </InputWrapper>
                 <InputWrapper>
@@ -100,16 +149,22 @@ function UserUpdateForm(props) {
                     <Input 
                         type="text"
                         id='nickname'
-                        value={values.nickname}
-                        onChange={handleChange}
-                        placeholder="Nickname"
+                        value={userValues.nickname}
+                        onChange={handleUserChange}
+                        placeholder={userValues.nickname}
                     />
                 </InputWrapper>
                 <InputWrapper>
                     <Label>
                         Self-introdution
                     </Label>
-                    <Input placeholder={'자기소개 문구를 입력하세요'}/>
+                    <Input
+                        type="text"
+                        id='selfIntro'
+                        value={portfolioValues.selfIntro}
+                        onChange={handlePortfolioChange}
+                        placeholder={portfolioValues.selfIntro}
+                    />
                 </InputWrapper>
                 <InputWrapper>
                     <Label>
@@ -118,9 +173,9 @@ function UserUpdateForm(props) {
                     <Input 
                         type="text"
                         name='gender'
-                        value={values.gender}
+                        value={userValues.gender}
                         onChange={handleGenderChange}
-                        placeholder="Gender"
+                        placeholder={userValues.gender}
                     />
                 </InputWrapper>
                 <InputWrapper>
@@ -130,32 +185,58 @@ function UserUpdateForm(props) {
                     <input 
                         type="date"
                         id='birth'
-                        value={values.birth}
-                        onChange={handleChange}
-                        placeholder="생년월일"
+                        value={userValues.birth}
+                        onChange={handleUserChange}
+                        placeholder={userValues.birth}
                     />
                 </InputWrapper>
                 <InputWrapper>
                     <Label>
                         Like genre
                     </Label>
-                    <Input 
-                        placeholder="선호 장르"
+                    <Input
+                        type="text"
+                        id='genre'
+                        value={portfolioValues.genre}
+                        onChange={handlePortfolioChange}
+                        placeholder={portfolioValues.genre}
                     />
                 </InputWrapper>
                 <InputWrapper>
                     <Label>
                         Position
                     </Label>
-                    <Input 
-                        placeholder="포지션"
+                    <Input
+                        type="text"
+                        id='position'
+                        value={portfolioValues.position}
+                        onChange={handlePortfolioChange}
+                        placeholder={portfolioValues.position}
                     />
                 </InputWrapper>
                 <InputWrapper>
                     <Label>
-                        SNS
+                        Instagram
                     </Label>
-                    <Input />
+                    <Input
+                        type="text"
+                        id='instagram'
+                        value={portfolioValues.instagram}
+                        onChange={handlePortfolioChange}
+                        placeholder={portfolioValues.instagram}
+                    />
+                </InputWrapper>
+                <InputWrapper>
+                    <Label>
+                        YouTube
+                    </Label>
+                    <Input
+                        type="text"
+                        id='youtube'
+                        value={portfolioValues.youtube}
+                        onChange={handlePortfolioChange}
+                        placeholder={portfolioValues.youtube}
+                    />
                 </InputWrapper>
                 <InputWrapper>
                     <Label>
@@ -164,7 +245,7 @@ function UserUpdateForm(props) {
                     <input 
                         type="checkbox"
                         id='searchAllow'
-                        checked={values.searchAllow}
+                        checked={userValues.searchAllow}
                         onChange={handleSearchAllowChange}
                     />
                 </InputWrapper>

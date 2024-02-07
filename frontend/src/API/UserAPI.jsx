@@ -22,7 +22,7 @@ UserApi.interceptors.response.use((response) => {
     return Promise.reject(error)
 })
 
-// 회원조회
+// 로그인 한 유저 조회
 export const fetchUser = async () => {
     const response = await UserApi.get(`/myinfo`)
     console.log(response.data)
@@ -30,9 +30,19 @@ export const fetchUser = async () => {
 }
 
 // 회원수정
-export const updateUser = async (data) => {
-    const response = await UserApi.put(`/myinfo`, data)
-    return response.data
+export const updateUser = async (formdata) => {
+    try {
+        const response = await axios.put('http://localhost:8080/api/v1/users/myinfo', formdata, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization' : `Bearer ${localStorage.accessToken}`
+          }
+        })
+        return response.data
+      }
+      catch (error) {
+        console.error(error);
+      }
 }
 
 // 회원탈퇴
@@ -95,6 +105,13 @@ export const checkNotification = async ({notificationid}) => {
 // 알람 삭제
 export const delNotification = async ({notificationid}) => {
     const response = await UserApi.delete(`/notifications/${notificationid}`)
+    console.log(response)
+    return response.data
+}
+
+// 타인의 포트폴리오 조회
+export const othersInfo = async (emailId) => {
+    const response = await UserApi.get(`api/v1/users/${emailId}/portfolio`, emailId)
     console.log(response)
     return response.data
 }
