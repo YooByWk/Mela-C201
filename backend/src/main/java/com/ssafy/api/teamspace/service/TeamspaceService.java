@@ -20,7 +20,7 @@ public interface TeamspaceService {
 
     Teamspace getTeamspaceById(Long id) throws Exception;
 
-    Teamspace updateTeamspace(Teamspace teamspace, TeamspaceUpdatePutReq updateInfo);
+    Teamspace updateTeamspace(Teamspace teamspace, TeamspaceUpdatePutReq updateInfo, MultipartFile teamspacePicture, MultipartFile teamspaceBackgroundPicture);
 
     void deleteTeamspace(Teamspace teamspace);
 
@@ -42,7 +42,6 @@ public interface TeamspaceService {
 
     void uploadFile(long teamspaceid, MultipartFile[] multipartFiles, String fileDescription);
 
-//    List<com.ssafy.db.entity.File> getTeamspaceFileListByTeamspaceIdx(long teamspaceIdx);
     List<com.ssafy.db.entity.File> getFileListByTeamspaceIdx(Teamspace teamspace);
 
     Teamspace findById(Long teamspaceIdx);

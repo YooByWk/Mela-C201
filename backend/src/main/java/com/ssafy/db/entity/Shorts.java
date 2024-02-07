@@ -19,13 +19,14 @@ public class Shorts {
 
 
     @ManyToOne
-    @JoinColumn(name="user_idx", referencedColumnName="userIdx")
+    @JoinColumn(name = "user_idx", referencedColumnName = "userIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     User userIdx;
 
-    String comment;
+    String title;
 
+    String description;
 
     @ManyToOne
     @JoinColumn(name="shorts_path_file_idx", referencedColumnName="fileIdx")

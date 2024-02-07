@@ -60,7 +60,7 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<? extends BaseResponseBody> register(
+	public ResponseEntity<? extends BaseResponseBody> register (
 			@RequestBody @ApiParam(value="회원가입 정보", required = true) UserRegisterPostReq registerInfo) {
 
 		//임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
@@ -315,6 +315,22 @@ public class UserController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
+	@GetMapping("/{userId}/isfollow")
+	@ApiOperation(value = "사용자와 팔로우한 유저인지 체크", notes = "현재 로그인한 사용자와 userId 사용자가 팔로우 관계인지 체크")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<Boolean> isFollow(
+			@ApiIgnore Authentication authentication,
+			@PathVariable String userId) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userEmail = userDetails.getUsername();
+		User nowLoginUser = userService.getUserByEmail(userEmail);
+
+		return ResponseEntity.status(200).body(userService.isFollow(nowLoginUser, userId));
+	}
 
 	@GetMapping("/{userId}/followers")
 	@ApiOperation(value = "사용자가 팔로우한 사람들 목록", notes = "특정 사용자가 팔로우한 사람들 목록을 보여준다")

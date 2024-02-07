@@ -19,7 +19,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Slf4j
 @Api(value = "포트폴리오 API", tags = {"Portfolio"})
 @RestController
-@RequestMapping("/api/v1/users/musics")
+@RequestMapping("/api/v1/users")
 
 public class PortfolioController {
     @Autowired
@@ -28,7 +28,7 @@ public class PortfolioController {
     @Autowired
     PortfolioService portfolioService;
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/musics", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "포트폴리오 음악 등록", notes = "포트폴리오 음악을 등록한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -62,25 +62,27 @@ public class PortfolioController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "삭제 실패"),
     })
-    public ResponseEntity<? extends BaseResponseBody> deletePortfolioMusic (
+        public ResponseEntity<? extends BaseResponseBody> deletePortfolioMusic (
             @ApiIgnore Authentication authentication,
-            @PathVariable(name = "musicid") long musicid) {
+            @PathVariable(name = "musicid") long[] musicids) {
 
         //TODO: 토큰 유효성 확인
 
         //1. 클라이언트로부터 전달받은 musicid로
         //FileRepository를 이용해
         //com.ssafy.db.entity 패키지 -> PortfolioMusic 클래스를 가져와
-        PortfolioMusic portfolioMusic = portfolioService.getPortfolioMusicInstanceByPortfolioMusicIdx(musicid);
+        for(long musicid : musicids) {
+            PortfolioMusic portfolioMusic = portfolioService.getPortfolioMusicInstanceByPortfolioMusicIdx(musicid);
 
-        //File 타입 musicFileIdx, File 타입 lyricFileIdx, File 타입 albumArtFileIdx를 com.ssafy.db.entity.File 클래스 배열로 생성
-        com.ssafy.db.entity.File[] files = {portfolioMusic.getMusicFileIdx(), portfolioMusic.getLyricFileIdx(), portfolioMusic.getAlbumArtFileIdx()};
+            //File 타입 musicFileIdx, File 타입 lyricFileIdx, File 타입 albumArtFileIdx를 com.ssafy.db.entity.File 클래스 배열로 생성
+            com.ssafy.db.entity.File[] files = {portfolioMusic.getMusicFileIdx(), portfolioMusic.getLyricFileIdx(), portfolioMusic.getAlbumArtFileIdx()};
 
-        //2. FileService클래스의 deleteFilesByFileInstances 메소드를 이용해 다수의 파일 삭제 (Amazon S3에서의 삭제 및 file 테이블에서의 삭제)
-        if(fileService.deleteFilesByFileInstances(files)) {
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
-        } else {
-            return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
+            //2. FileService클래스의 deleteFilesByFileInstances 메소드를 이용해 다수의 파일 삭제 (Amazon S3에서의 삭제 및 file 테이블에서의 삭제)
+            if(!fileService.deleteFilesByFileInstances(files)) {
+                return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
+            }
         }
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 }

@@ -26,6 +26,8 @@ public class QShortsLike extends EntityPathBase<ShortsLike> {
 
     public final NumberPath<Long> shortsLikeIdx = createNumber("shortsLikeIdx", Long.class);
 
+    public final QUser uploaderUserIdx;
+
     public final QUser userIdx;
 
     public QShortsLike(String variable) {
@@ -47,6 +49,7 @@ public class QShortsLike extends EntityPathBase<ShortsLike> {
     public QShortsLike(Class<? extends ShortsLike> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.shortsIdx = inits.isInitialized("shortsIdx") ? new QShorts(forProperty("shortsIdx"), inits.get("shortsIdx")) : null;
+        this.uploaderUserIdx = inits.isInitialized("uploaderUserIdx") ? new QUser(forProperty("uploaderUserIdx")) : null;
         this.userIdx = inits.isInitialized("userIdx") ? new QUser(forProperty("userIdx")) : null;
     }
 

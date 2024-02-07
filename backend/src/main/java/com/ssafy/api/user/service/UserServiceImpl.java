@@ -390,6 +390,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public Boolean isFollow(User nowLoginUser, String userId) {
+		User followedUser = userRepository.findByEmailId(userId).get();
+		Optional<Follow> isFollowed = followRepository.findByFollowerAndFollowe(nowLoginUser, followedUser);
+		return isFollowed.isPresent();
+	}
+
+	@Override
 	public List<User> getFollower(String emailId) {
 		return followRepositorySupport.findUserFollower(userRepository.findByEmailId(emailId).get());
 	}
