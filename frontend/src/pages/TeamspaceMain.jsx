@@ -9,7 +9,7 @@ import { TeamspaceList } from "../API/TeamspaceAPI";
 import Alarmbar from "../components/alarm/Alarmbar";
 
 function TeamspaceMain () {
-  const [isWriting, setIsWriting] = useState(false);
+  // const [isWriting, setIsWriting] = useState(false);
   const Navi = useNavigate()
   const [values, setValues] = useState({
     endDate: "",
@@ -17,9 +17,9 @@ function TeamspaceMain () {
     startDate: "", 
     teamDescription: "",
     teamName: "", 
-    // teamspaceBackgroundPictureFileIdx: {}, 
+    teamspaceBackgroundPictureFileIdx: {}, 
     teamspaceIdx: "",
-    // teamspacePictureFileIdx: {},
+    teamspacePictureFileIdx: {},
   })
 
   useEffect(() => {
@@ -46,17 +46,19 @@ function TeamspaceMain () {
       <MainDiv>
       <Navbar backcolour="10" />
         <Outlet />
-        <h1>팀 스페이스 공간입니다.</h1>
+        {/* <h1>팀 스페이스 공간입니다.</h1> */}
         <TeamspaceCreateModal />
+        <FileContainer>
         {Object.entries(values).map(([key, value]) => (
-        <DefaultFileShape 
-            key={value.teamspaceIdx}
-            title={value.teamName}
-            content={value.teamDescription}
-            day={value.endDate}
-            onClick={(event) => Navi(`/teamspace/${value.teamspaceIdx}`)}
-        />
+          <DefaultFileShape 
+              key={value.teamspaceIdx}
+              title={value.teamName}
+              content={value.teamDescription}
+              day={value.endDate}
+              onClick={(event) => Navi(`/teamspace/${value.teamspaceIdx}`)}
+          />
         ))}
+        </FileContainer>
       </MainDiv>
       <RSideDiv>
           <Alarmbar />
@@ -68,10 +70,16 @@ function TeamspaceMain () {
 
 export default TeamspaceMain ;
 
+const FileContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  padding-top: 3%;
+`
 const TeamspaceContainer = styled.div`
   background-color: ${(props) => props.theme.colours.primary};
   display: flex;
-  /* flex-direction: column; */
   height: 60rem;
   color: white;
   padding-top: 3%;

@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import { styled, css } from '@mui/system'
+import { styled, css, margin } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
 import { TeamspaceGenerate } from '../../API/TeamspaceAPI'
+import { useNavigate } from 'react-router'
 
 const CustomBody = styled('div')(
   ({ theme }) => css`
@@ -87,7 +88,7 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
   let todayDay = (today.getDate()) > 9 ? (today.getDate()) : '0' + (today.getDate())
   const formattedDate = `${today.getFullYear()}-${todayMonth}-${todayDay}`
   
-  console.log(formattedDate)
+  // console.log(formattedDate)
 
   const [values, setValues] = useState({
     teamName: "",
@@ -135,7 +136,9 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
     formData.append('teamspacePicture', imgFile)
 
     try {
-      await TeamspaceGenerate(formData)
+      const res = await TeamspaceGenerate(formData)
+      console.log(res)
+      // Navigate(`../${res.data.message}`)
       alert('팀스페이스 생성이 완료되었습니다.')
       setOpen(!open)
   } catch (err) {
@@ -145,9 +148,10 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
 
   return (
     <div>
-      <TriggerButton type="button" onClick={handleOpen} >
-        <p>+</p>
-      </TriggerButton>
+        <TriggerButton type="button" onClick={handleOpen} >
+          <span>+</span>
+        </TriggerButton>
+      
       <Modal
         aria-labelledby="unstyled-modal-title"
         aria-describedby="unstyled-modal-description"
@@ -197,19 +201,20 @@ const Backdrop = React.forwardRef((props, ref) => {
   const { open, className, ...other } = props;
   return (
     <div
-      className={clsx({ 'base-Backdrop-open': open }, className)}
-      ref={ref}
-      {...other}
+    className={clsx({ 'base-Backdrop-open': open }, className)}
+    ref={ref}
+    {...other}
     />
-  )
-})
+    )
+  })
 
-Backdrop.propTypes = {
-  className: PropTypes.string.isRequired,
-  open: PropTypes.bool,
-}
+  Backdrop.propTypes = {
+    className: PropTypes.string.isRequired,
+    open: PropTypes.bool,
+  }
 
-const Modal = styled(BaseModal)`
+
+  const Modal = styled(BaseModal)`
   position: fixed;
   z-index: 1300;
   inset: 0;
@@ -230,56 +235,45 @@ const StyledBackdrop = styled(Backdrop)`
 
 const TriggerButton = styled('button')(
   ({ theme }) => css`
-  /* default */
 
-  position: fixed;
   width: 30px;
   height: 30px;
-  left: 33px;
-  top: 38px;
+  left: 30px;
+  top: 30px;
 
-  /* Rectangle 1 */
-
-  position: fixed;
-  margin-left: 20%;
-  margin-top: 15%;
-  font-size: xx-large;
+  text-align: center;
+  margin-left: 8%;
+  margin-top: 4%;
+  font-size: x-large;
   color: #254EF8;
 
-  /* btn color
-
-  버튼컴포넌트 색
-  */
   border: 2px solid #254EF8;
+  background: white;
   border-radius: 4px;
 
-
-    & :hover {
-      /* hover */
-
-      position: fixed;
+    /* & :hover {
       width: 30px;
       height: 30px;
-      left: 33px;
-      top: 38px;
+      left: 30px;
+      top: 30px;
 
-      /* Rectangle 1 */
-
-      position: fixed;
-      margin-left: 20%;
-      margin-top: 15%;
+      text-align: center;      
+      margin-left: 8%;
+      margin-top: 4%;
       font-size: xx-large;
       color: white;
 
-      /* btn color
-
-      버튼컴포넌트 색
-      */
+      border: 2px solid white;
       background: #254EF8;
       border-radius: 4px;
+      
+    } */
 
+    .p {
+      text-align: center;
     }
     `,
 )
+
 
 export default TeamspaceCreateModal
