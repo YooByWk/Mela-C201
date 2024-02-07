@@ -18,7 +18,10 @@ public interface FileService {
     com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription);
     com.ssafy.db.entity.File getFileByFileIdx(long fileIdx);
     String getImageUrlBySaveFilenameAndFileIdx(String saveFilename, String savePath);
+    String getDefaultTeamspacePictureImageUrl();
+    String getDefaultTeamspaceBackgroundPictureImageUrl();
     String getImageUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException;
+    String getVideoUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException;
     //Amazon S3에 업로드된 파일 정보를 file 테이블에 저장
     com.ssafy.db.entity.File addTableRecord(com.ssafy.db.entity.File file);
     //Amazon S3에 저장된 파일 다운로드

@@ -11,7 +11,6 @@ import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Teamspace;
-import com.ssafy.db.entity.TeamspaceFile;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.TeamspaceFileRepository;
 import io.swagger.annotations.*;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -122,10 +120,24 @@ public class TeamspaceController {
         Teamspace teamspace = null;
         try {
             teamspace = teamspaceService.getTeamspaceById(teamspaceId);
+            TeamspaceRes teamspaceRes = TeamspaceRes.of(teamspace);
 
-            return ResponseEntity.status(200).body(TeamspaceRes.of(teamspace));
+            try {
+                String teamspacePictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspace.getTeamspacePictureFileIdx().getFileIdx());
+                String teamspaceBackgroundPictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspace.getTeamspaceBackgroundPictureFileIdx().getFileIdx());
+
+                teamspaceRes.setTeamspacePictureFileURL(teamspacePictureFileURL);
+                teamspaceRes.setTeamspaceBackgroundPictureFileURL(teamspaceBackgroundPictureFileURL);
+            } catch (NullPointerException e) {
+                //e.printStackTrace();
+                //기본 이미지가 없는 경우
+                teamspaceRes.setTeamspacePictureFileURL(fileService.getDefaultTeamspacePictureImageUrl());
+                teamspaceRes.setTeamspaceBackgroundPictureFileURL(fileService.getDefaultTeamspaceBackgroundPictureImageUrl());
+            }
+
+            return ResponseEntity.status(200).body(teamspaceRes);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(500).body(null);
         }
     }
 
