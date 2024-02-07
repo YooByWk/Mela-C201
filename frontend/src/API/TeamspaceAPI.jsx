@@ -18,23 +18,19 @@ export const TeamspaceList = async() => {
 }
 
 // 팀스페이스 생성
-export const TeamspaceGenerate = async({
-    endDate,
-    startDate,
-    teamDescription,
-    teamName,
-    // teamspace_picture_file_idx
-}) => {
-    const data = {
-        endDate,
-        startDate,
-        teamDescription,
-        teamName,
-        // teamspace_picture_file_idx
-    }
-    const response = await TeamspaceAPI.post(`/`, data)
-    console.log(response.data)
-    return response.data
+export const TeamspaceGenerate = async(formdata) => {
+    try {
+        const response = await axios.post('http://localhost:8080/api/v1/teamspaces', formdata, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization' : `Bearer ${localStorage.accessToken}`
+          }
+        })
+        return response.data
+      }
+      catch (error) {
+        console.error(error);
+      }
 }
 
 // 특정 팀스페이스 조회

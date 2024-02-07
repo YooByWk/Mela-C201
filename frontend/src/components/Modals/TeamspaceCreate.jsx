@@ -1,9 +1,80 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import { styled, css } from '@mui/system'
+import { styled, css, margin } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
 import { TeamspaceGenerate } from '../../API/TeamspaceAPI'
+import { useNavigate } from 'react-router'
+
+const CustomBody = styled('div')(
+  ({ theme }) => css`
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 500;
+    text-align: start;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow: hidden;
+    border-radius: 8px;
+    padding: 4rem;
+    color: white;
+    background: linear-gradient(180deg, #0C0A15 0%, #171930 100%);
+    margin: 0;
+    line-height: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 4px;
+
+    & .modal-title {
+      text-align: center;
+      line-height: 1.5rem;
+      margin-bottom: 2rem;
+      text-decoration: underline;
+      text-decoration-color: #254EF8;
+    }
+
+    & .modal-description {
+      margin: 0;
+      line-height: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+      
+      & .button {
+      background-color: #254EF8;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      width: 100%;
+      height: 2.5rem;
+      font-size: medium;
+      margin-top: 10px;
+    }
+
+    & .input {
+      background-color: #151c2c;
+      border: none;
+      height: 2.5rem;
+      color: white;
+      flex-grow: 1;
+    }
+
+    & .label {
+      color: #254EF8;
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    & .inputWrapper {
+      background-color: #151c2c;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  `
+)
 
 function TeamspaceCreateModal({className, fontSize, padding}) {
   const [open, setOpen] = React.useState(false);
@@ -17,38 +88,70 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
   let todayDay = (today.getDate()) > 9 ? (today.getDate()) : '0' + (today.getDate())
   const formattedDate = `${today.getFullYear()}-${todayMonth}-${todayDay}`
   
-  console.log(formattedDate)
-  const [values, setValues] = React.useState({
-    endDate: "", 
-    startDate: formattedDate,
-    teamDescription: "",
+  // console.log(formattedDate)
+
+  const [values, setValues] = useState({
     teamName: "",
-    // teamspacePictureFileIdx: {} 
+    startDate: formattedDate,
+    endDate: "",
+    teamDescription: ""
   })
+
+  const [imgFile, setImgFile] = useState('')
+  const [backImgFile, setBackImgFile] = useState('')
   
-  console.log(values)
   const handleChange = async (e) => {
     setValues({...values,
     [e.target.id]: e.target.value,
     })
   }
 
+  const handleImgFile = (e) => {
+    e.preventDefault()
+
+    if (e.target.files[0]) {
+        setImgFile(e.target.files[0])
+    }
+  }
+
+  const handleBackFile = (e) => {
+    e.preventDefault()
+
+    if (e.target.files[0]) {
+        setBackImgFile(e.target.files[0])
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    TeamspaceGenerate(values)
-    .then((res) => {
+    const formData = new FormData()
+    const registerInfo = JSON.stringify({
+      teamName: values.teamName,
+      startDate: values.startDate,
+      endDate: values.endDate,
+      teamDescription: values.teamDescription
+    })
+    formData.append('registerInfo', registerInfo)
+    formData.append('teamspaceBackgroundPicture', backImgFile)
+    formData.append('teamspacePicture', imgFile)
+
+    try {
+      const res = await TeamspaceGenerate(formData)
       console.log(res)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+      // Navigate(`../${res.data.message}`)
+      alert('팀스페이스 생성이 완료되었습니다.')
+      setOpen(!open)
+  } catch (err) {
+      console.error(err)
+  }
   }
 
   return (
     <div>
-      <TriggerButton type="button" onClick={handleOpen} >
-        <p>+</p>
-      </TriggerButton>
+        <TriggerButton type="button" onClick={handleOpen} >
+          <span>+</span>
+        </TriggerButton>
+      
       <Modal
         aria-labelledby="unstyled-modal-title"
         aria-describedby="unstyled-modal-description"
@@ -56,27 +159,39 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
         onClose={handleClose}
         slots={{ backdrop: StyledBackdrop }}
       >
-        <ModalContent sx={{ width: 700 }}>
+        <CustomBody sx={{ width: 700 }}>
           <h2 id="modal-title" className="modal-title">
             Create
           </h2>
           <form onSubmit={handleSubmit}> 
           <div id="modal-description" className="modal-description">
-            <input type="file" id='teamspacePictureFileIdx' onChange={handleChange}/>
-            <input type="date" id='endDate' onChange={handleChange}/>
-            <br/>
-            팀 스페이스
-            <input type='text' placeholder='팀 스페이스 이름을 입력해주세요. (최대 30자)' id='teamName' onChange={handleChange} />
-            <br/>
-            <input type='text' placeholder='팀 스페이스 설명을 입력해주세요.' id='teamDescription' onChange={handleChange} />
-            <br />
-            <button type='submit'>
+            <div className='inputWrapper'>
+              <label className='label'>배경 이미지</label>
+              <input type='file' className='input' onChange={handleBackFile} />
+            </div>
+            <div className='inputWrapper'>
+              <label className='label'>프로필 이미지</label>
+              <input type='file' className='input' onChange={handleImgFile} />
+            </div>            
+            <div className='inputWrapper'>
+              <label className='label'>종료일</label>
+              <input type='date' id='endDate' className='input' onChange={handleChange} />
+            </div>
+            <div className='inputWrapper'>
+              {/* <label className='label'>이름</label> */}
+              <input type='text' id='teamName' className='input' onChange={handleChange} placeholder='팀 스페이스 이름을 입력해주세요. (최대 30자)'/>
+            </div>            
+            <div className='inputWrapper'>
+              {/* <label className='label'>설명</label> */}
+              <input type='text' id='teamDescription' className='input' onChange={handleChange} placeholder='팀 스페이스 설명을 입력해주세요.'/>
+            </div>
+            <button className='button' type='submit'>
               Create
             </button>
             <br />
           </div>
           </form>
-        </ModalContent>
+        </CustomBody>
       </Modal>
     </div>
   )
@@ -86,19 +201,20 @@ const Backdrop = React.forwardRef((props, ref) => {
   const { open, className, ...other } = props;
   return (
     <div
-      className={clsx({ 'base-Backdrop-open': open }, className)}
-      ref={ref}
-      {...other}
+    className={clsx({ 'base-Backdrop-open': open }, className)}
+    ref={ref}
+    {...other}
     />
-  )
-})
+    )
+  })
 
-Backdrop.propTypes = {
-  className: PropTypes.string.isRequired,
-  open: PropTypes.bool,
-}
+  Backdrop.propTypes = {
+    className: PropTypes.string.isRequired,
+    open: PropTypes.bool,
+  }
 
-const Modal = styled(BaseModal)`
+
+  const Modal = styled(BaseModal)`
   position: fixed;
   z-index: 1300;
   inset: 0;
@@ -115,91 +231,49 @@ const StyledBackdrop = styled(Backdrop)`
   -webkit-tap-highlight-color: transparent;
 `
 
-const ModalContent = styled('div')(
-  ({ theme }) => css`
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 500;
-    text-align: start;
-    position: relative;
-    gap: 8px;
-    overflow: hidden;
-    border-radius: 8px;
-    padding: 24px;
-    color: white;
-    background-color: #151C2C;
-    width: 80%;
-    height: 60%;
-
-    & .modal-title {
-      text-align: center;
-      line-height: 1.5rem;
-      margin-bottom: 8px;
-      text-decoration: underline;
-      text-decoration-color: #254EF8;
-    }
-
-    & .modal-description {
-      margin: 0;
-      line-height: 1.5rem;
-      font-weight: 400;
-      margin-bottom: 4px;
-    }
-  `,
-)
 
 
 const TriggerButton = styled('button')(
   ({ theme }) => css`
-  /* default */
 
-  position: fixed;
   width: 30px;
   height: 30px;
-  left: 33px;
-  top: 38px;
+  left: 30px;
+  top: 30px;
 
-  /* Rectangle 1 */
-
-  position: fixed;
-  margin-left: 20%;
-  margin-top: 15%;
-  font-size: xx-large;
+  text-align: center;
+  margin-left: 8%;
+  margin-top: 4%;
+  font-size: x-large;
   color: #254EF8;
 
-  /* btn color
-
-  버튼컴포넌트 색
-  */
   border: 2px solid #254EF8;
+  background: white;
   border-radius: 4px;
 
-
-    & :hover {
-      /* hover */
-
-      position: fixed;
+    /* & :hover {
       width: 30px;
       height: 30px;
-      left: 33px;
-      top: 38px;
+      left: 30px;
+      top: 30px;
 
-      /* Rectangle 1 */
-
-      position: fixed;
-      margin-left: 20%;
-      margin-top: 15%;
+      text-align: center;      
+      margin-left: 8%;
+      margin-top: 4%;
       font-size: xx-large;
       color: white;
 
-      /* btn color
-
-      버튼컴포넌트 색
-      */
+      border: 2px solid white;
       background: #254EF8;
       border-radius: 4px;
+      
+    } */
 
+    .p {
+      text-align: center;
     }
     `,
 )
+
 
 export default TeamspaceCreateModal
