@@ -70,7 +70,7 @@ const Container = styled.div`
     display: flex;
     justify-content: space-evenly;
     padding: 5px;
-
+`
 // const H1 = styled.h1`
 //     color: white;
-// `
+//`

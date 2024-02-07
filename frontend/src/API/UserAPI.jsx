@@ -25,7 +25,7 @@ export const UserApi = axios.create({
 // 로그인 한 유저 조회
 export const fetchUser = async () => {
     const response = await UserApi.get(`/myinfo`)
-    console.log(response.data)
+    // console.log(response.data)
     return response.data
 }
 
@@ -54,23 +54,23 @@ export const deleteUser = async () => {
 // 나를 팔로우 한 사람 조회
 export const follower = async (userId) => {
     const response = await UserApi.get(`/${userId}/followees`)
-    console.log(response)
-    console.log(response.data)
+    // console.log(response)
+    // console.log(response.data)
     return response.data
 }
 
 // 내가 팔로우 한 사람 조회
 export const followee = async (userId) => {
     const response = await UserApi.get(`/${userId}/followers`)
-    console.log(response)
-    console.log(response.data)
+    // console.log(response)
+    // console.log(response.data)
     return response.data
 }
 
 // 팔로우 요청 
 export const followUser = async (userId) => {
     const response = await UserApi.put(`/follow/${userId}`)
-    console.log(response.data)
+    // console.log(response.data)
     return response.data
 }
 

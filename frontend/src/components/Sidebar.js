@@ -11,10 +11,13 @@ import {isLogined} from "../status/store";
 import { follower } from "../API/UserAPI";
 import { followee } from "../API/UserAPI";
 import { fetchUser } from "../API/UserAPI";
+import { getImg } from "../API/FileAPI";
+import defaultimage from '../assets/images/default-image.png'
 
 const SideContainer = styled.div`
   color: white;
   padding-top: ${props => props.$paddingtop || '0'};
+  margin-left:10px;
   .items {
     margin-top: 30px;
     margin-bottom: 30px;
@@ -26,26 +29,54 @@ const SideContainer = styled.div`
     margin-left: 10%;
     font-size: large;
   }
+  .img-wrapper{
+    display: flex;
+    flex-direction: row;
+  }
+  .name-follow{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-left: 7px;
+  }
 `;
 
 const CustomLink = styled(Link)`
   text-decoration: none;
   color: white;
+`;
+
+const Img = styled.img`
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    /* margin-left: 3rem; */
+`;
+
+const H3 = styled.h3`
+font-weight:bold;
+margin-bottom:5px;
 `
 
+const P = styled.p`
+color: grey;
+`
 function Sidebar({ className, paddingtop }) {
   const { logout } = useStore()
   const [userValues, setUserValues] = useState({})
+  const [portfolioValues, setPortfolioValues] = useState({})
   // const isLogined = useStore(state => state.isLogined)
   // const [userData, setUserData] = useState({})
   const [followers, setFollowers] = useState([])
   const [followings, setFollowings] = useState([])
-  
+  const [imageURL, setImageURL] = useState()
+
   useEffect(() => {
     const userInfo = async () => {
       try {
         const res = await fetchUser()
         setUserValues(res[0])
+        setPortfolioValues(res[1])
       } catch (err) {
         console.log(err)
       } 
@@ -67,19 +98,41 @@ function Sidebar({ className, paddingtop }) {
     }
     }
     followList()
+
+    const imageInfo = async() => {     
+      try {
+        if (portfolioValues.portfolio_picture_file_idx === null) {
+          setImageURL(defaultimage)
+        } else {
+          const response = await getImg(portfolioValues.portfolio_picture_file_idx.fileIdx)
+          setImageURL(response.message)
+        }
+        } catch (err) {
+          console.error(err)
+        }
+      }
+      
+      imageInfo()
   },[userValues])
 
-  console.log(followers)
-  console.log(followings)
+  // console.log(followers)
+  // console.log(followings)
 
   return (
     <div className={className}>
       <SideContainer className="contents" $paddingtop={paddingtop}>
         {userValues ? (
           <>
-          <h3> {userValues.nickname} </h3>
-          <br/>
-          <p>follower : {followers.length} following : {followings.length}</p>
+          <div className="img-wrapper">
+            <Img 
+            src={imageURL} 
+            alt="프로필 이미지"
+            />
+            <div className="name-follow">
+              <H3> {userValues.nickname} </H3>
+              <P>팔로워 {followers.length} 팔로잉 {followings.length}</P>
+            </div>
+          </div>
           <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4">
             <List>
               <ListItem className="items">

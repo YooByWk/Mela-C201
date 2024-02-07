@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface ShortsLikeRepository extends JpaRepository<ShortsLike, Long> {
     Optional<List<Shorts>> findShortsIdxByUserIdx(User userIdx);
 
+    Optional<ShortsLike>  findByShortsIdxAndUserIdx(Shorts shortsIdx, User userIdx);
+
     Optional<List<ShortsLike>> findByUserIdxAndUploaderUserIdx(User userIdx, User uploaderUserIdx);
 
 }

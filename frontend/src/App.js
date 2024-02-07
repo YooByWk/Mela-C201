@@ -69,13 +69,13 @@ function App() {
               }
             />
           </Routes>
-          <p>아래 링크는 지울 수 있습니다. - 개발용 -</p>
+          {/* <p>아래 링크는 지울 수 있습니다. - 개발용 -</p>
           <Link to="/home">Homepage(실험중인곳)</Link>||
           <Link to="/">기본 경로</Link>||
           <Link to="/nav">Navbar</Link>||
           <Link to="/user">Signup</Link>||
           <Link to="/login">SignIn</Link>||
-          <Link to="/community"> community </Link>
+          <Link to="/community"> community </Link> */}
         </BrowserRouter>
       </ThemeProvider>
     </Fragment>
@@ -101,19 +101,19 @@ const Body = styled.div`
 
   .BodyRouter {
     // 컴포 이하
-    width: 90%;
+    /* width: 90%; */
     background-color: #10141d;
-    padding-left: 2%;
+    padding-left: 10px;
     /* padding-top: 2%; */
     height: 100%;
   }
   .Side {
     // 사이드 L 바
-    margin-left: 15px;
-    width: 10%;
-    min-width: 80px;
+    margin-left: 10px;
+    width: 170px;
+    /* min-width: 80px; */
     padding-top: 2%;
-    max-width: 120px;
+    /* max-width: 300px; */
     text-align: center;
     height: 80%;
     background-color: #202c44;
