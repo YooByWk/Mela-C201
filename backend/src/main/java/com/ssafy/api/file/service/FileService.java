@@ -18,13 +18,18 @@ public interface FileService {
     com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription);
     com.ssafy.db.entity.File getFileByFileIdx(long fileIdx);
     String getImageUrlBySaveFilenameAndFileIdx(String saveFilename, String savePath);
+    String getDefaultTeamspacePictureImageUrl();
+    String getDefaultTeamspaceBackgroundPictureImageUrl();
     String getImageUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException;
+    String getVideoUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException;
     //Amazon S3에 업로드된 파일 정보를 file 테이블에 저장
     com.ssafy.db.entity.File addTableRecord(com.ssafy.db.entity.File file);
     //Amazon S3에 저장된 파일 다운로드
     byte[] getFile(String storedFileName) throws IOException;
     //Amazon S3에 저장된 파일을 파일 경로로 삭제 (예: mela/upload/2024/02/03/mp3/9da691a4-9873-492b-a785-0d0411773a60_Variations On The Canon By Pachelbel.mp3)
     boolean deleteFileByFilePath(String filePath) throws IOException;
+    //Amazon S3에 저장된 파일을 파일 idx로 삭제 (예: 1)
+    boolean deleteFileByFileInstance(long fileIdx);
     //Amazon S3에 저장된 파일을 file 테이블 인스턴스로 삭제
     boolean deleteFileByFileInstance(com.ssafy.db.entity.File file);
     //Amazon S3에 저장된 파일들을 file 테이블 인스턴스로 삭제 #테스트 중

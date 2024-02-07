@@ -42,11 +42,27 @@ public class Teamspace {
 
     @ManyToOne
     @JoinColumn(name="TEAMSPACE_PICTURE_FILE_IDX", referencedColumnName="fileIdx")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    //TODO: 테스트 필요 (현재 사진 삭제하면 teamspace 정보 삭제됨)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     File teamspacePictureFileIdx;
 
     @ManyToOne
     @JoinColumn(name="TEAMSPACE_BACKGROUND_PICTURE_FILE_IDX", referencedColumnName="fileIdx")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    //TODO: 테스트 필요 (현재 사진 삭제하면 teamspace 정보 삭제됨)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     File teamspaceBackgroundPictureFileIdx;
+
+    @Override
+    public String toString() {
+        return "Teamspace{" +
+                "teamspaceIdx=" + teamspaceIdx +
+                ", teamName='" + teamName + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", teamDescription='" + teamDescription + '\'' +
+                ", host=" + host +
+                ", teamspacePictureFileIdx=" + teamspacePictureFileIdx +
+                ", teamspaceBackgroundPictureFileIdx=" + teamspaceBackgroundPictureFileIdx +
+                '}';
+    }
 }
