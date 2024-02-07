@@ -11,5 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface UserPositionRepository extends JpaRepository<UserPosition, Long> {
-    Optional<List<Position>> findPositionIdxByUserIdx(User userIdx);
+//    Optional<List<Position>> findPositionIdxByUserIdx(User userIdx);
 }

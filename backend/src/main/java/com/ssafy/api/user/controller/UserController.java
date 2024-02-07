@@ -475,16 +475,13 @@ public class UserController {
 		}
 
 		int returnCode = userService.isAllowedToBrowsePortfolioAbstract(userEmail, targetUser);
-		System.err.println("returnCode: " + returnCode);
 		//2. 조회할 수 있는 사용자
 		if(returnCode == 200) {
 			PortfolioAbstract portfolioAbstract = userService.browsePortfolioAbstract(userid);
 			List<PortfolioMusic> portfolioMusicList = portfolioMusicRepositorySupport.getPortfolioMusicListByUserIdx(targetUser);
 
-//			Object[] returnVO = new Object[2];
 			Object[] returnVO = {portfolioAbstract, portfolioMusicList};
 
-//			return ResponseEntity.status(200).body(portfolioAbstract);
 			return ResponseEntity.status(200).body(returnVO);
 		//3. 조회할 수 없는 사용자 (searchAllow false)
 		} else {
