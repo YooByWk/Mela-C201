@@ -159,8 +159,9 @@ public class OpenViduController {
                 MeetingPostReq meetingPostReq = meetingService.readMeeting(session.getSessionId());
                 logger.info("*** getMeeting 호출");
 
-                if(meetingPostReq.getNumberOfPeople() >= 2) {
-                    // 세션 방에 인원이 2명 이상이면 입장 안됨.
+//                if(meetingPostReq.getNumberOfPeople() >= 2) {
+                // 세션 방에 인원이 2명 이상이면 입장 안됨.
+                if(meetingPostReq.getNumberOfPeople() >= 10) {
 
                     mapSessions.put("msg", "The session room is full.");
                     logger.info("*** createConnection 오류 - 방 인원이 가득 참");
