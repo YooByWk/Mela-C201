@@ -41,7 +41,6 @@ function TeamspaceTeam () {
             }
         }
         info()
-    },[])
     },[teamspaceIdx])
 
 
