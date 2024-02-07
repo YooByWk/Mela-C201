@@ -47,10 +47,11 @@ function Alarmbar () {
                             return (
                                 <li key={alarm.notificationIdx} className="list">
                                     <div className="list-content">
+                                        <div className={alarm.checked ? 'read' : 'unread'} />
                                         <Link to={`/alarm`} className="link">
-                                            {alarm.alarmContent.length < 20
+                                            {alarm.alarmContent.length < 10
                                                 ? alarm.alarmContent
-                                                : alarm.alarmContent.slice(0, 15) + '...'}
+                                                : alarm.alarmContent.slice(0, 9) + '...'}
                                         </Link>
                                     </div>
                                 </li>
@@ -73,13 +74,15 @@ const Container = styled.div`
     background-color: #151C2C;
     display: flex;
     flex-direction: column;
-    height: 10rem;
+    height: 30%;
     border-radius: 20px;
-    padding: 10px;
+    padding: 15px;
+    overflow: hidden;
 
     .header {
         display: flex;
         justify-content: space-between;
+        font-size: large;
     }
 
     .icon {
@@ -88,11 +91,28 @@ const Container = styled.div`
 
     .list-content {
         margin-top: 10px;
+        display: flex;
     }
 
     .link {
         text-decoration: none;
         color: white;
         cursor: pointer;
+    }
+
+    .read {
+        width: 0.7rem;
+        height: 0.7rem;
+        background-color: #6C7383;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+    .unread {
+        width: 0.7rem;
+        height: 0.7rem;
+        background-color: #254EF8;
+        border-radius: 50%;
+        margin-right: 5px;
     }
 `
