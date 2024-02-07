@@ -14,6 +14,7 @@ import TeamspaceManage from '../components/teamspace/TeamspaceManage';
 import TeamspaceDetail from '../pages/TeamspaceDetail';
 import ForgotPassword from '../pages/ForgotPassword';
 import AlarmMain from '../pages/AlarmMain';
+import SequenceMain from '../sequence/SequenceMain';
 
 
 function AppRouter({ className }) {
@@ -77,7 +78,7 @@ function AppRouter({ className }) {
           <Route
             path='/alarm' element={<AlarmMain />}
             />
-            
+          <Route path='/seq' element={<SequenceMain />} />
         </Routes>
     </div>
   );

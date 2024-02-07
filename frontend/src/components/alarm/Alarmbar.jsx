@@ -17,7 +17,7 @@ function Alarmbar () {
             console.log(res)
         }
         fetchData()
-    })
+    },[])
 
     const goDetail = () => {
         navigate('/alarm')
