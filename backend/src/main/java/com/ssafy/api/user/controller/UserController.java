@@ -17,6 +17,7 @@ import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.PortfolioAbstractRepository;
+import com.ssafy.db.repository.PortfolioMusicRepositorySupport;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,9 @@ public class UserController {
 	RecruitService recruitService;
 	@Autowired
 	PortfolioAbstractRepository portfolioAbstractRepository;
+
+	@Autowired
+	PortfolioMusicRepositorySupport portfolioMusicRepositorySupport;
 
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드 ...를</strong>를 통해 회원가입 한다.")
@@ -475,8 +479,13 @@ public class UserController {
 		//2. 조회할 수 있는 사용자
 		if(returnCode == 200) {
 			PortfolioAbstract portfolioAbstract = userService.browsePortfolioAbstract(userid);
+			List<PortfolioMusic> portfolioMusicList = portfolioMusicRepositorySupport.getPortfolioMusicListByUserIdx(targetUser);
 
-			return ResponseEntity.status(200).body(portfolioAbstract);
+//			Object[] returnVO = new Object[2];
+			Object[] returnVO = {portfolioAbstract, portfolioMusicList};
+
+//			return ResponseEntity.status(200).body(portfolioAbstract);
+			return ResponseEntity.status(200).body(returnVO);
 		//3. 조회할 수 없는 사용자 (searchAllow false)
 		} else {
 			return ResponseEntity.status(returnCode).body("Fail. Check error code");
