@@ -42,7 +42,7 @@ function SigninModal({className, fontSize, padding}) {
         console.log(userInfo, '유저 정보')
       }
       fetchData()
-      movePage(`/portfolio/${userInfo[0].emailId}`)
+      // movePage(`/portfolio/${userInfo[0].emailId}`)
     })
     .catch((err) => {
       console.error(err)
