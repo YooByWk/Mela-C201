@@ -1,10 +1,13 @@
 package com.ssafy.api.user.service;
 
+import com.ssafy.api.user.request.PortfolioAbstractPostReq;
 import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
 import com.ssafy.db.entity.Feed;
 import com.ssafy.db.entity.Notification;
+import com.ssafy.db.entity.PortfolioAbstract;
 import com.ssafy.db.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import java.util.List;
@@ -25,7 +28,7 @@ public interface UserService {
 
 	void logoutSaveJwt(String userId);
 
-	User updateUser(User user, UserUpdatePostReq userUpdateInfo);
+	void updateUser(User user, UserUpdatePostReq userUpdateInfo, PortfolioAbstractPostReq portfolioAbstractPostReq, MultipartFile portfolioPicture);
 
 	void deleteUser(User user);
 
@@ -53,6 +56,8 @@ public interface UserService {
 
 	void followUser(User nowLoginUser, String userId);
 
+	Boolean isFollow(User nowLoginUser, String userId);
+
 	List<User> getFollower(String emailId);
 
 	List<User> getFollowee(String emailId);
@@ -64,4 +69,7 @@ public interface UserService {
 	void deleteNotification(User nowLoginUser, Long notiId);
 
 	List<Feed> getFeed(User user);
+
+	//TODO: 테스트 필요!
+	PortfolioAbstract browsePortfolioAbstract(String userId);
 }

@@ -13,10 +13,13 @@ const Input = styled.input`
 function InputMessage() {
 
     return(
-        <Input 
-            type="text"
-            placeholder="Enter your message"
-        />
+        <>
+            <span>메시지 입력</span>
+            <Input
+                type="text"
+                placeholder="Enter your message"
+            />
+        </>
     )
 }
 

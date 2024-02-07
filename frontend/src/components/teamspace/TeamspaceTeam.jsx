@@ -3,9 +3,18 @@ import styled from "styled-components"
 // import TeamspaceMemberCard from "./TeamspaceMemberCard"
 import { TeamspaceInfo,TeamspaceMember } from "../../API/TeamspaceAPI"
 import { useParams } from "react-router-dom"
-import CalendarBar from "./calendar/CalendarBar"
 
 
+const H1 = styled.h1`
+    color: white;
+`
+const BackgroundImage = styled.div`
+    background-color: white;
+    width: 1000px;
+    height: 250px;
+    border-radius: 20px;
+    // background-image: axios 요청으로 값 가져와서 넣어야 될 듯
+`
 function TeamspaceTeam () {
     const { teamspaceIdx } = useParams()
     const [values, setValues] = useState({})
@@ -33,6 +42,8 @@ function TeamspaceTeam () {
         }
         info()
     },[])
+    },[teamspaceIdx])
+
 
     return(
         <>

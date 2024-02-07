@@ -7,6 +7,10 @@ import { AiOutlineMessage } from "react-icons/ai";
 import { MdOutlineLocalFireDepartment, MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
 import useStore from "../status/store";
+import {isLogined} from "../status/store";
+import { follower } from "../API/UserAPI";
+import { followee } from "../API/UserAPI";
+import { fetchUser } from "../API/UserAPI";
 
 const SideContainer = styled.div`
   color: white;
@@ -30,25 +34,59 @@ const CustomLink = styled(Link)`
 `
 
 function Sidebar({ className, paddingtop }) {
-  const { fetchUser, user, logout} = useStore()
-
+  const { logout } = useStore()
+  const [userValues, setUserValues] = useState({})
+  // const isLogined = useStore(state => state.isLogined)
+  // const [userData, setUserData] = useState({})
+  const [followers, setFollowers] = useState([])
+  const [followings, setFollowings] = useState([])
+  
   useEffect(() => {
-    fetchUser()
-  }, [fetchUser])
+    const userInfo = async () => {
+      try {
+        const res = await fetchUser()
+        setUserValues(res[0])
+      } catch (err) {
+        console.log(err)
+      } 
+    }; userInfo()
+    
+  }, [])
+  
+  useEffect(() => {
+    const followList = async () => {
+      if (userValues.emailId) {
+      try {
+      const getFollower = await follower(userValues.emailId)
+      setFollowers(getFollower)
+      const getFollowing = await followee(userValues.emailId)
+      setFollowings(getFollowing)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    }
+    followList()
+  },[userValues])
+
+  console.log(followers)
+  console.log(followings)
 
   return (
     <div className={className}>
       <SideContainer className="contents" $paddingtop={paddingtop}>
-        {user && user.nickname ? (
+        {userValues ? (
           <>
-          <h3> {user.nickname} </h3>
+          <h3> {userValues.nickname} </h3>
+          <br/>
+          <p>follower : {followers.length} following : {followings.length}</p>
           <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4">
             <List>
               <ListItem className="items">
                 <ListItemPrefix>
                   <FaRegUser />
                 </ListItemPrefix>
-              <CustomLink to={`/portfolio/${user.nickname}`}>
+              <CustomLink to={`/portfolio/${userValues.emailId}`}>
                 <span className="wd">Profile</span>
               </CustomLink>
               </ListItem>
@@ -81,7 +119,7 @@ function Sidebar({ className, paddingtop }) {
             </List>
           </Card>
           </>
-        ) : null}
+        ) : <p>유저정보가 없습니다.</p>}
       </SideContainer>
     </div>
   );

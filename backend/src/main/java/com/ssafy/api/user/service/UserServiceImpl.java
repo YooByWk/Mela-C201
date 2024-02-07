@@ -1,5 +1,7 @@
 package com.ssafy.api.user.service;
 
+import com.ssafy.api.file.service.FileService;
+import com.ssafy.api.user.request.PortfolioAbstractPostReq;
 import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
 import com.ssafy.common.util.CSVParser;
@@ -10,16 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
 
@@ -47,9 +49,12 @@ public class UserServiceImpl implements UserService {
 	FeedRepository feedRepository;
 	@Autowired
 	FeedRepositorySupport feedRepositorySupport;
-
 	@Autowired
 	private JavaMailSender mailSender;
+	@Autowired
+	PortfolioAbstractRepository portfolioAbstractRepository;
+	@Autowired
+	FileService fileService;
 
 	Random random = new Random();
 	CSVParser frontWords = new CSVParser("front_words");
@@ -75,6 +80,10 @@ public class UserServiceImpl implements UserService {
 
 		// boolean은 isXXX으로 getter 만들어짐!!
 		user.setSearchAllow(userRegisterInfo.isSearchAllow());
+
+		PortfolioAbstract portfolioAbstract = new PortfolioAbstract();
+		portfolioAbstract.setUserIdx(user);
+		portfolioAbstractRepository.save(portfolioAbstract);
 
 		return userRepository.save(user);
 	}
@@ -116,17 +125,55 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User updateUser(User user, UserUpdatePostReq userUpdateInfo) {
-		// TODO: 수정 사항 추가 필요!! (포트폴리오)
-		user.setName(userUpdateInfo.getName());
-		user.setNickname(userUpdateInfo.getNickname());
-		user.setBirth(userUpdateInfo.getBirth());
-		user.setGender(userUpdateInfo.getGender());
-		user.setSearchAllow(userUpdateInfo.isSearchAllow());
+	public void updateUser(User user, UserUpdatePostReq userUpdateInfo, PortfolioAbstractPostReq portfolioAbstractPostReq, MultipartFile portfolioPicture) {
+		if(userUpdateInfo != null) {
+			user.setName(userUpdateInfo.getName());
+			user.setNickname(userUpdateInfo.getNickname());
+			user.setBirth(userUpdateInfo.getBirth());
+			user.setGender(userUpdateInfo.getGender());
+			user.setSearchAllow(userUpdateInfo.isSearchAllow());
 
-		System.out.println(userUpdateInfo.isSearchAllow());
+			userRepository.saveAndFlush(user);
+		}
 
-		return userRepository.save(user);
+		if(portfolioAbstractPostReq != null) {
+			//portfolio_abstract 테이블에 유저식별번호 (user_idx) 일치하는 레코드 검색
+			PortfolioAbstract portfolioAbstract = null;
+			try {
+				portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user).get();
+			} catch(NoSuchElementException e) {													//portfolio_abstract 테이블에 유저식별번호 (user_idx) 일치하는 레코드 없음 -> 생성
+				e.printStackTrace();
+			} finally {
+				portfolioAbstract.setInstagram(portfolioAbstractPostReq.getInstagram());		//instagram
+				portfolioAbstract.setSelfIntro(portfolioAbstractPostReq.getSelfIntro());		//self_intro
+				portfolioAbstract.setYoutube(portfolioAbstractPostReq.getYoutube());			//youtube
+
+				portfolioAbstractRepository.saveAndFlush(portfolioAbstract);
+			}
+		}
+
+		//클라이언트에서 프로필 사진을 업로드 했다면 (파일이 비어있지 않다면)
+		if(portfolioPicture != null) {
+			//1. 프로필 사진 저장 (Amazon S3, file 테이블)
+			com.ssafy.db.entity.File file = fileService.saveFile(portfolioPicture, "");
+			PortfolioAbstract portfolioAbstract = null;
+
+			try {
+				//2. portfolio_abstract 테이블에 유저식별번호 (user_idx) 일치하는 레코드 검색
+				portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user).get();
+
+				//3-1. 일치하는 레코드가 있으면 프로필사진 파일 식별번호 업데이트 (portfolio_picture_file_idx)
+				portfolioAbstract.setPortfolio_picture_file_idx(file);							//프로필사진 파일 식별번호 업데이트 (portfolio_picture_file_idx)
+				portfolioAbstractRepository.save(portfolioAbstract);
+				userRepository.saveAndFlush(user);
+				//3-2. 일치하는 레코드가 없는 경우
+			} catch(NoSuchElementException e) {
+				e.printStackTrace();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	@Override
@@ -343,6 +390,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public Boolean isFollow(User nowLoginUser, String userId) {
+		User followedUser = userRepository.findByEmailId(userId).get();
+		Optional<Follow> isFollowed = followRepository.findByFollowerAndFollowe(nowLoginUser, followedUser);
+		return isFollowed.isPresent();
+	}
+
+	@Override
 	public List<User> getFollower(String emailId) {
 		return followRepositorySupport.findUserFollower(userRepository.findByEmailId(emailId).get());
 	}
@@ -392,4 +446,11 @@ public class UserServiceImpl implements UserService {
 
 		return feeds;
 	}
+
+	//TODO: 테스트 필요!
+	@Override
+	public PortfolioAbstract browsePortfolioAbstract(String userId) {
+		return portfolioAbstractRepository.findByUserIdx(userRepository.findByEmailId(userId).get()).get();
+	}
+
 }

@@ -33,18 +33,23 @@ function SigninModal({className, fontSize, padding}) {
     .then((res) => {
       localStorage.clear()
       localStorage.setItem('accessToken', res.accessToken)
-      console.log('로그인 성공')
-      console.log(res)
+      // console.log('로그인 성공')
+      console.log(res.data)
       setIsLogined(true)
-      console.log(IsLogined)
-      fetchUser().then(() => {
+      // console.log(IsLogined)
+      const fetchData = async () => {
+        const res = await fetchUser()
         console.log(userInfo, '유저 정보')
-        movePage('/profile')
-      })
+      }
+      fetchData()
+      movePage(`/portfolio/${userInfo[0].emailId}`)
     })
     .catch((err) => {
-      console.log(err)
-    })
+      console.error(err)
+      if (err.response.status === 401) {
+        alert('이메일 인증을 먼저 완료해주세요.')
+      }
+  })
   }
 
   return (

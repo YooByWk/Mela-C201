@@ -1,31 +1,32 @@
 package com.ssafy.api.file.service;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.ssafy.api.user.request.PortfolioMusicPostReq;
+import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.IOUtils;
 import com.ssafy.api.user.service.PortfolioService;
-import com.ssafy.db.entity.PortfolioMusic;
+import com.ssafy.common.exception.handler.NotValidExtensionException;
 import com.ssafy.db.repository.FileRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.UUID;
+
+import static com.ssafy.common.util.ExtensionUtil.isValidImageExtension;
+import static com.ssafy.common.util.ExtensionUtil.isValidVideoExtension;
 
 @Service("fileServiceImpl")
 public class FileServiceImpl implements FileService {
@@ -59,7 +60,8 @@ public class FileServiceImpl implements FileService {
         return file;
     }
 
-    private void removeFile(File targetFile) { // 로컬파일 삭제
+    @Override
+    public void removeFile(File targetFile) { // 로컬파일 삭제
         if (targetFile.exists()) {
             if (targetFile.delete()) {
                 //System.out.println("파일이 삭제되었습니다.");
@@ -69,6 +71,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
+    //FIXME: 테스트 코드이므로 file 테이블에 삽입 작업 없음 (코드 재사용 유의)
     @Override
     public void saveFileTest(MultipartFile multipartFile) {
         com.ssafy.db.entity.File file;
@@ -78,14 +81,12 @@ public class FileServiceImpl implements FileService {
             if (multipartFile.isEmpty()) {
                 throw new Exception("Empty file -FileServiceImpl.java");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         //2. 파일 업로드
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            //TODO: 컨트롤러 서버에 파일 저장되는지 확인
-
             //2-1. UUID 생성 (같은 이름의 파일 (확장자 포함) 업로드 충돌 방지)
             UUID uuid = UUID.randomUUID();
 
@@ -126,45 +127,12 @@ public class FileServiceImpl implements FileService {
 
             //MultipartFile -> File로 변환하면서 로컬에 저장된 파일 삭제
             removeFile(convertedFile);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public boolean addPortfolioMusic(PortfolioMusic portfolioMusic, MultipartFile[] multipartFile, PortfolioMusicPostReq portfolioMusicPostReq) {
-        for(MultipartFile mf : multipartFile) {
-            String extension = FilenameUtils.getExtension(mf.getOriginalFilename());                            //클라이언트가 업로드한 파일의 확장자 추출
-            com.ssafy.db.entity.File file;                                                                      //Amazon S3에 업로드한 파일에 관한 정보를 담고 있는 객체 (파일 경로, 원본 파일 명, 저장되는 파일 명, 파일 설명, 용량)
-
-            try {
-                //TODO: swith-case 문으로 수정 가능
-                if (extension.equals("mp3") || extension.equals("flac")) {                                       //2-4-1. 음원 파일 (mp3, flac)
-                    file = saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusic.setMusicFileIdx(file);
-                } else if (extension.equals("pdf") || extension.equals("xml")) {                                 //2-4-2. 가사 파일 (pdf, xml)
-                    file = saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusic.setLyricFileIdx(file);
-                } else if (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")) {     //2-4-3. 앨범 아트(jpg, jpeg, png)
-                    file = saveFile(mf, portfolioMusicPostReq.getFileDescription());
-                    file = addTableRecord(file);                                                                 //file 재할당 필요 없을지도
-                    portfolioMusic.setAlbumArtFileIdx(file);
-                } else {
-                    throw new Exception("지원하지 않는 파일 형식입니다.");
-                }
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        portfolioMusic.setTitle(portfolioMusic.getTitle());
-        portfolioMusic.setPinFixed(portfolioMusicPostReq.isPinFixed());
-        portfolioService.addPortfolioMusic(portfolioMusic);                                          //3. Service 구현체를 통해 포트폴리오 음악 추가
-
-        return true;
-    }
 
     @Override
     public com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription) {
@@ -175,14 +143,12 @@ public class FileServiceImpl implements FileService {
             if (multipartFile.isEmpty()) {
                 throw new Exception("Empty file -FileServiceImpl.java");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         //2. 파일 업로드
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            //TODO: 컨트롤러 서버에 파일 저장되는지 확인
-
             //2-1. UUID 생성 (같은 이름의 파일 (확장자 포함) 업로드 충돌 방지)
             UUID uuid = UUID.randomUUID();
 
@@ -221,7 +187,7 @@ public class FileServiceImpl implements FileService {
             //PublicRead 권한으로 Amazon S3 업로드
             amazonS3Client.putObject(new PutObjectRequest(bucket, saveFilename, convertedFile).withCannedAcl(CannedAccessControlList.PublicRead));
 
-            file.setSavePath(savePath.toString());                                              //1. 파일 경로
+            file.setSavePath(savePath.toString().replace("\\", "/"));          //1. 파일 경로
             file.setOriginalFilename(multipartFile.getOriginalFilename());                      //2. 원본 파일 명
             file.setSaveFilename(uuid.toString() + "_" + multipartFile.getOriginalFilename());  //3. 저장되는 파일 명
             file.setFileDescription(fileDescription);                                           //4. 파일 설명
@@ -229,7 +195,7 @@ public class FileServiceImpl implements FileService {
 
             //MultipartFile -> File로 변환하면서 로컬에 저장된 파일 삭제
             removeFile(convertedFile);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -237,26 +203,145 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Resource loadAsResource(String filePath) {
-        try {
-            Resource resource = new UrlResource(filePath);
-            Path root = Paths.get(filePath);
+    public com.ssafy.db.entity.File getFileByFileIdx(long fileIdx) {
+        return fileRepository.findById(fileIdx).get();
+    }
 
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            }
+    @Override
+    public String getImageUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException {
+        URL url = null;
 
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("파일을 읽을 수 없습니다. : " + filePath, e);
+        com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
+
+        //2. 파일의 확장자가 이미지인지 체크
+        String extension = FilenameUtils.getExtension(file.getSaveFilename());
+
+        if (isValidImageExtension(extension)) {     //3-1. 파일의 확장자가 이미지이면
+            url = amazonS3Client.getUrl("my.first.mela.sss.bucket", file.getSavePath() + "/" + file.getSaveFilename());
+        } else {                                    //3-2. 파일의 확장자가 이미지가 아니면
+            throw new NotValidExtensionException();
         }
 
-        System.err.println("Should Never Reach Here! - FileServiceImpl.java");
+        return url.toString();
+    }
 
-        return null;
+    @Override
+    public String getVideoUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException {
+        //1. fileIdx로 file 테이블에서 일치하는 레코드 조회
+        com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
+
+        //2. 파일의 확장자가 이미지인지 체크
+        String extension = FilenameUtils.getExtension(file.getSaveFilename());
+
+        //3-1. 파일의 확장자가 동영상이면
+        if (isValidVideoExtension(extension)) {
+            URL url = amazonS3Client.getUrl("my.first.mela.sss.bucket", file.getSavePath() + "/" + file.getSaveFilename());
+
+            return url.toString();
+            //3-2. 파일의 확장자가 동영상이 아니면
+        } else {
+            throw new NotValidExtensionException();
+        }
+    }
+
+    @Override
+    public String getImageUrlBySaveFilenameAndFileIdx(String saveFilename, String savePath) {
+        URL url = amazonS3Client.getUrl("my.first.mela.sss.bucket", savePath + "/" + saveFilename);
+
+        return url.toString();
+    }
+
+    @Override
+    public String getDefaultTeamspacePictureImageUrl() {
+        URL url = amazonS3Client.getUrl("my.second.mela.sss.bucket", "teamspacePicture.png");
+
+        return url.toString();
+    }
+
+    @Override
+    public String getDefaultTeamspaceBackgroundPictureImageUrl() {
+        URL url = amazonS3Client.getUrl("my.second.mela.sss.bucket", "teamspaceBackgroundPicture.png");
+
+        return url.toString();
     }
 
     @Override
     public com.ssafy.db.entity.File addTableRecord(com.ssafy.db.entity.File file) {
         return fileRepository.save(file);
+    }
+
+    public byte[] getFile(String filePath) throws IOException {
+        S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, filePath));
+        S3ObjectInputStream objectInputStream = o.getObjectContent();
+        byte[] bytes = IOUtils.toByteArray(objectInputStream);
+
+        objectInputStream.close();
+        o.close();
+
+        return bytes;
+    }
+
+    @Override
+    public boolean deleteFileByFilePath(String filePath) throws IOException {
+        try {
+            amazonS3Client.deleteObject(bucket, filePath);
+            int lastSlashIndex = filePath.lastIndexOf("/");
+            String filedir = filePath.substring(0, lastSlashIndex);
+            String filename = filePath.substring(lastSlashIndex + 1, filePath.length());
+            com.ssafy.db.entity.File file = getFileBySaveFilenameAndSavePath(filename, filedir);
+            fileRepository.delete(file);
+            return true;
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteFileByFileInstance(long fileIdx) {
+        com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
+
+        return deleteFileByFileInstance(file);
+    }
+
+    @Override
+    public boolean deleteFileByFileInstance(com.ssafy.db.entity.File file) {
+        try {
+            //Amazon S3에서 삭제
+            deleteFileByFilePath(file.getSavePath() + "/" + file.getSaveFilename());
+
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteFilesByFileInstances(com.ssafy.db.entity.File[] files) {
+        try {
+            for(com.ssafy.db.entity.File file : files) {
+                if(file != null) {
+                    //Amazon S3에서 삭제
+                    deleteFileByFilePath(file.getSavePath() + "/" + file.getSaveFilename());
+                }
+            }
+
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+    @Override
+    public com.ssafy.db.entity.File getFileBySaveFilenameAndSavePath(String saveFilename, String savePath) {
+        com.ssafy.db.entity.File file = fileRepository.findBySaveFilenameAndSavePath(saveFilename, savePath).get();
+
+        return file;
     }
 }

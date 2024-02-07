@@ -22,11 +22,13 @@ public class QShorts extends EntityPathBase<Shorts> {
 
     public static final QShorts shorts = new QShorts("shorts");
 
-    public final StringPath comment = createString("comment");
+    public final StringPath description = createString("description");
 
     public final NumberPath<Long> shortsIdx = createNumber("shortsIdx", Long.class);
 
     public final QFile shortsPathFileIdx;
+
+    public final StringPath title = createString("title");
 
     public final QUser userIdx;
 
