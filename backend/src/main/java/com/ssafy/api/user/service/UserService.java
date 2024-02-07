@@ -56,6 +56,8 @@ public interface UserService {
 
 	void followUser(User nowLoginUser, String userId);
 
+	Boolean isFollow(User nowLoginUser, String userId);
+
 	List<User> getFollower(String emailId);
 
 	List<User> getFollowee(String emailId);

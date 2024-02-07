@@ -306,6 +306,24 @@ public class UserController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
+	@GetMapping("/{userId}/followers")
+	@ApiOperation(value = "사용자와 팔로우한 유저인지 체크", notes = "현재 로그인한 사용자와 userId 사용자가 팔로우 관계인지 체크")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<Boolean> isFollow(
+			@ApiIgnore Authentication authentication,
+			@PathVariable String userId) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userEmail = userDetails.getUsername();
+		User nowLoginUser = userService.getUserByEmail(userEmail);
+
+		userService.isFollow(nowLoginUser, userId);
+
+		return ResponseEntity.status(200).body(true);
+	}
 
 	@GetMapping("/{userId}/followers")
 	@ApiOperation(value = "사용자가 팔로우한 사람들 목록", notes = "특정 사용자가 팔로우한 사람들 목록을 보여준다")
