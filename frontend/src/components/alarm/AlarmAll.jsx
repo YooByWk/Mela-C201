@@ -3,10 +3,14 @@ import styled from 'styled-components'
 import { notification, checkNotification, delNotification } from '../../API/UserAPI'
 import moment from 'moment'
 import DefaultButton from '../DefaultButton'
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 function AlarmAll () {
     const [data, setData] = useState(null)
     const [checkAlarm, setCheckAlarm] = useState([])
+    const [totalPageCount, setTotalPageCount] = useState(1)
+    const [currentPage, setCurrentPage] = useState(1)
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,6 +24,26 @@ function AlarmAll () {
         }
         fetchData()
     }, [])
+
+    const NextPage = () => {
+        setCurrentPage(prevPage => prevPage +1 )
+    }
+
+    const PrevPage = () => {
+        setCurrentPage(prevPage => prevPage > 1 ? prevPage -1 : prevPage)
+    }
+
+    const pages = [];
+    for (let i = 1; i <= Math.ceil(totalPageCount/10); i++) {
+        pages.push(
+        <PaginationButton
+            onClick={() => setCurrentPage(i)}
+            isActive={currentPage === i ? 'active' : ''}
+        >
+        </PaginationButton>
+        );
+    }
+
 
     // 단일 선택
     const handleSingleCheck = (checked, notificationIdx) => {
@@ -146,6 +170,18 @@ function AlarmAll () {
                     }
                 </ul>
             </div>
+        <br />
+            <div className="footer">
+                <div className="page-btn" onClick={PrevPage} disabled={currentPage === 1}> 
+                <IoIosArrowBack />
+                </div>
+                <div className="pagination">
+                {pages}
+                </div>
+                <div className="page-btn" onClick={NextPage}>
+                <IoIosArrowForward />
+                </div>
+            </div>
         </Container>
         </>
     )
@@ -153,6 +189,17 @@ function AlarmAll () {
 
 export default AlarmAll
 
+
+const PaginationButton = styled.button`
+  background-color: ${props => props.isActive ? "#254EF8" : "#13295b"};
+  border: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin: 3px;
+  cursor: pointer;
+  align-items: center;
+`
 
 const Container = styled.div`
     color: white;
@@ -203,4 +250,26 @@ const Container = styled.div`
         border: 1px solid #254EF8;
         margin-bottom: 1rem;
     }
+
+    .page-btn {
+    background-color: #151C2C;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    }
+
+    .footer {
+        display: flex;
+        align-items: center;
+        margin: 5px;
+    }
+
+    .pagination {
+        margin: 5px;
+    }
+
 `

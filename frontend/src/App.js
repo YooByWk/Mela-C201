@@ -115,7 +115,7 @@ const Body = styled.div`
     padding-top: 2%;
     /* max-width: 300px; */
     text-align: center;
-    height: 80%;
+    height: 67%;
     background-color: #202c44;
     border-radius: 10px;
   }
