@@ -18,11 +18,14 @@ public class JoinChatRoom {
     Long joinChatRoomIdx;
 
 
-    @ManyToOne
-    @JoinColumn(name="chat_room_idx", referencedColumnName="chatRoomIdx")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @ManyToOne
+//    @JoinColumn(name="chat_room_idx", referencedColumnName="chatRoomIdx")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @NotNull
+//    ChatRoom chatRoomIdx;
+
     @NotNull
-    ChatRoom chatRoomIdx;
+    String chatRoomIdx;
 
     @ManyToOne
     @JoinColumn(name="user_idx", referencedColumnName="userIdx")

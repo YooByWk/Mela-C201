@@ -13,12 +13,11 @@ public class ChatRoom implements Serializable {
     private static final long serialVersionUID = 6494678977089006639L;
 
     private String roomIdx;
-    private String name;
 
-    public static ChatRoom create(String name) {
+    public static ChatRoom create() {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomIdx = UUID.randomUUID().toString();
-        chatRoom.name = name;
+//        chatRoom.name = name;
         return chatRoom;
     }
 }

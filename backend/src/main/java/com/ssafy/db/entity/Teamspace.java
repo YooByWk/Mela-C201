@@ -49,4 +49,9 @@ public class Teamspace {
     @JoinColumn(name="TEAMSPACE_BACKGROUND_PICTURE_FILE_IDX", referencedColumnName="fileIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     File teamspaceBackgroundPictureFileIdx;
+
+    @OneToOne
+    @JoinColumn(name = "JOIN_CHAT_ROOM_IDX", referencedColumnName = "joinChatRoomIdx")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    JoinChatRoom joinChatRoomIdx;
 }

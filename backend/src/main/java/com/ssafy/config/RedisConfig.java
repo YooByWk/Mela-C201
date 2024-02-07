@@ -1,5 +1,6 @@
 package com.ssafy.config;
 
+import com.ssafy.db.entity.ChatMessage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -29,5 +30,15 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
         return redisTemplate;
+    }
+
+    @Bean
+    public RedisTemplate<String, ChatMessage> redisTemplateMessage(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, ChatMessage> redisTemplateMessage = new RedisTemplate<>();
+        redisTemplateMessage.setConnectionFactory(connectionFactory);
+        redisTemplateMessage.setKeySerializer(new StringRedisSerializer());        // Key Serializer
+        redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));      // Value Serializer
+
+        return redisTemplateMessage;
     }
 }

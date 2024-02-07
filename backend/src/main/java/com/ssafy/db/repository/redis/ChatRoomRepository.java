@@ -40,21 +40,20 @@ public class ChatRoomRepository {
     /**
      * 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
      */
-    public ChatRoom createChatRoom(String name) {
-        ChatRoom chatRoom = ChatRoom.create(name);
-        System.out.println("createChatRoom " + chatRoom.getRoomIdx() + " " + chatRoom);
+    public ChatRoom createChatRoom() {
+        ChatRoom chatRoom = ChatRoom.create();
         opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomIdx(), chatRoom);
         return chatRoom;
     }
     /**
      * 채팅방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정한다.
      */
-    public void enterChatRoom(String roomId) {
-        ChannelTopic topic = topics.get(roomId);
+    public void enterChatRoom(String roomIdx) {
+        ChannelTopic topic = topics.get(roomIdx);
         if (topic == null) {
-            topic = new ChannelTopic(roomId);
+            topic = new ChannelTopic(roomIdx);
             redisMessageListener.addMessageListener(redisSubscriber, topic);
-            topics.put(roomId, topic);
+            topics.put(roomIdx, topic);
         }
     }
     public ChannelTopic getTopic(String roomId) {
