@@ -101,19 +101,19 @@ const Body = styled.div`
 
   .BodyRouter {
     // 컴포 이하
-    width: 90%;
+    /* width: 90%; */
     background-color: #10141d;
-    padding-left: 2%;
+    padding-left: 10px;
     /* padding-top: 2%; */
     height: 100%;
   }
   .Side {
     // 사이드 L 바
-    margin-left: 15px;
-    width: 10%;
-    min-width: 80px;
+    margin-left: 10px;
+    width: 170px;
+    /* min-width: 80px; */
     padding-top: 2%;
-    max-width: 120px;
+    /* max-width: 300px; */
     text-align: center;
     height: 80%;
     background-color: #202c44;
