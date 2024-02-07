@@ -70,14 +70,7 @@ const Container = styled.div`
     display: flex;
     justify-content: space-evenly;
     padding: 5px;
-
+`
 // const H1 = styled.h1`
 //     color: white;
-// `
-const BackgroundImage = styled.div`
-    background-color: white;
-    width: 90%;
-    height: 250px;
-    border-radius: 20px;
-    // background-image: axios 요청으로 값 가져와서 넣어야 될 듯
-`
+//`

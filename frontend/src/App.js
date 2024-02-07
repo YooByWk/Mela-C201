@@ -69,13 +69,13 @@ function App() {
               }
             />
           </Routes>
-          <p>아래 링크는 지울 수 있습니다. - 개발용 -</p>
+          {/* <p>아래 링크는 지울 수 있습니다. - 개발용 -</p>
           <Link to="/home">Homepage(실험중인곳)</Link>||
           <Link to="/">기본 경로</Link>||
           <Link to="/nav">Navbar</Link>||
           <Link to="/user">Signup</Link>||
           <Link to="/login">SignIn</Link>||
-          <Link to="/community"> community </Link>
+          <Link to="/community"> community </Link> */}
         </BrowserRouter>
       </ThemeProvider>
     </Fragment>
