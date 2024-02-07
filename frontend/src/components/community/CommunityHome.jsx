@@ -101,12 +101,11 @@ function CommunityHome() {
   const pages = [];
   for (let i = 1; i <= Math.ceil(totalPageCount/10); i++) {
     pages.push(
-      <button
+      <PaginationButton
         onClick={() => setCurrentPage(i)}
-        className={currentPage === i ? 'active' : ''}
+        isActive={currentPage === i ? 'active' : ''}
       >
-        {i}
-      </button>
+      </PaginationButton>
     );
   }
 
@@ -114,9 +113,6 @@ function CommunityHome() {
   return (
     <>
     <MainDiv>
-    <div className="pagination">
-      {pages}
-    </div>
       <div className="Container">
         <h1>자유게시판</h1>
         <div className="BoardSearch">
@@ -197,6 +193,9 @@ function CommunityHome() {
         <div className="page-btn" onClick={PrevPage} disabled={currentPage === 1}> 
           <IoIosArrowBack />
         </div>
+        <div className="pagination">
+          {pages}
+        </div>
         <div className="page-btn" onClick={NextPage}>
           <IoIosArrowForward />
         </div>
@@ -209,6 +208,17 @@ function CommunityHome() {
 
 export default CommunityHome;
 
+
+const PaginationButton = styled.button`
+  background-color: ${props => props.isActive ? "#254EF8" : "#13295b"};
+  border: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin: 3px;
+  cursor: pointer;
+  align-items: center;
+`
 
 const MainDiv = styled.div`
   a {
@@ -296,6 +306,12 @@ const MainDiv = styled.div`
 
   .footer {
     display: flex;
+    align-items: center;
+    margin: 5px;
+  }
+
+  .pagination {
+    margin: 5px;
   }
 
   .Container {
