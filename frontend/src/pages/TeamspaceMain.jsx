@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { TeamspaceList } from "../API/TeamspaceAPI";
+import Alarmbar from "../components/alarm/Alarmbar";
 
 function TeamspaceMain () {
   const [isWriting, setIsWriting] = useState(false);
@@ -56,7 +57,9 @@ function TeamspaceMain () {
         />
         ))}
       </MainDiv>
-      {!isWriting && <RSideDiv>3</RSideDiv>}
+      <RSideDiv>
+          <Alarmbar />
+      </RSideDiv>
     </TeamspaceContainer>
    );
 }
