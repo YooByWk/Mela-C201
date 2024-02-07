@@ -35,7 +35,6 @@ function TeamspaceMain () {
       myTeamspaceList()
       
     },[])
-  
 
   return ( 
     <TeamspaceContainer>
@@ -55,6 +54,7 @@ function TeamspaceMain () {
               title={value.teamName}
               content={value.teamDescription}
               day={value.endDate}
+              image={value.teamspacePictureFileIdx}
               onClick={(event) => Navi(`/teamspace/${value.teamspaceIdx}`)}
           />
         ))}
@@ -76,6 +76,7 @@ const FileContainer = styled.div`
   flex-wrap: wrap;
   justify-content: space-evenly;
   padding-top: 3%;
+  overflow: scroll;
 `
 const TeamspaceContainer = styled.div`
   background-color: ${(props) => props.theme.colours.primary};

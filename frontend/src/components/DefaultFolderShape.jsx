@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-
+import defaultimage from '../assets/images/default-image.png'
+import { getImg } from "../API/FileAPI";
 
 const Container = styled.div`
 /* Rectangle 4017 */
@@ -26,13 +26,19 @@ const Container = styled.div`
 
   justify-content: space-evenly;
   padding-bottom: 5%;
-  padding-left: 1vw;
-  padding-right: 1vw;
-  
+  padding-left: 3vw;
+  padding-right: 3vw;
+
 .titleday{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+}
+.imgcontent{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
     align-items: center;
 }
     &:hover{
@@ -66,7 +72,38 @@ const Day = styled.span`
   right: 30px; */
 `
 
+// 프로젝트 프로필
+const Img = styled.img`
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    /* margin-left: 3rem; */
+`
+
 const DefaultFileShape = (props) => {
+  // console.log(props.image)
+  const [imageURL, setImageURL] = useState()
+
+  useEffect(() => {
+    const imageInfo = async() => {     
+      try {
+        if (props.image === null) {
+          setImageURL(defaultimage)
+        } else {
+          const response = await getImg(props.image.fileIdx)
+          setImageURL(response.message)
+        }
+        } catch (err) {
+          console.error(err)
+        }
+      }
+      
+      imageInfo()
+      
+    },[props.image])
+
+
+    // console.log(imageURL)
     return (
         <>
         <Container
@@ -82,12 +119,16 @@ const DefaultFileShape = (props) => {
                 {props.day}
             </Day>
             </div>
-            <div>img</div>
-            <div>
+            <div className='imgcontent'>
+            <Img 
+              src={imageURL} 
+              alt="프로필 이미지"
+              />
             <Content>
                 {props.content}
             </Content>
             </div>
+
         </Container>
         </>
     )
@@ -98,6 +139,7 @@ DefaultFileShape.defaultProps={
     content: '프로젝트 설명',
     day: 'D-??',
     width: '1rem',
+    image: '',
     onClick: () => {}
 }
 

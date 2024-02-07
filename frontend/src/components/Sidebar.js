@@ -69,8 +69,8 @@ function Sidebar({ className, paddingtop }) {
     followList()
   },[userValues])
 
-  console.log(followers)
-  console.log(followings)
+  // console.log(followers)
+  // console.log(followings)
 
   return (
     <div className={className}>
