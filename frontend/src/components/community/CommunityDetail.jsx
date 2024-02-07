@@ -10,7 +10,6 @@ import { FaTrashAlt } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { LuEye } from "react-icons/lu";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import profile from '../../assets/images/test.jpg';
 
 
 function CommunityDetail() {
@@ -20,6 +19,7 @@ function CommunityDetail() {
   const [isLiked, setIsLiked] = useState(null)
   const [userInput, setUserInput] = useState("");
   const [likeCount, setLikeCount] = useState(0)
+  const [commentCount, setCommentCount] = useState(0)
   const Navigate = useNavigate()
   const currentUserIdx = useStore(s => s.user ? s.user.userIdx : null)
   
@@ -42,6 +42,7 @@ function CommunityDetail() {
       const Comments = await GetComment({ boardIdx });
       setComments(Comments.data);
       setLikeCount(response.data.likeNum);
+      setCommentCount(Comments.data.length)
       // console.log(Comments);
     };
     detailData();
@@ -52,11 +53,12 @@ function CommunityDetail() {
   };
   
   const handleSubmit = async (event) => {
-    event.preventDefault(); 
-    await CreateComment({ boardIdx, content: userInput });
-    setUserInput("");
-    const Comments = await GetComment({ boardIdx }); 
-    setComments(Comments.data);
+    event.preventDefault()
+    await CreateComment({ boardIdx, content: userInput })
+    setUserInput("")
+    const Comments = await GetComment({ boardIdx })
+    setComments(Comments.data)
+    setCommentCount(Comments.data.length)
     setUserInput('')
   };
   
@@ -125,6 +127,8 @@ function CommunityDetail() {
     setLikeCount(res.data.likeNum)
     setIsLiked(!isLiked)
   }
+
+
   return (
     <MainDiv>
       <div className="header">
@@ -136,7 +140,7 @@ function CommunityDetail() {
           </div>
           <div>
             <div className="profile">
-              <img src={profile} alt="" className="image"/>
+
               <h3>{nickname}</h3>
               <div className="info">
                 <div className="registdate">
@@ -177,7 +181,10 @@ function CommunityDetail() {
         </span>
         <div className="comment-title">
           <GoBell className="icon"/>
-          댓글
+          <span>댓글</span>
+          <div className="comment-count">
+            {commentCount}
+          </div>
         </div>
         <hr key='' />
       </>
@@ -297,8 +304,10 @@ const MainDiv = styled.div`
   }
 
   .comment-title {
+    display: flex;
     margin-top: 2rem;
     margin-bottom: 10px;
+    align-items: center;
   }
 
   .comment {
@@ -307,6 +316,17 @@ const MainDiv = styled.div`
     align-items: center;
     border-radius: 10px;
     margin-top: 1rem;
+  }
+
+  .comment-count {
+    margin-left: 0.5rem;
+    border: 3px solid #254EF8;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
   }
 
   .comment-date {

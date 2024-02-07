@@ -52,6 +52,8 @@ public class Teamspace {
 //    @OnDelete(action = OnDeleteAction.CASCADE)
     File teamspaceBackgroundPictureFileIdx;
 
+    String chatRoomIdx;
+
     @Override
     public String toString() {
         return "Teamspace{" +
@@ -63,6 +65,7 @@ public class Teamspace {
                 ", host=" + host +
                 ", teamspacePictureFileIdx=" + teamspacePictureFileIdx +
                 ", teamspaceBackgroundPictureFileIdx=" + teamspaceBackgroundPictureFileIdx +
+                ", chatRoomIdx=" + chatRoomIdx +
                 '}';
     }
 }

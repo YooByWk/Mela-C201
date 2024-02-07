@@ -8,8 +8,8 @@ import useStore from "../../status/store";
 import DefaultButton from '../DefaultButton';
 import { GoDotFill } from "react-icons/go";
 import moment from 'moment'
-import { IoIosArrowBack } from "react-icons/io";
-import { IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { AiOutlineLike } from "react-icons/ai";
 
 
 function CommunityHome() {
@@ -21,6 +21,7 @@ function CommunityHome() {
   const [open, setOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [totalPageCount, setTotalPageCount] = useState(1);
+  const [likeCount, setLikeCount] = useState()
 
 
   useEffect(() => {
@@ -29,6 +30,7 @@ function CommunityHome() {
       // console.log(response, 'fetch log')
       setData(response.data.boardResList);
       setTotalPageCount(response.data.totalPageCount);
+      setLikeCount(response.data.likeNum)
       console.log(totalPageCount)
       // 패칭한 데이터를 상태에 저장
     };
@@ -95,18 +97,16 @@ function CommunityHome() {
     else {
       window.alert('검색 결과가 없습니다!')
     }
-
   }
 
   const pages = [];
   for (let i = 1; i <= Math.ceil(totalPageCount/10); i++) {
     pages.push(
-      <button
+      <PaginationButton
         onClick={() => setCurrentPage(i)}
-        className={currentPage === i ? 'active' : ''}
+        isActive={currentPage === i ? 'active' : ''}
       >
-        {i}
-      </button>
+      </PaginationButton>
     );
   }
 
@@ -114,9 +114,6 @@ function CommunityHome() {
   return (
     <>
     <MainDiv>
-    <div className="pagination">
-      {pages}
-    </div>
       <div className="Container">
         <h1>자유게시판</h1>
         <div className="BoardSearch">
@@ -157,12 +154,16 @@ function CommunityHome() {
                     <div>
                       {article.boardIdx}
                     </div>
-                    <div>
+                    <div className="title">
                       <Link to={`/community/${article.boardIdx}`}>
                         {article.title.length < 20
                           ? article.title
                           : article.title.slice(0, 18) + '...'}
                       </Link>
+                      <div className="like">
+                        <AiOutlineLike />
+                        <span>{article.likeNum}</span>
+                      </div>
                     </div>
                     <div>
                       {article.nickname}
@@ -197,6 +198,9 @@ function CommunityHome() {
         <div className="page-btn" onClick={PrevPage} disabled={currentPage === 1}> 
           <IoIosArrowBack />
         </div>
+        <div className="pagination">
+          {pages}
+        </div>
         <div className="page-btn" onClick={NextPage}>
           <IoIosArrowForward />
         </div>
@@ -209,6 +213,17 @@ function CommunityHome() {
 
 export default CommunityHome;
 
+
+const PaginationButton = styled.button`
+  background-color: ${props => props.isActive ? "#254EF8" : "#13295b"};
+  border: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin: 3px;
+  cursor: pointer;
+  align-items: center;
+`
 
 const MainDiv = styled.div`
   a {
@@ -277,6 +292,19 @@ const MainDiv = styled.div`
     justify-content: space-between;
     flex: 1;
   }
+
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+  }
+
+  .like {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+  }
   
   .buttonWrapper {
     position: absolute;
@@ -296,6 +324,12 @@ const MainDiv = styled.div`
 
   .footer {
     display: flex;
+    align-items: center;
+    margin: 5px;
+  }
+
+  .pagination {
+    margin: 5px;
   }
 
   .Container {
