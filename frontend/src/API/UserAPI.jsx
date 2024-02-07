@@ -111,7 +111,7 @@ export const delNotification = async ({notificationid}) => {
 
 // 타인의 포트폴리오 조회
 export const othersInfo = async (emailId) => {
-    const response = await UserApi.get(`api/v1/users/${emailId}/portfolio`, emailId)
-    console.log(response)
+    const response = await UserApi.get(`/${emailId}/portfolio`, emailId)
+    // console.log(response)
     return response.data
 }

@@ -34,8 +34,8 @@ function UserEdit(props) {
     const currentUser = props.currentUser
     const loginUser = props.loginUser
 
-    console.log(loginUser)
-    console.log(currentUser)
+    // console.log(loginUser)
+    // console.log(currentUser)
 
     const navigate = useNavigate()
 

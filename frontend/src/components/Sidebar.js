@@ -8,6 +8,10 @@ import { MdOutlineLocalFireDepartment, MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
 import useStore from "../status/store";
 import {isLogined} from "../status/store";
+import { follower } from "../API/UserAPI";
+import { followee } from "../API/UserAPI";
+import { count } from "console";
+
 const SideContainer = styled.div`
   color: white;
   padding-top: ${props => props.$paddingtop || '0'};
@@ -33,16 +37,26 @@ function Sidebar({ className, paddingtop }) {
   const { fetchUser, user, logout,} = useStore()
   const isLogined = useStore(state => state.isLogined)
   const [userData, setUserData] = useState({})
+  
   useEffect(() => {
     fetchUser()
+    // const followList = async () => {
+    //   await follower({userId: user[0].emailId})
+    //   await followee({userId: user[0].emailId})
+    // }
+    // followList()
   }, [])
+
+  // const followers = count(follower)
 
   return (
     <div className={className}>
       <SideContainer className="contents" $paddingtop={paddingtop}>
         {user && userData ? (
           <>
-          <h3> {user.nickname} </h3>
+          <h3> {user[0].nickname} </h3>
+          <br/>
+          <p>follower {}: following : </p>
           <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4">
             <List>
               <ListItem className="items">
