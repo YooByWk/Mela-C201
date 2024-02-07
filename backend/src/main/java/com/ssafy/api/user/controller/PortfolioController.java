@@ -62,9 +62,8 @@ public class PortfolioController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "삭제 실패"),
     })
-    public ResponseEntity<? extends BaseResponseBody> deletePortfolioMusic (
+        public ResponseEntity<? extends BaseResponseBody> deletePortfolioMusic (
             @ApiIgnore Authentication authentication,
-//            @PathVariable(name = "musicid") long musicid) {
             @PathVariable(name = "musicid") long[] musicids) {
 
         //TODO: 토큰 유효성 확인
@@ -72,8 +71,6 @@ public class PortfolioController {
         //1. 클라이언트로부터 전달받은 musicid로
         //FileRepository를 이용해
         //com.ssafy.db.entity 패키지 -> PortfolioMusic 클래스를 가져와
-//        PortfolioMusic portfolioMusic = portfolioService.getPortfolioMusicInstanceByPortfolioMusicIdx(musicid);
-//        PortfolioMusic portfolioMusic = portfolioService.getPortfolioMusicInstanceByPortfolioMusicIdx(musicid);
         for(long musicid : musicids) {
             PortfolioMusic portfolioMusic = portfolioService.getPortfolioMusicInstanceByPortfolioMusicIdx(musicid);
 

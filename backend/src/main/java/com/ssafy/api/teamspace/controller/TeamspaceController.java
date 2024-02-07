@@ -67,7 +67,7 @@ public class TeamspaceController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
-    @PutMapping("/{teamspaceid}")
+    @PutMapping(value = "/{teamspaceid}", consumes = MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "팀스페이스 정보 수정", notes = "<strong>팀스페이스 이름, 시작일, 종료일, 팀스페이스 설명, 배경 이미지, 썸네일 그리고 팀스페이스 인덱스</strong>정보를 보내 팀스페이스 정보를 수정한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
@@ -75,14 +75,17 @@ public class TeamspaceController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<? extends  BaseResponseBody> updateTeamspace(
-            @RequestBody @ApiParam(value="팀스페이스 수정 정보", required = true) TeamspaceUpdatePutReq updateInfo,
-            @PathVariable(name = "teamspaceid") Long teamspaceId
-    ) {
+            @RequestPart @ApiParam(value="팀스페이스 수정 정보", required = true) TeamspaceUpdatePutReq updateInfo,
+            @PathVariable(name = "teamspaceid") Long teamspaceId,
+            @RequestPart(required = false) MultipartFile teamspacePicture,
+            @RequestPart(required = false) MultipartFile teamspaceBackgroundPicture) {
+
         try{
-            // 여기서 teamspace 조회 안되면 어떤 값 나오는지? // 후기 기다리는 중입니다.
             Teamspace teamspace = teamspaceService.getTeamspaceById(teamspaceId);
-            teamspaceService.updateTeamspace(teamspace, updateInfo);
+
+            teamspaceService.updateTeamspace(teamspace, updateInfo, teamspacePicture, teamspaceBackgroundPicture);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(401).body(BaseResponseBody.of(404, "not found"));
         }
 

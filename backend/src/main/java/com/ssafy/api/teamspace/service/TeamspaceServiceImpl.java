@@ -71,12 +71,6 @@ public class TeamspaceServiceImpl implements TeamspaceService{
 
     @Override
     public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx, MultipartFile teamspacePicture, MultipartFile teamspaceBackgroundPicture) {
-        // 팀 스페이스 썸네일 저장
-        // 팀 스페이스 썸네일 사진 파일 idx 얻기
-        // ...
-        //FIXME: 아래는 필요없을 것 같다.
-//        System.out.println("파일: " +  registerInfo.getTeamspace_picture_file_idx());
-
         com.ssafy.db.entity.File teamspacePictureRecord = null;
         com.ssafy.db.entity.File teamspaceBackgroundPictureRecord = null;
 
@@ -109,9 +103,6 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         teamspace.setEndDate(registerInfo.getEndDate());
         teamspace.setHost(userRepository.getOne(userIdx));
         teamspace.setTeamDescription(registerInfo.getTeamDescription());
-        //FIXME: 아래는 필요없을 것 같다.
-//        registerInfo.setTeamspace_picture_file_idx(teamspacePictureRecord);
-//        teamspace.setTeamspacePictureFileIdx(registerInfo.getTeamspace_picture_file_idx());
         teamspace.setTeamspacePictureFileIdx(teamspacePictureRecord);
         teamspace.setTeamspaceBackgroundPictureFileIdx(teamspaceBackgroundPictureRecord);
         teamspaceRepository.save(teamspace);
@@ -131,7 +122,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     }
 
     @Override
-    public Teamspace updateTeamspace(Teamspace teamspace, TeamspaceUpdatePutReq updateInfo) {
+    public Teamspace updateTeamspace(Teamspace teamspace, TeamspaceUpdatePutReq updateInfo, MultipartFile teamspacePicture, MultipartFile teamspaceBackgroundPicture) {
         // 파일 삭제
         if (teamspace.getTeamspacePictureFileIdx() != null) {
             fileRepository.delete(teamspace.getTeamspacePictureFileIdx());
@@ -140,17 +131,46 @@ public class TeamspaceServiceImpl implements TeamspaceService{
             fileRepository.delete(teamspace.getTeamspaceBackgroundPictureFileIdx());
         }
 
-        // 사진 파일 저장
-        // ...
-        // 사진 파일 idx 얻어서 그 값으로 변경해줘야 함
+        com.ssafy.db.entity.File teamspacePictureRecord = null;
+        com.ssafy.db.entity.File teamspaceBackgroundPictureRecord = null;
+
+        //팀 스페이스 메인 이미지 저장
+        if(teamspacePicture != null) {
+            //기존 메인 이미지 삭제
+            if(teamspace.getTeamspacePictureFileIdx() != null) {
+                fileRepository.delete(teamspace.getTeamspacePictureFileIdx());
+            }
+            //클라이언트가 업로드한 파일의 확장자 추출
+            String extension = FilenameUtils.getExtension(teamspacePicture.getOriginalFilename());
+
+            if(isValidImageExtension(extension)) {
+                teamspacePictureRecord = fileService.saveFile(teamspacePicture, "");
+                teamspacePictureRecord = fileService.addTableRecord(teamspacePictureRecord);
+            }
+        }
+
+        //팀 스페이스 배경 이미지 저장
+        if(teamspaceBackgroundPicture != null) {
+            //기존 배경 이미지 삭제
+            if(teamspace.getTeamspacePictureFileIdx() != null) {
+                fileRepository.delete(teamspace.getTeamspaceBackgroundPictureFileIdx());
+            }
+            //클라이언트가 업로드한 파일의 확장자 추출
+            String extension = FilenameUtils.getExtension(teamspaceBackgroundPicture.getOriginalFilename());
+
+            if(isValidImageExtension(extension)) {
+                teamspaceBackgroundPictureRecord = fileService.saveFile(teamspaceBackgroundPicture, "");
+                teamspaceBackgroundPictureRecord = fileService.addTableRecord(teamspaceBackgroundPictureRecord);
+            }
+        }
 
         // 팀스페이스 정보 수정
         teamspace.setTeamName(updateInfo.getTeamName());
         teamspace.setStartDate(updateInfo.getStartDate());
         teamspace.setEndDate(updateInfo.getEndDate());
         teamspace.setTeamDescription(updateInfo.getTeamDescription());
-        teamspace.setTeamspacePictureFileIdx(updateInfo.getTeamspace_picture_file_idx());
-        teamspace.setTeamspaceBackgroundPictureFileIdx(updateInfo.getTeamspace_background_picture_file_idx());
+        teamspace.setTeamspacePictureFileIdx(teamspacePictureRecord);
+        teamspace.setTeamspaceBackgroundPictureFileIdx(teamspaceBackgroundPictureRecord);
 
         return teamspaceRepository.save(teamspace);
     }
