@@ -42,13 +42,11 @@ function SignupModal({className, fontSize, padding}) {
       }
     })
     .catch((err) => {
-        if (err.statusCode === 409) {
-          alert('이미 있는 닉네임입니다.')
-        }
-        else {
-          console.error(err)
-        }
-    })
+      console.error(err)
+      if (err.response.status === 409) {
+        alert('이미 있는 닉네임입니다.')
+      }
+  })
   }
 
   // 이메일 아이디 중복 확인
@@ -66,7 +64,7 @@ function SignupModal({className, fontSize, padding}) {
     })
     .catch((err) => {
         console.error(err)
-        if (err.statusCode === 409) {
+        if (err.response.status === 409) {
           alert('이미 있는 아이디입니다.')
         }
     })
@@ -88,7 +86,7 @@ function SignupModal({className, fontSize, padding}) {
   const handleChange = async (e) => {
     setValues({...values,
       [e.target.id]: e.target.value,})
-      console.log(e.target.value)
+      // console.log(e.target.value)
     }
 
   // 비밀번호 확인
@@ -322,6 +320,7 @@ const ModalContent = styled('div')(
 
     & .gender {
       width: 7rem;
+      color: white;
     }
 
     & .birth {

@@ -34,8 +34,8 @@ function UserEdit(props) {
     const currentUser = props.currentUser
     const loginUser = props.loginUser
 
-    console.log(loginUser)
-    console.log(currentUser)
+    // console.log(loginUser)
+    // console.log(currentUser)
 
     const navigate = useNavigate()
 
@@ -56,7 +56,7 @@ function UserEdit(props) {
         // 만약 현재 로그인 한 사용자의 이메일 아이디와 주소창의 닉네임이 다르다면
         if (loginUser && currentUser && loginUser[0].emailId !== currentUser.userIdx.emailId) {
             try {
-                await followUser(loginUser[0].emailId)
+                await followUser(currentUser.userIdx.emailId)
                 setIsFollowed(!isFollowed)
             } catch(err) {
                 console.error(err)
