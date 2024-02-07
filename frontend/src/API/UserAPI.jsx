@@ -12,15 +12,15 @@ export const UserApi = axios.create({
 
 
 // 토큰 유효성 검사
-UserApi.interceptors.response.use((response) => {
-    return response
-}, async (error) => {
-    const originalRequest = error.config
-    if (error.response.status === 403 && !originalRequest._retry) {
-        return UserApi(originalRequest)
-    }
-    return Promise.reject(error)
-})
+// UserApi.interceptors.response.use((response) => {
+//     return response
+// }, async (error) => {
+//     const originalRequest = error.config
+//     if (error.response.status === 403 && !originalRequest._retry) {
+//         return UserApi(originalRequest)
+//     }
+//     return Promise.reject(error)
+// })
 
 // 로그인 한 유저 조회
 export const fetchUser = async () => {
@@ -54,6 +54,7 @@ export const deleteUser = async () => {
 // 나를 팔로우 한 사람 조회
 export const follower = async (userId) => {
     const response = await UserApi.get(`/${userId}/followees`)
+    console.log(response)
     console.log(response.data)
     return response.data
 }
@@ -61,6 +62,7 @@ export const follower = async (userId) => {
 // 내가 팔로우 한 사람 조회
 export const followee = async (userId) => {
     const response = await UserApi.get(`/${userId}/followers`)
+    console.log(response)
     console.log(response.data)
     return response.data
 }
@@ -91,7 +93,7 @@ export const newPassword = async (data) => {
 // 알람 조회
 export const notification = async () => {
     const response = await UserApi.get(`/notifications`)
-    console.log(response)
+    // console.log(response)
     return response.data
 }
 
@@ -111,7 +113,7 @@ export const delNotification = async ({notificationid}) => {
 
 // 타인의 포트폴리오 조회
 export const othersInfo = async (emailId) => {
-    const response = await UserApi.get(`api/v1/users/${emailId}/portfolio`, emailId)
-    console.log(response)
+    const response = await UserApi.get(`/${emailId}/portfolio`, emailId)
+    // console.log(response)
     return response.data
 }

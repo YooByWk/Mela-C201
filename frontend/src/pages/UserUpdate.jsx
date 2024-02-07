@@ -28,7 +28,8 @@ function UserUpdateForm(props) {
         const getUserInfo = async() => {
             try {
                 const res = await fetchUser()
-                setUserValues(res)
+                setUserValues(res[0])
+                setPortfolioValues(res[1])
             } catch (err) {
                 console.error(err)
             }
