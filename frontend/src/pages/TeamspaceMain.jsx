@@ -53,7 +53,7 @@ function TeamspaceMain () {
             title={value.teamName}
             content={value.teamDescription}
             day={value.endDate}
-            onClick={(event) => Navi(`/teamspace/${value.teamspaceIdx}`)}
+            onClick={() => window.location.href = `/teamspace/${value.teamspaceIdx}/team`}
         />
         ))}
       </MainDiv>
