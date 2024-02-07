@@ -315,7 +315,7 @@ public class UserController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
-	@GetMapping("/{userId}/followers")
+	@GetMapping("/{userId}/isfollow")
 	@ApiOperation(value = "사용자와 팔로우한 유저인지 체크", notes = "현재 로그인한 사용자와 userId 사용자가 팔로우 관계인지 체크")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -329,9 +329,7 @@ public class UserController {
 		String userEmail = userDetails.getUsername();
 		User nowLoginUser = userService.getUserByEmail(userEmail);
 
-		userService.isFollow(nowLoginUser, userId);
-
-		return ResponseEntity.status(200).body(true);
+		return ResponseEntity.status(200).body(userService.isFollow(nowLoginUser, userId));
 	}
 
 	@GetMapping("/{userId}/followers")
