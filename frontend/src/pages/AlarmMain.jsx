@@ -69,16 +69,7 @@ function AlarmMain () {
 
         </Container>
         <div className='footer'>
-            <div className='btnWrapper'>
-                
-                <DefaultButton
-                    text='Delete'
-                    backgroundcolor='#C02525'
-                    width='4rem'
-                    height='2rem'
-                    // onClick={() => handleDelete()}
-                />
-            </div>
+
         </div>
         </>
     )

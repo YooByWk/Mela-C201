@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { notification, checkNotification, delNotification } from '../../API/UserAPI'
 import moment from 'moment'
+import DefaultButton from '../DefaultButton'
 
 
 function AlarmUnread () {
@@ -57,6 +58,20 @@ function AlarmUnread () {
         })
     }
 
+    // 삭제
+    const handleDelete = async () => {
+        checkAlarm.forEach(notificationIdx => {
+            delNotification({ notificationid: notificationIdx })
+            .then(() => {
+                console.log(notificationIdx)
+                refreshNotification()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        })
+    }
+
     // 새로고침
     const refreshNotification = async () => {
         try {
@@ -80,10 +95,21 @@ function AlarmUnread () {
                     />
                     <span>전체 선택</span>
                 </div>
-                <div className='read'>
-                    <p onClick={handleRead}>
-                        Mark all as read
-                    </p>
+                <div className="right">
+                    <div className='btnWrapper'>
+                        <DefaultButton
+                            text='Delete'
+                            backgroundcolor='#C02525'
+                            width='4rem'
+                            height='2rem'
+                            onClick={() => handleDelete()}
+                        />
+                    </div>
+                    <div className='read'>
+                        <p onClick={handleRead}>
+                            Mark all as read
+                        </p>
+                    </div>
                 </div>
             </div>
         <hr className='line'/>
@@ -139,9 +165,18 @@ const Container = styled.div`
         justify-content: space-between;
     }
 
+    .right {
+        display: flex;
+        flex-direction: column;
+    }
+
     .read {
         color: #254EF8;
         cursor: pointer;
+    }
+
+    .btnWrapper {
+        margin-left: 3rem;
     }
 
     .content {

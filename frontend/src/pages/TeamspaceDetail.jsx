@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import styled from "styled-components";
+import React, { useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import styled from "styled-components"
 import TeamspaceTeam from "../components/teamspace/TeamspaceTeam"
 import TeamspaceAudio from "../components/teamspace/TeamspaceAudio"
 import TeamspaceFile from "../components/teamspace/TeamspaceFile"
