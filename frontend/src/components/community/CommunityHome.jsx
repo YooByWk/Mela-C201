@@ -8,8 +8,8 @@ import useStore from "../../status/store";
 import DefaultButton from '../DefaultButton';
 import { GoDotFill } from "react-icons/go";
 import moment from 'moment'
-import { IoIosArrowBack } from "react-icons/io";
-import { IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { AiOutlineLike } from "react-icons/ai";
 
 
 function CommunityHome() {
@@ -21,6 +21,7 @@ function CommunityHome() {
   const [open, setOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [totalPageCount, setTotalPageCount] = useState(1);
+  const [likeCount, setLikeCount] = useState()
 
 
   useEffect(() => {
@@ -29,6 +30,7 @@ function CommunityHome() {
       // console.log(response, 'fetch log')
       setData(response.data.boardResList);
       setTotalPageCount(response.data.totalPageCount);
+      setLikeCount(response.data.likeNum)
       console.log(totalPageCount)
       // 패칭한 데이터를 상태에 저장
     };
@@ -95,7 +97,6 @@ function CommunityHome() {
     else {
       window.alert('검색 결과가 없습니다!')
     }
-
   }
 
   const pages = [];
@@ -153,12 +154,16 @@ function CommunityHome() {
                     <div>
                       {article.boardIdx}
                     </div>
-                    <div>
+                    <div className="title">
                       <Link to={`/community/${article.boardIdx}`}>
                         {article.title.length < 20
                           ? article.title
                           : article.title.slice(0, 18) + '...'}
                       </Link>
+                      <div className="like">
+                        <AiOutlineLike />
+                        <span>{article.likeNum}</span>
+                      </div>
                     </div>
                     <div>
                       {article.nickname}
@@ -286,6 +291,19 @@ const MainDiv = styled.div`
     flex-direction: column;
     justify-content: space-between;
     flex: 1;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+  }
+
+  .like {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
   }
   
   .buttonWrapper {
