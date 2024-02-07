@@ -40,12 +40,16 @@ function SigninModal({className, fontSize, padding}) {
       const fetchData = async () => {
         const res = await fetchUser()
         console.log(userInfo, '유저 정보')
-        movePage(`/portfolio/${userInfo[0].emailId}`)
       }
+      fetchData()
+      movePage(`/portfolio/${userInfo[0].emailId}`)
     })
     .catch((err) => {
-      console.log(err)
-    })
+      console.error(err)
+      if (err.response.status === 401) {
+        alert('이메일 인증을 먼저 완료해주세요.')
+      }
+  })
   }
 
   return (

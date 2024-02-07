@@ -53,7 +53,7 @@ public class AuthController {
 
 		User user = userService.getUserByEmailIdAndEmailDomain(emailId, emailDomain);
 
-		if (user.getUserType().equals("unAuth")) {
+		if (user.getUserType().equals("unauth")) {
 			return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Unauthorized", null));
 		}
 
