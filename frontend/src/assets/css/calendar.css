@@ -54,6 +54,17 @@ text-align: center;
 font: inherit;
 }
 
+/* 요일 밑줄 제거 */
+.react-calendar__month-view__weekdays abbr {
+    text-decoration: none;
+    font-weight: 800;
+}
+
+/* 일요일에만 빨간 폰트 */
+.react-calendar__month-view__weekdays__weekday--weekend abbr[title="일요일"] {
+    color: red;
+  }
+
 .react-calendar__month-view__weekdays__weekday {
     color: #fff;
     font-size: 13px;
@@ -187,11 +198,3 @@ background: #a9d4ff;
 background-color: #e6e6e6;
 }
 
-.dot {
-    height: 8px;
-    width: 8px;
-    background-color: #51F8C4;
-    border-radius: 50%;
-    text-align: center;
-    margin-top: 3px;
-}

@@ -5,6 +5,7 @@ import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
 import { ScheduleGenerate } from '../../API/ScheduleAPI'
 
+
 function ScheduleCreateModal({ className, fontSize, padding, teamspaceId, onScheduleCreate }) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -12,25 +13,42 @@ function ScheduleCreateModal({ className, fontSize, padding, teamspaceId, onSche
 
     const [values, setValues] = React.useState({
         content: '',
-        endTime: '',
         place: '',
-        startTime: '',
+        sDate: '',
+        sTime: '',
+        eDate: '',
+        eTime: '',
     })
 
-    console.log(values)
     const handleChange = async (e) => {
-        setValues({...values,
-            [e.target.id]: e.target.value,
-        })
-      }
+        const { id, value } = e.target
+        setValues(preValue => ({
+            ...preValue,
+            [id]: value,
+        }))
+    }
+
+    const formatDateTime = (date, time) => {
+        const info = time ? `${time}:00` : '00:00:00'
+        console.log(`${date} ${info}`)
+        return `${date} ${info}`
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const res = await ScheduleGenerate(teamspaceId, values);
-            console.log(res)
+            const data = {
+                content: values.content,
+                endTime: formatDateTime(values.eDate, values.eTime),
+                place: values.place,
+                startTime: formatDateTime(values.sDate, values.sTime),
+            }
+
+            const res = await ScheduleGenerate(teamspaceId, data);
+            // console.log(res)
             onScheduleCreate(res)
             setOpen(false)
+
         } catch(err) {
             console.log(err)
         }
@@ -63,13 +81,15 @@ function ScheduleCreateModal({ className, fontSize, padding, teamspaceId, onSche
                         <input type='text' className='input' id='place' onChange={handleChange} />
                     </div>
                     <div className='inputWrapper'>
-                        <label className='label'>마지막일</label>
-                        <input type='date' className='input' id='endTime' onChange={handleChange} />
-                    </div>
-                    <div className='inputWrapper'>
                         <label className='label'>시작일</label>
-                        <input type='date' className='input' id='startTime' onChange={handleChange} />
+                        <input type='date' className='input' id='sDate' onChange={handleChange} />
+                        <input type='time' className='input' id='sTime' onChange={handleChange} />
                     </div>                            
+                    <div className='inputWrapper'>
+                        <label className='label'>종료일</label>
+                        <input type='date' className='input' id='eDate' onChange={handleChange} />
+                        <input type='time' className='input' id='eTime' onChange={handleChange} />
+                    </div>
                     <button type='submit' className='button'>
                         Create
                     </button>
