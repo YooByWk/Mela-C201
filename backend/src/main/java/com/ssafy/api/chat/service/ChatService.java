@@ -25,9 +25,8 @@ public class ChatService {
         message.setSendTime(LocalDateTime.now().toString());
 
         log.info("redisSaveMessage: {} ", message);
-        redisTemplateMessage.opsForList().rightPush(message.getRoomIdx(), message);
-        // 키 만료??
-
+        redisTemplateMessage.opsForList().leftPush(message.getRoomIdx(), message);
+        // 키 만료 설정
     }
 
     // 대화 조회 - Redis
