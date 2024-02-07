@@ -112,6 +112,29 @@ public class ScheduleController {
         }
     }
 
+    @GetMapping(value = "/{teamspaceid}/schedules/upcoming")
+    @ApiOperation(value = "지나가지 않은 일정 목록", notes ="<string>팀스페이스 아이디<strong>를 통해 지나가지 않은 일정 목록을 얻는다. 정렬X")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<List<ScheduleRes>> getScheduleListNotPassed(
+            @PathVariable(name = "teamspaceid") Long teamspaceIdx
+    ) {
+        try {
+            List<Schedule> schedules = teamspaceService.getScheduleListNotPassed(teamspaceIdx);
+            List<ScheduleRes> res = new ArrayList<>();
+            for(Schedule schedule : schedules) {
+                res.add(ScheduleRes.of(schedule));
+            }
+
+            return ResponseEntity.status(200).body(res);
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(null);
+        }
+    }
+
     @GetMapping(value = "/{teamspaceid}/schedules/{schdulesid}")
     @ApiOperation(value = "일정 단건 조회 (지원X)", notes ="<string>일정 아이디<strong>를 통해 일정을 조회한다.")
     @ApiResponses({

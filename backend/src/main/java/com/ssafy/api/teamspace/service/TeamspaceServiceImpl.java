@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -279,6 +280,12 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     public List<Schedule> getScheduleList(Long teamspaceIdx) {
         List<Schedule> schedules = scheduleRepository.findByTeamspaceIdx(teamspaceRepository.getOne(teamspaceIdx));
 
+        return schedules;
+    }
+
+    @Override
+    public List<Schedule> getScheduleListNotPassed(Long teamspaceIdx) {
+        List<Schedule> schedules = scheduleRepository.findByEndTimeGreaterThan(LocalDateTime.now());
         return schedules;
     }
 
