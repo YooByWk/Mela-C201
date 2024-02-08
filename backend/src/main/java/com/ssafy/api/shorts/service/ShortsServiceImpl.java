@@ -183,4 +183,9 @@ public class ShortsServiceImpl implements  ShortsService {
         shortsDislike.setShortsIdx(shorts);
         shortsDislikeRepository.save(shortsDislike);
     }
+
+    @Override
+    public long getShortsIdxByFileIdx(long shortsIdx) {
+        return shortsRepository.findByShortsIdx(shortsIdx).get().getShortsPathFileIdx().getFileIdx();
+    }
 }
