@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import DefaultButton from "./DefaultButton";
 import { IoMdClose } from "react-icons/io";
 import { FaFileUpload } from "react-icons/fa";
 import { Dialog, DialogHeader, DialogBody } from '@material-tailwind/react'
 import { musicUpload } from '../API/PortfolioAPI'
-// import defaultimage from '../assets/images/default-image.png'
+import defaultimage from '../assets/images/default-profile.png'
 import { Link } from "react-router-dom";
 
 const CloseButton = styled.button`
@@ -80,15 +80,38 @@ const CustomBody = styled(DialogBody)`
       align-items: center;
       justify-content: space-between;
     }
+
+    & .label-file-album {
+        padding: 6px 25px;
+        background-color:#FF6600;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+    }
+
+    & .label-file {
+        padding: 6px 25px;
+        background-color:#FF6600;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+    }
 `
 
+const Img = styled.img`
+    height: 30px;
+    width: 30px;
+    border-radius: 10;
+`
 
 function PortfolioAdd() {
     const [open, setOpen] = useState(false)
     const [pinFixed, setPinFixed] = useState(false)
     // const [fileDescription, setFileDescription] = useState('')
     const [title, setTitle] = useState('')
+    const imgRef = useRef()
     const [imgFile, setImgFile] = useState('')
+    const [imgPreview, setImgPreview] = useState('')
     const [musicFile, setMusicFile] = useState()
     const [lyricFile, setLyricFile] = useState()
 
@@ -104,13 +127,18 @@ function PortfolioAdd() {
     //     setFileDescription(e.target.value)
     // }
 
+
     // 앨범 커버 (jpg, jpeg, png)
     const handleImgFile = (e) => {
         e.preventDefault()
-        
-        if (e.target.files[0]) {
-            setImgFile(e.target.files[0])
+        const file = imgRef.current.files[0]
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            setImgPreview(reader.result)
         }
+        console.log(e.target.files[0])
+        setImgFile(e.target.files[0])
     }
    
     // 음원 (mp3, flac)
@@ -203,17 +231,41 @@ function PortfolioAdd() {
                     <label className='label'>Content</label>
                     <input type='text' className='input' placeholder='설명' onChange={handleDescription} />
                 </div> */}
+                <Img 
+                src={imgPreview ? imgPreview : defaultimage} 
+                alt="프로필 이미지"
+                />
                 <div className='inputWrapper'>
-                    <label className='label'>앨범 커버 (jpg, jpeg, png)</label>
-                    <input type='file' className='input' onChange={handleImgFile} accept=".jpg,.jpeg,.png" />
+                    <label className='label-file-album' for="input-file">앨범 커버 (jpg, jpeg, png)</label>
+                    <input 
+                    type='file' 
+                    className='input' 
+                    onChange={handleImgFile} 
+                    accept=".jpg,.jpeg,.png" 
+                    // style={{display: "none"}} 
+                    ref={imgRef}
+                    id="input-file"/>
                 </div>
                 <div className='inputWrapper'>
-                    <label className='label'>음원 (mp3, flac)</label>
-                    <input type='file' className='input' onChange={handleMusicFile} accept=".mp3,.flac" />
+                    <label className='label-file' for="input-file">음원 (mp3, flac)</label>
+                    <input 
+                    type='file' 
+                    className='input' 
+                    onChange={handleMusicFile} 
+                    accept=".mp3,.flac" 
+                    // style={{display: "none"}}
+                    id="input-file"
+                    />
                 </div>
                 <div className='inputWrapper'>
-                    <label className='label'>가사 (txt, xml)</label>
-                    <input type='file' className='input' onChange={handleLyricFile} accept=".txt,.xml" />
+                    <label className='label-file' for="input-file">가사 (txt, xml)</label>
+                    <input 
+                    type='file' 
+                    className='input' 
+                    onChange={handleLyricFile} 
+                    accept=".txt,.xml" 
+                    // style={{display: "none"}}
+                    id="input-file"/>
                 </div>
                 <div className='inputWrapper'>
                     <label className='label'>pin고정</label>
