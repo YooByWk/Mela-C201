@@ -56,6 +56,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	FileService fileService;
 
+	@Autowired
+	UserPositionRepositorySupport userPositionRepositorySupport;
+
 	Random random = new Random();
 	CSVParser frontWords = new CSVParser("front_words");
 	CSVParser backWords = new CSVParser("back_words");
@@ -472,6 +475,13 @@ public class UserServiceImpl implements UserService {
 
 		//나머지 경우: 조회할 수 없음 (searchAllow false)
 		return 403;
+	}
+
+	@Override
+	public List<Position> getUserPreferredPosition(User user) {
+		List<Position> positionList = userPositionRepositorySupport.findUserPositionByUser(user);
+
+		return positionList;
 	}
 
 }

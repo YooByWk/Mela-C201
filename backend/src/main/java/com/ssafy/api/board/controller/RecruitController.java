@@ -80,7 +80,12 @@ public class RecruitController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
+
         //1. user_position 테이블로부터 사용자의 희망 포지션을 가져온다.
+        List<Position> positionList = userService.getUserPreferredPosition(user);
+
+        //2. 희망하는 포지션을 전달인자 (parameter)로
+        recruitService.getRecommendedBoardList(positionList);
 
 //        PortfolioAbstract portfolioAbstract = portfolioService.getPortfolioAbstractByUserIdx(user);
 
