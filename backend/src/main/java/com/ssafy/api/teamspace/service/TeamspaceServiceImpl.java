@@ -301,7 +301,6 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     public void uploadFile(long teamspaceid, MultipartFile[] multipartFiles, String fileDescription) {
         for(MultipartFile multipartFile : multipartFiles) {
             if(multipartFile != null) {
-                //TODO: fileDescription 입력하지 않는 경우 ""인지 null 인지 확인 후 처리
                 //1. Amazon S3 파일 업로드
                 com.ssafy.db.entity.File file = fileService.saveFile(multipartFile, fileDescription);
                 //2. file 테이블에 저장

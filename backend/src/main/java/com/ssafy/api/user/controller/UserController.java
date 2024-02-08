@@ -17,6 +17,7 @@ import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.PortfolioAbstractRepository;
+import com.ssafy.db.repository.PortfolioMusicRepositorySupport;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,9 @@ public class UserController {
 	RecruitService recruitService;
 	@Autowired
 	PortfolioAbstractRepository portfolioAbstractRepository;
+
+	@Autowired
+	PortfolioMusicRepositorySupport portfolioMusicRepositorySupport;
 
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드 ...를</strong>를 통해 회원가입 한다.")
@@ -439,32 +443,51 @@ public class UserController {
 	@ApiOperation(value = "포트폴리오 조회", notes = "포트폴리오 정보를 응답한다. (타인의 포트폴리오 조회 가능)")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
-			//@ApiResponse(code = 401, message = "인증 실패"),	//로그인하지 않고 포트폴리오 조회 요청 시 응답
+			@ApiResponse(code = 403, message = "조회할 수 없는 사용자"),	//로그인하지 않고 내 정보 확인 또는 정보공개 (searchAllow가 false인 사용자) 거부한 사용자의 포트폴리오를 요청한 경우
 			@ApiResponse(code = 404, message = "사용자 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<?> browsePortfolioAbstract(@ApiIgnore Authentication authentication, @PathVariable(name = "userid") String userid) {
-		//로그인이 필요한 기능이라면 토큰 확인 절차 주석 풀기
-		/*
-		public ResponseEntity<? extends BaseResponseBody> browsePortfolioAbstract(@ApiIgnore Authentication authentication, @PathVariable(name = "userid") String userid) {
 		SsafyUserDetails userDetails = null;
+		String userEmail = null;			//로그인한 사용자의 ID
+		User user = null;
+		User targetUser = null;
+		String targetUserId = userid;		//포트폴리오를 조회 대상 ID
 
+		//로그인 되어있는지 검사
 		try {
 			userDetails = (SsafyUserDetails) authentication.getDetails();
-		} catch(NullPointerException e) {
-			e.printStackTrace();
-
-			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Authentication failed!"));
+			userEmail = userDetails.getUsername();
+			user = userService.getUserByEmail(userEmail);
 		} catch(Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			//return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Authentication failed!"));
 		}
-		*/
 
-		PortfolioAbstract portfolioAbstract = userService.browsePortfolioAbstract(userid);
+		//1. 조회하려는 사용자가 없는 경우 (잘못된 이메일 아이디)
+		try {
+			targetUser = userService.getUserByEmailId(targetUserId);
+		} catch(Exception e) {
+			//e.printStackTrace();
+			return ResponseEntity.status(404).body("Fail. Check error code");
+		}
 
-		return ResponseEntity.status(200).body(portfolioAbstract);
+		int returnCode = userService.isAllowedToBrowsePortfolioAbstract(userEmail, targetUser);
+		//2. 조회할 수 있는 사용자
+		if(returnCode == 200) {
+			PortfolioAbstract portfolioAbstract = userService.browsePortfolioAbstract(userid);
+			List<PortfolioMusic> portfolioMusicList = portfolioMusicRepositorySupport.getPortfolioMusicListByUserIdx(targetUser);
+
+			Object[] returnVO = {portfolioAbstract, portfolioMusicList};
+
+			return ResponseEntity.status(200).body(returnVO);
+		//3. 조회할 수 없는 사용자 (searchAllow false)
+		} else {
+			return ResponseEntity.status(returnCode).body("Fail. Check error code");
+		}
 	}
 	@GetMapping("/recruit")
+	@ApiOperation(value = "구인글 조회", notes = "구인글 정보를 응답한다.")
 	public ResponseEntity<?> getRecruitList(
 			@ApiIgnore Authentication authentication,
 			@ApiParam(value = "페이지 번호 (1부터 시작)", example = "1") @RequestParam int page,

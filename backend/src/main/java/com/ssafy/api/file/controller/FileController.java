@@ -123,20 +123,19 @@ public class FileController {
         }
     }
 
-    //FIXME: 테스트 중
     @GetMapping("/videos/{fileIdx}")
     @ApiOperation(value = "동영상 조회", notes = "html <video> 태그에 넣을 수 있는 동영상의 주소를 반환합니다.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "삭제 성공"),
+            @ApiResponse(code = 200, message = "동영상 주소 리턴"),
             @ApiResponse(code = 400, message = "동영상 파일이 아님"),
             @ApiResponse(code = 404, message = "파일을 찾을 수 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<? extends BaseResponseBody> getVideoURLByFileIdx(@PathVariable(name = "fileIdx") long fileIdx) {
         try {
-            String imageUrl = fileService.getVideoUrlBySaveFileIdx(fileIdx);
+            String videoUrl = fileService.getVideoUrlBySaveFileIdx(fileIdx);
 
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, imageUrl));
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, videoUrl));
         } catch (NotValidExtensionException e) {
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "동영상 파일이 아님"));
         } catch (NoSuchElementException e) {
