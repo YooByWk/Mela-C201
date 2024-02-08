@@ -144,6 +144,7 @@ function CommunityHome() {
           <span>작성자</span>
           <span>날짜</span>
           <span>조회수</span>
+          <span>추천수</span>
         </div>
         <div className="listWrapper">
           <ul className="content">
@@ -160,10 +161,6 @@ function CommunityHome() {
                           ? article.title
                           : article.title.slice(0, 18) + '...'}
                       </Link>
-                      <div className="like">
-                        <AiOutlineLike />
-                        <span>{article.likeNum}</span>
-                      </div>
                     </div>
                     <div>
                       {article.nickname}
@@ -173,6 +170,9 @@ function CommunityHome() {
                     </div>
                     <div>
                       {article.viewNum}
+                    </div>
+                    <div>
+                      <span>{article.likeNum}</span>
                     </div>
                   </li>
                 );
@@ -272,7 +272,8 @@ const MainDiv = styled.div`
   .header span:nth-child(2), .list div:nth-child(2) { flex: 3; } /* 제목 */
   .header span:nth-child(3), .list div:nth-child(3) { flex: 1; } /* 작성자 */
   .header span:nth-child(4), .list div:nth-child(4) { flex: 1; } /* 날짜 */
-  .header span:nth-child(5), .list div:nth-child(5) { flex: 1; } /* 조회수 */
+  .header span:nth-child(5), .list div:nth-child(5) { flex: 0.5; } /* 조회수 */
+  .header span:nth-child(6), .list div:nth-child(6) { flex: 0.5; } /* 추천수 */
 
 
   .sort-btn {
