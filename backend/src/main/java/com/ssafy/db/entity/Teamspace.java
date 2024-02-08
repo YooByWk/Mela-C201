@@ -42,14 +42,10 @@ public class Teamspace {
 
     @ManyToOne
     @JoinColumn(name="TEAMSPACE_PICTURE_FILE_IDX", referencedColumnName="fileIdx")
-    //TODO: 테스트 필요 (현재 사진 삭제하면 teamspace 정보 삭제됨)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     File teamspacePictureFileIdx;
 
     @ManyToOne
     @JoinColumn(name="TEAMSPACE_BACKGROUND_PICTURE_FILE_IDX", referencedColumnName="fileIdx")
-    //TODO: 테스트 필요 (현재 사진 삭제하면 teamspace 정보 삭제됨)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     File teamspaceBackgroundPictureFileIdx;
 
     String chatRoomIdx;

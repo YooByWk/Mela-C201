@@ -5,6 +5,7 @@ import com.ssafy.api.shorts.request.ShortsPostReq;
 import com.ssafy.api.shorts.service.ShortsService;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
+import com.ssafy.common.exception.handler.NotValidExtensionException;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.Shorts;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Api(value = "쇼츠 API", tags = {"Shorts"})
@@ -149,5 +151,30 @@ public class ShortsController {
         shortsService.setShortsDislike(user, shortsid);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    @GetMapping("/{shortsid}")
+    @ApiOperation(value = "쇼츠 1개 조회", notes = "html <video> 태그에 넣을 수 있는 쇼츠의 주소를 반환한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "동영상 주소 리턴"),
+            @ApiResponse(code = 400, message = "동영상 파일이 아님"),
+            @ApiResponse(code = 404, message = "파일을 찾을 수 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<? extends BaseResponseBody> getVideoURLByFileIdx(@PathVariable(name = "shortsid") String shortsid) {
+
+        try {
+            //shortsIdx로 fileIdx 찾기
+            long fileIdx = shortsService.getShortsIdxByFileIdx(Long.parseLong(shortsid));
+            String shortsUrl = fileService.getVideoUrlBySaveFileIdx(fileIdx);
+
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, shortsUrl));
+        } catch (NotValidExtensionException e) {
+            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "동영상 파일이 아님"));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "파일을 찾을 수 없음"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 오류"));
+        }
     }
 }

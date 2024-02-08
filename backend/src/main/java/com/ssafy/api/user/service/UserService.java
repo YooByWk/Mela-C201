@@ -3,10 +3,7 @@ package com.ssafy.api.user.service;
 import com.ssafy.api.user.request.PortfolioAbstractPostReq;
 import com.ssafy.api.user.request.UserRegisterPostReq;
 import com.ssafy.api.user.request.UserUpdatePostReq;
-import com.ssafy.db.entity.Feed;
-import com.ssafy.db.entity.Notification;
-import com.ssafy.db.entity.PortfolioAbstract;
-import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
@@ -55,6 +52,7 @@ public interface UserService {
 
 	List<Feed> getFeed(User user);
 
-	//TODO: 테스트 필요!
 	PortfolioAbstract browsePortfolioAbstract(String userId);
+
+	int isAllowedToBrowsePortfolioAbstract(String userEmail, User targetUser);
 }

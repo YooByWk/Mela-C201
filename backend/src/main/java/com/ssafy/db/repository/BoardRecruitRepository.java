@@ -27,4 +27,36 @@ public interface BoardRecruitRepository extends JpaRepository<BoardRecruit, Long
             "ON b.boardIdx = br.boardIdx " +
             "WHERE b.userIdx = :userIdx")
     Page<BoardRecruit> findByUserIdx(@Param("userIdx") User userIdx, Pageable pageable);
+
+    @Query("SELECT br " +
+            "FROM Board b " +
+            "RIGHT JOIN BoardRecruit br ON br.boardIdx = b.boardIdx " +
+            "WHERE br.boardIdx IN ( " +
+            "    SELECT br.boardIdx " +
+            "    FROM BoardRecruit br " +
+            "    JOIN UserGenre ug ON br.genreIdx1 = ug.genreIdx OR br.genreIdx2 = ug.genreIdx OR br.genreIdx3 = ug.genreIdx " +
+            "    WHERE ug.userIdx = :userIdx " +
+            "    AND br.boardRecruitIdx IN ( " +
+            "        SELECT boardRecruitIdx " +
+            "        FROM BoardRecruitPosition " +
+            "        WHERE positionIdx IN (" +
+            "            SELECT positionIdx " +
+            "            FROM UserPosition " +
+            "            WHERE userIdx = :userIdx " +
+            "        )" +
+            "    AND br.boardRecruitIdx IN " +
+            "        (SELECT boardIdx FROM Board WHERE :keyword IS NULL OR b.title LIKE %:keyword% OR b.content LIKE %:keyword%)" +
+            "    )" +
+            ")")
+    Page<BoardRecruit> findRecommendedBoardListByGenreIdx(@Param("keyword") String keyword, @Param("userIdx") User userIdx, Pageable pageable);
+
+    //아니 왜 이 쿼리 안되는지 (마지막 줄 :keyword를 Board 테이블이 아니라 BoardRecruit에 대입함) #검색 조건(예: 조회수 - viewNum) 없이 호출하면 괜찮음
+    /*
+    @Query("SELECT br " +
+            "FROM BoardRecruit br " +
+            "JOIN UserGenre ug ON br.genreIdx1 = ug.genreIdx OR br.genreIdx2 = ug.genreIdx OR br.genreIdx3 = ug.genreIdx " +
+            "WHERE ug.userIdx = :userIdx AND br.boardRecruitIdx IN (SELECT boardRecruitIdx FROM BoardRecruitPosition WHERE positionIdx IN (SELECT positionIdx FROM UserPosition WHERE userIdx = :userIdx))" +
+            "AND br.boardRecruitIdx IN (SELECT b.boardIdx FROM Board b WHERE (:keyword IS NULL OR b.title LIKE %:keyword% OR b.content LIKE %:keyword%))")
+    Page<BoardRecruit> findRecommendedBoardListByGenreIdx(@Param("keyword") String keyword, @Param("userIdx") User userIdx, Pageable pageable);
+     */
 }
