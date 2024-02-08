@@ -12,7 +12,7 @@ import { follower } from "../API/UserAPI";
 import { followee } from "../API/UserAPI";
 import { fetchUser } from "../API/UserAPI";
 import { getImg } from "../API/FileAPI";
-import defaultimage from '../assets/images/default-image.png'
+import defaultprofile from '../assets/images/default-profile.png'
 
 const SideContainer = styled.div`
   color: white;
@@ -102,7 +102,7 @@ function Sidebar({ className, paddingtop }) {
     const imageInfo = async() => {     
       try {
         if (portfolioValues.portfolio_picture_file_idx === null) {
-          setImageURL(defaultimage)
+          setImageURL(defaultprofile)
         } else {
           const response = await getImg(portfolioValues.portfolio_picture_file_idx.fileIdx)
           setImageURL(response.message)
