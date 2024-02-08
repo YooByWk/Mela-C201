@@ -161,6 +161,7 @@ function CommunityHome() {
                           ? article.title
                           : article.title.slice(0, 18) + '...'}
                       </Link>
+                      <span className="comment-count">[{article.commentNum}]</span>
                     </div>
                     <div>
                       {article.nickname}
@@ -304,6 +305,11 @@ const MainDiv = styled.div`
   .like {
     display: flex;
     align-items: center;
+    margin-left: 10px;
+  }
+
+  .comment-count {
+    color: gray;
     margin-left: 10px;
   }
   
