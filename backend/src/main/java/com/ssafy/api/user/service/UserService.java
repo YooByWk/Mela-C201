@@ -15,14 +15,12 @@ import java.util.List;
 public interface UserService {
 	User createUser(UserRegisterPostReq userRegisterInfo);
 
+	User getUserByUserIdx(Long userIdx);
 	User getUserByEmail(String email);
-
 	User getUserByEmailId(String emailId);
-
 	User getUserByEmailIdAndEmailDomain(String emailId, String emailDomain);
 
 	void loginSaveJwt(String userId, String jwtToken);
-
 	void logoutSaveJwt(String userId);
 
 	void updateUser(User user, UserUpdatePostReq userUpdateInfo, PortfolioAbstractPostReq portfolioAbstractPostReq, MultipartFile portfolioPicture);
@@ -30,39 +28,26 @@ public interface UserService {
 	void deleteUser(User user);
 
 	boolean idDupCheck(String userId);
-
 	boolean checkPassword(String password, User user);
-
 	void updatePassword(String password, User user);
 
 	boolean nicknameDupCheck(String nickName);
-
 	String generateRandomNickname();
 
 	boolean checkEmailAuthToken(Long userIdx);
-
 	void saveEmailAuthToken(Long userIdx, String token);
-
 	void sendAuthEmail(Long userIdx, String token) throws MessagingException;
-
 	boolean verifyEmail(Long userIdx, String token);
-
 	void sendFindPasswordEmail(Long userIdx, String token) throws MessagingException;
-
 	void deleteAuthToken(User user);
 
 	void followUser(User nowLoginUser, String userId);
-
 	Boolean isFollow(User nowLoginUser, String userId);
-
 	List<User> getFollower(String emailId);
-
 	List<User> getFollowee(String emailId);
 
 	List<Notification> getNotification(User nowLoginUser);
-
 	String checkNotification(User nowLoginUser, Long notiId);
-
 	void deleteNotification(User nowLoginUser, Long notiId);
 
 	List<Feed> getFeed(User user);

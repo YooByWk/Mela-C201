@@ -34,8 +34,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
-    UserRepositorySupport userRepositorySupport;
-	@Autowired
 	EmailAuthRepository emailAuthRepository;
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -45,8 +43,6 @@ public class UserServiceImpl implements UserService {
 	FollowRepositorySupport followRepositorySupport;
 	@Autowired
 	NotificationRepository notificationRepository;
-	@Autowired
-	FeedRepository feedRepository;
 	@Autowired
 	FeedRepositorySupport feedRepositorySupport;
 	@Autowired
@@ -89,6 +85,11 @@ public class UserServiceImpl implements UserService {
 		portfolioAbstractRepository.save(portfolioAbstract);
 
 		return userRepository.save(user);
+	}
+
+	@Override
+	public User getUserByUserIdx(Long userIdx) {
+		return userRepository.getOne(userIdx);
 	}
 
 	@Override

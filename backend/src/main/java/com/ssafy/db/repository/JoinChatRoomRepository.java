@@ -11,4 +11,6 @@ public interface JoinChatRoomRepository extends JpaRepository<JoinChatRoom, Long
     Optional<JoinChatRoom> findByChatRoomIdxAndUserIdx(String chatRoomIdx, User userIdx);
 
     List<JoinChatRoom> findByUserIdx(User userIdx);
+
+    Optional<JoinChatRoom> findByChatRoomIdxAndUserIdxNot(String chatRoomIdx, User userIdx);
 }

@@ -1,6 +1,7 @@
 package com.ssafy.api.chat.service;
 
 import com.ssafy.api.chat.request.ChatMessage;
+import com.ssafy.api.chat.request.ChatMessageReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,4 +40,10 @@ public class ChatService {
         return messages;
     }
 
+    public ChatMessage loadLastMessage(String roomIdx) {
+        redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(ChatMessage.class));
+        ChatMessage message = redisTemplateMessage.opsForList().index(roomIdx, 0);
+
+        return message;
+    }
 }
