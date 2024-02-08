@@ -11,9 +11,7 @@ import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +68,11 @@ public class RecruitController {
     //FIXME: 여기서부터 시작
     @GetMapping("/recommend")
     @ApiOperation(value = "나를 찾는 (추천) 구인글 리스트 조회", notes = "<string>페이지번호(page), 페이지당 글 수(size), 검색어(word), 정렬조건(sortKey) </string>에 따라 게시글을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
     public ResponseEntity<BoardRecruitListRes> getRecommendedBoardList(
             @ApiIgnore Authentication authentication,
             @ApiParam(value = "페이지 번호 (1부터 시작)", example = "1") @RequestParam int page,
@@ -77,17 +80,21 @@ public class RecruitController {
             @ApiParam(value = "검색어", example = "검색내용") @RequestParam(required = false) String word,
             @ApiParam(value = "정렬 조건", example = "viewNum") @RequestParam(required = false) String sortKey) {
 
-        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-        String userEmail = userDetails.getUsername();
-        User user = userService.getUserByEmail(userEmail);
+        SsafyUserDetails userDetails = null;
+        User user = null;
 
-        //1. user_position 테이블로부터 사용자의 희망 포지션을 가져온다.
-        List<Position> positionList = userService.getUserPreferredPosition(user);
+        //1-1. 로그인한 사용자 체크 (토큰 확인)
+        try {
+            userDetails = (SsafyUserDetails) authentication.getDetails();
+            String userEmail = userDetails.getUsername();
+            user = userService.getUserByEmail(userEmail);
+        } catch(NullPointerException e) {
+            //e.printStackTrace();
 
-        //2. 희망하는 포지션을 전달인자 (parameter)로
-        recruitService.getRecommendedBoardList(positionList);
-
-//        PortfolioAbstract portfolioAbstract = portfolioService.getPortfolioAbstractByUserIdx(user);
+            return ResponseEntity.status(401).body(null);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
         page-=1; // 1부터 시작하도록 함
 
@@ -97,8 +104,13 @@ public class RecruitController {
         recruitGetListReq.setWord(word);
         recruitGetListReq.setSortKey(sortKey);
 
-        List<BoardRecruit> recruits = recruitService.getBoardList(recruitGetListReq);  //boardService.getBoardList(boardGetListReq);
+        //1. user_position 테이블로부터 사용자의 희망 포지션을 가져온다.
+//        List<Position> positionList = userService.getUserPreferredPosition(user);
 
+        //2. user 객체를 전달인자 (parameter)로 넘겨 희망하는 포지션과 선호 장르가 일치하는 글을 찾아낸다.
+        List<BoardRecruit> recruits = recruitService.getRecommendedBoardList(recruitGetListReq, user);
+
+        //3. 구인글 리스트 생성
         List<BoardRecruitRes> res = new ArrayList<>();
         for (BoardRecruit board : recruits) {
             List<Position> positions = recruitService.getPositions(board.getBoardRecruitIdx());
@@ -106,7 +118,7 @@ public class RecruitController {
         }
 
 
-        return ResponseEntity.status(200).body(BoardRecruitListRes.of(res, recruitService.getBoardTotalCount()));
+        return ResponseEntity.status(200).body(BoardRecruitListRes.of(res, res.size()));
     }
 
     @PostMapping("")

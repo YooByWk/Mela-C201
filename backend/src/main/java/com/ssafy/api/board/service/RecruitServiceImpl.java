@@ -204,24 +204,22 @@ public class RecruitServiceImpl implements RecruitService {
         return res;
     }
 
-//    @Override
-//    public List<BoardRecruitRes> getRecommendedBoardList(List<Position> positionList) {
-//        Pageable pageable;
-//        Page<BoardRecruit> page;
-//
-//        //TODO: 좋아요 순 정렬
-//
-//        // 기본 정렬: 최신순
-//        Sort sort = (getListInfo.getSortKey() != null)
-//                ? Sort.by(Sort.Direction.DESC, getListInfo.getSortKey())
+    //TODO: 테스트 필요
+    @Override
+//    public List<BoardRecruitRes> getRecommendedBoardList(RecruitGetListReq getListInfo, User user, List<Position> positionList) {
+    public List<BoardRecruit> getRecommendedBoardList(RecruitGetListReq getListInfo, User user) {
+        Pageable pageable;
+        Page<BoardRecruit> page;
+
+        // 기본 정렬: 최신순
+        Sort sort = (getListInfo.getSortKey() != null)
+                ? Sort.by(Sort.Direction.DESC, getListInfo.getSortKey())
 //                : Sort.by(Sort.Direction.DESC, "boardIdx");
-//
-//        pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
-//        page = recruitRepository.findByTitleContainingOrContentContaining(getListInfo.getWord(), pageable);
-//
-//        return page.getContent();
-////        List<BoardRecruitRes> res = ;
-//
-//        return res;
-//    }
+                : Sort.by(Sort.Direction.DESC, "boardRecruitIdx");
+
+        pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
+        page = recruitRepository.findRecommendedBoardListByGenreIdx(getListInfo.getWord(), user, pageable);
+
+        return page.getContent();
+    }
 }

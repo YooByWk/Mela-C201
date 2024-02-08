@@ -25,6 +25,6 @@ public interface RecruitService {
     void createBoardRecruitPosition(BoardRecruit boardRecruit, List<String> genres);
     void deleteBoardRecruitPosition(BoardRecruit boardRecruit);
     List<Position> getPositions(Long recruitIdx);
-
-//    List<BoardRecruitRes> getRecommendedBoardList(List<Position> positionList);
+    //TODO: 테스트 필요
+    List<BoardRecruit> getRecommendedBoardList(RecruitGetListReq getListInfo, User user);
 }
