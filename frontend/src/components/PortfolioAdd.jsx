@@ -205,15 +205,15 @@ function PortfolioAdd() {
                 </div> */}
                 <div className='inputWrapper'>
                     <label className='label'>앨범 커버 (jpg, jpeg, png)</label>
-                    <input type='file' className='input' onChange={handleImgFile} multiple="multiple" />
+                    <input type='file' className='input' onChange={handleImgFile} accept=".jpg,.jpeg,.png" />
                 </div>
                 <div className='inputWrapper'>
                     <label className='label'>음원 (mp3, flac)</label>
-                    <input type='file' className='input' onChange={handleMusicFile} multiple="multiple" />
+                    <input type='file' className='input' onChange={handleMusicFile} accept=".mp3,.flac" />
                 </div>
                 <div className='inputWrapper'>
                     <label className='label'>가사 (txt, xml)</label>
-                    <input type='file' className='input' onChange={handleLyricFile} multiple="multiple" />
+                    <input type='file' className='input' onChange={handleLyricFile} accept=".txt,.xml" />
                 </div>
                 <div className='inputWrapper'>
                     <label className='label'>pin고정</label>
