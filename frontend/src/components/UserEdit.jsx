@@ -4,7 +4,6 @@ import DefaultButton from '../components/DefaultButton';
 import styled from 'styled-components';
 import { fetchUser, followUser } from '../API/UserAPI';
 import defaultimage from '../assets/images/default-image.png'
-import { height } from "@mui/system";
 
 const Container = styled.div`
     padding: 1rem;

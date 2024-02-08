@@ -73,13 +73,14 @@ const Container = styled.div`
     
     .schedule-box {
         flex: 0.3;
+        
     }
 `
 
 const Header = styled.div`
     display: flex;
     align-items: center;
-    width: 100%;
+    width: 200px;
 `
 
 const TabMenu = styled.ul`
