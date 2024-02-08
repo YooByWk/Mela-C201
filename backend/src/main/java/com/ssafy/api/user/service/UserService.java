@@ -70,7 +70,4 @@ public interface UserService {
 	PortfolioAbstract browsePortfolioAbstract(String userId);
 
 	int isAllowedToBrowsePortfolioAbstract(String userEmail, User targetUser);
-
-	//TODO: 테스트 필요!
-	List<Position> getUserPreferredPosition(User user);
 }

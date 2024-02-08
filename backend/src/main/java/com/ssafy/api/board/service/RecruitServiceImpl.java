@@ -204,9 +204,7 @@ public class RecruitServiceImpl implements RecruitService {
         return res;
     }
 
-    //TODO: 테스트 필요
     @Override
-//    public List<BoardRecruitRes> getRecommendedBoardList(RecruitGetListReq getListInfo, User user, List<Position> positionList) {
     public List<BoardRecruit> getRecommendedBoardList(RecruitGetListReq getListInfo, User user) {
         Pageable pageable;
         Page<BoardRecruit> page;
@@ -214,7 +212,6 @@ public class RecruitServiceImpl implements RecruitService {
         // 기본 정렬: 최신순
         Sort sort = (getListInfo.getSortKey() != null)
                 ? Sort.by(Sort.Direction.DESC, getListInfo.getSortKey())
-//                : Sort.by(Sort.Direction.DESC, "boardIdx");
                 : Sort.by(Sort.Direction.DESC, "boardRecruitIdx");
 
         pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);

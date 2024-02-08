@@ -450,7 +450,6 @@ public class UserServiceImpl implements UserService {
 		return feeds;
 	}
 
-	//TODO: 테스트 필요!
 	@Override
 	public PortfolioAbstract browsePortfolioAbstract(String userId) {
 		return portfolioAbstractRepository.findByUserIdx(userRepository.findByEmailId(userId).get()).get();
@@ -476,12 +475,4 @@ public class UserServiceImpl implements UserService {
 		//나머지 경우: 조회할 수 없음 (searchAllow false)
 		return 403;
 	}
-
-	@Override
-	public List<Position> getUserPreferredPosition(User user) {
-		List<Position> positionList = userPositionRepositorySupport.findUserPositionByUser(user);
-
-		return positionList;
-	}
-
 }

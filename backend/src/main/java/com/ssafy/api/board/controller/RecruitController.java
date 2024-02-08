@@ -1,16 +1,19 @@
 package com.ssafy.api.board.controller;
 
-import com.ssafy.api.board.request.*;
+import com.ssafy.api.board.request.RecruitGetListReq;
+import com.ssafy.api.board.request.RecruitRegisterPostReq;
+import com.ssafy.api.board.request.RecruitUpdatePutReq;
 import com.ssafy.api.board.response.BoardRecruitListRes;
 import com.ssafy.api.board.response.BoardRecruitRes;
-import com.ssafy.api.board.response.BoardRes;
 import com.ssafy.api.board.service.BoardService;
 import com.ssafy.api.board.service.RecruitService;
 import com.ssafy.api.user.service.PortfolioService;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
-import com.ssafy.db.entity.*;
+import com.ssafy.db.entity.BoardRecruit;
+import com.ssafy.db.entity.Position;
+import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,13 +107,10 @@ public class RecruitController {
         recruitGetListReq.setWord(word);
         recruitGetListReq.setSortKey(sortKey);
 
-        //1. user_position 테이블로부터 사용자의 희망 포지션을 가져온다.
-//        List<Position> positionList = userService.getUserPreferredPosition(user);
-
-        //2. user 객체를 전달인자 (parameter)로 넘겨 희망하는 포지션과 선호 장르가 일치하는 글을 찾아낸다.
+        //1. user 객체를 전달인자 (parameter)로 넘겨 희망하는 포지션과 선호 장르가 일치하는 글을 찾아낸다.
         List<BoardRecruit> recruits = recruitService.getRecommendedBoardList(recruitGetListReq, user);
 
-        //3. 구인글 리스트 생성
+        //2. 구인글 리스트 생성
         List<BoardRecruitRes> res = new ArrayList<>();
         for (BoardRecruit board : recruits) {
             List<Position> positions = recruitService.getPositions(board.getBoardRecruitIdx());
