@@ -19,7 +19,7 @@ public interface BoardRecruitRepository extends JpaRepository<BoardRecruit, Long
     @Query("SELECT br FROM Board b " +
             "JOIN BoardRecruit br " +
             "ON b.boardIdx = br.boardIdx " +
-            "WHERE (:keyword IS NULL OR b.title LIKE %:keyword% OR b.content LIKE %:keyword%)")
+            "WHERE (:keyword IS NULL OR b.title LIKE %: keyword% OR b.content LIKE %:keyword%)")
     Page<BoardRecruit> findByTitleContainingOrContentContaining(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT br FROM Board b " +

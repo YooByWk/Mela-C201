@@ -21,6 +21,7 @@ public interface BoardService {
     void registComment(CommentRegisterPostReq registInfo, Board board, User user);
     void deleteComment(Long commentIdx);
     List<Comment> listComment(Long boardIdx);
+    int getBoardCommentNum(Long boardIdx);
 
     void likeBoard(Long boardIdx, User user);
     boolean isLikeBoard(Long boardIdx, Long userIdx);

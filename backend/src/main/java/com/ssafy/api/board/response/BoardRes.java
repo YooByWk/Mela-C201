@@ -33,8 +33,10 @@ public class BoardRes {
     Long userIdx;
     @ApiModelProperty(name="like number")
     int likeNum;
+    @ApiModelProperty(name="comment number")
+    int commentNum;
 
-    public static BoardRes of(Board board, int likeNum){
+    public static BoardRes of(Board board, int likeNum, int commentNum){
         BoardRes res = new BoardRes();
         res.setBoardIdx(board.getBoardIdx());
         res.setTitle(board.getTitle());
@@ -45,6 +47,7 @@ public class BoardRes {
         res.setViewNum(board.getViewNum());
         res.setUserIdx(board.getUserIdx().getUserIdx());
         res.setLikeNum(likeNum);
+        res.setCommentNum(commentNum);
         return res;
     }
 }

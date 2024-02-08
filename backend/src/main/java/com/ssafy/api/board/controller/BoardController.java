@@ -57,7 +57,9 @@ public class BoardController {
         List<Board> boards = boardService.getBoardList(boardGetListReq);
         List<BoardRes> boardRes = new ArrayList<>();
         for (Board board : boards) {
-            boardRes.add(BoardRes.of(board, boardService.getBoardLikeNum(board.getBoardIdx())));
+            int likeNum = boardService.getBoardLikeNum(board.getBoardIdx());
+            int commentNum = boardService.getBoardCommentNum(board.getBoardIdx());
+            boardRes.add(BoardRes.of(board, likeNum, commentNum));
         }
 
         return ResponseEntity.status(200).body(BoardListRes.of(boardRes, boardService.getBoardTotalCount()));
@@ -114,7 +116,10 @@ public class BoardController {
         try {
             Board board = boardService.getBoard(boardIdx);
 
-            return ResponseEntity.status(200).body(BoardRes.of(board, boardService.getBoardLikeNum(board.getBoardIdx())));
+            int likeNum = boardService.getBoardLikeNum(board.getBoardIdx());
+            int commentNum = boardService.getBoardCommentNum(board.getBoardIdx());
+
+            return ResponseEntity.status(200).body(BoardRes.of(board,likeNum, commentNum));
         } catch (Exception e) {
             return ResponseEntity.status(400).body(null);
         }

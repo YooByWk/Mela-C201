@@ -141,6 +141,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public int getBoardCommentNum(Long boardIdx) {
+
+        return commentRepository.countByBoardIdx(boardRepository.getOne(boardIdx));
+    }
+
+    @Override
     public void likeBoard(Long boardIdx, User user) {
         Optional<BoardLike> boardLike = boardLikeRepository.findByUserIdxAndBoardIdx(user, boardRepository.getOne(boardIdx));
         if(boardLike.isPresent()) {
