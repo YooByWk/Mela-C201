@@ -2,7 +2,6 @@ package com.ssafy.api.chat.service;
 
 import com.ssafy.api.chat.request.ChatRoom;
 import com.ssafy.db.entity.JoinChatRoom;
-import com.ssafy.db.entity.Teamspace;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.JoinChatRoomRepository;
 import com.ssafy.db.repository.JoinChatRoomRepositorySupport;
@@ -16,10 +15,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Repository
@@ -145,5 +141,15 @@ public class ChatRoomService {
         return joinChatRoomRepository.save(joinChatRoom);
     }
 
+    public User findOtherUser(User user, String roomIdx) {
+        // 1:1 채팅방 상대방 찾기
+        Optional<JoinChatRoom> joinChatRoom = joinChatRoomRepository.findByChatRoomIdxAndUserIdxNot(roomIdx, user);
+
+        if (!joinChatRoom.isPresent()) {
+            return null;
+        }
+
+        return userRepository.getOne(joinChatRoom.get().getUserIdx().getUserIdx());
+    }
 
 }

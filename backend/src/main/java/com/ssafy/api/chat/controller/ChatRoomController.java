@@ -4,10 +4,12 @@ import com.ssafy.api.chat.request.ChatMessage;
 import com.ssafy.api.chat.request.ChatMessageReq;
 import com.ssafy.api.chat.request.ChatRoom;
 import com.ssafy.api.chat.response.ChatMessageRes;
+import com.ssafy.api.chat.response.ChatRoomRes;
 import com.ssafy.api.chat.service.ChatRoomService;
 import com.ssafy.api.chat.service.ChatService;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
+import com.ssafy.db.entity.JoinChatRoom;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,15 +37,23 @@ public class ChatRoomController {
 
     @GetMapping("")
     @ApiOperation(value = "나의 모든 1:1 채팅방 목록", notes = "유저정보를 통해 유저가 속한 1:1 채팅방 목록을 반환한다.")
-    public ResponseEntity<List<ChatRoom>> room(@ApiIgnore Authentication authentication) {
+    public ResponseEntity<List<ChatRoomRes>> room(@ApiIgnore Authentication authentication) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
 
         List<ChatRoom> chatRooms = chatRoomService.findAllMyRoom(user);
+        
+        List<ChatRoomRes> res = new ArrayList<>();
+        for (ChatRoom chatRoom : chatRooms) {
+            ChatMessage chatMessage = chatService.loadLastMessage(chatRoom.getRoomIdx());
+            User otherUser = chatRoomService.findOtherUser(user, chatRoom.getRoomIdx());
 
-        return ResponseEntity.status(200).body(chatRooms);
+            res.add(ChatRoomRes.of(chatRoom, otherUser, chatMessage));
+        }
+
+        return ResponseEntity.status(200).body(res);
     }
 
     @PostMapping("")
