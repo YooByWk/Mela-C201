@@ -90,7 +90,7 @@ public class ScheduleController {
     }
 
     @GetMapping(value = "/{teamspaceid}/schedules")
-    @ApiOperation(value = "일정 목록", notes ="<string>팀스페이스 아이디<strong>를 통해 일정 목록을 얻는다. 정렬X")
+    @ApiOperation(value = "일정 목록", notes ="<string>팀스페이스 아이디<strong>를 통해 일정 목록을 얻는다. 시작날짜 순서 정렬")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 요청"),
@@ -113,7 +113,7 @@ public class ScheduleController {
     }
 
     @GetMapping(value = "/{teamspaceid}/schedules/upcoming")
-    @ApiOperation(value = "지나가지 않은 일정 목록", notes ="<string>팀스페이스 아이디<strong>를 통해 지나가지 않은 일정 목록을 얻는다. 정렬X")
+    @ApiOperation(value = "지나가지 않은 일정 목록", notes ="<string>팀스페이스 아이디<strong>를 통해 지나가지 않은 일정 목록을 얻는다. 시작날짜 순서 정렬")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 요청"),
@@ -135,18 +135,42 @@ public class ScheduleController {
         }
     }
 
-    @GetMapping(value = "/{teamspaceid}/schedules/{schdulesid}")
-    @ApiOperation(value = "일정 단건 조회 (지원X)", notes ="<string>일정 아이디<strong>를 통해 일정을 조회한다.")
+    @GetMapping(value = "/{teamspaceid}/schedules/today")
+    @ApiOperation(value = "오늘 일정 목록", notes ="<string>팀스페이스 아이디<strong>를 통해 지나가지 않은 일정 목록을 얻는다. 시작날짜 순서 정렬")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 400, message = "잘못된 요청"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<Schedule> getSchedule(
-            @PathVariable(name = "schdulesid") Long schdulesIdx
+    public ResponseEntity<List<ScheduleRes>> getTodayScheduleList(
+            @PathVariable(name = "teamspaceid") Long teamspaceIdx
     ) {
+        try {
+            List<Schedule> schedules = teamspaceService.getTodaySchedule(teamspaceIdx);
+            List<ScheduleRes> res = new ArrayList<>();
+            for(Schedule schedule : schedules) {
+                res.add(ScheduleRes.of(schedule));
+            }
 
-        return ResponseEntity.status(200).body(null);
+            return ResponseEntity.status(200).body(res);
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(null);
+        }
+    }
+
+    @GetMapping(value = "/{teamspaceid}/schedules/{scheduleid}")
+    @ApiOperation(value = "일정 단건 조회", notes ="<string>일정 아이디<strong>를 통해 일정을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<ScheduleRes> getSchedule(
+            @PathVariable(name = "scheduleid") Long scheduleidIdx
+    ) {
+        Schedule schedule = teamspaceService.getSchedule(scheduleidIdx);
+
+        return ResponseEntity.status(200).body(ScheduleRes.of(schedule));
 
     }
 }

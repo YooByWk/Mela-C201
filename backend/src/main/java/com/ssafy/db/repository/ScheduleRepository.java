@@ -8,10 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import java.util.Optional;
-
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<Schedule> findByTeamspaceIdx(Teamspace teamspaceIdx);
-    List<Schedule> findByEndTimeGreaterThan(LocalDateTime now);
+    List<Schedule> findByTeamspaceIdxOrderByStartTime(Teamspace teamspaceIdx);
+    List<Schedule> findByEndTimeGreaterThanOrderByStartTime(LocalDateTime endTime);
 }

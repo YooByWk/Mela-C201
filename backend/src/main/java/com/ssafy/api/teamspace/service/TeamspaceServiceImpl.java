@@ -5,13 +5,10 @@ import com.ssafy.api.teamspace.request.ScheduleRegisterPostReq;
 import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
-import com.ssafy.api.teamspace.response.TeamspaceListRes;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
-import com.ssafy.api.teamspace.response.TeamspaceRes;
 import com.ssafy.common.util.NotificationUtil;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
-import lombok.extern.java.Log;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -278,15 +275,26 @@ public class TeamspaceServiceImpl implements TeamspaceService{
 
     @Override
     public List<Schedule> getScheduleList(Long teamspaceIdx) {
-        List<Schedule> schedules = scheduleRepository.findByTeamspaceIdx(teamspaceRepository.getOne(teamspaceIdx));
+        List<Schedule> schedules = scheduleRepository.findByTeamspaceIdxOrderByStartTime(teamspaceRepository.getOne(teamspaceIdx));
 
         return schedules;
     }
 
     @Override
     public List<Schedule> getScheduleListNotPassed(Long teamspaceIdx) {
-        List<Schedule> schedules = scheduleRepository.findByEndTimeGreaterThan(LocalDateTime.now());
+        List<Schedule> schedules = scheduleRepository.findByEndTimeGreaterThanOrderByStartTime(LocalDateTime.now());
         return schedules;
+    }
+
+    @Override
+    public Schedule getSchedule(Long scheduleIdx) {
+        return scheduleRepository.getOne(scheduleIdx);
+    }
+
+    @Override
+    public List<Schedule> getTodaySchedule(Long teamspaceIdx) {
+        Teamspace teamspace = teamspaceRepository.getOne(teamspaceIdx);
+        return scheduleRepositorySupport.findTodaySchedule(teamspace);
     }
 
     @Override
