@@ -68,15 +68,15 @@ public class ChatRoomController {
         return ResponseEntity.status(200).body(roomIdx);
     }
 
+//    @GetMapping("/{roomidx}")
+//    @ApiOperation(value = "채팅방 조회", notes = "채팅방아이디를 통해 채팅방 정보를 얻는다.")
+//    public ResponseEntity<?> roomInfo(@PathVariable(name = "roomidx") String roomIdx) {
+//        // ??
+//
+//        return ResponseEntity.status(200).body(chatRoomService.findRoomById(roomIdx));
+//    }
+
     @GetMapping("/{roomidx}")
-    @ApiOperation(value = "채팅방 조회", notes = "채팅방아이디를 통해 채팅방 정보를 얻는다.")
-    public ResponseEntity<?> roomInfo(@PathVariable(name = "roomidx") String roomIdx) {
-        // ??
-
-        return ResponseEntity.status(200).body(chatRoomService.findRoomById(roomIdx));
-    }
-
-    @GetMapping("/{roomidx}/chat")
     @ApiOperation(value = "채팅 내역 조회", notes = "roomIdx(채팅방아이디)로 채팅 내역을 불러온다.")
     public ResponseEntity<List<ChatMessageRes>> chatInfo(@PathVariable(name = "roomidx") String roomIdx) {
         log.info("채팅내역: 방 아이디: {}", roomIdx);
