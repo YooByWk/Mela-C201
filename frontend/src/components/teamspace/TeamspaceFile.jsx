@@ -115,10 +115,10 @@ function TeamspaceFile () {
           try {
               const teamspaceFile = await TeamspaceFileList(teamspaceIdx)
               if ("fileIdx" in Object.values(teamspaceFile)[0]) {
-                console.log(Object.values(teamspaceFile))
+                // console.log(Object.values(teamspaceFile))
                 setValues(teamspaceFile)
               } else {
-                console.log(Object.values(teamspaceFile))
+                // console.log(Object.values(teamspaceFile))
               setValues('') }
             } catch (err) {
               console.error(err)
@@ -173,7 +173,6 @@ function TeamspaceFile () {
             setFile('')
             setFileDescription('')
             setOpen(!open)
-            Navigate (-1)
         } catch (err) {
             console.error(err)
         }
@@ -218,16 +217,12 @@ function TeamspaceFile () {
                     </CloseButton>
                 </CustomHeader>
                 <CustomBody>
-                {/* <div className='inputWrapper'>
-                    <label className='label'>Title</label>
-                    <input type='text' className='input' placeholder='제목' onChange={handleTitle} />
-                </div> */}
                 <div className='inputWrapper'>
                     <label className='label'>File Description</label>
                     <input type='text' className='input' placeholder='설명' onChange={handleDescription} />
                 </div>
                 <div className='inputWrapper'>
-                    <label className='label-file' for="input-file">업로드 할 파일</label>
+                    {/* <label className='label-file' for="input-file">업로드 할 파일</label> */}
                     <input 
                     type='file' 
                     className='input' 
