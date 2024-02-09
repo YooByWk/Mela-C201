@@ -7,6 +7,7 @@ import com.ssafy.api.chat.response.ChatMessageRes;
 import com.ssafy.api.chat.response.ChatRoomRes;
 import com.ssafy.api.chat.service.ChatRoomService;
 import com.ssafy.api.chat.service.ChatService;
+import com.ssafy.api.user.response.UserRes;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.db.entity.JoinChatRoom;
@@ -56,7 +57,7 @@ public class ChatRoomController {
                 continue;
             }
 
-            log.debug("chatMessage {}, otherUser {}", chatMessage, otherUser);
+            log.info("chatMessage {}, otherUser {}", chatMessage, otherUser);
             res.add(ChatRoomRes.of(chatRoom, otherUser, chatMessage));
         }
 
@@ -64,7 +65,6 @@ public class ChatRoomController {
         res.sort(new Comparator<ChatRoomRes>() {
             @Override
             public int compare(ChatRoomRes o1, ChatRoomRes o2) {
-
                 return  o2.getLastSendTime().compareTo(o1.getLastSendTime());
             }
         });
@@ -87,6 +87,7 @@ public class ChatRoomController {
         return ResponseEntity.status(200).body(roomIdx);
     }
 
+    @GetMapping("/{roomid}")
     @ApiOperation(value = "채팅 내역 조회", notes = "roomIdx(채팅방아이디)로 채팅 내역을 불러온다.")
     public ResponseEntity<List<ChatMessageRes>> chatInfo(@PathVariable(name = "roomid") String roomIdx) {
         log.info("채팅내역: 방 아이디: {}", roomIdx);
@@ -115,5 +116,23 @@ public class ChatRoomController {
         String roomIdx = chatRoomService.enterTeamspaceRoom(teamspaceIdx);
 
         return ResponseEntity.status(200).body(roomIdx);
+    }
+
+    @GetMapping("/recentusers")
+    @ApiOperation(value = "채팅한 유저 목록 (최신순)", notes = "최근 채팅한 유저 목록을 얻는다.")
+    public ResponseEntity<List<UserRes>> getRecentChatUsers(
+            @ApiIgnore Authentication authentication
+    ) {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userEmail = userDetails.getUsername();
+        User user = userService.getUserByEmail(userEmail);
+
+        List<UserRes> res = new ArrayList<>();
+        List<User> users = chatRoomService.findRecentChatUser(user);
+        for (User u : users) {
+            res.add(UserRes.of(u));
+        }
+
+        return ResponseEntity.status(200).body(res);
     }
 }
