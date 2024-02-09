@@ -87,9 +87,12 @@ const DefaultFileShape = (props) => {
   useEffect(() => {
     const imageInfo = async() => {     
       try {
-        const response = await getImg(props.image.fileIdx)
-        if (response) {
+        if (props.image) {
+          const response = await getImg(props.image.fileIdx)
           setImageURL(response.message)
+        }
+         else {
+          setImageURL(defaultimage)
         }
         } catch (err) {
           console.error(err)  
@@ -98,7 +101,7 @@ const DefaultFileShape = (props) => {
       
       imageInfo()
       
-    },[props.image])
+    },[])
 
 
     // console.log(imageURL)
