@@ -1,5 +1,7 @@
 import styled from "styled-components"
 import { useParams } from "react-router-dom"
+import SequenceMain from './../../sequence/SequenceMain';
+
 
 const H1 = styled.h1`
     color: white;
@@ -10,8 +12,14 @@ function TeamspaceAudio() {
     return(
     <>
     <H1>Teamspace - Audio</H1>
+    <Sequence teamspaceIdx={teamspaceIdx} />
     </>
     )
 }
 
 export default TeamspaceAudio
+
+const Sequence = styled(SequenceMain)`
+    width: 100%;
+    overflow-x:scroll;
+`

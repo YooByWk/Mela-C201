@@ -95,6 +95,7 @@ export const CommentDelete = async ({boardIdx, commentIdx}) => {
 
 // export const Delete
 export const checkBoardLike = async({boardIdx, currentUserIdx}) => {
+  // if (!currentUserIdx){return}
   const response = await BoardAPI.get(`/${boardIdx}/like/${currentUserIdx}`)
   console.log(response)
   return response

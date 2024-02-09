@@ -14,7 +14,7 @@ const soundfontHostname = 'https://gleitz.github.io/midi-js-soundfonts/FluidR3_G
 
 const noteRange = {
   first: MidiNumbers.fromNote("C2"),
-  last: MidiNumbers.fromNote("C6"),
+  last: MidiNumbers.fromNote("B5"),
 };
 
 const keyboardShortcuts = KeyboardShortcuts.create({
@@ -36,7 +36,7 @@ function PianoComponent() {
           render={({isLoading ,playNote, stopNote }) => (
             <Piano
               noteRange={noteRange}
-              width={1000}
+              width={950}
               playNote={playNote}
               stopNote={stopNote}
               disabled={isLoading}

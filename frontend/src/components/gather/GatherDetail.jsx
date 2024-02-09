@@ -15,14 +15,17 @@ const GatherDetail = () => {
   const [likeCount, setLikeCount] = useState(0)
   const [userInput, setUserInput] = useState("");
   const Navigate = useNavigate();
-  const currentUserIdx = useStore((s) => (s.user ? s.user.userIdx : null));
+  const currentUserIdx = Number(localStorage.getItem("userIdx"));
   const [boardIndex, setBoardIndex] = useState(null);
+  const [isAuthor, setIsAuthor] = useState(false);
   useEffect(() => {
     const detailData = async () => {
       const response = await RecruitDetail({ gatherIdx });
       setData(response.data);
       setBoardIndex(response.data.boardIdx);
       setLikeCount(response.data.likeNum);
+      console.log(response.data, currentUserIdx,'온갖체크')
+      setIsAuthor(response.data.userIdx === currentUserIdx)
     };
     detailData();
   }, [gatherIdx,likeCount]);
@@ -32,6 +35,7 @@ useEffect(() => {
       if (boardIndex) { // boardIndex가 존재할 때만 댓글을 가져옴
         const Comments = await GetComment({boardIdx: boardIndex});
         setComments(Comments.data);
+
       }
     };
     getComments();
@@ -80,7 +84,6 @@ useEffect(() => {
     }
   }
 
-  const isAuthor = data ? data.userIdx === currentUserIdx : null;
 
   const [isLiked, setIsLiked] = useState(null)
   useEffect (()=> {
@@ -109,6 +112,7 @@ useEffect(() => {
   if (data) {
   return (
     <DetailMain>
+    <button onClick={()=>{console.log(currentUserIdx)}}>asdf</button>
       <button onClick={() => console.log(isAuthor,boardIndex,comments, "작성자 확인")}>
         작성자 확인
       </button>

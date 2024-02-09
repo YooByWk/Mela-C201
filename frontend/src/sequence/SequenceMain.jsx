@@ -1,5 +1,5 @@
 // Code: 시퀀싱 메인 페이지
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import PianoComponent from './PianoComponent';
 import MidiVisualizer from './MidiVisualizer';
@@ -13,7 +13,15 @@ function SequenceMain() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  
+  const containerRef = useRef();
+
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      setContainerWidth(containerRef.current.clientWidth);
+    }
+  }, [containerRef.current]);
 
   const handleFileChange = (midiData) => {
     try {
@@ -39,13 +47,13 @@ function SequenceMain() {
 
   return (
     <div>
-      <SequenceContainer>
+      <SequenceContainer ref={containerRef}>
         <PianoComponent />
         <h1>온라인 시퀀싱 작업</h1>
         <MidiUpload onFileChange={handleFileChange} />
         {loading && <p>Loading...</p>}
         {error && <p>Error: {error}</p>}
-        <MidiVisualizer midiData={midiData} onNoteAdd={handleNoteAdd} onNoteRemove={handleNoteRemove} />
+        <MidiVisualizer Cwidth={containerWidth * 0.95} midiData={midiData} onNoteAdd={handleNoteAdd} onNoteRemove={handleNoteRemove} />
       </SequenceContainer>
     </div>
   );
@@ -56,4 +64,5 @@ const SequenceContainer = styled.div`
 color: #FFFFFF;
 display: flex;
 flex-direction: column;
+overflow-x: scroll;
 `;
