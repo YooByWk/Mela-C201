@@ -53,7 +53,7 @@ function CalendarBar () {
                     <span className="today">TODAY </span>
                     <span className="day">{moment(today).format('MM/DD(ddd)')}</span>
                 </div>
-                <ul>
+                <EventList>
                     { dates && dates.length > 0 ? (
                         dates.map((schedule) => {
                             return (
@@ -70,7 +70,7 @@ function CalendarBar () {
                         : (
                             <p>일정이 없습니다.</p>
                         )}
-                </ul>
+                </EventList>
             </div>
         </Container>
         </>
@@ -123,4 +123,9 @@ const Container = styled.div`
     .content {
         margin: 10px;
     }
+`
+
+const EventList = styled.ul`
+    padding-left: 5%;
+    padding-bottom: 3%;
 `
