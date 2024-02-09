@@ -95,50 +95,45 @@ function AlarmUnread () {
                     />
                     <span>전체 선택</span>
                 </div>
-                <div className="right">
-                    <div className='btnWrapper'>
-                        <DefaultButton
-                            text='Delete'
-                            backgroundcolor='#C02525'
-                            width='4rem'
-                            height='2rem'
-                            onClick={() => handleDelete()}
-                        />
-                    </div>
+                <div className="actions">
                     <div className='read'>
                         <p onClick={handleRead}>
                             Mark all as read
                         </p>
                     </div>
+                    
                 </div>
             </div>
+            <div className="category">
+                <span>체크</span>
+                <span>상태</span>
+                <span>내용</span>
+                <span>날짜</span>
+            </div>
         <hr className='line'/>
-            <div>
-                <ul>
+            <div className='listWrapper'>
+                <ul className='content'>
                     {data && data.length > 0? (
                         data.filter(alarm => !alarm.checked)
                         .map((alarm) =>{
                             return (
-                                <li key={alarm.notificationIdx}>
-                                    <div className='content-box'>
-                                        <div>
-                                            <input 
-                                                type="checkbox"
-                                                checked={checkAlarm.includes(alarm.notificationIdx) ? true : false }
-                                                onChange={(e) => handleSingleCheck(e.target.checked, alarm.notificationIdx)}
-                                            />
-                                        </div>
-                                        <div className={alarm.checked ? 'text-checked' : 'text-unchecked'}>
-                                            {alarm.checked ? '읽음' : '읽지 않음'}
-                                        </div>
-                                        <div className={`content ${alarm.checked ? 'text-checked' : ''}`}>
-                                            {alarm.alarmContent}
-                                        </div>
-                                        <div className={`date ${alarm.checked ? 'text-checked' : ''}`}>
-                                            {moment(alarm.alarmDate).format('YYYY-MM-DD HH:mm:ss')}
-                                        </div>
+                                <li key={alarm.notificationIdx} className='list'>
+                                    <div className='alarm-check'>
+                                        <input 
+                                            type="checkbox"
+                                            checked={checkAlarm.includes(alarm.notificationIdx) ? true : false }
+                                            onChange={(e) => handleSingleCheck(e.target.checked, alarm.notificationIdx)}
+                                        />
                                     </div>
-                                    <hr />
+                                    <div className={alarm.checked ? 'text-checked' : 'text-unchecked'}>
+                                        {alarm.checked ? '읽음' : '읽지 않음'}
+                                    </div>
+                                    <div className='alarm-content'>
+                                        {alarm.alarmContent}
+                                    </div>
+                                    <div className='alarm-date'>
+                                        {moment(alarm.alarmDate).format('YYYY-MM-DD HH:mm:ss')}
+                                    </div>
                                 </li>
                             )
                         }) )
@@ -148,7 +143,19 @@ function AlarmUnread () {
                     }
                 </ul>
             </div>
+        <br />
         </Container>
+        <div className='footer'>
+            <div className='btnWrapper'>
+                <DefaultButton
+                    text='Delete'
+                    backgroundcolor='#C02525'
+                    width='4rem'
+                    height='2rem'
+                    onClick={() => handleDelete()}
+                />
+            </div>
+        </div>
         </>
     )
 }
@@ -163,11 +170,25 @@ const Container = styled.div`
     .header {
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
-    .right {
+    .category {
         display: flex;
-        flex-direction: column;
+        background-color: #1e40c6;
+        height: 2rem;
+        border-radius: 10px;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 5px;
+        margin-top: 10px;
+        flex: 1;
+        text-align: center;
+    }
+
+    .actions {
+        display: flex;
+        gap: 20px;
     }
 
     .read {
@@ -175,11 +196,39 @@ const Container = styled.div`
         cursor: pointer;
     }
 
+    .list {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #254EF8;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .list:last-child {
+        border-bottom: none;
+    }
+
+    .category span:nth-child(1), .list div:nth-child(1) { flex: 0.5; }
+    .category span:nth-child(2), .list div:nth-child(2) { flex: 0.5; }
+    .category span:nth-child(3), .list div:nth-child(3) { flex: 3; }
+    .category span:nth-child(4), .list div:nth-child(4) { flex: 1.5; }
+
+    .listWrapper {
+        overflow: hidden;
+    }
+
+    .content {
+        overflow-y: scroll;
+        -ms-overflow-style: none; /* 인터넷 익스플로러 */
+        scrollbar-width: none; /* 파이어폭스 */
+    }
+
     .btnWrapper {
         margin-left: 3rem;
     }
 
-    .content {
+    .alarm-content {
         font-size: 18px;
         margin-bottom: 10px;
         margin-left: 3rem;
@@ -205,5 +254,9 @@ const Container = styled.div`
     .line {
         border: 1px solid #254EF8;
         margin-bottom: 1rem;
+    }
+
+    .footer {
+        display: flex;
     }
 `
