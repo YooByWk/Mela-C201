@@ -16,9 +16,11 @@ const ImageContainer = styled.div`
     position: relative;
 `
 const BackgroundImage = styled.img`
-    width: 1000px;
-    height: 250px;
+    background-image: url(backImgURL);
+    width: 57vw;
+    height: 33vh;
     border-radius: 20px;
+    margin-left: 2%;
 `
 
 const TeamspaceImage = styled.img`
