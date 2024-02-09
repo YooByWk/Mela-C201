@@ -95,7 +95,41 @@ export const TeamspaceMemberInvite = async({
 
     const response = TeamspaceAPI.post(`/${teamspaceId}/users/${userId}`, data)
 
-    console.log(response.data)
+    // console.log(response.data)
 
     return response.data
+}
+
+
+// 팀스페이스 파일 업로드
+export const uploadTeamspaceFile = async({
+  formData, 
+  teamspaceid
+}) => {
+  
+    for (let key of formData.keys()) {
+        console.log(key, ":", formData.get(key));
+    }
+
+  try {
+    const response = await axios.post(`http://localhost:8080/api/v1/teamspaces/${teamspaceid}/file`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization' : `Bearer ${localStorage.accessToken}`
+      }
+    })
+
+    return response.data
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
+
+
+//팀스페이스 파일 조회
+export const TeamspaceFileList = async(teamspaceId) => {
+  const response = await TeamspaceAPI.get(`/${teamspaceId}/file`)
+  // console.log(response.data.statusCode)
+  return response.data
 }
