@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -50,15 +51,33 @@ public class ChatRoomController {
             ChatMessage chatMessage = chatService.loadLastMessage(chatRoom.getRoomIdx());
             User otherUser = chatRoomService.findOtherUser(user, chatRoom.getRoomIdx());
 
+            log.info("chatMEssage: {}", chatMessage);
+            if(chatMessage == null) {
+                continue;
+            }
+
+            log.debug("chatMessage {}, otherUser {}", chatMessage, otherUser);
             res.add(ChatRoomRes.of(chatRoom, otherUser, chatMessage));
         }
+
+        // 최근 대화 순으로 정렬
+        res.sort(new Comparator<ChatRoomRes>() {
+            @Override
+            public int compare(ChatRoomRes o1, ChatRoomRes o2) {
+
+                return  o2.getLastSendTime().compareTo(o1.getLastSendTime());
+            }
+        });
 
         return ResponseEntity.status(200).body(res);
     }
 
     @PostMapping("")
     @ApiOperation(value = "채팅방 입장", notes = "유저1과 유저2의 채팅방에 입장한다.")
-    public ResponseEntity<String> createRoom(@ApiIgnore Authentication authentication, @RequestBody Long otherUserIdx) {
+    public ResponseEntity<String> enterChatRoom(
+            @ApiIgnore Authentication authentication,
+            @RequestBody Long otherUserIdx
+    ) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
@@ -68,15 +87,6 @@ public class ChatRoomController {
         return ResponseEntity.status(200).body(roomIdx);
     }
 
-//    @GetMapping("/{roomidx}")
-//    @ApiOperation(value = "채팅방 조회", notes = "채팅방아이디를 통해 채팅방 정보를 얻는다.")
-//    public ResponseEntity<?> roomInfo(@PathVariable(name = "roomidx") String roomIdx) {
-//        // ??
-//
-//        return ResponseEntity.status(200).body(chatRoomService.findRoomById(roomIdx));
-//    }
-
-    @GetMapping("/{roomid}")
     @ApiOperation(value = "채팅 내역 조회", notes = "roomIdx(채팅방아이디)로 채팅 내역을 불러온다.")
     public ResponseEntity<List<ChatMessageRes>> chatInfo(@PathVariable(name = "roomid") String roomIdx) {
         log.info("채팅내역: 방 아이디: {}", roomIdx);
@@ -97,4 +107,13 @@ public class ChatRoomController {
         return ResponseEntity.status(200).body(res);
     }
 
+    @GetMapping("/teamspaces/{teamspaceid}")
+    @ApiOperation(value = "팀스페이스 채팅방 입장")
+    public ResponseEntity<String> enterTeamspaceChatRoom(
+            @ApiIgnore Authentication authentication,
+            @PathVariable(name = "teamspaceid") Long teamspaceIdx) {
+        String roomIdx = chatRoomService.enterTeamspaceRoom(teamspaceIdx);
+
+        return ResponseEntity.status(200).body(roomIdx);
+    }
 }
