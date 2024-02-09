@@ -1,17 +1,16 @@
 package com.ssafy.api.teamspace.service;
 
+import com.ssafy.api.chat.request.ChatRoom;
+import com.ssafy.api.chat.service.ChatRoomService;
 import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.teamspace.request.ScheduleRegisterPostReq;
 import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
-import com.ssafy.api.teamspace.response.TeamspaceListRes;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
-import com.ssafy.api.teamspace.response.TeamspaceRes;
 import com.ssafy.common.util.NotificationUtil;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
-import lombok.extern.java.Log;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +55,9 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     ScheduleRepositorySupport scheduleRepositorySupport;
 
     @Autowired
+    ChatRoomService chatRoomService;
+
+    @Autowired
     NotificationUtil notificationUtil;
 
     @Autowired
@@ -97,6 +99,9 @@ public class TeamspaceServiceImpl implements TeamspaceService{
             }
         }
 
+        // 팀 채팅방 생성
+        ChatRoom chatRoom = chatRoomService.createTeamspaceRoom();
+
         // 팀 스페이스 생성
         Teamspace teamspace = new Teamspace();
         teamspace.setTeamName(registerInfo.getTeamName());
@@ -106,6 +111,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         teamspace.setTeamDescription(registerInfo.getTeamDescription());
         teamspace.setTeamspacePictureFileIdx(teamspacePictureRecord);
         teamspace.setTeamspaceBackgroundPictureFileIdx(teamspaceBackgroundPictureRecord);
+        teamspace.setChatRoomIdx(chatRoom.getRoomIdx());
         teamspaceRepository.save(teamspace);
 
         // host 팀 멤버로 추가
@@ -278,22 +284,32 @@ public class TeamspaceServiceImpl implements TeamspaceService{
 
     @Override
     public List<Schedule> getScheduleList(Long teamspaceIdx) {
-        List<Schedule> schedules = scheduleRepository.findByTeamspaceIdx(teamspaceRepository.getOne(teamspaceIdx));
+        List<Schedule> schedules = scheduleRepository.findByTeamspaceIdxOrderByStartTime(teamspaceRepository.getOne(teamspaceIdx));
 
         return schedules;
     }
 
     @Override
     public List<Schedule> getScheduleListNotPassed(Long teamspaceIdx) {
-        List<Schedule> schedules = scheduleRepository.findByEndTimeGreaterThan(LocalDateTime.now());
+        List<Schedule> schedules = scheduleRepository.findByEndTimeGreaterThanOrderByStartTime(LocalDateTime.now());
         return schedules;
+    }
+
+    @Override
+    public Schedule getSchedule(Long scheduleIdx) {
+        return scheduleRepository.getOne(scheduleIdx);
+    }
+
+    @Override
+    public List<Schedule> getTodaySchedule(Long teamspaceIdx) {
+        Teamspace teamspace = teamspaceRepository.getOne(teamspaceIdx);
+        return scheduleRepositorySupport.findTodaySchedule(teamspace);
     }
 
     @Override
     public void uploadFile(long teamspaceid, MultipartFile[] multipartFiles, String fileDescription) {
         for(MultipartFile multipartFile : multipartFiles) {
             if(multipartFile != null) {
-                //TODO: fileDescription 입력하지 않는 경우 ""인지 null 인지 확인 후 처리
                 //1. Amazon S3 파일 업로드
                 com.ssafy.db.entity.File file = fileService.saveFile(multipartFile, fileDescription);
                 //2. file 테이블에 저장

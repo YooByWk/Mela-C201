@@ -139,8 +139,6 @@ function Message() {
           JSON.stringify({ type: "TALK", roomIdx, userIdx, message })
         );
         setMessage("");
-
-        console.log("frame?? ");
       },
       (error) => {
         if (reconnect++ <= 5) {

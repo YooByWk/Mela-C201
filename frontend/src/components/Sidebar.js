@@ -101,12 +101,12 @@ function Sidebar({ className, paddingtop }) {
 
     const imageInfo = async() => {     
       try {
-        if (portfolioValues.portfolio_picture_file_idx === null) {
-          setImageURL(defaultprofile)
-        } else {
+        if (portfolioValues.portfolio_picture_file_idx) {
           const response = await getImg(portfolioValues.portfolio_picture_file_idx.fileIdx)
           setImageURL(response.message)
-        }
+        } else{
+            setImageURL(defaultprofile)
+          }
         } catch (err) {
           console.error(err)
         }

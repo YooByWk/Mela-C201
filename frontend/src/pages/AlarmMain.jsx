@@ -66,11 +66,7 @@ function AlarmMain () {
             <div className='main-box'>
                 {menuArr[currentTab].content}
             </div>
-
         </Container>
-        <div className='footer'>
-
-        </div>
         </>
     )
 }

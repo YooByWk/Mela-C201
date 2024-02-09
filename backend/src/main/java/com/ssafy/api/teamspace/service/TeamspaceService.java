@@ -27,6 +27,8 @@ public interface TeamspaceService {
     void updateSchedule(ScheduleUpdatePutReq updateInfo, Long scheduleIdx) throws EntityNotFoundException;
     List<Schedule> getScheduleList(Long teamspaceIdx);
     List<Schedule> getScheduleListNotPassed(Long teamspaceIdx);
+    Schedule getSchedule(Long scheduleIdx);
+    List<Schedule> getTodaySchedule(Long teamspaceIdx);
 
     void uploadFile(long teamspaceid, MultipartFile[] multipartFiles, String fileDescription);
     List<com.ssafy.db.entity.File> getFileListByTeamspaceIdx(Teamspace teamspace);

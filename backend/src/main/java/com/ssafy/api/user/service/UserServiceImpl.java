@@ -34,8 +34,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
-    UserRepositorySupport userRepositorySupport;
-	@Autowired
 	EmailAuthRepository emailAuthRepository;
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -46,8 +44,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	NotificationRepository notificationRepository;
 	@Autowired
-	FeedRepository feedRepository;
-	@Autowired
 	FeedRepositorySupport feedRepositorySupport;
 	@Autowired
 	private JavaMailSender mailSender;
@@ -55,6 +51,9 @@ public class UserServiceImpl implements UserService {
 	PortfolioAbstractRepository portfolioAbstractRepository;
 	@Autowired
 	FileService fileService;
+
+	@Autowired
+	UserPositionRepositorySupport userPositionRepositorySupport;
 
 	Random random = new Random();
 	CSVParser frontWords = new CSVParser("front_words");
@@ -86,6 +85,11 @@ public class UserServiceImpl implements UserService {
 		portfolioAbstractRepository.save(portfolioAbstract);
 
 		return userRepository.save(user);
+	}
+
+	@Override
+	public User getUserByUserIdx(Long userIdx) {
+		return userRepository.getOne(userIdx);
 	}
 
 	@Override
@@ -447,10 +451,29 @@ public class UserServiceImpl implements UserService {
 		return feeds;
 	}
 
-	//TODO: 테스트 필요!
 	@Override
 	public PortfolioAbstract browsePortfolioAbstract(String userId) {
 		return portfolioAbstractRepository.findByUserIdx(userRepository.findByEmailId(userId).get()).get();
 	}
 
+	@Override
+	public int isAllowedToBrowsePortfolioAbstract(String userEmail, User targetUser) {
+		//1. 조회하려는 사용자가 없는 경우 (잘못된 이메일 아이디)
+		if(targetUser == null) {
+			return 404;
+		}
+
+		//2. 조회하려는 사용자가 searchAllow를 true로 설정해둔 경우
+		if(targetUser.getSearchAllow()) {
+			return 200;
+		}
+
+		//3. 조회하려는 사용자가 searchAllow를 false로 설정해두었지만 로그인한 사용자와 일치한 경우 (내 정보 조회)
+		if(userEmail != null && userEmail.equals(userEmail)) {
+			return 200;
+		}
+
+		//나머지 경우: 조회할 수 없음 (searchAllow false)
+		return 403;
+	}
 }

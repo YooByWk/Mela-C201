@@ -203,4 +203,20 @@ public class RecruitServiceImpl implements RecruitService {
 
         return res;
     }
+
+    @Override
+    public List<BoardRecruit> getRecommendedBoardList(RecruitGetListReq getListInfo, User user) {
+        Pageable pageable;
+        Page<BoardRecruit> page;
+
+        // 기본 정렬: 최신순
+        Sort sort = (getListInfo.getSortKey() != null)
+                ? Sort.by(Sort.Direction.DESC, getListInfo.getSortKey())
+                : Sort.by(Sort.Direction.DESC, "boardRecruitIdx");
+
+        pageable = PageRequest.of(getListInfo.getPage(), getListInfo.getSize(), sort);
+        page = recruitRepository.findRecommendedBoardListByGenreIdx(getListInfo.getWord(), user, pageable);
+
+        return page.getContent();
+    }
 }

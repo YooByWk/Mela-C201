@@ -4,10 +4,12 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
-import { signup, checkDupNickname, email } from '../../API/AuthAPI'
+import Datepicker from 'react-datepicker'
+import { ko } from "date-fns/locale/ko";
+import 'react-datepicker/dist/react-datepicker.css'
+import { signup, checkDupNickname } from '../../API/AuthAPI'
 //Gender Dropdown
 import Box from '@mui/material/Box'
-import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
@@ -20,6 +22,7 @@ function SignupModal({className, fontSize, padding}) {
   const handleClose = () => setOpen(false)
   const [passwordConfirm, setPasswordConfirm] = React.useState('')
   const [isPasswordConfirm, setIsPasswordConfirm] = React.useState(false)
+  const [birthDate, setBirthDate] = React.useState(new Date())
   const [values, setValues] = React.useState({
     emailId: "",
     emailDomain: "", 
@@ -30,24 +33,6 @@ function SignupModal({className, fontSize, padding}) {
     birth: "",
     searchAllow: "",
   })
-  
-  // 닉네임 중복 확인
-  const checkNickname = () => {
-    checkDupNickname({nickname: values.nickname})
-    .then((res) => {
-      console.log(values.nickname)
-      console.log(res)
-      if (res.statusCode === 200) {
-        alert('사용 가능한 닉네임입니다.')
-      }
-    })
-    .catch((err) => {
-      console.error(err)
-      if (err.response.status === 409) {
-        alert('이미 있는 닉네임입니다.')
-      }
-  })
-  }
 
   // 이메일 아이디 중복 확인
   const checkEmailId = (e) => {
@@ -70,6 +55,59 @@ function SignupModal({className, fontSize, padding}) {
     })
   }
 
+  // 닉네임 중복 확인
+  const checkNickname = () => {
+    checkDupNickname({nickname: values.nickname})
+    .then((res) => {
+      console.log(values.nickname)
+      console.log(res)
+      if (res.statusCode === 200) {
+        alert('사용 가능한 닉네임입니다.')
+      }
+    })
+    .catch((err) => {
+      console.error(err)
+      if (err.response.status === 409) {
+        alert('이미 있는 닉네임입니다.')
+      }
+  })
+  }
+
+  // 비밀번호 확인
+  const handlePasswordCheck = async (e) => {
+    const currentPasswordCheck = e.target.value
+    setPasswordConfirm(currentPasswordCheck)
+    if (values.password !== currentPasswordCheck) {
+      setIsPasswordConfirm(false)
+    } else {
+      setIsPasswordConfirm(true)
+    }
+  }
+  
+  const handleChange = async (e) => {
+    setValues({...values,
+      [e.target.id]: e.target.value,})
+      // console.log(e.target.value)
+    }
+
+  const handleDateChange = (date) => {
+    setBirthDate(date)
+    setValues({...values, birth: date})
+  }
+
+    
+  const handleGenderChange = async (e) => {
+    setValues({...values,
+      [e.target.name]: e.target.value,})
+      console.log(e.target)
+    }
+
+  const handleSearchAllowChange = async (e) => {
+    setValues({...values,
+      [e.target.id]: e.target.checked,})
+      console.log(e.target.checked)
+    }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log(values.emailId)
@@ -83,34 +121,6 @@ function SignupModal({className, fontSize, padding}) {
     })
   }
 
-  const handleChange = async (e) => {
-    setValues({...values,
-      [e.target.id]: e.target.value,})
-      // console.log(e.target.value)
-    }
-
-  // 비밀번호 확인
-  const handlePasswordCheck = async (e) => {
-    const currentPasswordCheck = e.target.value
-    setPasswordConfirm(currentPasswordCheck)
-    if (values.password !== currentPasswordCheck) {
-      setIsPasswordConfirm(false)
-    } else {
-      setIsPasswordConfirm(true)
-    }
-  }
-    
-  const handleGenderChange = async (e) => {
-    setValues({...values,
-      [e.target.name]: e.target.value,})
-      console.log(e.target)
-    }
-
-  const handleSearchAllowChange = async (e) => {
-    setValues({...values,
-      [e.target.id]: e.target.checked,})
-      console.log(e.target.checked)
-    }
 
   return (
     <div>
@@ -132,26 +142,29 @@ function SignupModal({className, fontSize, padding}) {
             <div id="unstyled-modal-description" className="modal-description">
               <div className='inputWrapper'>
                 <label className='label'>Email</label>
-                <input type='text' placeholder='ssafy' id='emailId' onChange={handleChange} className='input'/>
+                <input type='text' placeholder='ssafy' id='emailId' onChange={handleChange} className='input' required/>
                 <span>@</span>
-                <input type='text' palceholder='gmail.com' id='emailDomain' onChange={handleChange} className='input'/>
+                <input type='text' palceholder='gmail.com' id='emailDomain' onChange={handleChange} className='input' required/>
                 <input type='button' onClick={checkEmailId} value='중복 확인' className='checkButton'/>
               </div>
               <div className='inputWrapper'>
                 <label className='label'>Password</label>
-                <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} className='input'/>
+                <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합'
+                  id='password' onChange={handleChange} className='input' required
+                  pattern='^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$'
+                />
               </div>
               <div className='inputWrapper'>
                 <label className='label'>Password again</label>
-                <input type='password' id='password2' onChange={handlePasswordCheck} value={passwordConfirm} className='input'/>
+                <input type='password' id='password2' onChange={handlePasswordCheck} value={passwordConfirm} className='input' required/>
+                {passwordConfirm && (isPasswordConfirm
+                  ? <p style={{ color: 'blue'}}>비밀번호가 일치합니다.</p>
+                  : <p style={{ color: 'red'}}>비밀번호가 다릅니다.</p>
+                )}
               </div>
-              {passwordConfirm && (isPasswordConfirm
-                ? <p style={{ color: 'green'}}>비밀번호가 일치합니다.</p>
-                : <p style={{ color: 'red'}}>비밀번호가 다릅니다.</p>
-              )}
               <div className='inputWrapper'>
                 <label className='label'>Name</label>
-                <input type='text' placeholder='홍길동' id='name' onChange={handleChange} className='input'/>
+                <input type='text' placeholder='홍길동' id='name' onChange={handleChange} className='input' required/>
               </div>
               <div className='inputWrapper'>
                 <label className='label'>Nickname</label>
@@ -171,6 +184,7 @@ function SignupModal({className, fontSize, padding}) {
                       onChange={handleGenderChange}
                       name='gender'
                       className='gender'
+                      required
                     >
                       <MenuItem value='Etc'>
                         Etc
@@ -187,11 +201,20 @@ function SignupModal({className, fontSize, padding}) {
                 </Box>
                 <div className='blank' />
                 <div className='inputWrapper'>
-                  <label className='label'>Birth</label>
-                  <input type='date' id='birth' onChange={handleChange} className='birth'/>
+                  <label className='label' for='birth'>Birth</label>
+                  <MyDatePicker
+                    id='birth'
+                    locale={ko}
+                    dateFormat='yyyy-MM-dd'
+                    shouldCloseOnSelect
+                    selected={birthDate}
+                    onChange={handleDateChange}
+                    popperPlacement='left'
+                    required
+                  />
                 </div>
               </div>
-              <br/>
+
               <input type='checkbox' id='searchAllow' onChange={handleSearchAllowChange}/>
                 다른 회원의 검색 조건에 노출을 허용합니다.
               <br />
@@ -270,6 +293,10 @@ const ModalContent = styled('div')(
       margin-bottom: 4px;
     }
 
+    & .passwordCheck {
+      margin-bottom: 5px;
+    }
+
     & .gender-birth {
       display: flex;
     }
@@ -323,6 +350,20 @@ const ModalContent = styled('div')(
       color: white;
     }
 
+    & .input[type=date] {
+      position: relative;
+    }
+
+    & .input[type=date]::webkit-calendar-picker-indicator {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      cursor: pointer;
+    }
+
     & .birth {
       background-color: #151c2c;
       color: white;
@@ -331,11 +372,22 @@ const ModalContent = styled('div')(
       width: 8rem;
     }
 
+
     & .blank {
-      margin: 2rem;
+      width: 5rem;
     }
   `,
 )
+
+const MyDatePicker = styled(Datepicker)`
+  background-color: transparent;
+  color: white;
+  border: none;
+  width: 90%;
+  text-align: center;
+  font-size: 0.8rem;
+`
+
 const dynamicStyle = ({ fontSize = '0.875rem', padding = '8px 16px' }) => css`
   font-size: ${fontSize};
   padding: ${padding};
