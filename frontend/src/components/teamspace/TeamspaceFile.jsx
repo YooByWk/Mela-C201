@@ -103,6 +103,11 @@ const CustomBody = styled(DialogBody)`
 const Div = styled.div`
     color: white;
 `
+
+const ButtonContainer = styled.div`
+    padding-left: 93%;
+`
+
 function TeamspaceFile () {
     const [open, setOpen] = useState(false)
     const { teamspaceIdx } = useParams()
@@ -129,7 +134,7 @@ function TeamspaceFile () {
           
         },[])
     
-    console.log(values)
+    // console.log(values)
     const handleModal = () => {
         setOpen(!open)
     }
@@ -180,15 +185,17 @@ function TeamspaceFile () {
 
     return(
     <>
-    <H1>Teamspace - File</H1>
+        <ButtonContainer>
         <DefaultButton 
             text={'Upload'}
             backgroundcolor={'#873FFA'}
             fontcolor={'white'}
-            width={'100px'}
+            width={'80px'}
             onClick={handleModal}
+            height={'30px'}
         />
-        <Div>
+        </ButtonContainer>
+        <div>
             {values ?  (
                     <>
                     {Object.entries(values).map(([key, value]) => (
@@ -196,16 +203,18 @@ function TeamspaceFile () {
                         File Description={value.fileDescription}
                         <br/>
                         title={value.originalFilename}
+                        <br/>
+                        ===================================================
                     </Div>
                   ))}
                     </>
                 ) : (
-                    <>
+                    <Div>
                     업로드 된 파일이 없습니다.
-                    </>
+                    </Div>
                 )
             }
-        </Div>
+        </div>
 
         
         {/* 업로드 모달 */}
