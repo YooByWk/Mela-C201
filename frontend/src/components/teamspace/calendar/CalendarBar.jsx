@@ -72,7 +72,7 @@ function CalendarBar () {
                         : (
                             <p>일정이 없습니다.</p>
                         )}
-                </ul>
+                </EventList>
                 <div className='more-btn'>
                     <ScheduleAll
                         dates={dates}

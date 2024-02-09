@@ -31,7 +31,6 @@ function CommunityHome() {
       setData(response.data.boardResList);
       setTotalPageCount(response.data.totalPageCount);
       setLikeCount(response.data.likeNum)
-      console.log(totalPageCount)
       // 패칭한 데이터를 상태에 저장
     };
     fetchData();
