@@ -41,7 +41,7 @@ export const TeamspaceInfo = async(teamspaceId) => {
 }
 
 // 팀스페이스 정보 수정
-export const TeamspaceUpdate = async(formData, teamspaceId) => {
+export const TeamspaceUpdate = async({formData, teamspaceId}) => {
   try {
     const response = await axios.put(`http://localhost:8080/api/v1/teamspaces/${teamspaceId}`, formData, {
       headers: {
