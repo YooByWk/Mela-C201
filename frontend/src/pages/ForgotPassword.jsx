@@ -11,6 +11,7 @@ function ForgotPassword() {
         changePassword({emailId: emailId})
         .then(res => {
             console.log(res.data)
+            alert('이메일을 확인해주세요')
         })
         .catch(err => {
             console.log(err)
@@ -60,5 +61,7 @@ const Container = styled.div`
         padding: 1rem;
         width: 30%;
         margin: 10px;
+        border-radius: 10px;
+        border: none;
     }
 `

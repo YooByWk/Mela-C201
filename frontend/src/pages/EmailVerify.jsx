@@ -31,7 +31,7 @@ function EmailVerify() {
             <h1>이메일 인증을 완료해주세요</h1>
             <div className="buttonWrapper">
                 <DefaultButton 
-                text="인증메일 전송"
+                text="인증 재전송"
                 onClick={sendEmail}
                 width='8rem'
                 />
