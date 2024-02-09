@@ -3,61 +3,55 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
-import { ScheduleGenerate } from '../../API/ScheduleAPI'
+import { ScheduleUpdate } from '../../API/ScheduleAPI'
+import moment from 'moment'
 
 
-function ScheduleCreateModal({ className, fontSize, padding, teamspaceId, onScheduleCreate }) {
+function ScheduleEditModal({
+    className, fontSize, padding,
+    teamspaceId, scheduleId, onScheduleEdit, initialData }) {
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
     const [values, setValues] = React.useState({
-        content: '',
-        place: '',
-        sDate: '',
-        sTime: '',
-        eDate: '',
-        eTime: '',
-    })
+      content: '',
+      place: '',
+      sDate: '',
+      sTime: '',
+      eDate: '',
+      eTime: '',
+    });
+
+    React.useEffect(() => {
+      if (initialData) {
+        setValues({
+          content: initialData.content,
+          place: initialData.place,
+          sDate: moment(initialData.sDate).format('YYYY-MM-DD'),
+          sTime: moment(initialData.sTime).format('HH:mm'),
+          eDate: moment(initialData.eDate).format('YYYY-MM-DD'),
+          eTime: moment(initialData.eTime).format('HH:mm'),
+        })
+
+      }
+    }, [initialData])
 
     const handleChange = async (e) => {
         const { id, value } = e.target
-        setValues(preValue => ({
-            ...preValue,
-            [id]: value,
-        }))
-    }
-
-    const formatDateTime = (date, time) => {
-        const info = time ? `${time}:00` : '00:00:00'
-        console.log(`${info}`)
-        return `${date} ${info}`
+        setValues({
+          ...values,
+          [id] : value
+        })
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const startDateTime = formatDateTime(values.sDate, values.sTime)
-        const endDateTime = formatDateTime(values.eDate, values.eTime)
-
-        if (new Date(endDateTime) < new Date(startDateTime)) {
-            alert('종료일은 시작일보다 빠를 수 없습니다.')
-            return
-        }
-
         try {
-            const data = {
-                content: values.content,
-                endTime: endDateTime,
-                place: values.place,
-                startTime: startDateTime,
-            }
-
-
-            const res = await ScheduleGenerate(teamspaceId, data);
-            // console.log(res)
-            onScheduleCreate(res)
-            setOpen(false)
+            await ScheduleUpdate(teamspaceId, scheduleId, values)
+            onScheduleEdit()
+            handleClose()
 
         } catch(err) {
             console.log(err)
@@ -68,7 +62,7 @@ function ScheduleCreateModal({ className, fontSize, padding, teamspaceId, onSche
     return (
         <>
         <TriggerButton type="button" onClick={handleOpen} className={className} fontSize={fontSize} padding={padding}>
-            +
+            수정
         </TriggerButton>
         <Modal
             aria-labelledby="unstyled-modal-title"
@@ -79,30 +73,30 @@ function ScheduleCreateModal({ className, fontSize, padding, teamspaceId, onSche
         >
             <ModalContent sx={{ width: 400 }}>
                 <h2 id="modal-title" className="modal-title">
-                    일정 추가
+                    일정 수정
                 </h2>
                 <form onSubmit={handleSubmit}> 
                 <div id="modal-description" className="modal-description">
                     <div className='inputWrapper'>
                         <label className='label'>내용</label>
-                        <input type='text' className='input' placeholder='일정 내용을 입력해주세요' id='content' onChange={handleChange} />
+                        <input type='text' className='input' placeholder='일정 내용을 입력해주세요' id='content' value={values.content} onChange={handleChange} />
                     </div>
                     <div className='inputWrapper'>
                         <label className='label'>장소</label>
-                        <input type='text' className='input' id='place' onChange={handleChange} />
+                        <input type='text' className='input' id='place' value={values.place} onChange={handleChange} />
                     </div>
                     <div className='inputWrapper'>
                         <label className='label'>시작일</label>
-                        <input type='date' className='input' id='sDate' onChange={handleChange} />
-                        <input type='time' className='input' id='sTime' onChange={handleChange} />
+                        <input type='date' className='input' id='sDate' value={values.sDate} onChange={handleChange} />
+                        <input type='time' className='input' id='sTime' value={values.sTime} onChange={handleChange} />
                     </div>                            
                     <div className='inputWrapper'>
                         <label className='label'>종료일</label>
-                        <input type='date' className='input' id='eDate' onChange={handleChange} />
-                        <input type='time' className='input' id='eTime' onChange={handleChange} />
+                        <input type='date' className='input' id='eDate' value={values.eDate} onChange={handleChange} />
+                        <input type='time' className='input' id='eTime' value={values.eTime} onChange={handleChange} />
                     </div>
                     <button type='submit' className='button'>
-                        Create
+                        Save
                     </button>
                 </div>
                 </form>
@@ -112,7 +106,7 @@ function ScheduleCreateModal({ className, fontSize, padding, teamspaceId, onSche
     )
 }
 
-export default ScheduleCreateModal
+export default ScheduleEditModal
 
 
 const Backdrop = React.forwardRef((props, ref) => {
