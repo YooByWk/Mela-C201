@@ -41,29 +41,19 @@ export const TeamspaceInfo = async(teamspaceId) => {
 }
 
 // 팀스페이스 정보 수정
-export const TeamspaceUpdate = async({
-    teamspaceId,
-    endDate,
-    startDate,
-    teamDescription,
-    teamName,
-    // teamspace_background_picture_file_idx,
-    // teamspace_picture_file_idx
-}) => {
-    const data = {
-        teamspaceId,
-        endDate,
-        startDate,
-        teamDescription,
-        teamName,
-        // teamspace_background_picture_file_idx,
-        // teamspace_picture_file_idx
-    }
-
-    const response = await TeamspaceAPI.put(`/${teamspaceId}`, data)
-
-    console.log(response.data)
+export const TeamspaceUpdate = async({formData, teamspaceId}) => {
+  try {
+    const response = await axios.put(`http://localhost:8080/api/v1/teamspaces/${teamspaceId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization' : `Bearer ${localStorage.accessToken}`
+      }
+    })
     return response.data
+  }
+  catch (error) {
+    console.error(error);
+  }
 }
 
 //팀스페이스 삭제

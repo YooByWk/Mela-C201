@@ -64,7 +64,7 @@ const Container = styled.div`
 
     .content-box {
         display: flex;
-        flex-direction: row
+        flex-direction: row;
     }
     
     .nowContent {
@@ -73,7 +73,7 @@ const Container = styled.div`
     
     .schedule-box {
         flex: 0.3;
-        
+        margin-top: -4.5%;
     }
 `
 

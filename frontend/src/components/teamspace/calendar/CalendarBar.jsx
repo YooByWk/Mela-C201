@@ -55,7 +55,7 @@ function CalendarBar () {
                     <span className="today">TODAY </span>
                     <span className="day">{moment(today).format('MM/DD(ddd)')}</span>
                 </div>
-                <ul>
+                <EventList>
                     { dates && dates.length > 0 ? (
                         dates.map((schedule) => {
                             return (
@@ -135,4 +135,9 @@ const Container = styled.div`
     .more-btn {
         display: flex;
     }
+`
+
+const EventList = styled.ul`
+    padding-left: 5%;
+    padding-bottom: 3%;
 `
