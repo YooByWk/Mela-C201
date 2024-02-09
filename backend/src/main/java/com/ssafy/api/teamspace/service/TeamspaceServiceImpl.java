@@ -1,5 +1,7 @@
 package com.ssafy.api.teamspace.service;
 
+import com.ssafy.api.chat.request.ChatRoom;
+import com.ssafy.api.chat.service.ChatRoomService;
 import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.teamspace.request.ScheduleRegisterPostReq;
 import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
@@ -53,6 +55,9 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     ScheduleRepositorySupport scheduleRepositorySupport;
 
     @Autowired
+    ChatRoomService chatRoomService;
+
+    @Autowired
     NotificationUtil notificationUtil;
 
     @Autowired
@@ -94,6 +99,9 @@ public class TeamspaceServiceImpl implements TeamspaceService{
             }
         }
 
+        // 팀 채팅방 생성
+        ChatRoom chatRoom = chatRoomService.createTeamspaceRoom();
+
         // 팀 스페이스 생성
         Teamspace teamspace = new Teamspace();
         teamspace.setTeamName(registerInfo.getTeamName());
@@ -103,6 +111,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         teamspace.setTeamDescription(registerInfo.getTeamDescription());
         teamspace.setTeamspacePictureFileIdx(teamspacePictureRecord);
         teamspace.setTeamspaceBackgroundPictureFileIdx(teamspaceBackgroundPictureRecord);
+        teamspace.setChatRoomIdx(chatRoom.getRoomIdx());
         teamspaceRepository.save(teamspace);
 
         // host 팀 멤버로 추가

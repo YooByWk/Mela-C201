@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { styled, css, margin } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
 import { TeamspaceGenerate } from '../../API/TeamspaceAPI'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
 const CustomBody = styled('div')(
   ({ theme }) => css`

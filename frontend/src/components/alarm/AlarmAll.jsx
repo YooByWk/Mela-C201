@@ -3,13 +3,11 @@ import styled from 'styled-components'
 import { notification, checkNotification, delNotification } from '../../API/UserAPI'
 import moment from 'moment'
 import DefaultButton from '../DefaultButton'
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+
 
 function AlarmAll () {
     const [data, setData] = useState(null)
     const [checkAlarm, setCheckAlarm] = useState([])
-    const [totalPageCount, setTotalPageCount] = useState(1)
-    const [currentPage, setCurrentPage] = useState(1)
 
 
     useEffect(() => {
@@ -24,26 +22,6 @@ function AlarmAll () {
         }
         fetchData()
     }, [])
-
-    const NextPage = () => {
-        setCurrentPage(prevPage => prevPage +1 )
-    }
-
-    const PrevPage = () => {
-        setCurrentPage(prevPage => prevPage > 1 ? prevPage -1 : prevPage)
-    }
-
-    const pages = [];
-    for (let i = 1; i <= Math.ceil(totalPageCount/10); i++) {
-        pages.push(
-        <PaginationButton
-            onClick={() => setCurrentPage(i)}
-            isActive={currentPage === i ? 'active' : ''}
-        >
-        </PaginationButton>
-        );
-    }
-
 
     // 단일 선택
     const handleSingleCheck = (checked, notificationIdx) => {
@@ -84,6 +62,7 @@ function AlarmAll () {
     // 삭제
     const handleDelete = async () => {
         checkAlarm.forEach(notificationIdx => {
+            window.confirm('삭제하시겠습니까?')
             delNotification({ notificationid: notificationIdx })
             .then(() => {
                 console.log(notificationIdx)
@@ -118,16 +97,7 @@ function AlarmAll () {
                     />
                     <span>전체 선택</span>
                 </div>
-                <div className="right">
-                    <div className='btnWrapper'>
-                        <DefaultButton
-                            text='Delete'
-                            backgroundcolor='#C02525'
-                            width='4rem'
-                            height='2rem'
-                            onClick={() => handleDelete()}
-                        />
-                    </div>
+                <div className="actions">
                     <div className='read'>
                         <p onClick={handleRead}>
                             Mark all as read
@@ -135,32 +105,35 @@ function AlarmAll () {
                     </div>
                 </div>
             </div>
+            <div className="category">
+                <span>체크</span>
+                <span>상태</span>
+                <span>내용</span>
+                <span>날짜</span>
+            </div>
         <hr className='line'/>
-            <div>
-                <ul>
+            <div className='listWrapper'>
+                <ul className='content'>
                     {data && data.length > 0? (
                         data.map((alarm) =>{
                             return (
-                                <li key={alarm.notificationIdx}>
-                                    <div className='content-box'>
-                                        <div>
-                                            <input 
-                                                type="checkbox"
-                                                checked={checkAlarm.includes(alarm.notificationIdx) ? true : false }
-                                                onChange={(e) => handleSingleCheck(e.target.checked, alarm.notificationIdx)}
-                                            />
-                                        </div>
-                                        {alarm.checked ? <div className='text-checked'>읽음</div>
-                                            : <div className='text-unchecked'>읽지 않음</div>
-                                        }
-                                        <div className='content'>
-                                            {alarm.alarmContent}
-                                        </div>
-                                        <div className='date'>
-                                            {moment(alarm.alarmDate).format('YYYY-MM-DD HH:mm:ss')}
-                                        </div>
+                                <li key={alarm.notificationIdx} className='list'>
+                                    <div className='alarm-check'>
+                                        <input 
+                                            type="checkbox"
+                                            checked={checkAlarm.includes(alarm.notificationIdx) ? true : false }
+                                            onChange={(e) => handleSingleCheck(e.target.checked, alarm.notificationIdx)}
+                                        />
                                     </div>
-                                    <hr />
+                                    {alarm.checked ? <div className='text-checked'>읽음</div>
+                                        : <div className='text-unchecked'>읽지 않음</div>
+                                    }
+                                    <div className='alarm-content'>
+                                        {alarm.alarmContent}
+                                    </div>
+                                    <div className='alarm-date'>
+                                        {moment(alarm.alarmDate).format('YYYY-MM-DD HH:mm:ss')}
+                                    </div>
                                 </li>
                             )
                         }) )
@@ -171,35 +144,24 @@ function AlarmAll () {
                 </ul>
             </div>
         <br />
-            <div className="footer">
-                <div className="page-btn" onClick={PrevPage} disabled={currentPage === 1}> 
-                <IoIosArrowBack />
-                </div>
-                <div className="pagination">
-                {pages}
-                </div>
-                <div className="page-btn" onClick={NextPage}>
-                <IoIosArrowForward />
-                </div>
-            </div>
         </Container>
+        <div className="footer">
+            <div className='btnWrapper'>
+                <DefaultButton
+                    text='Delete'
+                    backgroundcolor='#C02525'
+                    width='4rem'
+                    height='2rem'
+                    onClick={() => handleDelete()}
+                />
+            </div>
+        </div>
         </>
     )
 }
 
 export default AlarmAll
 
-
-const PaginationButton = styled.button`
-  background-color: ${props => props.isActive ? "#254EF8" : "#13295b"};
-  border: none;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  margin: 3px;
-  cursor: pointer;
-  align-items: center;
-`
 
 const Container = styled.div`
     color: white;
@@ -208,12 +170,44 @@ const Container = styled.div`
     .header {
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
-    .right {
+    .category {
         display: flex;
-        flex-direction: column;
+        background-color: #1e40c6;
+        height: 2rem;
+        border-radius: 10px;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 5px;
+        margin-top: 10px;
+        flex: 1;
+        text-align: center;
     }
+
+    .actions {
+        display: flex;
+        gap: 20px;
+    }
+
+    .list {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #254EF8;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .list:last-child {
+        border-bottom: none;
+    }
+
+    .category span:nth-child(1), .list div:nth-child(1) { flex: 0.5; }
+    .category span:nth-child(2), .list div:nth-child(2) { flex: 0.5; }
+    .category span:nth-child(3), .list div:nth-child(3) { flex: 3; }
+    .category span:nth-child(4), .list div:nth-child(4) { flex: 1.5; }
 
     .read {
         color: #254EF8;
@@ -223,17 +217,21 @@ const Container = styled.div`
     .btnWrapper {
         margin-left: 3rem;
     }
+    
+    .listWrapper {
+        overflow: hidden;
+    }
 
     .content {
+        overflow-y: scroll;
+        -ms-overflow-style: none; /* 인터넷 익스플로러 */
+        scrollbar-width: none; /* 파이어폭스 */
+    }
+
+    .alarm-content {
         font-size: 18px;
         margin-bottom: 10px;
         margin-left: 3rem;
-    }
-
-    .content-box {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
     }
 
     .text-checked {
@@ -251,25 +249,7 @@ const Container = styled.div`
         margin-bottom: 1rem;
     }
 
-    .page-btn {
-    background-color: #151C2C;
-    width: 40px;
-    height: 40px;
-    border-radius: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    }
-
     .footer {
         display: flex;
-        align-items: center;
-        margin: 5px;
     }
-
-    .pagination {
-        margin: 5px;
-    }
-
 `

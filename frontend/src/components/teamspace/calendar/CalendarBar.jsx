@@ -7,6 +7,7 @@ import { ScheduleList } from "../../../API/ScheduleAPI"
 import { useParams } from "react-router-dom"
 import ScheduleCreateModal from "../../Modals/ScheduleCreate"
 import CalendarBox from "../calendar/CalendarBox"
+import ScheduleAll from '../../Modals/ScheduleAll'
 
 
 function CalendarBar () {
@@ -14,6 +15,7 @@ function CalendarBar () {
     const { teamspaceIdx } = useParams()
     const [dates, setDates] = useState([])
 
+    // 일정 생성
     const handleScheduleCreate = async (newSchedule) => {
         try {
             console.log(newSchedule)
@@ -70,7 +72,13 @@ function CalendarBar () {
                         : (
                             <p>일정이 없습니다.</p>
                         )}
-                </EventList>
+                </ul>
+                <div className='more-btn'>
+                    <ScheduleAll
+                        dates={dates}
+                        teamspaceId={teamspaceIdx}
+                    />
+                </div>
             </div>
         </Container>
         </>
@@ -122,6 +130,10 @@ const Container = styled.div`
 
     .content {
         margin: 10px;
+    }
+    
+    .more-btn {
+        display: flex;
     }
 `
 

@@ -21,7 +21,7 @@ function SigninModal({className, fontSize, padding}) {
     password: "", 
   })
 
-  const handleChange = async (e) => {
+  const handleChange = (e) => {
     setValues({...values,
     [e.target.id]: e.target.value,
     })
@@ -29,27 +29,28 @@ function SigninModal({className, fontSize, padding}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    signin(values)
-    .then((res) => {
-      localStorage.clear()
-      localStorage.setItem('accessToken', res.accessToken)
-      // console.log('로그인 성공')
-      console.log(res.data)
-      setIsLogined(true)
-      // console.log(IsLogined)
-      const fetchData = async () => {
-        const res = await fetchUser()
-        console.log(userInfo, '유저 정보')
+
+    try {
+      const res = await signin(values)
+      console.log(res)
+
+      if (res && res.accessToken) {
+        localStorage.clear()
+        localStorage.setItem('accessToken', res.accessToken);
+        setIsLogined(true);
+        await fetchUser()
+        movePage('/message')
       }
-      fetchData()
-      // movePage(`/portfolio/${userInfo[0].emailId}`)
-    })
-    .catch((err) => {
-      console.error(err)
-      if (err.response.status === 401) {
+
+    } catch (err) {
+      console.log(err)
+
+      if (err.response && err.response.status === 401) {
         alert('이메일 인증을 먼저 완료해주세요.')
+      } else {
+        alert('로그인 실패')
       }
-  })
+    }
   }
 
   return (
