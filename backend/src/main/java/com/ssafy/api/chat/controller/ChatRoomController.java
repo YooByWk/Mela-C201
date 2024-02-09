@@ -7,6 +7,7 @@ import com.ssafy.api.chat.response.ChatMessageRes;
 import com.ssafy.api.chat.response.ChatRoomRes;
 import com.ssafy.api.chat.service.ChatRoomService;
 import com.ssafy.api.chat.service.ChatService;
+import com.ssafy.api.user.response.UserRes;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.db.entity.JoinChatRoom;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -50,15 +52,32 @@ public class ChatRoomController {
             ChatMessage chatMessage = chatService.loadLastMessage(chatRoom.getRoomIdx());
             User otherUser = chatRoomService.findOtherUser(user, chatRoom.getRoomIdx());
 
+            log.info("chatMEssage: {}", chatMessage);
+            if(chatMessage == null) {
+                continue;
+            }
+
+            log.info("chatMessage {}, otherUser {}", chatMessage, otherUser);
             res.add(ChatRoomRes.of(chatRoom, otherUser, chatMessage));
         }
+
+        // 최근 대화 순으로 정렬
+        res.sort(new Comparator<ChatRoomRes>() {
+            @Override
+            public int compare(ChatRoomRes o1, ChatRoomRes o2) {
+                return  o2.getLastSendTime().compareTo(o1.getLastSendTime());
+            }
+        });
 
         return ResponseEntity.status(200).body(res);
     }
 
     @PostMapping("")
     @ApiOperation(value = "채팅방 입장", notes = "유저1과 유저2의 채팅방에 입장한다.")
-    public ResponseEntity<String> createRoom(@ApiIgnore Authentication authentication, @RequestBody Long otherUserIdx) {
+    public ResponseEntity<String> enterChatRoom(
+            @ApiIgnore Authentication authentication,
+            @RequestBody Long otherUserIdx
+    ) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
@@ -67,14 +86,6 @@ public class ChatRoomController {
 
         return ResponseEntity.status(200).body(roomIdx);
     }
-
-//    @GetMapping("/{roomidx}")
-//    @ApiOperation(value = "채팅방 조회", notes = "채팅방아이디를 통해 채팅방 정보를 얻는다.")
-//    public ResponseEntity<?> roomInfo(@PathVariable(name = "roomidx") String roomIdx) {
-//        // ??
-//
-//        return ResponseEntity.status(200).body(chatRoomService.findRoomById(roomIdx));
-//    }
 
     @GetMapping("/{roomid}")
     @ApiOperation(value = "채팅 내역 조회", notes = "roomIdx(채팅방아이디)로 채팅 내역을 불러온다.")
@@ -97,4 +108,31 @@ public class ChatRoomController {
         return ResponseEntity.status(200).body(res);
     }
 
+    @GetMapping("/teamspaces/{teamspaceid}")
+    @ApiOperation(value = "팀스페이스 채팅방 입장")
+    public ResponseEntity<String> enterTeamspaceChatRoom(
+            @ApiIgnore Authentication authentication,
+            @PathVariable(name = "teamspaceid") Long teamspaceIdx) {
+        String roomIdx = chatRoomService.enterTeamspaceRoom(teamspaceIdx);
+
+        return ResponseEntity.status(200).body(roomIdx);
+    }
+
+    @GetMapping("/recentusers")
+    @ApiOperation(value = "채팅한 유저 목록 (최신순)", notes = "최근 채팅한 유저 목록을 얻는다.")
+    public ResponseEntity<List<UserRes>> getRecentChatUsers(
+            @ApiIgnore Authentication authentication
+    ) {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userEmail = userDetails.getUsername();
+        User user = userService.getUserByEmail(userEmail);
+
+        List<UserRes> res = new ArrayList<>();
+        List<User> users = chatRoomService.findRecentChatUser(user);
+        for (User u : users) {
+            res.add(UserRes.of(u));
+        }
+
+        return ResponseEntity.status(200).body(res);
+    }
 }

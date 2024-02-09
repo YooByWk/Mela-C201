@@ -1,6 +1,8 @@
 package com.ssafy.api.chat.service;
 
+import com.ssafy.api.chat.request.ChatMessage;
 import com.ssafy.api.chat.request.ChatRoom;
+import com.ssafy.api.chat.response.ChatRoomRes;
 import com.ssafy.db.entity.JoinChatRoom;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.JoinChatRoomRepository;
@@ -26,6 +28,7 @@ public class ChatRoomService {
     private final JoinChatRoomRepository joinChatRoomRepository;
     private final JoinChatRoomRepositorySupport joinChatRoomRepositorySupport;
 
+    private final ChatService chatService;
 
     // 채팅방(topic)에 발행되는 메시지를 처리할 Listner
     private final RedisMessageListenerContainer redisMessageListener;
@@ -150,6 +153,35 @@ public class ChatRoomService {
         }
 
         return userRepository.getOne(joinChatRoom.get().getUserIdx().getUserIdx());
+    }
+
+    public List<User> findRecentChatUser(User user) {
+        List<User> users = new ArrayList<>();
+
+        // 유저가 속해있는 채팅방 목록 불러오기
+        List<JoinChatRoom> chatRooms = joinChatRoomRepository.findByUserIdx(user);
+        // 최근 대화 순으로 정렬
+
+        List<ChatMessage> chatMessages = new ArrayList<>();
+        for (JoinChatRoom chatRoom : chatRooms) {
+            // 최근 메시지 가져오기
+            ChatMessage chatMessage = chatService.loadLastMessage(chatRoom.getChatRoomIdx());
+            chatMessages.add(chatMessage);
+        }
+
+        chatMessages.sort(new Comparator<ChatMessage>() {
+            // 최신순 정렬
+            @Override
+            public int compare(ChatMessage o1, ChatMessage o2) {
+                return o2.getSendTime().compareTo(o1.getSendTime());
+            }
+        });
+
+        for (ChatMessage chatMessage : chatMessages) {
+            users.add(findOtherUser(user, chatMessage.getRoomIdx()));
+        }
+
+        return users;
     }
 
 }
