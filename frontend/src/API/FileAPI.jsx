@@ -14,3 +14,9 @@ export const getImg = async (fileIdx) => {
     const response = await FileAPI.get(`/images/${fileIdx}`, fileIdx)
     return response.data
 }
+
+// 파일 업로드
+export const uploadFile = async (formData) => {
+    const response = await FileAPI.post(`/upload`, formData)
+    return response.data
+}
