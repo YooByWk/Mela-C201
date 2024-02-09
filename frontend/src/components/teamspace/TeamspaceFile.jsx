@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components"
 import { useParams } from "react-router-dom";
 import DefaultButton from "../DefaultButton";
 import { IoMdClose } from "react-icons/io";
 import { Dialog, DialogHeader, DialogBody } from '@material-tailwind/react'
-import { Link } from "react-router-dom";
-import { uploadTeamspaceFile} from "../../API/TeamspaceAPI"
+import { Navigate } from "react-router-dom";
+import { uploadTeamspaceFile, TeamspaceFileList } from "../../API/TeamspaceAPI"
 
 const H1 = styled.h1`
     color: white;
@@ -100,13 +100,36 @@ const CustomBody = styled(DialogBody)`
         cursor: pointer;
     }
 `
-
+const Div = styled.div`
+    color: white;
+`
 function TeamspaceFile () {
     const [open, setOpen] = useState(false)
     const { teamspaceIdx } = useParams()
     const [file, setFile] = useState('')
     const [fileDescription, setFileDescription] = useState('')
+    const [values, setValues] = useState()
 
+    useEffect(() => {
+        const teamspaceFileList = async() => {     
+          try {
+              const teamspaceFile = await TeamspaceFileList(teamspaceIdx)
+              if ("fileIdx" in Object.values(teamspaceFile)[0]) {
+                console.log(Object.values(teamspaceFile))
+                setValues(teamspaceFile)
+              } else {
+                console.log(Object.values(teamspaceFile))
+              setValues('') }
+            } catch (err) {
+              console.error(err)
+            }
+          }; 
+          
+          teamspaceFileList()
+          
+        },[])
+    
+    console.log(values)
     const handleModal = () => {
         setOpen(!open)
     }
@@ -150,6 +173,7 @@ function TeamspaceFile () {
             setFile('')
             setFileDescription('')
             setOpen(!open)
+            Navigate (-1)
         } catch (err) {
             console.error(err)
         }
@@ -165,6 +189,27 @@ function TeamspaceFile () {
             width={'100px'}
             onClick={handleModal}
         />
+        <Div>
+            {values ?  (
+                    <>
+                    {Object.entries(values).map(([key, value]) => (
+                    <Div key={value.fileIdx}>
+                        File Description={value.fileDescription}
+                        <br/>
+                        title={value.originalFilename}
+                    </Div>
+                  ))}
+                    </>
+                ) : (
+                    <>
+                    업로드 된 파일이 없습니다.
+                    </>
+                )
+            }
+        </Div>
+
+        
+        {/* 업로드 모달 */}
         <CustomDialog open={open} handler={handleModal}>
                 <CustomHeader>
                     <h3>팀스페이스 파일 업로드</h3>
@@ -194,11 +239,9 @@ function TeamspaceFile () {
                     {/* <FaFileUpload size={80}/> */}
                 </CustomBody>
                 <br/>
-                <Link to='/teamspace/'>
                 <button onClick={handleUpload}>
                     업로드
                 </button>
-            </Link>
             </CustomDialog>
     </>
     )

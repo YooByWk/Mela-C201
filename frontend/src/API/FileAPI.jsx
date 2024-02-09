@@ -11,8 +11,11 @@ export const FileAPI = axios.create({
 
 // 단일 이미지 조회
 export const getImg = async (fileIdx) => {
-    const response = await FileAPI.get(`/images/${fileIdx}`, fileIdx)
-    return response.data
+    if (fileIdx) {
+        const response = await FileAPI.get(`/images/${fileIdx}`)
+        return response.data
+    }
+    return
 }
 
 // 파일 업로드

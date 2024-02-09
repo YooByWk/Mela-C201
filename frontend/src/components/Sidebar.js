@@ -103,6 +103,7 @@ function Sidebar({ className, paddingtop }) {
       try {
         if (portfolioValues.portfolio_picture_file_idx === null) {
           setImageURL(defaultprofile)
+          return
         } else {
           const response = await getImg(portfolioValues.portfolio_picture_file_idx.fileIdx)
           setImageURL(response.message)

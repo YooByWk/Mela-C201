@@ -30,7 +30,7 @@ function TeamspaceDetail () {
             <Header>
                 <TabMenu>
                     {menuArr.map((el, index) => (
-                        <li className={index === currentTab ? "submenu focused" : "submenu" }>
+                        <li className={index === currentTab ? "submenu focused" : "submenu" } key={index}>
                         <span onClick={() => clickMenuHandler(index)}>
                             {el.name}
                         </span>

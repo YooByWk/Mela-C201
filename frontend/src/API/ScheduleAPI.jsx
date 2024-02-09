@@ -13,7 +13,7 @@ export const ScheduleAPI = axios.create({
 // 일정 목록
 export const ScheduleList = async(teamspaceId) => {
   const response = await ScheduleAPI.get(`/${teamspaceId}/schedules`)
-  console.log(response)
+//   console.log(response)
   return response.data
 }
 

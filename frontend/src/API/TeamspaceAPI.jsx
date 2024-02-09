@@ -130,6 +130,6 @@ export const uploadTeamspaceFile = async({
 //팀스페이스 파일 조회
 export const TeamspaceFileList = async(teamspaceId) => {
   const response = await TeamspaceAPI.get(`/${teamspaceId}/file`)
-  // console.log(response.data)
+  // console.log(response.data.statusCode)
   return response.data
 }
