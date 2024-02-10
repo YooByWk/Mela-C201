@@ -153,9 +153,11 @@ width: 30px;
 color: #cdcdcd;
 }
 
+/* 선택한 날짜 */
 .react-calendar__tile:enabled:hover,
-.react-calendar__tile:enabled:focus {
-background-color: #ffad69;
+.react-calendar__tile:enabled:focus,
+.react-calendar__tile--active {
+background-color: #fff069;
 border-radius: 100%;
 height: 30px;
 width: 30px;
@@ -170,7 +172,7 @@ width: 30px;
 
 .react-calendar__tile--now:enabled:hover,
 .react-calendar__tile--now:enabled:focus {
-background: #ffad69;
+background: #fff069;
 border-radius: 100%;
 height: 30px;
 width: 30px;
@@ -185,10 +187,6 @@ background: #76baff;
 background: #a9d4ff;
 }
 
-.react-calendar__tile--active {
-    background: #F04D23;
-}
-
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
     background: #F04D23;
@@ -197,4 +195,3 @@ background: #a9d4ff;
 .react-calendar--selectRange .react-calendar__tile--hover {
 background-color: #e6e6e6;
 }
-

@@ -5,7 +5,6 @@ import clsx from 'clsx'
 import { styled, css } from '@mui/system'
 import { Modal as BaseModal } from '@mui/base/Modal'
 import Datepicker from 'react-datepicker'
-import { ko } from "date-fns/locale/ko";
 import 'react-datepicker/dist/react-datepicker.css'
 import { signup, checkDupNickname } from '../../API/AuthAPI'
 //Gender Dropdown
@@ -14,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import { emailCheck } from '../../API/UserAPI'
+import moment from 'moment'
 
 function SignupModal({className, fontSize, padding}) {
   const navigate = useNavigate()
@@ -91,8 +91,10 @@ function SignupModal({className, fontSize, padding}) {
     }
 
   const handleDateChange = (date) => {
-    setBirthDate(date)
-    setValues({...values, birth: date})
+    const formmatedDate = moment(date).format('YYYY-MM-DD')
+    setBirthDate(formmatedDate)
+    setValues({...values, birth: formmatedDate})
+    console.log(formmatedDate)
   }
 
     
@@ -110,7 +112,7 @@ function SignupModal({className, fontSize, padding}) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(values.emailId)
+    console.log(values)
     signup(values)
     .then((res) => {
       alert('이메일 인증을 진행해주세요.')
@@ -204,7 +206,6 @@ function SignupModal({className, fontSize, padding}) {
                   <label className='label' for='birth'>Birth</label>
                   <MyDatePicker
                     id='birth'
-                    locale={ko}
                     dateFormat='yyyy-MM-dd'
                     shouldCloseOnSelect
                     selected={birthDate}

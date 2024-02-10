@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
 import Calendar from 'react-calendar'
 import '../../../assets/css/calendar.css'
+import styled from 'styled-components'
 import moment from 'moment'
-import styled from "styled-components"
 import { ScheduleList } from "../../../API/ScheduleAPI"
 import { useParams } from "react-router-dom"
 
@@ -10,34 +10,46 @@ import { useParams } from "react-router-dom"
 function CalendarBox () {
     const { teamspaceIdx } = useParams()
     const [date, setDate] = useState(new Date())
-    const [event, setEvent] = useState([])
+    const [marks, setMarks] = useState([])
   
     const handleDateChange = (newDate) => {
-        setDate(moment(newDate).format('MM/DD(dd)'))
+        setDate(newDate)
     }
 
     useEffect(() => {
-      const fetchEvent = async () => {
+      const fetchEvents = async () => {
         try {
           const dateInfo = await ScheduleList(teamspaceIdx)
-          const eventDate = dateInfo.map(e => moment(e.date).format('MM/DD'))
-          setEvent(eventDate)
+          const eventDates = dateInfo.map(e => moment(e.startTime).format('MM/DD'))
+          setMarks(eventDates)
+          console.log(eventDates)
         } catch (err) {
           console.log(err)
         }
       }
-      fetchEvent()
+        fetchEvents()
     }, [teamspaceIdx])
+
 
     return (
         <Calendar
             onChange={handleDateChange}
             className='mx-auto w-full text-sm border-b'
-            formatDay={(locale, date) => moment(date).format("D")}
+            calendarType="gregory"
+            formatDay={(locale, date) => moment(date).format("D")} // '일' 제거하고 숫자만 보이게
             value={date}
             next2Label={null}
             prev2Label={null}
             showNeighboringMonth={false}
+            tileContent={({ date, view }) => {
+              let html = []
+              if (
+                marks.find((x) => x === moment(date).format("MM/DD"))
+              ) {
+                html.push(<StyledDot key={moment(date).format("MM/DD")} />);
+              }
+              return <>{html}</>;
+            }}
         />
     )
 }
@@ -45,12 +57,9 @@ function CalendarBox () {
 export default CalendarBox
 
 const StyledDot = styled.div`
-  background-color: #00BD79;
-  border-radius: 50%;
-  width: 0.3rem;
-  height: 0.3rem;
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translateX(-50%);
+    background-color: #76ff91;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 5px;
+    margin-top: 2px;
 `

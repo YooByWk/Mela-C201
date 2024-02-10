@@ -52,8 +52,16 @@ function CalendarBar () {
                 </div>
                 <CalendarBox />
                 <div className="today-wrapper">
-                    <span className="today">TODAY </span>
-                    <span className="day">{moment(today).format('MM/DD(ddd)')}</span>
+                    <div>
+                        <span className="today">TODAY </span>
+                        <span className="day">{moment(today).format('MM/DD(ddd)')}</span>
+                    </div>
+                    <div className='more-btn'>
+                        <ScheduleAll
+                            dates={dates}
+                            teamspaceId={teamspaceIdx}
+                        />
+                    </div>
                 </div>
                 <EventList>
                     { dates && dates.length > 0 ? (
@@ -73,12 +81,6 @@ function CalendarBar () {
                             <p>일정이 없습니다.</p>
                         )}
                 </EventList>
-                <div className='more-btn'>
-                    <ScheduleAll
-                        dates={dates}
-                        teamspaceId={teamspaceIdx}
-                    />
-                </div>
             </div>
         </Container>
         </>
@@ -100,9 +102,10 @@ const Container = styled.div`
         background-color: #151C2C;
         border-radius: 20px;
         width: 20rem;
-        height: 32rem;
+        max-height: 32rem;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
     }
 
     .title {
@@ -113,8 +116,10 @@ const Container = styled.div`
 
     .today-wrapper {
         display: flex;
-        padding: 20px;
-        margin-left: 20px;
+        padding: 10px;
+        margin-left: 10px;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .today {
@@ -133,7 +138,7 @@ const Container = styled.div`
     }
     
     .more-btn {
-        display: flex;
+        
     }
 `
 
