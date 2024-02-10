@@ -54,10 +54,7 @@ export const ScheduleUpdate = async(teamspaceId, scheduleId, {
 }
 
 // 일정 삭제
-export const ScheduleDelete = async(
-    teamspaceId,
-    scheduleId
-) => {
+export const ScheduleDelete = async({teamspaceId, scheduleId}) => {
     const response = await ScheduleAPI.delete(`/${teamspaceId}/schedules/${scheduleId}`)
 
     console.log(response.data)

@@ -9,7 +9,7 @@ import moment from 'moment'
 
 function ScheduleEditModal({
     className, fontSize, padding,
-    teamspaceId, scheduleId, onScheduleEdit, initialData }) {
+    teamspaceId, scheduleId, initialData, onScheduleEdit }) {
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -28,10 +28,10 @@ function ScheduleEditModal({
         setValues({
           content: initialData.content,
           place: initialData.place,
-          sDate: moment(initialData.sDate).format('YYYY-MM-DD'),
-          sTime: moment(initialData.sTime).format('HH:mm'),
-          eDate: moment(initialData.eDate).format('YYYY-MM-DD'),
-          eTime: moment(initialData.eTime).format('HH:mm'),
+          sDate: moment(initialData.startTime).format('YYYY-MM-DD'),
+          sTime: moment(initialData.startTime).format('HH:mm'),
+          eDate: moment(initialData.endTime).format('YYYY-MM-DD'),
+          eTime: moment(initialData.endTime).format('HH:mm'),
         })
 
       }
@@ -45,11 +45,32 @@ function ScheduleEditModal({
         })
     }
 
+    const formatDateTime = (date, time) => {
+        const info = time ? `${time}:00` : '00:00:00'
+        console.log(`${info}`)
+        return `${date} ${info}`
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
 
+        const startDateTime = formatDateTime(values.sDate, values.sTime)
+        const endDateTime = formatDateTime(values.eDate, values.eTime)
+
+        if (new Date(endDateTime) < new Date(startDateTime)) {
+            alert('종료일은 시작일보다 빠를 수 없습니다.')
+            return
+        }
+
         try {
-            await ScheduleUpdate(teamspaceId, scheduleId, values)
+            const data = {
+                content: values.content,
+                place: values.place,
+                startTime: startDateTime,
+                endTime: endDateTime
+            }
+    
+            await ScheduleUpdate(teamspaceId, scheduleId, data)
             onScheduleEdit()
             handleClose()
 

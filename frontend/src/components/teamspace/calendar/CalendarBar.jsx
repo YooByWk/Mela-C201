@@ -15,12 +15,22 @@ function CalendarBar () {
     const { teamspaceIdx } = useParams()
     const [dates, setDates] = useState([])
 
+    const refreshEvents = async() => {
+        try {
+            const dateInfo = await ScheduleList(teamspaceIdx);
+            setDates(dateInfo);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     // 일정 생성
     const handleScheduleCreate = async (newSchedule) => {
         try {
             console.log(newSchedule)
             const response = await ScheduleList(teamspaceIdx)
             setDates(response)
+            await refreshEvents()
         } catch (err) {
             console.log(err)
         }
@@ -37,6 +47,10 @@ function CalendarBar () {
         }
         info()
     },[])
+
+    useEffect(() => {
+        refreshEvents();
+    }, [])
 
 
     return (
@@ -60,6 +74,7 @@ function CalendarBar () {
                         <ScheduleAll
                             dates={dates}
                             teamspaceId={teamspaceIdx}
+                            onRefresh={refreshEvents}
                         />
                     </div>
                 </div>
