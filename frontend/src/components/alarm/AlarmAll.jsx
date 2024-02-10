@@ -132,7 +132,7 @@ function AlarmAll () {
                                         {alarm.alarmContent}
                                     </div>
                                     <div className='alarm-date'>
-                                        {moment(alarm.alarmDate).format('YYYY-MM-DD HH:mm:ss')}
+                                        {moment(alarm.alarmDate).format('YY-MM-DD HH:mm:ss')}
                                     </div>
                                 </li>
                             )
@@ -166,6 +166,8 @@ export default AlarmAll
 const Container = styled.div`
     color: white;
     margin: 20px;
+    display: flex;
+    flex-direction: column;
 
     .header {
         display: flex;
@@ -205,9 +207,9 @@ const Container = styled.div`
     }
 
     .category span:nth-child(1), .list div:nth-child(1) { flex: 0.5; }
-    .category span:nth-child(2), .list div:nth-child(2) { flex: 0.5; }
+    .category span:nth-child(2), .list div:nth-child(2) { flex: 1; }
     .category span:nth-child(3), .list div:nth-child(3) { flex: 3; }
-    .category span:nth-child(4), .list div:nth-child(4) { flex: 1.5; }
+    .category span:nth-child(4), .list div:nth-child(4) { flex: 1; }
 
     .read {
         color: #254EF8;
@@ -217,15 +219,14 @@ const Container = styled.div`
     .btnWrapper {
         margin-left: 3rem;
     }
-    
+
     .listWrapper {
-        overflow: hidden;
+
     }
 
     .content {
-        overflow-y: scroll;
-        -ms-overflow-style: none; /* 인터넷 익스플로러 */
-        scrollbar-width: none; /* 파이어폭스 */
+        flex: 1;
+        overflow-y: auto;
     }
 
     .alarm-content {

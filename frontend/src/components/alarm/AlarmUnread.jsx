@@ -132,7 +132,7 @@ function AlarmUnread () {
                                         {alarm.alarmContent}
                                     </div>
                                     <div className='alarm-date'>
-                                        {moment(alarm.alarmDate).format('YYYY-MM-DD HH:mm:ss')}
+                                        {moment(alarm.alarmDate).format('YY-MM-DD HH:mm:ss')}
                                     </div>
                                 </li>
                             )
@@ -210,9 +210,9 @@ const Container = styled.div`
     }
 
     .category span:nth-child(1), .list div:nth-child(1) { flex: 0.5; }
-    .category span:nth-child(2), .list div:nth-child(2) { flex: 0.5; }
+    .category span:nth-child(2), .list div:nth-child(2) { flex: 1; }
     .category span:nth-child(3), .list div:nth-child(3) { flex: 3; }
-    .category span:nth-child(4), .list div:nth-child(4) { flex: 1.5; }
+    .category span:nth-child(4), .list div:nth-child(4) { flex: 1; }
 
     .listWrapper {
         overflow: hidden;
