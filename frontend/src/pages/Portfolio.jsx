@@ -36,7 +36,6 @@ function Portfolio() {
         currentUser: current,
         loginUser: user
     }
-    
     return (
         <>
             {user ?

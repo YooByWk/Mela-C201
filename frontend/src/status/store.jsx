@@ -21,14 +21,12 @@ const useStore = create(set => ({
         }
       });
       set({user: response.data[0]})
-      console.log(response.data[0], '유저정보')
-      console.log('response', response)
       localStorage.setItem('userIdx', response.data[0].userIdx)
+      // console.log(response.data[0], '유저정보')
     }
      catch(error) {
       console.error(error)
     }
-
   },
   
   logout : async () => {

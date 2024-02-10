@@ -39,7 +39,7 @@ function SigninModal({className, fontSize, padding}) {
         localStorage.setItem('accessToken', res.accessToken);
         setIsLogined(true);
         await fetchUser()
-        movePage('/message')
+        movePage('/community')
       }
 
     } catch (err) {
@@ -73,11 +73,11 @@ function SigninModal({className, fontSize, padding}) {
           <div id="modal-description" className="modal-description">
             <div className='inputWrapper'>
               <label className='label'>Email</label>
-              <input type='email' className='input' placeholder='ssafy@gmail.com' id='id' onChange={handleChange} />
+              <input type='email' className='input' placeholder='ssafy@gmail.com' id='id' required onChange={handleChange} />
             </div>
             <div className='inputWrapper'>
               <label className='label'>Password</label>
-              <input type='password' className='input' placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} />
+              <input type='password' className='input' required placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} />
             </div>
             <button type='submit' className='button'>
               Log in

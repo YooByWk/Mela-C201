@@ -11,6 +11,7 @@ import Alarmbar from "../components/alarm/Alarmbar";
 function TeamspaceMain () {
   // const [isWriting, setIsWriting] = useState(false);
   const Navi = useNavigate()
+  const [newTeamspace, setNewTeamspace] = useState(null);
   const [values, setValues] = useState({
     endDate: "",
     host: {}, 
@@ -22,19 +23,34 @@ function TeamspaceMain () {
     teamspacePictureFileIdx: {},
   })
 
-  useEffect(() => {
-    const myTeamspaceList = async() => {     
-      try {
-          const teamspace = await TeamspaceList()
-          setValues(teamspace)
-        } catch (err) {
-          console.error(err)
-        }
-      }; 
+  // useEffect(() => {
+  //   const myTeamspaceList = async() => {     
+  //     try {
+  //         const teamspace = await TeamspaceList()
+  //         setValues(teamspace)
+  //       } catch (err) {
+  //         console.error(err)
+  //       }
+  //     }; 
       
-      myTeamspaceList()
+  //     myTeamspaceList()
       
-    },[])
+  //   },[])
+
+
+useEffect(() => {
+  const myTeamspaceList = async() => {     
+    try {
+        const teamspace = await TeamspaceList()
+        setValues(teamspace)
+      } catch (err) {
+        console.error(err)
+      }
+    }; 
+    
+    myTeamspaceList()
+
+  },[newTeamspace])
 
   return ( 
     <TeamspaceContainer>
