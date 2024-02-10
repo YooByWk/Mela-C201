@@ -1,30 +1,10 @@
 import React, { useState, useEffect } from "react";
-import InboxList from "../components/InboxList";
-import MessageFrom from "../components/MessageFrom";
 import styled from "styled-components";
 import axios from "axios";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import { RiMessage2Line } from "react-icons/ri";
 
-const Container = styled.div`
-  display: flex;
-  width: 100%;
-  color: white;
-  ul {
-    color: #ffffff;
-  }
-`;
-
-const MessageFromWrapper = styled.div`
-  color: white;
-  flex: 3;
-`;
-
-const InboxWrapper = styled.div`
-  background-color: #151c2c;
-  color: white;
-  flex: 1;
-`;
 
 function Message() {
   const [roomName, setRoomName] = useState("");
@@ -155,79 +135,115 @@ function Message() {
 
   return (
     <Container>
-      <div className="row">
-        <div className="col-md-12">
-          <h3>채팅방 리스트</h3>
-        </div>
-      </div>
-      <div className="input-group">
-        <div className="input-group-prepend">
-          <label className="input-group-text">방제목</label>
-        </div>
-        <input
-          type="text"
-          className="form-control"
-          value={roomName}
-          onChange={(e) => setRoomName(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && createRoom()}
-        />
-        <div className="input-group-append">
-          <button className="btn btn-primary" type="button" onClick={createRoom}>
-            채팅방 개설
-          </button>
-        </div>
-      </div>
-      <ul className="list-group">
-        {chatRooms.map((room) => (
-          <li
-            key={room.roomIdx}
-            className="list-group-item list-group-item-action"
-            onClick={() => enterRoom(room.roomIdx)}
-          >
-            {room.name}
-          </li>
-        ))}
-      </ul>
-
-      <div className="container">
-        <div>
+      <div className="select-chat">
+        <div className="chat-title">
           <h2>{room.name}</h2>
         </div>
-        <div className="input-group">
-          <div className="input-group-prepend">
-            <label className="input-group-text">내용</label>
-          </div>
+        <div className="input-wrppaer">
           <input
             type="text"
-            className="form-control"
+            className="input"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && sendMessage()}
           />
-          <div className="input-group-append">
-            <button className="btn btn-primary" type="button" onClick={sendMessage}>
-              보내기
+          <div className="button-wrapper">
+            <button className="btn" type="button" onClick={sendMessage}>
+              Send
             </button>
           </div>
         </div>
         <ul className="list-group">
           {messages.map((message, index) => (
-            <li key={index} className="list-group-item">
+            <li key={index} className="list-item">
               {message.userIdx} - {message.message}
             </li>
           ))}
         </ul>
-        <div></div>
       </div>
-
-      <MessageFromWrapper>
-        <MessageFrom />
-      </MessageFromWrapper>
-      <InboxWrapper>
-        <InboxList />
-      </InboxWrapper>
+      <div className="room-list">
+        <div className="header">
+          <RiMessage2Line />
+          <h3>Inbox</h3>
+        </div>
+        <div className="input-wrapper">
+          <input
+            type="text"
+            className="input"
+            value={roomName}
+            onChange={(e) => setRoomName(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && createRoom()}
+          />
+          <div className="button-wrapper">
+            <button className="btn" type="button" onClick={createRoom}>
+              Create
+            </button>
+          </div>
+        </div>
+        <ul className="list-group">
+          {chatRooms.map((room) => (
+            <li
+              key={room.roomIdx}
+              className="list-item"
+              onClick={() => enterRoom(room.roomIdx)}
+            >
+              {room.name}
+            </li>
+          ))}
+        </ul>
+      </div>
     </Container>
   );
 }
 
-export default Message;
+export default Message
+
+
+const Container = styled.div`
+  display: flex;
+  width: 100%;
+  color: white;
+
+  .select-chat {
+    flex: 3;
+    margin-left: 1rem;
+    padding: 20px;
+  }
+
+  .room-list {
+    flex: 1;
+    background-color: #202C44;
+    padding: 20px;
+    border-radius: 20px;
+    margin-right: 1rem;
+  }
+
+  .header {
+    display: flex;
+  }
+
+  .input-wrapper {
+    display: flex;
+    margin-top: 1rem;
+  }
+
+  .input {
+    background-color: #151C2C;
+    border: none;
+    height: 2rem;
+    border-radius: 10px;
+    color: white;
+  }
+
+  .button-wrapper {
+    display: flex;
+  }
+
+  button {
+    background-color: #254ef8;
+    border: none;
+    border-radius: 5px;
+    height: 2rem;
+    color: white;
+  }
+`
