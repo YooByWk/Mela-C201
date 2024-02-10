@@ -25,7 +25,6 @@ export const UserApi = axios.create({
 // 로그인 한 유저 조회
 export const fetchUser = async () => {
     const response = await UserApi.get(`/myinfo`)
-    // console.log(response.data)
     return response.data
 }
 
@@ -76,9 +75,9 @@ export const followUser = async (userId) => {
 
 // 이메일 중복 확인
 export const emailCheck = async ({emailId}) => {
-    console.log(emailId)
+    console.log(emailId,'유저API 이메일')
     const response = await axios.get(`http://localhost:8080/api/v1/users/emailid/${emailId}`)
-    console.log(response)
+    // console.log(response)
     
     return response.data
 }

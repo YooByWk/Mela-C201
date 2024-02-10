@@ -29,18 +29,22 @@ function UserEdit(props) {
     const imgRef = useRef()
     const [values, setValues] = useState([])
     const [isFollowed, setIsFollowed] = useState(false)
-
-    const currentUser = props.currentUser
-    const loginUser = props.loginUser
-
-    // console.log(loginUser)
-    // console.log(currentUser)
+    const [currentUser, setCurrentUser] = useState(props.currentUser);
+    const [loginUser, setLoginUser] = useState(props.loginUser);
+    // const currentUser = props.currentUser
+    // const loginUser = props.loginUser
 
     const navigate = useNavigate()
 
     const goUpdate = () => {
         navigate('/users')
     }
+
+    useEffect(() => {
+        setCurrentUser(props.currentUser);
+        setLoginUser(props.loginUser);
+    }, [props.currentUser, props.loginUser]);
+
 
     const profileImg = () => {
         const file = imgRef.current.files[0]
@@ -52,8 +56,7 @@ function UserEdit(props) {
     }
 
     const handleFollow = async() => {
-        // 만약 현재 로그인 한 사용자의 이메일 아이디와 주소창의 닉네임이 다르다면
-        if (loginUser && currentUser && loginUser[0].emailId !== currentUser.userIdx.emailId) {
+        if (loginUser && currentUser && currentUser.userIdx && loginUser[0].emailId !== currentUser.userIdx.emailId) {
             try {
                 await followUser(currentUser.userIdx.emailId)
                 setIsFollowed(!isFollowed)
@@ -63,63 +66,70 @@ function UserEdit(props) {
         }
     }
 
+    if (!loginUser || !currentUser || !currentUser[0].userIdx) {
+        return <div>
+        
+            <p>로딩 중...</p>
+            <button onClick={ ()=> console.log(currentUser[0].userIdx.emailId === loginUser.emailId )}>51243</button>
+            <button onClick={ ()=> console.log(currentUser)}>1243</button>
+            <button onClick={ ()=> console.log(loginUser)}>lgue</button>
+            <button onClick={ ()=> console.log(loginUser.emailId)}>lgue</button>
+            <button onClick={ ()=> console.log(currentUser[0].userIdx.emailId)}>123</button>
+        </div>
+    }
+
     return (
         <Container>
             <Title>{loginUser.nickname}</Title>
-            {loginUser && currentUser && (
-                <div>
-                    {currentUser.userIdx.emailId === loginUser[0].emailId ? (
-                        <>
-                            <p>{ loginUser[0].nickname }</p>
-                            <Img 
+            <div>
+                {currentUser[0].userIdx.emailId === loginUser.emailId ? (
+                    <>
+                        <p>{ loginUser.nickname }</p>
+                        <Img 
                             src={imgFile ? imgFile : defaultimage} 
                             alt="프로필 이미지"
-                            />
-                            <input type="file" onChange={profileImg} ref={imgRef}/>
-                            <p>Gender : { loginUser[0].gender }</p>
-                            <p>Birth : { loginUser[0].birth }</p>
-                            <p>Like genre : </p>
-                            <p>Position : </p>
-                            <p>SNS</p>
-                            <p>instagram : { loginUser[1].instagram }</p>
-                            <p>youtube : {loginUser[1].youtube }</p>
-                            {/* <p>{loginUser.searchAllow}</p> */}
-
-                            <DefaultButton 
-                                text={'Edit'}
-                                backgroundcolor={'#6C7383'}
-                                fontcolor={'white'}
-                                width={'6rem'}
-                                onClick={goUpdate}
-                            />
-                        </>
-                    ) : (
-                            <>
-                                <p>{ currentUser.userIdx.nickname }</p>
-                                <Img 
-                            src={imgFile ? imgFile : defaultimage} 
-                            alt="프로필 이미지"
-                            />
-                                <p>Gender : { currentUser.userIdx.gender }</p>
-                                <p>Birth : { currentUser.userIdx.birth }</p>
-                                <p>Like genre : </p>
-                                <p>Position : </p>
-                                <p>SNS</p>
-                                <p>instagram : {currentUser.instagram }</p>
-                                <p>youtube : {currentUser.youtube }</p>
-                                {/* <p>{currentUser.searchAllow}</p> */}
-
-                                <DefaultButton 
-                                text={isFollowed ? 'Unfollow' : 'Follow'}
-                                backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
-                                fontcolor={'white'}
-                                width={'6rem'}
-                                onClick={handleFollow}
-                                />
+                        />
+                        <input type="file" onChange={profileImg} ref={imgRef}/>
+                        <p>Gender : { loginUser.gender }</p>
+                        <p>Birth : { loginUser.birth }</p>
+                        <p>Like genre : </p>
+                        <p>Position : </p>
+                        <p>SNS</p>
+                        {/* 주석처리 부분 정보 누락으로, 수정 요망 */}
+                        {/* <p>instagram : { loginUser[1].instagram }</p> */}
+                        {/* <p>youtube : {loginUser[1].youtube }</p> */}
+                        <DefaultButton 
+                            text={'Edit'}
+                            backgroundcolor={'#6C7383'}
+                            fontcolor={'white'}
+                            width={'6rem'}
+                            onClick={goUpdate}
+                        />
                     </>
-                    )}
-                </div>   
-            )}   
+                ) : (
+                    <>
+                        <p>{ currentUser[0].userIdx.nickname }</p>
+                        <Img 
+                            src={imgFile ? imgFile : defaultimage} 
+                            alt="프로필 이미지"
+                        />
+                        <p>Gender : { currentUser[0].userIdx.gender }</p>
+                        <p>Birth : { currentUser[0].userIdx.birth }</p>
+                        <p>Like genre : </p>
+                        <p>Position : </p>
+                        <p>SNS</p>
+                        <p>instagram : {currentUser[0].instagram }</p>
+                        <p>youtube : {currentUser[0].youtube }</p>
+                        <DefaultButton 
+                            text={isFollowed ? 'Unfollow' : 'Follow'}
+                            backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
+                            fontcolor={'white'}
+                            width={'6rem'}
+                            onClick={handleFollow}
+                        />
+                    </>
+                )}
+            </div>   
         </Container>
     )
 }
