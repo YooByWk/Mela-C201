@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { styled, css } from '@mui/system'
@@ -9,21 +10,25 @@ import { FaTrashAlt } from "react-icons/fa"
 import ScheduleEditModal from './ScheduleEdit'
 
 
-function ScheduleAllModal({ className, fontSize, padding, teamspaceId, dates }) {
+function ScheduleAllModal({ className, fontSize, padding, teamspaceId, dates, onRefresh }) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const ScheduleDeleteHandler = async (scheduleIdx) => {
-        const check = window.confirm('삭제하시겠습니까?')
-        if (check) {
-            try {
-                await ScheduleDelete({ teamspaceid: teamspaceId, scheduleid: dates.scheduleIdx })
-            } catch (err) {
-                console.log(err)
-            }
+    const ScheduleDeleteHandler = async (scheduleId) => {
+        try {
+            console.log(scheduleId)
+            await ScheduleDelete({ teamspaceId, scheduleId })
+            onRefresh()
+        } catch (err) {
+            console.log(err)
         }
     }
+
+    const handleScheduleEdit = () => {
+        // 여기서는 예시로 일정 목록을 새로고침합니다.
+        onRefresh();
+    };
 
     return (
         <>
@@ -38,6 +43,9 @@ function ScheduleAllModal({ className, fontSize, padding, teamspaceId, dates }) 
             slots={{ backdrop: StyledBackdrop }}
         >
             <ModalContent sx={{ width: 400 }}>
+                <h2 id="modal-title" className="modal-title">
+                    모든 일정
+                </h2>
                 <ul>
                     { dates && dates.length > 0 ? (
                         dates.map((schedule) => {
@@ -47,19 +55,24 @@ function ScheduleAllModal({ className, fontSize, padding, teamspaceId, dates }) 
                                         {moment(schedule.startTime).format('MM/DD HH:mm')} - {moment(schedule.endTime).format('MM/DD HH:mm')}
                                         <div className="content">
                                             <p>{schedule.content} ({schedule.place})</p>
-                                        </div>
-                                        <div>
-                                            <ScheduleEditModal
-                                                teamspaceId={teamspaceId}
-                                                scheduleId={dates.scheduleIdx}
-                                                initialData={schedule}
-                                                onScheduleEdit={dates}
-                                            />
-                                            <FaTrashAlt 
-                                                onClick={() => ScheduleDeleteHandler(schedule.scheduleIdx)}
-                                            />
+                                            <div className='btn-group'>
+                                                <div className='edit'>
+                                                    <ScheduleEditModal
+                                                        teamspaceId={teamspaceId}
+                                                        scheduleId={schedule.scheduleIdx}
+                                                        initialData={schedule}
+                                                        onScheduleEdit={handleScheduleEdit}
+                                                    />
+                                                </div>
+                                                <div className='delete'>
+                                                    <FaTrashAlt 
+                                                        onClick={() => ScheduleDeleteHandler(schedule.scheduleIdx)}
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
                                     </li>
+                                    <hr />
                                 </div>
                             )
                         }) )
@@ -130,6 +143,22 @@ const ModalContent = styled('div')(
         line-height: 1.5rem;
         font-weight: 400;
         margin-bottom: 4px;
+    }
+
+    & .content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    & .btn-group {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+    }
+
+    & .edit {
+        margin-right: 20px;
     }
 `,
 )
