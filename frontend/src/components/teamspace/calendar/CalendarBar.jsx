@@ -23,34 +23,10 @@ function CalendarBar () {
             console.log(err);
         }
     }
-
-    // 일정 생성
-    const handleScheduleCreate = async (newSchedule) => {
-        try {
-            console.log(newSchedule)
-            const response = await ScheduleList(teamspaceIdx)
-            setDates(response)
-            await refreshEvents()
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    useEffect(() => {
-        const info = async() => {
-            try {
-                const dateInfo = await ScheduleList(teamspaceIdx)
-                setDates(dateInfo)
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        info()
-    },[])
-
+    
     useEffect(() => {
         refreshEvents();
-    }, [])
+    }, [teamspaceIdx])
 
 
     return (
@@ -61,7 +37,7 @@ function CalendarBar () {
                     <h3>Schedule</h3>
                     <ScheduleCreateModal 
                         teamspaceId={teamspaceIdx}
-                        onScheduleCreate={handleScheduleCreate}
+                        onScheduleCreate={refreshEvents}
                     />
                 </div>
                 <CalendarBox />
