@@ -3,17 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultButton from "./DefaultButton";
 
-const Container = styled.div`
-    padding: 1rem;
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
-`
-
-const Title = styled.h3`
-    color: white;
-    margin-bottom: 10px;
-`
 
 function PortfolioPin() {
     const navigate = useNavigate()
@@ -25,17 +14,38 @@ function PortfolioPin() {
     return (
         <>
         <Container>
-            <Title>Portfolio</Title>
-            <DefaultButton 
-                text={'More'}
-                backgroundcolor={'#254ef8'}
-                fontcolor={'white'}
-                width={'6rem'}
-                onClick={goPortfolioAdd}
-            />
+            <div className="header">
+                <Title>Portfolio</Title>
+                <DefaultButton 
+                    text={'More'}
+                    backgroundcolor={'#254ef8'}
+                    fontcolor={'white'}
+                    width={'4rem'}
+                    height={'2rem'}
+                    onClick={goPortfolioAdd}
+                />
+            </div>
         </Container>
         </>
     )
 }
 
 export default PortfolioPin
+
+const Container = styled.div`
+    padding: 1rem;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+`
+
+const Title = styled.h3`
+    color: white;
+    margin-bottom: 10px;
+`

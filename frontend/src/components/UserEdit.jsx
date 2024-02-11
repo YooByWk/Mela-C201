@@ -3,26 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import DefaultButton from '../components/DefaultButton';
 import styled from 'styled-components';
 import { fetchUser, followUser } from '../API/UserAPI';
-import defaultimage from '../assets/images/default-image.png'
+import defaultprofile from '../assets/images/default-profile.png'
 
-const Container = styled.div`
-    padding: 1rem;
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
-    background-color: #202c44;
-    color: white;
-`
 
-const Title = styled.h3`
-    margin-bottom: 10px;
-`
-
-const Img = styled.img`
-    height: 30px;
-    width: 30px;
-    border-radius: 10;
-`
 
 function UserEdit(props) {
     const [imgFile, setImgFile] = useState('')  
@@ -79,61 +62,110 @@ function UserEdit(props) {
     }
 
     return (
+        <>      
         <Container>
-            <Title>{loginUser.nickname}</Title>
-            <div>
-                {currentUser[0].userIdx.emailId === loginUser.emailId ? (
-                    <>
-                        <p>{ loginUser.nickname }</p>
-                        <Img 
-                            src={imgFile ? imgFile : defaultimage} 
-                            alt="프로필 이미지"
-                        />
-                        <input type="file" onChange={profileImg} ref={imgRef}/>
-                        <p>Gender : { loginUser.gender }</p>
-                        <p>Birth : { loginUser.birth }</p>
-                        <p>Like genre : </p>
-                        <p>Position : </p>                        
-                        
-                        {/* 주석처리 부분 정보 누락으로, 수정 요망 */}
-                        {/* <p>instagram : { loginUser[1].instagram }</p> */}
-                        {/* <p>youtube : {loginUser[1].youtube }</p> */}
-                        <p>SNS</p>
+            {currentUser[0].userIdx.emailId === loginUser.emailId ? (
+                <>
+                <div className="main">
 
-                        <DefaultButton 
-                            text={'Edit'}
-                            backgroundcolor={'#6C7383'}
-                            fontcolor={'white'}
-                            width={'6rem'}
-                            onClick={goUpdate}
-                        />
-                    </>
-                ) : (
-                    <>
-                        <p>{ currentUser[0].userIdx.nickname }</p>
-                        <Img 
-                            src={imgFile ? imgFile : defaultimage} 
-                            alt="프로필 이미지"
-                        />
-                        <p>Gender : { currentUser[0].userIdx.gender }</p>
-                        <p>Birth : { currentUser[0].userIdx.birth }</p>
-                        <p>Like genre : </p>
-                        <p>Position : </p>
-                        <p>SNS</p>
-                        <p>instagram : {currentUser[0].instagram }</p>
-                        <p>youtube : {currentUser[0].youtube }</p>
-                        <DefaultButton 
-                            text={isFollowed ? 'Unfollow' : 'Follow'}
-                            backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
-                            fontcolor={'white'}
-                            width={'6rem'}
-                            onClick={handleFollow}
-                        />
-                    </>
-                )}
-            </div>   
+                
+                <div className="header">
+                    <div className="userInfo">
+                        <div className="image">
+                            <Img 
+                                src={imgFile ? imgFile : defaultprofile} 
+                                alt="프로필 이미지"
+                            />
+                        </div>
+                        <div className="name">
+                            <Title>{loginUser.nickname}</Title>
+                            <p>{ loginUser.name }</p>
+                        </div>
+                    </div>
+                    <DefaultButton 
+                        text={'Edit'}
+                        backgroundcolor={'#6C7383'}
+                        fontcolor={'white'}
+                        width={'4rem'}
+                        height={'2rem'}
+                        onClick={goUpdate}
+                    />
+                </div>
+                    <p></p>
+                    <input type="file" onChange={profileImg} ref={imgRef}/>
+                    <p>Like genre : </p>
+                    <p>Position : </p>                        {/* 주석처리 부분 정보 누락으로, 수정 요망 */}
+                    <p>SNS</p>
+                    {/* <p>instagram : { loginUser[1].instagram }</p> */}
+                    {/* <p>youtube : {loginUser[1].youtube }</p> */}
+                </div>
+                </>
+            ) : (
+                <>
+                    <p>{ currentUser[0].userIdx.nickname }</p>
+                    <Img 
+                        src={imgFile ? imgFile : defaultprofile} 
+                        alt="프로필 이미지"
+                    />
+                    <p>Like genre : </p>
+                    <p>Position : </p>
+                    <p>SNS</p>
+                    <p>instagram : {currentUser[0].instagram }</p>
+                    <p>youtube : {currentUser[0].youtube }</p>
+                    <DefaultButton 
+                        text={isFollowed ? 'Unfollow' : 'Follow'}
+                        backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
+                        fontcolor={'white'}
+                        width={'4rem'}
+                        height={'2rem'}
+                        onClick={handleFollow}
+                    />
+                </>
+            )}
         </Container>
+        </>
     )
 }
 
 export default UserEdit;
+
+const Container = styled.div`
+    flex: 2;
+    padding: 1rem;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #202c44;
+    border-radius: 20px;
+    color: white;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .image {
+        display: flex;
+    }
+
+    .userInfo {
+        display: flex;
+    }
+
+    .name {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+`
+
+const Title = styled.h3`
+    margin-bottom: 10px;
+`
+
+const Img = styled.img`
+    height: 5rem;
+    width: 5rem;
+    border-radius: 10;
+`

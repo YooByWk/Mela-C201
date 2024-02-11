@@ -5,9 +5,10 @@ import DefaultButton from "../components/DefaultButton";
 import { MdLockOutline } from "react-icons/md";
 import { CgDanger } from "react-icons/cg";
 import { fetchUser, updateUser, deleteUser } from "../API/UserAPI";
+import { getImg } from "../API/FileAPI";
+import defaultprofile from '../assets/images/default-profile.png'
 
-
-function UserUpdateForm(props) {
+function UserUpdateForm() {
     const [imgFile, setImgFile] = useState('')
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [selectedPositions, setSelectedPositions] = useState([]);
@@ -69,6 +70,8 @@ function UserUpdateForm(props) {
         youtube:''
     })
 
+    const [imageURL, setImageURL] = useState()
+
     useEffect(()=> {
         const getUserInfo = async() => {
             try {
@@ -80,11 +83,24 @@ function UserUpdateForm(props) {
             }
         }; getUserInfo()
        
+        const imageInfo = async() => {     
+            try {
+              if (portfolioValues.portfolio_picture_file_idx) {
+                const response = await getImg(portfolioValues.portfolio_picture_file_idx.fileIdx)
+                setImageURL(response.message)
+              } else{
+                  setImageURL(defaultprofile)
+                }
+            } catch (err) {
+                console.error(err)
+            }
+        }
+        imageInfo()
     }, [])
+
 
     const handleImgFile = (e) => {
         e.preventDefault()
-        
         if (e.target.files[0]) {
             setImgFile(e.target.files[0])
         }
@@ -173,13 +189,22 @@ function UserUpdateForm(props) {
                 Profile Settings
             </Title>
             <Form onSubmit={handleSubmit}>
-            프로필 사진
-            <input type='file'onChange={handleImgFile} />
+                <ProfileImageWrapper>
+                    <div className="image">
+                        <img src={imageURL} alt="프로필 이미지" />
+                    </div>
+                    <input
+                        type='file'
+
+                        onChange={handleImgFile}
+                    />
+                </ProfileImageWrapper>
                 <InputWrapper>
-                    <ProfileImageWrapper />
-                    <Label>
-                        Name
-                    </Label>
+                    <div className="label">
+                        <Label>
+                            Name
+                        </Label>
+                    </div>
                     <Input
                         type="text"
                         id='name'
@@ -189,9 +214,11 @@ function UserUpdateForm(props) {
                     />
                 </InputWrapper>
                 <InputWrapper>
-                    <Label>
-                        Nickname
-                    </Label>
+                    <div className="label">
+                        <Label>
+                            Nickname
+                        </Label>
+                    </div>
                     <Input 
                         type="text"
                         id='nickname'
@@ -201,9 +228,11 @@ function UserUpdateForm(props) {
                     />
                 </InputWrapper>
                 <InputWrapper>
-                    <Label>
-                        Self-introdution
-                    </Label>
+                    <div className="label">
+                        <Label>
+                            Self-introdution
+                        </Label>
+                    </div>
                     <TextArea
                         type="text"
                         id='selfIntro'
@@ -213,9 +242,11 @@ function UserUpdateForm(props) {
                     />
                 </InputWrapper>
                 <InputWrapper>
-                    <Label>
-                        Gender
-                    </Label>
+                    <div className="label">
+                        <Label>
+                            Gender
+                        </Label>
+                    </div>
                     <Input 
                         type="text"
                         name='gender'
@@ -225,9 +256,11 @@ function UserUpdateForm(props) {
                     />
                 </InputWrapper>
                 <InputWrapper>
-                    <Label>
-                        Birth
-                    </Label>
+                    <div className="label">
+                        <Label>
+                            Birth
+                        </Label>
+                    </div>
                     <input 
                         type="date"
                         id='birth'
@@ -237,9 +270,11 @@ function UserUpdateForm(props) {
                     />
                 </InputWrapper>
                 <InputWrapper>
-                    <Label>
-                        Like genre
-                    </Label>
+                    <div className="label">
+                        <Label>
+                            Like genre
+                        </Label>
+                    </div>
                     <GenreContainer>
           {genres.map((genre) => (
             <div key={genre}>
@@ -255,9 +290,11 @@ function UserUpdateForm(props) {
         </GenreContainer>
                 </InputWrapper>
                 <InputWrapper>
-                    <Label>
-                        Position
-                    </Label>
+                    <div className="label">
+                        <Label>
+                            Position
+                        </Label>
+                    </div>
                     <GenreContainer>
           {positions.map((position) => (
             <div key={position}>
@@ -273,9 +310,11 @@ function UserUpdateForm(props) {
         </GenreContainer>
                 </InputWrapper>
                 <InputWrapper>
-                    <Label>
-                        Instagram
-                    </Label>
+                    <div className="label">
+                        <Label>
+                            Instagram
+                        </Label>
+                    </div>
                     <Input
                         type="text"
                         id='instagram'
@@ -285,9 +324,11 @@ function UserUpdateForm(props) {
                     />
                 </InputWrapper>
                 <InputWrapper>
-                    <Label>
-                        YouTube
-                    </Label>
+                    <div className="label">
+                        <Label>
+                            YouTube
+                        </Label>
+                    </div>
                     <Input
                         type="text"
                         id='youtube'
@@ -296,41 +337,45 @@ function UserUpdateForm(props) {
                         placeholder={portfolioValues.youtube}
                     />
                 </InputWrapper>
-                <InputWrapper>
+                <div className="findCheck">
                     <Label>
                         다른 회원 검색 노출 허용
                     </Label>
-                    <input 
-                        type="checkbox"
-                        id='searchAllow'
-                        checked={userValues.searchAllow}
-                        onChange={handleSearchAllowChange}
-                    />
-                </InputWrapper>
+                    <div className="checkbox">
+                        <input 
+                            type="checkbox"
+                            id='searchAllow'
+                            checked={userValues.searchAllow}
+                            onChange={handleSearchAllowChange}
+                        />
+                    </div>
+                </div>
             </Form>
             <ButtonWrapper>
                 <DefaultButton 
                     text={'Cancel'}
                     backgroundcolor={'#6C7383'}
                     fontcolor={'white'}
-                    width={'8rem'}
+                    width={'7rem'}
                     onClick={handleCancel}
                 />
-                <DefaultButton 
-                    text={'Save'}
-                    backgroundcolor={'#254ef8'}
-                    fontcolor={'white'}
-                    width={'8rem'}
-                    onClick={handleSubmit}
-                />
+                <div className="save-btn">
+                    <DefaultButton 
+                        text={'Save'}
+                        backgroundcolor={'#254ef8'}
+                        fontcolor={'white'}
+                        width={'7rem'}
+                        onClick={handleSubmit}
+                    />
+                </div>
             </ButtonWrapper>
             <Span>
                 <MdLockOutline />
-                Change password
+                <span>Change password</span>
             </Span>
             <Span onClick={handleDelete}>
                 <CgDanger />
-                회원 탈퇴
+                <span>회원 탈퇴</span>
             </Span>
         </Container> 
     )
@@ -345,9 +390,10 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     padding: 20px;
+    color: white;
 `
 
-const Title = styled.h1`
+const Title = styled.h2`
     margin-bottom: 20px;
     color: white;
 `
@@ -359,12 +405,31 @@ const Label = styled.span`
 `
 
 const Form = styled.div`
+    .findCheck {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .checkbox {
+        margin-left: 10px;
+    }
 `
 
-const ProfileImageWrapper = styled.img`
-    width: 50px;
-    height: 50px;
-    border-radius: 100%;
+const ProfileImageWrapper = styled.div`
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    img {
+        width: 6rem;
+        height: 6rem;
+        border: 2px solid white;
+        border-radius: 50%;
+    }
 `
 
 const InputWrapper = styled.div`
@@ -372,6 +437,21 @@ const InputWrapper = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
+
+    input {
+        width: 100%;
+        height: 1.5rem;
+        background-color: #151c2c;
+        border: none;
+        color: white;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .label {
+        display: flex;
+        align-self: self-start;
+    }
 `
 
 const Input = styled.input`
@@ -392,11 +472,12 @@ const TextArea = styled.input`
 `
 
 const ButtonWrapper = styled.div`
-    position: absolute;
-    top: 20px;
-    right: 20px;
     padding: 5px 10px;
-    font-size: 0.8rem;
+    display: flex;
+
+    .save-btn {
+        margin-left: 10px;
+    }
 `
 
 const Span = styled.span`

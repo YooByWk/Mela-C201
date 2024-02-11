@@ -35,8 +35,8 @@ function Alarmbar () {
                 <DefaultButton 
                     text='+'
                     width='1.5rem'
-                    height='0.8rem'
-                    backgroundcolor='#202C44'
+                    height='1rem'
+                    backgroundcolor='#151C2C'
                     onClick={goDetail}
                 />
             </div>
@@ -71,14 +71,14 @@ export default Alarmbar
 
 
 const Container = styled.div`
-    background-color: #151C2C;
+    background-color: #202c44;
     display: flex;
     flex-direction: column;
     height: 30%;
     border-radius: 20px;
     padding: 15px;
     overflow: hidden;
-    margin-left: 3%;
+
     .header {
         display: flex;
         justify-content: space-between;

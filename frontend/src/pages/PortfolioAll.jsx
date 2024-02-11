@@ -9,6 +9,10 @@ const Hedaer = styled.div`
     display: flex;
     justify-content: center;
     color: white;
+
+    .btn-wrapper {
+        margin-left: 1rem;
+    }
 `
 
 const PinList = styled.div`
@@ -16,12 +20,20 @@ const PinList = styled.div`
     justify-content: space-between;
     padding: 20px;
     color: white;
+
+    .title {
+        display: flex;
+    }
 `
 
 const AllList = styled.div`
     display: flex;
     padding: 20px;
     color: white;
+
+    .title {
+        display: flex;
+    }
 `
 
 function PortfolioAll() {
@@ -30,11 +42,13 @@ function PortfolioAll() {
         <>
             <Hedaer>
                 <h1>user 님의 Portfolio</h1>
-                <PortfolioAdd />
+                <div className="btn-wrapper">
+                    <PortfolioAdd />
+                </div>
             </Hedaer>
             
             <PinList>
-                <div>
+                <div className="title">
                     <TiPin />
                     <h3>Pin</h3>
                 </div>
@@ -47,8 +61,10 @@ function PortfolioAll() {
             </PinList>
             <hr />
             <AllList>
-                <RiHeadphoneFill />
-                <h3>All</h3>
+                <div className="title">
+                    <RiHeadphoneFill />
+                    <h3>All</h3>
+                </div>
             </AllList>
         </>
     )
