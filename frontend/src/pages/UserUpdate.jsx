@@ -9,6 +9,51 @@ import { fetchUser, updateUser, deleteUser } from "../API/UserAPI";
 
 function UserUpdateForm(props) {
     const [imgFile, setImgFile] = useState('')
+    const [selectedGenres, setSelectedGenres] = useState([]);
+    const [selectedPositions, setSelectedPositions] = useState([]);
+
+    // 장르 // 
+    const genres = [
+        "Pop",
+        "Rock",
+        "Hiphop",
+        "Classic",
+        "Jazz",
+        "R&B",
+        "Disco",
+        "Electrionic",
+        "Balad",
+        "Country",
+        "Reggae",
+        "Folk",
+        "Etc",
+      ];
+
+    // 포지션 //
+    const positions = ["보컬", "작곡", "작사", "세션", "믹싱", "기타"];
+
+
+    const handleGenreChange = (event) => {
+        const { checked, value } = event.target;
+        if (checked && selectedGenres.length < 3) {
+          setSelectedGenres([...selectedGenres, value]);
+        } else if (!checked) {
+          setSelectedGenres(selectedGenres.filter((genre) => genre !== value));
+        } 
+        console.log(selectedGenres);
+      };
+    
+      const handlePositionChange = (event) => {
+        const { checked, value } = event.target;
+        if (checked) {
+          setSelectedPositions([...selectedPositions, value]);
+        } else if (!checked) {
+          setSelectedPositions(
+            selectedPositions.filter((position) => position !== value)
+          );
+        }
+      };
+    // 나머지 해야함  //
 
     const [userValues, setUserValues] = useState({
         name: '',
@@ -195,25 +240,37 @@ function UserUpdateForm(props) {
                     <Label>
                         Like genre
                     </Label>
-                    <Input
-                        type="text"
-                        id='genre'
-                        value={portfolioValues.genre}
-                        onChange={handlePortfolioChange}
-                        placeholder={portfolioValues.genre}
-                    />
+                    <GenreContainer>
+          {genres.map((genre) => (
+            <div key={genre}>
+              <input
+                type="checkbox"
+                id={genre}
+                value={genre}
+                onChange={handleGenreChange}
+              />
+              <label htmlFor={genre}>{genre}</label>
+            </div>
+          ))}
+        </GenreContainer>
                 </InputWrapper>
                 <InputWrapper>
                     <Label>
                         Position
                     </Label>
-                    <Input
-                        type="text"
-                        id='position'
-                        value={portfolioValues.position}
-                        onChange={handlePortfolioChange}
-                        placeholder={portfolioValues.position}
-                    />
+                    <GenreContainer>
+          {positions.map((position) => (
+            <div key={position}>
+              <input
+                type="checkbox"
+                id={position}
+                value={position}
+                onChange={handlePositionChange}
+              />
+              <label htmlFor={position}>{position}</label>
+            </div>
+          ))}
+        </GenreContainer>
                 </InputWrapper>
                 <InputWrapper>
                     <Label>
@@ -335,3 +392,15 @@ const Span = styled.span`
     color: white;
     padding: 5px;
 `
+
+const GenreContainer = styled.div`
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: center;
+  height: 60%;
+  border: 1px solid black;
+  margin: 5px;
+  color: #ffffff;
+  flex-wrap: wrap;
+`;
