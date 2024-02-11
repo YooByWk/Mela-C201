@@ -24,11 +24,11 @@ const BackgroundImage = styled.img`
 `
 
 const TeamspaceImage = styled.img`
-    width: 130px;
-    height: 130px;
+    width: 20%;
+    height: 25%;
     border-radius: 50%;
     position: absolute;
-    top: 50%;
+    top: 75%;
     left: 15%;
     transform: translate(-50%, -50%);
 `

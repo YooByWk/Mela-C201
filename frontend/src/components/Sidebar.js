@@ -18,8 +18,14 @@ const SideContainer = styled.div`
   color: white;
   padding-top: ${props => props.$paddingtop || '0'};
   margin-left:10px;
+  /* text-align: center; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 12vw;
   .items {
     margin-top: 30px;
+    margin-left: 1rem;
     margin-bottom: 30px;
     display: flex;
   }
@@ -44,6 +50,7 @@ const SideContainer = styled.div`
 const CustomLink = styled(Link)`
   text-decoration: none;
   color: white;
+  margin-left: 7.5%;
 `;
 
 const Img = styled.img`
@@ -72,6 +79,9 @@ function Sidebar({ className, paddingtop }) {
   const [imageURL, setImageURL] = useState()
 
   useEffect(() => {
+    if (!localStorage.accessToken) {
+      return
+    }
     const userInfo = async () => {
       try {
         const res = await fetchUser()
@@ -130,7 +140,7 @@ function Sidebar({ className, paddingtop }) {
             />
             <div className="name-follow">
               <H3> {userValues.nickname} </H3>
-              <P>팔로워 {followers.length} 팔로잉 {followings.length}</P>
+              <P>팔로워 {followers.length} </P> <br></br><P> 팔로잉 {followings.length}</P>
             </div>
           </div>
           <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4">

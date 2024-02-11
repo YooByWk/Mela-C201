@@ -3,6 +3,7 @@ import reset from "styled-reset"
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
+  
   h1 {
     font-size: 2em;
   }
@@ -12,6 +13,7 @@ const GlobalStyle = createGlobalStyle`
   h3 {
     font-size: 1.17em;
   }
+
 `;
 
 

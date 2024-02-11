@@ -92,7 +92,7 @@ export const newPassword = async (data) => {
 // 알람 조회
 export const notification = async () => {
     const response = await UserApi.get(`/notifications`)
-    // console.log(response)
+    console.log(response)
     return response.data
 }
 

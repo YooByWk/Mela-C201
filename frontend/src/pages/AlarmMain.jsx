@@ -81,7 +81,6 @@ const Container = styled.div`
     border-radius: 20px;
     margin-bottom: 1rem;
     color: white;
-
     .main-box {
         padding: 20px;
     }

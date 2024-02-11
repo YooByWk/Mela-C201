@@ -65,6 +65,7 @@ const Container = styled.div`
     .content-box {
         display: flex;
         flex-direction: row;
+        align-items: center;
     }
     
     .nowContent {
@@ -73,14 +74,14 @@ const Container = styled.div`
     
     .schedule-box {
         flex: 0.3;
-        margin-top: -4.5%;
+        /* margin-top: -4.5%; */
     }
 `
 
 const Header = styled.div`
     display: flex;
     align-items: center;
-    width: 200px;
+    width: 100%;
 `
 
 const TabMenu = styled.ul`

@@ -124,3 +124,41 @@ export const TeamspaceFileList = async(teamspaceId) => {
   // console.log(response.data.statusCode)
   return response.data
 }
+
+// Web RTC functions with Openvidu
+export const createSession = async () => {
+  const response = await axios.post('http://localhost:8080/api/v1/openvidu/sessions')
+  return response.data
+}
+
+export const createToken = async (sessionId) => {
+  const response = await axios.post(`http://localhost:8080/api/v1/openvidu/sessions/${sessionId}/tokens`)
+  return response.data
+}
+
+export const getOpenviduStatus = async () => {
+  const response = await axios.get('http://localhost:8080/api/v1/openvidu/status')
+  return response.data
+}
+
+export const getOpenviduSessions = async () => {
+  const response = await axios.get('http://localhost:8080/api/v1/openvidu/sessions')
+  return response.data
+}
+
+export const getOpenviduSession = async (sessionId) => {
+  const response = await axios.get(`http://localhost:8080/api/v1/openvidu/sessions/${sessionId}`)
+  return response.data
+}
+
+export const deleteOpenviduSession = async (sessionId) => {
+  const response = await axios.delete(`http://localhost:8080/api/v1/openvidu/sessions/${sessionId}`)
+  return response.data
+}
+
+export const deleteOpenviduToken = async (sessionId, tokenId) => {
+  const response = await axios.delete(`http://localhost:8080/api/v1/openvidu/sessions/${sessionId}/tokens/${tokenId}`)
+  return response.data
+}
+
+
