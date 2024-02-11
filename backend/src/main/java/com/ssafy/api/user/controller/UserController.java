@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import retrofit2.http.Path;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.mail.MessagingException;
@@ -512,6 +513,27 @@ public class UserController {
 
 		// 내 글 개수 세기
 		return ResponseEntity.status(200).body(BoardRecruitListRes.of(res, recruitService.getMyBoardTotalCount(user)));
+	}
+
+	@GetMapping("/totalsearchuser/{word}")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<List<User>> totalSearch(
+			@PathVariable(name = "검색어(사용자 이름 혹은 닉네임)") String word
+	) {
+		List<User> userList = new ArrayList<>();
+		List<User> userByName = userService.getUserByName(word);
+		List<User> userByNickname = userService.getUserByNickname(word);
+		if(userByName != null){
+			userList.addAll(userByName);
+		}
+		if(userByNickname != null){
+			userList.addAll(userByNickname);
+		}
+
+		return ResponseEntity.status(200).body(userList);
 	}
 
 }

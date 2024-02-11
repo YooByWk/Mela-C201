@@ -201,4 +201,7 @@ public class ShortsServiceImpl implements  ShortsService {
     public long getShortsIdxByFileIdx(long shortsIdx) {
         return shortsRepository.findByShortsIdx(shortsIdx).get().getShortsPathFileIdx().getFileIdx();
     }
+    public Long getShortsSize() {
+        return shortsRepository.countBy();
+    }
 }

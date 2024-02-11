@@ -6,6 +6,7 @@ import com.ssafy.api.user.service.PortfolioService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.PortfolioMusic;
+import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Api(value = "포트폴리오 API", tags = {"Portfolio"})
@@ -84,5 +88,19 @@ public class PortfolioController {
         }
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+
+    @GetMapping("/totalsearchmusic/{word}")
+    public ResponseEntity<List<PortfolioMusic>> totalSearch(
+			@PathVariable(name = "검색어(포트폴리오 제목)") String word
+    ) {
+        List<PortfolioMusic> PortfolioMusicList = new ArrayList<>();
+        List<PortfolioMusic> PortfolioMusicByTitle = portfolioService.getPortfolioMusicListByTitle(word);
+        if(PortfolioMusicByTitle != null){
+            PortfolioMusicList.addAll(PortfolioMusicByTitle);
+        }
+
+        return ResponseEntity.status(200).body(PortfolioMusicList);
     }
 }

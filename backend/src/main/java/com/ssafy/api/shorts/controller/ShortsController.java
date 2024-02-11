@@ -25,11 +25,13 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+
 @Slf4j
 @Api(value = "쇼츠 API", tags = {"Shorts"})
 @RestController
 @RequestMapping("/api/v1/shorts")
 public class ShortsController {
+    static List<Shorts> shortsList = null;
     @Autowired
     FileService fileService;
 
@@ -38,6 +40,7 @@ public class ShortsController {
 
     @Autowired
     UserService userService;
+
 
 
     @GetMapping()
@@ -52,9 +55,33 @@ public class ShortsController {
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         String userEmail = userDetails.getUsername();
         User nowLoginUser = userService.getUserByEmail(userEmail);
-        List<Shorts> shortsList = shortsService.getShortsList(nowLoginUser);
+        if(shortsList == null){
+            shortsList = shortsService.getShortsList(nowLoginUser);
+        }
+//        shortsList.get(0).getShortsPathFileIdx().getFileIdx()
 
         return ResponseEntity.status(200).body(shortsList);
+    }
+
+    @GetMapping("/getshort")
+    @ApiOperation(value = "쇼츠 동영상 가져오기", notes = "자신이 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 한개를 가져온다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "삭제 실패"),
+    })
+    public ResponseEntity<Shorts> getOneShort (
+            @ApiIgnore Authentication authentication)
+    {
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        String userEmail = userDetails.getUsername();
+        User nowLoginUser = userService.getUserByEmail(userEmail);
+        if(shortsList == null){
+            shortsList = shortsService.getShortsList(nowLoginUser);
+        }
+
+        int randNum = (int) (Math.random() * shortsList.size());
+
+        return ResponseEntity.status(200).body(shortsList.get(randNum));
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -72,7 +99,7 @@ public class ShortsController {
 
         Shorts shorts = new Shorts();
 
-        //TODO: 토큰 유효성 확인
+        //TODO: 토큰 유효성 확인00
 
         //1. 토큰으로부터 사용자 확인 후 VO에 설정
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();

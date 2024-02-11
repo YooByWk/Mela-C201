@@ -186,4 +186,5 @@ public class BoardServiceImpl implements BoardService {
     public int getBoardLikeNum(Long boardIdx) {
         return boardLikeRepository.countByBoardIdx(boardRepository.getOne(boardIdx));
     }
+
 }

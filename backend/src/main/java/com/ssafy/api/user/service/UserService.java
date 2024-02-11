@@ -18,6 +18,10 @@ public interface UserService {
 	User getUserByUserIdx(Long userIdx);
 	User getUserByEmail(String email);
 	User getUserByEmailId(String emailId);
+	List<User> getUserByName(String userName);
+
+	List<User> getUserByNickname(String userNickname);
+
 	User getUserByEmailIdAndEmailDomain(String emailId, String emailDomain);
 
 	void loginSaveJwt(String userId, String jwtToken);

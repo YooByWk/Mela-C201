@@ -12,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Spliterator;
+
 @Service("portfolioService")
 public class PortfolioServiceImpl implements PortfolioService {
     @Autowired
@@ -65,5 +69,15 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Override
     public PortfolioAbstract getPortfolioAbstractByUserIdx(User user) {
         return portfolioAbstractRepository.findByUserIdx(user).get();
+    }
+
+    @Override
+    public List<PortfolioMusic> getPortfolioMusicListByTitle(String word) {
+        Optional<List<PortfolioMusic>> portfolioMusicList = portfolioMusicRepository.findByTitleContaining(word);
+        if(portfolioMusicList.get().size() != 0){
+            return portfolioMusicList.get();
+        }else{
+            return null;
+        }
     }
 }

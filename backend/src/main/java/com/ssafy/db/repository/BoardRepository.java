@@ -18,4 +18,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "AND (:keyword IS NULL OR b.title LIKE %:keyword% OR b.content LIKE %:keyword%)")
     Page<Board> findByTitleContainingOrContentContaining(@Param("keyword") String keyword, Pageable pageable);
 
+
 }

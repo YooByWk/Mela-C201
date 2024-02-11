@@ -10,10 +10,13 @@ import java.util.List;
 public interface ShortsService {
 
     List<Shorts> getShortsList(User nowLoginUser);
+
     int uploadShorts(Shorts shorts, MultipartFile multipartFile, ShortsPostReq shortsPostReq);
     com.ssafy.db.entity.File getFileInstanceByShortsIdx(Long shortsIdx);
 
     void setShortsLike(User user, Long shortsId);
     void setShortsDislike(User user, Long shortsId);
     long getShortsIdxByFileIdx(long shortsIdx);
+
+    Long getShortsSize();
 }

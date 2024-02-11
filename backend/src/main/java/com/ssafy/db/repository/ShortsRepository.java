@@ -14,4 +14,6 @@ public interface ShortsRepository extends JpaRepository<Shorts, Long> {
     // 아래와 같이, Query Method 인터페이스(반환값, 메소드명, 인자) 정의를 하면 자동으로 Query Method 구현됨.
     Optional<Shorts> findByShortsIdx(Long shortsIdx);
     Optional<List<Shorts>> findByShortsIdxNotIn(List<Shorts> shortsIdx);
+
+    Long countBy();
 }

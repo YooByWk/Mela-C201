@@ -28,4 +28,5 @@ public interface BoardService {
     void createLikeBoard(Long boardIdx, User user);
     void deleteLikeBoard(Long boardIdx, User user);
     int getBoardLikeNum(Long boardIdx);
+
 }
