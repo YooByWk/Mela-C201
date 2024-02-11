@@ -5,6 +5,8 @@ import SignupModal from "../components/Modals/SignupModal";
 import SigninModal from "../components/Modals/SigninModal";
 import { styled as styled2 } from "@mui/system";
 import { useEffect,useState } from "react";
+import RightDouble from "../assets/icons/Expand_right_double.svg";
+import LeftDouble from "../assets/icons/Expand_left.png";
 // background-color: ${props => props.theme.colours.primary};
 
 const LandingPageContainer = styled.div`
@@ -12,8 +14,91 @@ const LandingPageContainer = styled.div`
   background-color: ${(props) => props.theme.colours.primary};
   color: white;
   text-align: center;
+  .contents{
+    padding-top: 5%;
+  }
 `;
 
+function Landing() {
+  const [logined, setLogined] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.accessToken) {
+      setLogined(true);
+    }
+  }, []);
+
+  return (
+    <>
+      <Navbar />
+      <LandingPageContainer>
+{ !logined &&        <LandingImageDiv>
+          <div></div>
+          <div>
+            <h1>M A T C H</h1>
+            <h1>C O L L A B O R A T E</h1>
+            <h1>P O R T F O L I O</h1>
+          </div>
+          <div>
+            <SignUp />
+            <SignIn />
+          </div>
+        </LandingImageDiv>}
+
+        <div className='contents'>
+          <ContentsContainer>
+              <img src={RightDouble} alt="" />
+              <h1> Matching</h1>
+            <Titles>
+              <img src={LeftDouble} alt="" />
+            </Titles>
+          </ContentsContainer>
+          <ContentsContainer>
+              <img src={RightDouble} alt="" />
+              <h1> Matching</h1>
+            <Titles>
+              <img src={LeftDouble} alt="" />
+            </Titles>
+          </ContentsContainer>
+          <ContentsContainer>
+              <img src={RightDouble} alt="" />
+              <h1> Gathering List</h1>
+            <Titles>
+              <img src={LeftDouble} alt="" />
+            </Titles>
+          </ContentsContainer>
+          <ContentsContainer>
+              <img src={RightDouble} alt="" />
+              <h1> Community</h1>
+            <Titles>
+              <img src={LeftDouble} alt="" />
+            </Titles>
+          </ContentsContainer>
+        </div>
+      </LandingPageContainer>
+    </>
+  );
+}
+
+export default Landing;
+const ContentsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img{
+    padding-bottom: 3%;
+  }
+  `
+const Titles = styled.div`
+  position: relative;
+  /* height: 5rem; */
+  /* display: flex; */
+  /* align-items: end; */
+  img{
+    position: absolute;
+    top: 50%;
+  }
+`
 const LandingImageDiv = styled.div`
   background-image: url(${mainImage});
   background-size: 100% auto;
@@ -42,7 +127,6 @@ const LandingImageDiv = styled.div`
     gap: 3rem;
   }
 `;
-
 const SignUp = styled2(SignupModal)`
   margin: 2rem;
   font-size: 1.5rem;
@@ -53,51 +137,3 @@ const SignIn = styled(SigninModal)`
   font-size: 1.5rem;
   padding: 12px 24px;
 `;
-
-// console.log(props)
-function Landing() {
-  const [logined, setLogined] = useState(false);
-
-  useEffect(() => {
-    if (localStorage.accessToken) {
-      setLogined(true);
-    }
-  }, []);
-
-  return (
-    <>
-      <Navbar />
-      <LandingPageContainer>
-{ !logined &&        <LandingImageDiv>
-          <div></div>
-          <div>
-            <h1>M A T C H</h1>
-            <h1>C O L L A B O R A T E</h1>
-            <h1>P O R T F O L I O</h1>
-          </div>
-          <div>
-            <SignUp />
-            <SignIn />
-          </div>
-        </LandingImageDiv>}
-
-        <div>
-          <div>
-            <h1> Matching</h1>
-          </div>
-          <div>
-            <h1> Gathering List</h1>
-          </div>
-          <div>
-            <h1> Popular Musicians</h1>
-          </div>
-          <div>
-            <h1> Community</h1>
-          </div>
-        </div>
-      </LandingPageContainer>
-    </>
-  );
-}
-
-export default Landing;
