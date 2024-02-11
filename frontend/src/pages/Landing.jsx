@@ -1,19 +1,18 @@
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
-import mainImage from '../assets/images/mainImage.png'
-import SignupModal from '../components/Modals/SignupModal';
+import mainImage from "../assets/images/mainImage.png";
+import SignupModal from "../components/Modals/SignupModal";
 import SigninModal from "../components/Modals/SigninModal";
-import { styled as styled2 } from '@mui/system' ;
+import { styled as styled2 } from "@mui/system";
+import { useEffect,useState } from "react";
 // background-color: ${props => props.theme.colours.primary};
 
-
-const LandingPageContainer = styled.div`  
+const LandingPageContainer = styled.div`
   min-height: 300vh;
-  background-color: ${props => props.theme.colours.primary};
+  background-color: ${(props) => props.theme.colours.primary};
   color: white;
   text-align: center;
-
-`
+`;
 
 const LandingImageDiv = styled.div`
   background-image: url(${mainImage});
@@ -57,39 +56,45 @@ const SignIn = styled(SigninModal)`
 
 // console.log(props)
 function Landing() {
-  return (  
+  const [logined, setLogined] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.accessToken) {
+      setLogined(true);
+    }
+  }, []);
+
+  return (
     <>
-      <Navbar/>
+      <Navbar />
       <LandingPageContainer>
-        <LandingImageDiv>
-        <div></div>
-        <div>
-          <h1>M A T C H</h1>
-          <h1>C O L L A B O R A T E</h1>
-          <h1>P O R T F O L I O</h1>
-        </div>
-        <div>
-          <SignUp  />
-          <SignIn />
-        </div>
-        </LandingImageDiv>
+{ !logined &&        <LandingImageDiv>
+          <div></div>
+          <div>
+            <h1>M A T C H</h1>
+            <h1>C O L L A B O R A T E</h1>
+            <h1>P O R T F O L I O</h1>
+          </div>
+          <div>
+            <SignUp />
+            <SignIn />
+          </div>
+        </LandingImageDiv>}
 
-      <div>
         <div>
-          <h1> Matching</h1>
+          <div>
+            <h1> Matching</h1>
+          </div>
+          <div>
+            <h1> Gathering List</h1>
+          </div>
+          <div>
+            <h1> Popular Musicians</h1>
+          </div>
+          <div>
+            <h1> Community</h1>
+          </div>
         </div>
-        <div>
-          <h1> Gathering List</h1>
-        </div>
-        <div>
-          <h1> Popular Musicians</h1>
-        </div>
-        <div>
-          <h1> Community</h1>
-        </div>
-      </div>
-
-      
       </LandingPageContainer>
     </>
   );
