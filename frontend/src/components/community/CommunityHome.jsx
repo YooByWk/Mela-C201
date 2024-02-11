@@ -90,12 +90,21 @@ function CommunityHome() {
   const SortByKey =  async(event)=> {
     event.preventDefault()
     const response =  await BoardList({page:1, size:10, word:boardInput})
-    if (response.data.length > 1) {
-    setData(response.data)
-    console.log(response.data.length) }
+    console.log(response.data.boardResList.length,'sortbykey')
+    if (response.data.boardResList.length > 1) {
+    setData(response.data.boardResList)
+   }
     else {
       window.alert('검색 결과가 없습니다!')
     }
+  }
+
+  const BoardClickHandler = async (e) => {
+    e.preventDefault();
+    setBoardInput('');
+    const response = await BoardList({ page: 1, size: 10, word :boardInput? boardInput : '' });
+    setData(response.data.boardResList)
+    setSortType('latest')
   }
 
   const pages = [];
@@ -114,7 +123,7 @@ function CommunityHome() {
     <>
     <MainDiv>
       <div className="Container">
-        <h1>자유게시판</h1>
+        <h1 onClick={BoardClickHandler}>자유게시판</h1>
         <div className="BoardSearch">
           <span className="SearchContainer">
             <FaSearch />
