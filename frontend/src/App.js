@@ -87,17 +87,19 @@ export default App;
 const StyledAppRouter = styled(AppRouter)`
   /* background-color: blue; */
   /* color: blue; */
-  height: 21987347px;
+  height: 100%;
   width: 100%;
 `;
 
 const Body = styled.div`
-  padding-top: 2%;
+  padding-top: 2.5%;
   display: flex;
   flex-direction: row;
 
   background-color: #10141d;
-  height: 60rem;
+  /* height: 90rem; */
+  height: 100%;
+  min-height: 90vh;
 
   .BodyRouter {
     // 컴포 이하
@@ -106,17 +108,19 @@ const Body = styled.div`
     padding-left: 10px;
     /* padding-top: 2%; */
     height: 100%;
+    min-height: 90vh;
   }
   .Side {
     // 사이드 L 바
-    margin-left: 10px;
-    width: 170px;
+    width: 12.5vw;
     /* min-width: 80px; */
-    padding-top: 2%;
+    padding-top: 1.5%;
     /* max-width: 300px; */
     text-align: center;
+    padding-left:0.5%;
+    margin-left: 1rem;
     height: 67%;
-    background-color: #202c44;
+    /* background-color: #202c44; */
     border-radius: 10px;
   }
 `;

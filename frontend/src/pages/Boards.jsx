@@ -35,21 +35,21 @@ const CommunityContainer = styled.div`
   background-color: ${(props) => props.theme.colours.primary};
   display: flex;
   /* flex-direction: column; */
-  height: 60rem;
+  height: 70rem;
   color: white;
   padding-top: 3%;
   justify-content: space-evenly;
-  padding-left: 3%;
+  /* padding-left: 3%; */
   
 `;
 
 const SideDiv = styled.div`
-  width: 10%;
-  padding-left: 2.5%;
+  width: 12.5vw;
+  padding-left: 1%;
 `;
 
 const MainDiv = styled.div`
-  width: 70%;
+  width: 67.5%;
   background-color: ${(props) => props.theme.colours.point};
   border-radius: 50px;
   overflow-x: hidden;
@@ -104,5 +104,5 @@ const MainDiv = styled.div`
 `;
 
 const RSideDiv = styled.div`
-  width: 12.5%;
+  width: 15%;
 `;

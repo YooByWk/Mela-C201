@@ -78,7 +78,7 @@ const Container = styled.div`
     border-radius: 20px;
     padding: 15px;
     overflow: hidden;
-
+    margin-left: 3%;
     .header {
         display: flex;
         justify-content: space-between;

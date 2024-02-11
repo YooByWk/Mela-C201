@@ -93,11 +93,11 @@ function UserEdit(props) {
                         <p>Gender : { loginUser.gender }</p>
                         <p>Birth : { loginUser.birth }</p>
                         <p>Like genre : </p>
-                        <p>Position : </p>
-                        <p>SNS</p>
-                        {/* 주석처리 부분 정보 누락으로, 수정 요망 */}
+                        <p>Position : </p>                        {/* 주석처리 부분 정보 누락으로, 수정 요망 */}
                         {/* <p>instagram : { loginUser[1].instagram }</p> */}
                         {/* <p>youtube : {loginUser[1].youtube }</p> */}
+                        <p>SNS</p>
+
                         <DefaultButton 
                             text={'Edit'}
                             backgroundcolor={'#6C7383'}

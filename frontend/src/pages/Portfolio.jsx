@@ -30,7 +30,7 @@ function Portfolio() {
         }, [emailId])
 
     // console.log(emailId)
-    // console.log(current)
+    console.log(current)
 
     const userProps = {
         currentUser: current,
