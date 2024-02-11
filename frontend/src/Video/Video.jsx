@@ -6,6 +6,7 @@ import styled from "styled-components";
 import axios from "axios";
 import icon from "../assets/icons/logo.png";
 import UserVideoComponent from "./UserVideoComponent";
+import { createViduSession } from "../API/TeamspaceAPI";
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
@@ -59,6 +60,13 @@ class Video extends Component {
   }
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+  }
+  
+  createHandler = () => {
+    console.log(this.state);
+    createViduSession()
+    .then((res)=> {console.log(res)})
+    .catch((err)=>{console.log(err)})
   }
 
   componentWillUnmount() {
@@ -291,6 +299,7 @@ class Video extends Component {
     console.log(this.state);
     return (
       <div>
+      <button onClick={createViduSession}>제발</button>
       <button onClick={Check}>체크</button>
         {this.state.session === undefined ? (
           <div>

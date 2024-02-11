@@ -47,6 +47,7 @@ function TeamspaceDetail () {
                 </div>
                 <div className='schedule-box'>
                     <CalendarBar />
+                    
                 </div>
             </div>
         </Container>

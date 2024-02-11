@@ -112,9 +112,6 @@ function GatherCreate() {
   }
 }
 
-// 보내줘 내가 쓴 글 번호 . .
-
-
 if (isLogined)
  { return (
     <CreateDiv>

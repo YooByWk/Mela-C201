@@ -39,7 +39,10 @@ function SigninModal({className, fontSize, padding}) {
         localStorage.setItem('accessToken', res.accessToken);
         setIsLogined(true);
         await fetchUser()
-        movePage('/community')
+        // movePage('/')
+        window.location.reload();
+
+        setOpen(false)
       }
 
     } catch (err) {

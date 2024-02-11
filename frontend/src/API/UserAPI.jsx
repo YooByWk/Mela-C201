@@ -4,9 +4,16 @@ let ACCESS_TOKEN = localStorage.getItem('accessToken')
 
 export const UserApi = axios.create({
     baseURL: 'http://localhost:8080/api/v1/users',
-    headers: {
+    headers:  {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ACCESS_TOKEN}`,
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+})
+
+const UserApi2 = axios.create({
+    baseURL: 'http://localhost:8080/api/v1/users',
+    headers: {
+        'Authorization': `Bearer ${localStorage.accessToken}`,
     },
 })
 
@@ -24,7 +31,15 @@ export const UserApi = axios.create({
 
 // 로그인 한 유저 조회
 export const fetchUser = async () => {
-    const response = await UserApi.get(`/myinfo`)
+    if (!localStorage.accessToken) {
+        console.log('토큰이 없습니다')
+        return
+    }
+    const response = await axios.get(`http://localhost:8080/api/v1/users/myinfo`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.accessToken}`,
+        }
+    })
     return response.data
 }
 
@@ -52,15 +67,23 @@ export const deleteUser = async () => {
 
 // 나를 팔로우 한 사람 조회
 export const follower = async (userId) => {
-    const response = await UserApi.get(`/${userId}/followees`)
-    // console.log(response)
-    // console.log(response.data)
+    
+    const response = await axios.get(`http://localhost:8080/api/v1/users/${userId}/followees`,{
+        headers: {
+            'Authorization': `Bearer ${localStorage.accessToken}`,
+        }
+    })
+
     return response.data
 }
 
 // 내가 팔로우 한 사람 조회
 export const followee = async (userId) => {
-    const response = await UserApi.get(`/${userId}/followers`)
+    const response = await axios.get(`http://localhost:8080/api/v1/users/${userId}/followers`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.accessToken}`,
+        }
+    })
     // console.log(response)
     // console.log(response.data)
     return response.data
@@ -84,14 +107,22 @@ export const emailCheck = async ({emailId}) => {
 
 // 새로운 비밀번호 설정(잃어버렸을 때)
 export const newPassword = async (data) => {
-    const response = await UserApi.put(`/newpassword`, data)
+    const response = await UserApi.put('/newpassword', data)
     console.log(response)
     return response.data
 }
 
 // 알람 조회
 export const notification = async () => {
-    const response = await UserApi.get(`/notifications`)
+    if (!localStorage.accessToken) {
+        console.log('토큰이 없습니다')
+        return
+    }
+    const response = await axios.get(`http://localhost:8080/api/v1/users/notifications`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.accessToken}`,
+        }
+    })
     console.log(response)
     return response.data
 }
