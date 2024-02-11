@@ -9,7 +9,7 @@ const Container = styled.div`
   clip-path: polygon(47% 0, 61% 15%, 100% 15%, 100% 75%, 0 75%, 0 0);
   
   width: ${props => props.width};
-  height: 100%;
+  height: 80%;
     
   display: flex;
   /* flex-wrap: wrap; */
@@ -23,7 +23,7 @@ const Container = styled.div`
   border-radius: 20px;
 
   justify-content: space-evenly;
-  padding-bottom: 5%;
+  padding-bottom: 4%;
   padding-left: 3vw;
   padding-right: 3vw;
 

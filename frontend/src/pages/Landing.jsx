@@ -10,6 +10,9 @@ import LeftDouble from "../assets/icons/Expand_left.png";
 import FolderNoImage from "../components/FolderNoImage";
 import { BoardList } from "../API/BoardAPI";
 import { GatherList } from "./../API/GatherAPI";
+import { useNavigate } from "react-router-dom";
+import DefaultButton from "./../components/DefaultButton";
+
 // background-color: ${props => props.theme.colours.primary};
 
 const LandingPageContainer = styled.div`
@@ -23,6 +26,7 @@ const LandingPageContainer = styled.div`
 `;
 
 function Landing() {
+  const Navi = useNavigate();
   const [logined, setLogined] = useState(false);
   const [boardList, setBoardList] = useState([]);
   const [gatherList, setGatherList] = useState([]);
@@ -52,13 +56,6 @@ function Landing() {
     <>
       <Navbar />
       <LandingPageContainer>
-        <button
-          onClick={() => {
-            console.log(boardList, gatherList);
-          }}
-        >
-          체크
-        </button>
         {!logined && (
           <LandingImageDiv>
             <div></div>
@@ -102,14 +99,29 @@ function Landing() {
               </Titles>
             </InnerContainer>
             <FolderContainer>
-              <FolderNoImage
-                title={gatherList[0]?.title}
-                content={gatherList[0]?.content}
-                day={gatherList[0]?.endDate}
-                width="20vw"
-                height="100%"
-              />
+              {gatherList.map((gather) => {
+                return (
+                  <FolderNoImage
+                    key={gather.boardRecruitIdx}
+                    title={gather.title}
+                    content={gather.content}
+                    day={gather.endDate}
+                    width="12vw"
+                    onClick={(event) =>
+                      Navi(`/gather/detail/${gather.boardRecruitIdx}`)
+                    }
+                  />
+                );
+              })}
             </FolderContainer>
+            <div className="buttonholder">
+              <DefaultButton
+                text="More"
+                width="7vw"
+                height="3vh"
+                onClick={(event) => Navi("/gather")}
+              />
+            </div>
           </ContentsContainer>
           <ContentsContainer>
             <InnerContainer>
@@ -119,6 +131,28 @@ function Landing() {
                 <img src={LeftDouble} alt="" />
               </Titles>
             </InnerContainer>
+            <FolderContainer>
+              {boardList.map((board) => {
+                return (
+                  <FolderNoImage
+                    key={board.boardIdx}
+                    title={board.title}
+                    content={board.content}
+                    day={board.createAt}
+                    width="12vw"
+                    onClick={(event) => Navi(`/community/${board.boardIdx}`)}
+                  />
+                );
+              })}
+            </FolderContainer>
+            <div className="buttonholder">
+              <DefaultButton
+                text="More"
+                width="7vw"
+                height="3vh"
+                onClick={(event) => Navi("/community")}
+              />
+            </div>
           </ContentsContainer>
         </div>
       </LandingPageContainer>
@@ -128,7 +162,17 @@ function Landing() {
 
 export default Landing;
 const FolderContainer = styled.div`
-height: 20vh;`
+  margin-top: 2vh;
+  width: 100%;
+  height: 20vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  overflow: hidden;
+  padding-top: 3%;
+  margin-bottom: 0%;
+`;
 const InnerContainer = styled.div`
   display: flex;
   align-items: center;
@@ -141,10 +185,16 @@ const ContentsContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  .buttonholder {
+    display: flex;
+    width: 100%;
+    justify-content: end;
+    padding-right:5%;
+    align-items: baseline;
+  }
 `;
 const Titles = styled.div`
   position: relative;
-
   img {
     position: absolute;
     top: 50%;
