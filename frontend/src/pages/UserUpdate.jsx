@@ -204,7 +204,7 @@ function UserUpdateForm(props) {
                     <Label>
                         Self-introdution
                     </Label>
-                    <Input
+                    <TextArea
                         type="text"
                         id='selfIntro'
                         value={portfolioValues.selfIntro}
@@ -378,6 +378,17 @@ const Input = styled.input`
     background-color: #151c2c;
     color: white;
     border: none;
+    width: 25rem;
+    text-align: center;
+    height: 2.5rem;
+`
+const TextArea = styled.input`
+    background-color: #151c2c;
+    color: white;
+    border: none;
+    width: 25rem;
+    text-align: center;
+    height: 11rem;
 `
 
 const ButtonWrapper = styled.div`
