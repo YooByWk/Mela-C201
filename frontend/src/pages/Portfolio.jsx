@@ -6,6 +6,9 @@ import UserEdit from '../components/UserEdit';
 import Selfshorts from '../components/Selfshorts';
 import PortfolioPin from '../components/PortfolioPin';
 import { othersInfo } from "../API/UserAPI";
+import Alarmbar from '../components/alarm/Alarmbar'
+import styled from 'styled-components';
+import Feed from '../components/Feed';
 
 
 function Portfolio() {
@@ -40,9 +43,21 @@ function Portfolio() {
         <>
             {user ?
             (<>
-            <UserEdit {...userProps}/>
-            <Selfshorts />
-            <PortfolioPin />
+            <Container>
+                <div className="main">
+                    <UserEdit {...userProps}/>
+                    <Selfshorts />
+                    <PortfolioPin />
+                </div>
+                <div className="side">
+                    <div className="alarm">
+                        <Alarmbar />
+                    </div>
+                    <div className="feed">
+                        <Feed />
+                    </div>
+                </div>
+            </Container>
             </>) : null
             }
         </>
@@ -51,3 +66,22 @@ function Portfolio() {
 }
 
 export default Portfolio;
+
+const Container = styled.div`
+    display: flex;
+    color: white;
+
+    .main {
+        flex: 2;
+    }
+
+    .side {
+        flex: 0.8;
+        margin: 20px;
+        align-items: center;
+    }
+
+    .alarm {
+        margin-bottom: 3rem;
+    }
+`
