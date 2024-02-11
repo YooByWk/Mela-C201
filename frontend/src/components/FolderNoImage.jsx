@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import defaultimage from '../assets/images/default-image.png'
-import { getImg } from "../API/FileAPI";
 
 const Container = styled.div`
 /* Rectangle 4017 */
@@ -10,8 +8,8 @@ const Container = styled.div`
   // 참고 => https://bennettfeely.com/clippy/
   clip-path: polygon(47% 0, 61% 15%, 100% 15%, 100% 75%, 0 75%, 0 0);
   
-  width: 350px;
-  height: 320px;
+  width: ${props => props.width};
+  height: 100%;
     
   display: flex;
   /* flex-wrap: wrap; */
@@ -35,12 +33,7 @@ const Container = styled.div`
     justify-content: space-between;
     align-items: center;
 }
-.imgcontent{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-}
+
     &:hover{
   /* Rectangle 4017 */
   background: linear-gradient(180deg, #873FFA 29.5%, #254EF8 100%);
@@ -71,39 +64,12 @@ const Day = styled.span`
   right: 30px; */
 `
 
-// 프로젝트 프로필
-const Img = styled.img`
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-    /* margin-left: 3rem; */
-`
-
-const DefaultFileShape = (props) => {
-  // console.log(props.image)
-  const [imageURL, setImageURL] = useState()
-
-  useEffect(() => {
-    const imageInfo = async() => {     
-      try {
-        if (props.image) {
-          const response = await getImg(props.image.fileIdx)
-          setImageURL(response.message)
-        }
-         else {
-          setImageURL(defaultimage)
-        }
-        } catch (err) {
-          console.error(err)  
-        }
-      }
-      
-      imageInfo()
-      
-    },[])
 
 
-    // console.log(imageURL)
+const FolderNoImage = (props) => {
+
+
+
     return (
         <>
         <Container
@@ -119,28 +85,24 @@ const DefaultFileShape = (props) => {
                 {props.day}
             </Day>
             </div>
-            <div className='imgcontent'>
-            <Img 
-              src={imageURL} 
-              alt="프로필 이미지"
-              />
+
             <Content>
                 {props.content}
             </Content>
-            </div>
+
 
         </Container>
         </>
     )
 }
 
-DefaultFileShape.defaultProps={
+FolderNoImage.defaultProps={
     title: 'Project name',
     content: '프로젝트 설명',
     day: 'D-??',
     width: '1rem',
-    image: '',
+    height: '1rem',
     onClick: () => {}
 }
 
-export default DefaultFileShape
+export default FolderNoImage
