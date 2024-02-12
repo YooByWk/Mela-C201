@@ -12,6 +12,7 @@ import { BoardList } from "../API/BoardAPI";
 import { GatherList } from "./../API/GatherAPI";
 import { useNavigate } from "react-router-dom";
 import DefaultButton from "./../components/DefaultButton";
+import { createViduSession, getsessions } from "../API/TeamspaceAPI";
 
 // background-color: ${props => props.theme.colours.primary};
 
@@ -107,6 +108,7 @@ function Landing() {
                     content={gather.content}
                     day={gather.endDate}
                     width="12vw"
+                    maxwidth="400px"
                     onClick={(event) =>
                       Navi(`/gather/detail/${gather.boardRecruitIdx}`)
                     }
@@ -140,6 +142,7 @@ function Landing() {
                     content={board.content}
                     day={board.createAt}
                     width="12vw"
+                    maxwidth="400px"
                     onClick={(event) => Navi(`/community/${board.boardIdx}`)}
                   />
                 );
