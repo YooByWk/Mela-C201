@@ -53,7 +53,10 @@ function SequenceMain() {
         <MidiUpload onFileChange={handleFileChange} />
         {loading && <p>Loading...</p>}
         {error && <p>Error: {error}</p>}
-        <MidiVisualizer Cwidth={containerWidth * 0.95} midiData={midiData} onNoteAdd={handleNoteAdd} onNoteRemove={handleNoteRemove} />
+        
+        <div className='midi'>
+          <MidiVisualizer Cwidth={containerWidth * 0.95} midiData={midiData} onNoteAdd={handleNoteAdd} onNoteRemove={handleNoteRemove} />
+        </div>
       </SequenceContainer>
     </div>
   );
@@ -65,4 +68,5 @@ color: #FFFFFF;
 display: flex;
 flex-direction: column;
 overflow-x: scroll;
+
 `;
