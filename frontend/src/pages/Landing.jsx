@@ -34,13 +34,13 @@ function Landing() {
   useEffect(() => {
     const fetchData = async () => {
       // 글 인기순으로 가져오기
-      const response = await BoardList({ page: 1, size: 10 });
+      const response = await BoardList({ page: 1, size: 4 });
       const sortedData = response.data.boardResList.sort(
         (a, b) => b.likeNum - a.likeNum
       );
       setBoardList(sortedData);
       // 모집글 가져오기
-      const response2 = await GatherList({ page: 1, size: 10 });
+      const response2 = await GatherList({ page: 1, size: 4 });
       setGatherList(response2.data.boardRecruitRes);
     };
     fetchData();

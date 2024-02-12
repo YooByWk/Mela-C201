@@ -106,7 +106,7 @@ function Sidebar({ className, paddingtop }) {
       }
       imageInfo()
     
-  }, [portfolioValues])
+  }, [])
   
   useEffect(() => {
     const followList = async () => {
@@ -122,7 +122,7 @@ function Sidebar({ className, paddingtop }) {
     }
     }
     followList()
-  },[userValues])
+  },[])
 
   // console.log(followers)
   // console.log(followings)
