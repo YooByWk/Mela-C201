@@ -28,9 +28,9 @@ class Video extends Component {
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
       publisher: undefined, // 로컬 웹캠 스트림
       subscribers: [], // 다른 사용자의 활성 스트림
-      isCamera: true,
-      isMic: true,
-      isSpeaker: true,
+      isCamera: false,
+      isMic: false,
+      isSpeaker: false,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -50,6 +50,8 @@ class Video extends Component {
         myUserName: tempName[0].nickname,
       });
   }
+
+
   handleToggle(target) {
     // 마이크 카메라 토글 입력 함수
     switch (target) {
@@ -76,6 +78,8 @@ class Video extends Component {
   }
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+    console.log("유저이름 불러오기")
+    this.getUserName();
   }
 
   createHandler = () => {
@@ -141,7 +145,7 @@ class Video extends Component {
         session: this.OV.initSession(),
       },
       () => {
-        var mySession = this.state.session;
+        let mySession = this.state.session;
 
         // --- 3) Specify the actions when events take place in the session ---
 
@@ -186,8 +190,8 @@ class Video extends Component {
               let publisher = await this.OV.initPublisherAsync(undefined, {
                 audioSource: undefined, // The source of audio. If undefined default microphone
                 videoSource: undefined, // The source of video. If undefined default webcam
-                publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-                publishVideo: true, // Whether you want to start publishing with your video enabled or not
+                publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+                publishVideo: false, // Whether you want to start publishing with your video enabled or not
                 resolution: "640x480", // The resolution of your video
                 frameRate: 30, // The frame rate of your video
                 insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
@@ -247,7 +251,7 @@ class Video extends Component {
     });
   }
   async switchCamera(e) {
-    console.log(e);
+    // console.log(e);
     try {
       const devices = await this.OV.getDevices();
       var videoDevices = devices.filter(
@@ -319,12 +323,13 @@ class Video extends Component {
     console.log(this.state);
     return (
       <div>
-        <button onClick={createViduSession}>제발</button>
-        <button onClick={this.getUserName}>유저이리온</button>
-        <button onClick={()=> console.log(this.state.myUserName)}>제발 유저이름 </button>
+        <button type='button' onClick={createViduSession}>제발</button>
+        <button type='button' onClick={this.getUserName}>유저이리온</button>
+        <button type='button' onClick={()=> console.log(this.state.myUserName)}>제발 유저이름 </button>
 
 
-        <button onClick={Check}>체크</button>
+        <button type='button'  onClick={Check}>체크</button>
+        <button type='button' onClick={()=> console.log(this.state)}>비디오체크</button>
         {this.state.session === undefined ? (
           <div>
             <p>Mela Team Video Conference</p>
@@ -374,13 +379,13 @@ class Video extends Component {
               />
             </div>
             {/* 205~211 */}
-            {this.state.mainStreamManager !== undefined ? (
+            {/* {this.state.mainStreamManager !== undefined ? (
               <div className="VideoComponent">
                 <UserVideoComponent
                   streamManager={this.state.mainStreamManager}
                 />
               </div>
-            ) : null}
+            ) : null} */}
 
             <div>
               {/* 212 */}
