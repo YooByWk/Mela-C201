@@ -26,8 +26,7 @@ import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static com.ssafy.common.util.ExtensionUtil.isValidImageExtension;
-import static com.ssafy.common.util.ExtensionUtil.isValidVideoExtension;
+import static com.ssafy.common.util.ExtensionUtil.*;
 
 @Service("fileServiceImpl")
 public class FileServiceImpl implements FileService {
@@ -232,7 +231,7 @@ public class FileServiceImpl implements FileService {
         //1. fileIdx로 file 테이블에서 일치하는 레코드 조회
         com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
 
-        //2. 파일의 확장자가 이미지인지 체크
+        //2. 파일의 확장자가 동영상인지 체크
         String extension = FilenameUtils.getExtension(file.getSaveFilename());
 
         //3-1. 파일의 확장자가 동영상이면
@@ -241,6 +240,25 @@ public class FileServiceImpl implements FileService {
 
             return url.toString();
             //3-2. 파일의 확장자가 동영상이 아니면
+        } else {
+            throw new NotValidExtensionException();
+        }
+    }
+
+    @Override
+    public String getAudioUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException {
+        //1. fileIdx로 file 테이블에서 일치하는 레코드 조회
+        com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
+
+        //2. 파일의 확장자가 오디오인지 체크
+        String extension = FilenameUtils.getExtension(file.getSaveFilename());
+
+        //3-1. 파일의 확장자가 오디오이면
+        if (isValidAudioExtension(extension)) {
+            URL url = amazonS3Client.getUrl("my.first.mela.sss.bucket", file.getSavePath() + "/" + file.getSaveFilename());
+
+            return url.toString();
+            //3-2. 파일의 확장자가 오디오가 아니면
         } else {
             throw new NotValidExtensionException();
         }
