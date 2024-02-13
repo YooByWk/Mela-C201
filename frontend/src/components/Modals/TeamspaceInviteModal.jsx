@@ -4,14 +4,17 @@ import DefaultButton from "../DefaultButton"
 import { FaSearch } from "react-icons/fa";
 
 const ModalBackdrop = styled.div`
-  width: 100%;
-  height: 100%;
+  right: 10rem;
+  width: 60%;
+  height: 50%;
   position: fixed;
   display: flex;
   flex-flow: row wrep;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 20px;
+  z-index: 1000;
 `
 
 const ModalView = styled.div.attrs(props => ({
@@ -62,7 +65,6 @@ const SearchBar = styled.form`
 const submitHandler = (event) => {
   event.preventDefault();
   window.alert('제출버튼확인')
-  // state 
 }
 
 function TeamspaceInviteModal () {
@@ -71,6 +73,19 @@ function TeamspaceInviteModal () {
   const openModalHandler = () => {
     setOpen(!open)
   }
+
+  const closeModalHandler = (event) => {
+    if (event.currentTarget === event.target) { // 모달 백드롭에서의 클릭만 처리
+      setOpen(false);
+    }
+  }
+
+  // 모달 내부 클릭 이벤트 버블링 방지
+  const modalContentClickHandler = (event) => {
+    event.stopPropagation();
+    
+  }
+
 
   return (
     <>
@@ -83,8 +98,8 @@ function TeamspaceInviteModal () {
         onClick={openModalHandler}
             />
       {open ?
-      <ModalBackdrop onClick={openModalHandler}>
-          <SearchBar onSubmit={submitHandler}>
+      <ModalBackdrop onClick={closeModalHandler}>
+          <SearchBar onSubmit={modalContentClickHandler}>
           <FaSearch className='Icon'/>
           <input type="search" spellCheck='false' placeholder='Search'  />
           </SearchBar>
