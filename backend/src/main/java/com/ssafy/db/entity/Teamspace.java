@@ -50,6 +50,10 @@ public class Teamspace {
 
     String chatRoomIdx;
 
+    @OneToOne
+    @JoinColumn(name = "session_id", referencedColumnName = "sessionId")
+    String sessionId;
+
     @Override
     public String toString() {
         return "Teamspace{" +
@@ -62,6 +66,7 @@ public class Teamspace {
                 ", teamspacePictureFileIdx=" + teamspacePictureFileIdx +
                 ", teamspaceBackgroundPictureFileIdx=" + teamspaceBackgroundPictureFileIdx +
                 ", chatRoomIdx=" + chatRoomIdx +
+                ", sessionId=" + sessionId +
                 '}';
     }
 }

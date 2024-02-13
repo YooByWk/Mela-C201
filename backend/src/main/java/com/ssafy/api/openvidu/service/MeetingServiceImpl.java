@@ -4,6 +4,7 @@ package com.ssafy.api.openvidu.service;
 import com.ssafy.api.openvidu.request.MeetingPostReq;
 import com.ssafy.db.entity.Meeting;
 import com.ssafy.db.repository.MeetingRepository;
+import com.ssafy.db.repository.TeamspaceRepository;
 import com.ssafy.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     MeetingRepository meetingRepository;
+
+    @Autowired
+    TeamspaceRepository teamspaceRepository;
 
     @Autowired
     UserRepository userRepository;

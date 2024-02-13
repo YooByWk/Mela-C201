@@ -33,4 +33,6 @@ public interface TeamspaceService {
     void uploadFile(long teamspaceid, MultipartFile[] multipartFiles, String fileDescription);
     List<com.ssafy.db.entity.File> getFileListByTeamspaceIdx(Teamspace teamspace);
     Teamspace findById(Long teamspaceIdx);
+
+    void updateTeamspaceOpenViduSessionId(Long teamspaceIdx, String sessionId);
 }
