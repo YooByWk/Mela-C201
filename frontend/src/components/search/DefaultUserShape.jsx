@@ -48,6 +48,7 @@ export default DefaultUserShape
 const Container = styled.div`
     width: 180px;
     height: 40%;
+    padding-bottom: 5%;
 `
 
 const Profile = styled.img`

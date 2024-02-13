@@ -52,8 +52,9 @@ const SearchContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 3% 3%;
+  justify-content: flex-start;
+  padding: 3% 5%;
+  gap: 4%;
   overflow: scroll;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
