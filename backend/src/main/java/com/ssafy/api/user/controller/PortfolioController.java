@@ -93,13 +93,11 @@ public class PortfolioController {
 
     @GetMapping("/totalsearchmusic/{word}")
     public ResponseEntity<List<PortfolioMusic>> totalSearch(
-			@PathVariable(name = "검색어(포트폴리오 제목)") String word
+			@PathVariable(name = "word") String word
     ) {
         List<PortfolioMusic> PortfolioMusicList = new ArrayList<>();
         List<PortfolioMusic> PortfolioMusicByTitle = portfolioService.getPortfolioMusicListByTitle(word);
-        if(PortfolioMusicByTitle != null){
-            PortfolioMusicList.addAll(PortfolioMusicByTitle);
-        }
+        PortfolioMusicList.addAll(PortfolioMusicByTitle);
 
         return ResponseEntity.status(200).body(PortfolioMusicList);
     }

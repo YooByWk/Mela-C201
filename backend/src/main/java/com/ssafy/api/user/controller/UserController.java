@@ -479,6 +479,7 @@ public class UserController {
 
 			PortfolioAbstract portfolioAbstract = userService.browsePortfolioAbstract(userid);
 			List<PortfolioMusic> portfolioMusicList = portfolioMusicRepositorySupport.getPortfolioMusicListByUserIdx(targetUser);
+			targetUser.setPassword("");
 
 			Object[] returnVO = {targetUser, portfolioAbstract, portfolioMusicList};
 
@@ -523,17 +524,14 @@ public class UserController {
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<List<User>> totalSearch(
-			@PathVariable(name = "검색어(사용자 이름 혹은 닉네임)") String word
+			@PathVariable(name = "word") String word
 	) {
 		List<User> userList = new ArrayList<>();
-		List<User> userByName = userService.getUserByName(word);
-		List<User> userByNickname = userService.getUserByNickname(word);
-		if(userByName != null){
-			userList.addAll(userByName);
-		}
-		if(userByNickname != null){
-			userList.addAll(userByNickname);
-		}
+		List<User> userByName = userService.getUserByNameOrNickname(word, word);
+//		List<User> userByNickname = userService.getUserByNickname(word);
+
+		userList.addAll(userByName);
+//		userList.addAll(userByNickname);
 
 		return ResponseEntity.status(200).body(userList);
 	}
