@@ -4,21 +4,23 @@ import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { RiMessage2Line } from "react-icons/ri";
 import { ChatList, CreateChat, EnterChat } from "../API/ChatAPI";
-import moment from 'moment'
+import moment from "moment";
 import useStore from "../status/store";
-import { useParams } from 'react-router-dom'
+import { useParams } from "react-router-dom";
 
+let sock;
+let ws;
 
-function Message () {
-  const { roomid } = useParams()
+function Message() {
+  const { roomid } = useParams();
   const [chatRooms, setChatRooms] = useState([]);
   const [roomIdx, setRoomIdx] = useState("");
   const [userIdx, setUserIdx] = useState("");
   const [otheruserid, setOtheruserid] = useState();
-  const user = useStore((state) => state.user)
+  const user = useStore((state) => state.user);
 
   useEffect(() => {
-    useStore.getState().fetchUser()
+    useStore.getState().fetchUser();
     findAllRooms();
   }, []);
 
@@ -40,7 +42,7 @@ function Message () {
     } else {
       try {
         const response = await CreateChat({ otheruserid: otheruserid });
-        console.log(response)
+        console.log(response);
         setOtheruserid("");
         findAllRooms();
       } catch (err) {
@@ -48,33 +50,36 @@ function Message () {
         alert("채팅방 개설에 실패하였습니다.");
       }
     }
-  }
+  };
 
   const enterRoom = (roomIdx) => {
     // const userIdx = prompt("대화명을 입력해 주세요.");
     if (user) {
-      setUserIdx(localStorage.getItem('userIdx'))
+      setUserIdx(localStorage.getItem("userIdx"));
       localStorage.setItem("wschat.userIdx", userIdx);
       localStorage.setItem("wschat.roomIdx", roomIdx);
-      setRoomIdx(roomIdx)
+      setRoomIdx(roomIdx);
     }
-  }
+  };
 
   const [room, setRoom] = useState({});
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  let sock = new SockJS("//localhost:8080/ws-stomp");
-  let ws = Stomp.over(sock);
   let reconnect = 0;
-
+  const params = useParams();
   useEffect(() => {
-    setRoomIdx(localStorage.getItem("wschat.roomIdx"));
+    console.log("params: ", params);
+    console.log("params.roomid: ", params.roomid);
+
+    setRoomIdx(params.roomid);
     setUserIdx(localStorage.getItem("wschat.userIdx"));
+
+    console.log("roomidx : ", roomIdx);
 
     findRoom();
     connect();
-  }, [])
+  }, []);
 
   const findRoom = async (roomIdx) => {
     try {
@@ -83,24 +88,21 @@ function Message () {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const sendMessage = () => {
     console.log("ws.connected: " + ws.connected);
+    console.log("roomIDx : ", roomIdx);
 
-    if (ws && ws.connected && message.trim() !== '') {
-      ws.send(
-        "/pub/chat/message",
-        {},
-        JSON.stringify({ type: "TALK", roomIdx, userIdx, message })
-      );
+    if (ws && ws.connected && message.trim() !== "") {
+      ws.send("/pub/chat/message", {}, JSON.stringify({ type: "TALK", roomIdx, userIdx, message }));
       setMessage("");
     } else {
       // WebSocket 연결이 설정되지 않은 경우, 메시지를 보낼 수 없음을 사용자에게 알림
       console.error("WebSocket 연결이 설정되지 않았습니다.");
       connect();
     }
-  }
+  };
 
   const recvMessage = (recv) => {
     setMessages((prevMessages) => [
@@ -110,36 +112,40 @@ function Message () {
         userIdx: recv.userIdx,
         message: recv.message,
       },
-    ])
-  }
+    ]);
+  };
 
   const connect = () => {
     if (!roomIdx) {
-      console.error()
-      return
+      console.error();
+      return;
     }
 
     sock = new SockJS("//localhost:8080/ws-stomp");
     ws = Stomp.over(sock);
 
-    ws.connect({}, (frame) => {
+    ws.connect(
+      {},
+      (frame) => {
         ws.subscribe(`/sub/chat/room/${roomIdx}`, (message) => {
-        const recv = JSON.parse(message.body);
+          const recv = JSON.parse(message.body);
           recvMessage(recv);
         });
-      }, (error) => {
-        console.error()
+      },
+      (error) => {
+        console.error();
         if (reconnect++ < 5) {
-          setTimeout(connect, 5000)
+          setTimeout(connect, 5000);
         }
-      })
-  }
+      }
+    );
+  };
 
   useEffect(() => {
     if (roomIdx) {
-      connect()
+      connect();
     }
-  }, [roomIdx])
+  }, [roomIdx]);
 
   return (
     <Container>
@@ -190,13 +196,9 @@ function Message () {
         </div>
         <ul className="list-group">
           {chatRooms.map((room) => (
-            <li
-              key={room.roomIdx}
-              className="list-item"
-              onClick={() => enterRoom(room.roomIdx)}
-            >
+            <li key={room.roomIdx} className="list-item" onClick={() => enterRoom(room.roomIdx)}>
               {room.user.nickname} - {room.lastSendMessage} :{" "}
-              {moment(message.lastSendTime).format("YY-MM-DD HH:mm:ss")}
+              {moment(room.lastSendTime).format("YY-MM-DD HH:mm:ss")}
             </li>
           ))}
         </ul>
@@ -204,7 +206,7 @@ function Message () {
     </Container>
   );
 }
-export default Message
+export default Message;
 
 const Container = styled.div`
   display: flex;
@@ -253,4 +255,4 @@ const Container = styled.div`
     height: 2rem;
     color: white;
   }
-`
+`;

@@ -60,6 +60,12 @@ public class ChatRoomController {
 
             log.info("chatMEssage: {}", chatMessage);
             if(chatMessage == null) {
+                ChatRoomRes tmp = new ChatRoomRes();
+                tmp.setRoomIdx(chatRoom.getRoomIdx());
+                tmp.setLastSendMessage(null);
+                tmp.setLastSendTime(null);
+                tmp.setUser(otherUser);
+                res.add(tmp);
                 continue;
             }
 
