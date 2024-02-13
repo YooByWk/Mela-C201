@@ -99,14 +99,13 @@ public class ShortsController {
 
         Shorts shorts = new Shorts();
 
-        //TODO: 토큰 유효성 확인00
-
         //1. 토큰으로부터 사용자 확인 후 VO에 설정
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        User user = userDetails.getUser();
         shorts.setUserIdx(userDetails.getUser());
 
         //2. Amazon S3에 파일 저장
-        int returnCode = shortsService.uploadShorts(shorts, multipartFile, shortsPostReq);
+        int returnCode = shortsService.uploadShorts(shorts, multipartFile, shortsPostReq, user);
 
         if(returnCode == 200) {             //파일 정상 저장 (Response 200)
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));

@@ -50,10 +50,11 @@ public class PortfolioController {
 
         //1. 토큰으로부터 사용자 확인 후 VO에 설정
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        User user = userDetails.getUser();
         portfolioMusic.setUserIdx(userDetails.getUser());
 
         //2. Amazon S3에 파일 저장
-        if(portfolioService.addPortfolioMusic(portfolioMusic, multipartFile, portfolioMusicPostReq)) {      //파일 정상 저장 (Response 200)
+        if(portfolioService.addPortfolioMusic(portfolioMusic, multipartFile, portfolioMusicPostReq, user)) {      //파일 정상 저장 (Response 200)
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
         } else {                                                                                            //파일 저장 실패 (Response 500)
             return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Fail"));
@@ -92,15 +93,22 @@ public class PortfolioController {
 
 
     @GetMapping("/totalsearchmusic/{word}")
-    public ResponseEntity<List<PortfolioMusic>> totalSearch(
-			@PathVariable(name = "검색어(포트폴리오 제목)") String word
+    public ResponseEntity<?> totalSearch(
+			@PathVariable(name = "word") String word
     ) {
-        List<PortfolioMusic> PortfolioMusicList = new ArrayList<>();
-        List<PortfolioMusic> PortfolioMusicByTitle = portfolioService.getPortfolioMusicListByTitle(word);
-        if(PortfolioMusicByTitle != null){
-            PortfolioMusicList.addAll(PortfolioMusicByTitle);
+
+
+
+        List<PortfolioMusic> portfolioMusicByTitle = portfolioService.getPortfolioMusicListByTitle(word);
+
+        List<Object[]> returnList = new ArrayList<>();
+        for(PortfolioMusic portfolioMusicItem : portfolioMusicByTitle){
+            Object[] returnVO = new Object[2];
+            returnVO[0] = portfolioMusicItem;
+            returnVO[1] = portfolioService.getPortfolioAbstractByUserIdx(portfolioMusicItem.getUserIdx());
+            returnList.add(returnVO);
         }
 
-        return ResponseEntity.status(200).body(PortfolioMusicList);
+        return ResponseEntity.status(200).body(returnList);
     }
 }

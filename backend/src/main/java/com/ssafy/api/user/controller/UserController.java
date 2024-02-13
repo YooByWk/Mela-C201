@@ -18,6 +18,8 @@ import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.PortfolioAbstractRepository;
 import com.ssafy.db.repository.PortfolioMusicRepositorySupport;
+import com.ssafy.db.repository.UserGenreRepository;
+import com.ssafy.db.repository.UserPositionRepository;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
@@ -53,9 +56,12 @@ public class UserController {
 	RecruitService recruitService;
 	@Autowired
 	PortfolioAbstractRepository portfolioAbstractRepository;
-
 	@Autowired
 	PortfolioMusicRepositorySupport portfolioMusicRepositorySupport;
+	@Autowired
+	UserPositionRepository userPositionRepository;
+	@Autowired
+	UserGenreRepository userGenreRepository;
 
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드 ...를</strong>를 통해 회원가입 한다.")
@@ -74,6 +80,7 @@ public class UserController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
+	//TODO: 선호 장르, 포지션 추가
 	@GetMapping("/myinfo")
 	@ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
 	@ApiResponses({
@@ -97,9 +104,30 @@ public class UserController {
 			userDetails = (SsafyUserDetails) authentication.getDetails();
 			User user = userDetails.getUser();
 
-			Object[] returnVO = new Object[2];
+			//FIXME: ArrayIndexOutOfBoundsException 원인 될 수 있음!
+			Object[] returnVO = new Object[4];
+
+			//1. 유저 기본 정보
 			returnVO[0] = user;														//user 객체 반환 (user_idx, birth, email_domain, email_id, gender, jwt_token, name, nickname, password, search_allow, user_type)
+
+			//2. 유저 포트폴리오
 			returnVO[1] = portfolioAbstractRepository.findByUserIdx(user).get();	//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
+
+			//3. 유저 포지션
+			try {
+				returnVO[2] = userPositionRepository.findPositionIdxByUserIdx(user);
+			} catch (Exception e) {
+				//TODO: 주석하기
+				e.printStackTrace();
+			}
+
+			//4. 유저 장르
+			try {
+				returnVO[3] = userGenreRepository.findGenreIdxByUserIdx(user);
+			} catch (Exception e) {
+				//TODO: 주석하기
+				e.printStackTrace();
+			}
 
 			return ResponseEntity.status(200).body(returnVO);
 		} catch(NullPointerException e) {
@@ -113,6 +141,7 @@ public class UserController {
 		return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Server failed!"));
 	}
 
+	//TODO: 선호 장르, 포지션 추가
 	@PutMapping(value = "/myinfo", consumes = MULTIPART_FORM_DATA_VALUE)
 	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인한 회원 본인의 정보를 수정한다.")
 	@ApiResponses({
@@ -476,16 +505,19 @@ public class UserController {
 		int returnCode = userService.isAllowedToBrowsePortfolioAbstract(userEmail, targetUser);
 		//2. 조회할 수 있는 사용자
 		if(returnCode == 200) {
+
 			PortfolioAbstract portfolioAbstract = userService.browsePortfolioAbstract(userid);
 			List<PortfolioMusic> portfolioMusicList = portfolioMusicRepositorySupport.getPortfolioMusicListByUserIdx(targetUser);
+			targetUser.setPassword("");
 
-			Object[] returnVO = {portfolioAbstract, portfolioMusicList};
+			Object[] returnVO = {targetUser, portfolioAbstract, portfolioMusicList};
 
 			return ResponseEntity.status(200).body(returnVO);
 		//3. 조회할 수 없는 사용자 (searchAllow false)
 		} else {
 			return ResponseEntity.status(returnCode).body("Fail. Check error code");
 		}
+
 	}
 	@GetMapping("/recruit")
 	@ApiOperation(value = "구인글 조회", notes = "구인글 정보를 응답한다.")
@@ -520,21 +552,19 @@ public class UserController {
 			@ApiResponse(code = 200, message = "성공"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<List<User>> totalSearch(
-			@PathVariable(name = "검색어(사용자 이름 혹은 닉네임)") String word
+	public ResponseEntity<List<PortfolioAbstract>> totalSearch(
+			@PathVariable(name = "word") String word
 	) {
-		List<User> userList = new ArrayList<>();
-		List<User> userByName = userService.getUserByName(word);
-		List<User> userByNickname = userService.getUserByNickname(word);
-		if(userByName != null){
-			userList.addAll(userByName);
-		}
-		if(userByNickname != null){
-			userList.addAll(userByNickname);
-		}
+		List<PortfolioAbstract> userPortfolioAbstractList = new ArrayList<>();
+		List<User> userListByName = userService.getUserByNameOrNickname(word, word);
 
-		return ResponseEntity.status(200).body(userList);
+		for(User userItem : userListByName){
+			Optional<PortfolioAbstract> userPortAbst = portfolioAbstractRepository.findByUserIdx(userItem);
+			if(userPortAbst.isPresent()){
+				userPortfolioAbstractList.add(userPortAbst.get());
+			}
+		}
+		return ResponseEntity.status(200).body(userPortfolioAbstractList);
 	}
 
 }
-

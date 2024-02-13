@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import com.ssafy.api.user.service.PortfolioService;
 import com.ssafy.common.exception.handler.NotValidExtensionException;
+import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.FileRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,7 @@ import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-import static com.ssafy.common.util.ExtensionUtil.isValidImageExtension;
-import static com.ssafy.common.util.ExtensionUtil.isValidVideoExtension;
+import static com.ssafy.common.util.ExtensionUtil.*;
 
 @Service("fileServiceImpl")
 public class FileServiceImpl implements FileService {
@@ -135,7 +135,7 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription) {
+    public com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription, User user) {
         com.ssafy.db.entity.File file = new com.ssafy.db.entity.File();
 
         //1. 업로드 한 파일이 비어있는지 확인
@@ -192,6 +192,7 @@ public class FileServiceImpl implements FileService {
             file.setSaveFilename(uuid.toString() + "_" + multipartFile.getOriginalFilename());  //3. 저장되는 파일 명
             file.setFileDescription(fileDescription);                                           //4. 파일 설명
             file.setFileSize(convertedFile.length());                                           //5. 파일 크기 (용량)
+            file.setUserIdx(user);
 
             //MultipartFile -> File로 변환하면서 로컬에 저장된 파일 삭제
             removeFile(convertedFile);
@@ -230,7 +231,7 @@ public class FileServiceImpl implements FileService {
         //1. fileIdx로 file 테이블에서 일치하는 레코드 조회
         com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
 
-        //2. 파일의 확장자가 이미지인지 체크
+        //2. 파일의 확장자가 동영상인지 체크
         String extension = FilenameUtils.getExtension(file.getSaveFilename());
 
         //3-1. 파일의 확장자가 동영상이면
@@ -239,6 +240,25 @@ public class FileServiceImpl implements FileService {
 
             return url.toString();
             //3-2. 파일의 확장자가 동영상이 아니면
+        } else {
+            throw new NotValidExtensionException();
+        }
+    }
+
+    @Override
+    public String getAudioUrlBySaveFileIdx(long fileIdx) throws NoSuchElementException, NotValidExtensionException {
+        //1. fileIdx로 file 테이블에서 일치하는 레코드 조회
+        com.ssafy.db.entity.File file = fileRepository.findById(fileIdx).get();
+
+        //2. 파일의 확장자가 오디오인지 체크
+        String extension = FilenameUtils.getExtension(file.getSaveFilename());
+
+        //3-1. 파일의 확장자가 오디오이면
+        if (isValidAudioExtension(extension)) {
+            URL url = amazonS3Client.getUrl("my.first.mela.sss.bucket", file.getSavePath() + "/" + file.getSaveFilename());
+
+            return url.toString();
+            //3-2. 파일의 확장자가 오디오가 아니면
         } else {
             throw new NotValidExtensionException();
         }

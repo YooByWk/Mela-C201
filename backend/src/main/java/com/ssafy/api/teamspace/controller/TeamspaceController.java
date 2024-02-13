@@ -10,6 +10,7 @@ import com.ssafy.api.user.request.FilePostReq;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.db.entity.File;
 import com.ssafy.db.entity.Teamspace;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.TeamspaceFileRepository;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
@@ -62,7 +64,7 @@ public class TeamspaceController {
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
 
-        Teamspace teamspace = teamspaceService.createTeamspace(registerInfo, user.getUserIdx(), teamspacePicture, teamspaceBackgroundPicture);
+        Teamspace teamspace = teamspaceService.createTeamspace(registerInfo, user.getUserIdx(), teamspacePicture, teamspaceBackgroundPicture, user);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, teamspace.getTeamspaceIdx() + ""));
     }
@@ -75,15 +77,20 @@ public class TeamspaceController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<? extends  BaseResponseBody> updateTeamspace(
+            @ApiIgnore Authentication authentication,
             @RequestPart @ApiParam(value="팀스페이스 수정 정보", required = true) TeamspaceUpdatePutReq updateInfo,
             @PathVariable(name = "teamspaceid") Long teamspaceId,
             @RequestPart(required = false) MultipartFile teamspacePicture,
             @RequestPart(required = false) MultipartFile teamspaceBackgroundPicture) {
 
+        //1. 토큰으로부터 사용자 확인 후 VO에 설정
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        User user = userDetails.getUser();
+
         try{
             Teamspace teamspace = teamspaceService.getTeamspaceById(teamspaceId);
 
-            teamspaceService.updateTeamspace(teamspace, updateInfo, teamspacePicture, teamspaceBackgroundPicture);
+            teamspaceService.updateTeamspace(teamspace, updateInfo, teamspacePicture, teamspaceBackgroundPicture, user);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(401).body(BaseResponseBody.of(404, "not found"));
@@ -121,25 +128,49 @@ public class TeamspaceController {
     })
     public ResponseEntity<TeamspaceRes> getTeamspace(@PathVariable(name = "teamspaceid") Long teamspaceId) {
         Teamspace teamspace = null;
+        TeamspaceRes teamspaceRes = null;
+        File teamspacePictureFile = null;
+        File teamspaceBackgroundPictureFile = null;
+        String teamspacePictureFileURL = null;
+        String teamspaceBackgroundPictureFileURL = null;
+
         try {
             teamspace = teamspaceService.getTeamspaceById(teamspaceId);
-            TeamspaceRes teamspaceRes = TeamspaceRes.of(teamspace);
+            teamspaceRes = TeamspaceRes.of(teamspace);
 
+            //1. 기본 이미지 URL 설정
             try {
-                String teamspacePictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspace.getTeamspacePictureFileIdx().getFileIdx());
-                String teamspaceBackgroundPictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspace.getTeamspaceBackgroundPictureFileIdx().getFileIdx());
-
-                teamspaceRes.setTeamspacePictureFileURL(teamspacePictureFileURL);
-                teamspaceRes.setTeamspaceBackgroundPictureFileURL(teamspaceBackgroundPictureFileURL);
-            } catch (NullPointerException e) {
+                teamspacePictureFile = fileService.getFileByFileIdx(teamspace.getTeamspacePictureFileIdx().getFileIdx());
+                teamspacePictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspacePictureFile.getFileIdx());
+            } catch (NoSuchElementException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
                 //e.printStackTrace();
                 //기본 이미지가 없는 경우
-                teamspaceRes.setTeamspacePictureFileURL(fileService.getDefaultTeamspacePictureImageUrl());
-                teamspaceRes.setTeamspaceBackgroundPictureFileURL(fileService.getDefaultTeamspaceBackgroundPictureImageUrl());
+                teamspacePictureFileURL = fileService.getDefaultTeamspacePictureImageUrl();
             }
+
+            //2. 배경 이미지 URL 설정
+            try {
+                teamspaceBackgroundPictureFile = fileService.getFileByFileIdx(teamspace.getTeamspaceBackgroundPictureFileIdx().getFileIdx());
+                teamspaceBackgroundPictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspaceBackgroundPictureFile.getFileIdx());
+            } catch (NoSuchElementException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                //e.printStackTrace();
+                //기본 이미지가 없는 경우
+                teamspaceBackgroundPictureFileURL = fileService.getDefaultTeamspaceBackgroundPictureImageUrl();
+            }
+
+            //이미지 설정
+            teamspaceRes.setTeamspacePictureFileURL(teamspacePictureFileURL);
+            teamspaceRes.setTeamspaceBackgroundPictureFileURL(teamspaceBackgroundPictureFileURL);
+            teamspaceRes.setTeamspacePictureFile(teamspacePictureFile);
+            teamspaceRes.setTeamspaceBackgroundPictureFile(teamspaceBackgroundPictureFile);
 
             return ResponseEntity.status(200).body(teamspaceRes);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(500).body(null);
         }
     }
@@ -238,10 +269,12 @@ public class TeamspaceController {
             @RequestPart(value = "file", required = true) MultipartFile[] multipartFiles) {
 
         SsafyUserDetails userDetails = null;
+        User user = null;
 
         //1-1. 로그인한 사용자 체크 (토큰 확인)
 		try {
 			userDetails = (SsafyUserDetails) authentication.getDetails();
+            user = userDetails.getUser();
 		} catch(NullPointerException e) {
 			e.printStackTrace();
 
@@ -258,7 +291,7 @@ public class TeamspaceController {
         }
 
         //3. 파일 업로드
-        teamspaceService.uploadFile(teamspaceid, multipartFiles, filePostReq.getFileDescription());
+        teamspaceService.uploadFile(teamspaceid, multipartFiles, filePostReq.getFileDescription(), user);
 
         //4. 응답
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));

@@ -62,8 +62,8 @@ public class QTeamspace extends EntityPathBase<Teamspace> {
         super(type, metadata, inits);
         this.host = inits.isInitialized("host") ? new QUser(forProperty("host")) : null;
         this.sessionId = inits.isInitialized("sessionId") ? new QMeeting(forProperty("sessionId"), inits.get("sessionId")) : null;
-        this.teamspaceBackgroundPictureFileIdx = inits.isInitialized("teamspaceBackgroundPictureFileIdx") ? new QFile(forProperty("teamspaceBackgroundPictureFileIdx")) : null;
-        this.teamspacePictureFileIdx = inits.isInitialized("teamspacePictureFileIdx") ? new QFile(forProperty("teamspacePictureFileIdx")) : null;
+        this.teamspaceBackgroundPictureFileIdx = inits.isInitialized("teamspaceBackgroundPictureFileIdx") ? new QFile(forProperty("teamspaceBackgroundPictureFileIdx"), inits.get("teamspaceBackgroundPictureFileIdx")) : null;
+        this.teamspacePictureFileIdx = inits.isInitialized("teamspacePictureFileIdx") ? new QFile(forProperty("teamspacePictureFileIdx"), inits.get("teamspacePictureFileIdx")) : null;
     }
 
 }

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import styled from "styled-components"
 import TeamspaceTeam from "../components/teamspace/TeamspaceTeam"
 import TeamspaceAudio from "../components/teamspace/TeamspaceAudio"
@@ -11,7 +11,8 @@ import CalendarBar from '../components/teamspace/calendar/CalendarBar'
 function TeamspaceDetail () {
     // 현재 어느 메뉴가 선택 되었는가?
     const [currentTab, clickTab] = useState(0)
-
+    const  teamspaceIdx  = useParams().teamspaceIdx
+    const Navigate = useNavigate()
     const menuArr = [
         { name: 'Team', content: <TeamspaceTeam/>},
         { name: 'Audio File', content: <TeamspaceAudio/>},
@@ -23,12 +24,22 @@ function TeamspaceDetail () {
     const clickMenuHandler = (index) => {
         clickTab(index)
     }
+    const goVideo = (e) => {
+        e.preventDefault()
+        sessionStorage.clear()
+        sessionStorage.setItem('teamspaceIdx', teamspaceIdx)
+        // console.log(sessionStorage.getItem('teamspaceIdx')+ '세션스토리지')
+        Navigate(`../teamspace/video/${teamspaceIdx}`, { state : { teamspace : teamspaceIdx } })
+    }
+    
+
 
     return(
         <>
         <Container>
             <Header>
                 <TabMenu>
+                <button onClick={()=> console.log(teamspaceIdx)}>asd54as54d</button>
                     {menuArr.map((el, index) => (
                         <li className={index === currentTab ? "submenu focused" : "submenu" } key={index}>
                         <span onClick={() => clickMenuHandler(index)}>
@@ -47,7 +58,14 @@ function TeamspaceDetail () {
                 </div>
                 <div className='schedule-box'>
                     <CalendarBar />
+                    <div>
                     
+                        <h1  
+                        onClick={goVideo}
+                        style={{color: 'white',}}>
+                            화상 회의 참여하기
+                        </h1>
+                    </div>
                 </div>
             </div>
         </Container>
