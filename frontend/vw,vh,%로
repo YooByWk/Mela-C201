@@ -1,0 +1,13 @@
+            </div>
+            {/* 205~211 */}
+            {/* {this.state.mainStreamManager !== undefined ? (
+              <div className="VideoComponent">
+                <UserVideoComponent
+                  streamManager={this.state.mainStreamManager}
+                />
+              </div>
+            ) : null} */}
+
+            <div>
+
+            teamspace 어딘가 

@@ -6,7 +6,11 @@ import styled from "styled-components";
 import axios from "axios";
 import icon from "../assets/icons/logo.png";
 import UserVideoComponent from "./UserVideoComponent";
-import { createViduSession,  GetSessionId, DeleteViduSession} from "../API/TeamspaceAPI";
+import {
+  createViduSession,
+  GetSessionId,
+  DeleteViduSession,
+} from "../API/TeamspaceAPI";
 import { fetchUser } from "../API/UserAPI";
 
 const APPLICATION_SERVER_URL =
@@ -28,10 +32,10 @@ class Video extends Component {
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
       publisher: undefined, // 로컬 웹캠 스트림
       subscribers: [], // 다른 사용자의 활성 스트림
-      isCamera: false,
-      isMic: false,
-      isSpeaker: false,
-      teamspaceIdx: null
+      isCamera: true,
+      isMic: true,
+      isSpeaker: true,
+      teamspaceIdx: null,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -45,14 +49,13 @@ class Video extends Component {
     this.getUserName = this.getUserName.bind(this);
     this.getSessionId = this.getSessionId.bind(this);
   }
-  async getUserName () {
-     const tempName = await fetchUser();
-      console.log(tempName);
-      this.setState({
-        myUserName: tempName[0].nickname,
-      });
+  async getUserName() {
+    const tempName = await fetchUser();
+    console.log(tempName);
+    this.setState({
+      myUserName: tempName[0].nickname,
+    });
   }
-
 
   handleToggle(target) {
     // 마이크 카메라 토글 입력 함수
@@ -80,16 +83,18 @@ class Video extends Component {
   }
   async componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
-    console.log("유저이름 불러오기")
+    console.log("유저이름 불러오기");
     this.getUserName();
     this.setState({
-     teamspaceIdx : window.location.pathname.split('/').pop()
-    })
-    const tempSession = await GetSessionId(window.location.pathname.split('/').pop())
-    console.log(tempSession)
+      teamspaceIdx: window.location.pathname.split("/").pop(),
+    });
+    const tempSession = await GetSessionId(
+      window.location.pathname.split("/").pop()
+    );
+    console.log(tempSession);
     this.setState({
-      mySessionId : tempSession
-    })
+      mySessionId: tempSession,
+    });
   }
 
   createHandler = () => {
@@ -157,7 +162,7 @@ class Video extends Component {
       () => {
         let mySession = this.state.session;
         // --- 3) Specify the actions when events take place in the session ---
-        
+
         // On every new Stream received...
         mySession.on("streamCreated", (event) => {
           // Subscribe to the Stream to receive it. Second parameter is undefined
@@ -165,44 +170,44 @@ class Video extends Component {
           var subscriber = mySession.subscribe(event.stream, undefined);
           var subscribers = this.state.subscribers;
           subscribers.push(subscriber);
-          
+
           // Update the state with the new subscribers
           this.setState({
             subscribers: subscribers,
           });
         });
-        
+
         // On every Stream destroyed...
         mySession.on("streamDestroyed", (event) => {
           // Remove the stream from 'subscribers' array
           this.deleteSubscriber(event.stream.streamManager);
         });
-        
+
         // On every asynchronous exception...
         mySession.on("exception", (exception) => {
           console.warn(exception);
         });
-        
+
         // --- 4) Connect to the session with a valid user token ---
-        
+
         // Get a token from the OpenVidu deployment
         this.getToken().then((token) => {
           // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
           //////////////////////////////////////////////////////////////////////////
           mySession
-          .connect(token, { clientData: this.state.myUserName })
-          .then(async () => {
-            // --- 5) Get your own camera stream ---
-            
-            // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
-            // element: we will manage it on our own) and with the desired properties
-            let publisher = await this.OV.initPublisherAsync(undefined, {
+            .connect(token, { clientData: this.state.myUserName })
+            .then(async () => {
+              // --- 5) Get your own camera stream ---
+
+              // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
+              // element: we will manage it on our own) and with the desired properties
+              let publisher = await this.OV.initPublisherAsync(undefined, {
                 audioSource: undefined, // The source of audio. If undefined default microphone
                 videoSource: undefined, // The source of video. If undefined default webcam
                 publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                 publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                resolution: "640x480", // The resolution of your video
+                // resolution: "640x480", // The resolution of your video
                 frameRate: 30, // The frame rate of your video
                 insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                 mirror: false, // Whether to mirror your local video or not
@@ -300,7 +305,6 @@ class Video extends Component {
     }
   }
 
-
   async getToken() {
     const sessionId = await this.createSession(this.state.mySessionId);
     return await this.createToken(sessionId);
@@ -318,7 +322,7 @@ class Video extends Component {
   }
 
   async createToken(sessionId) {
-    const response = await  axios.post(
+    const response = await axios.post(
       APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
       {},
       {
@@ -329,11 +333,11 @@ class Video extends Component {
   }
 
   async getSessionId() {
-  const res = await GetSessionId(this.state.teamspaceIdx);
-  console.log(res)
-  this.setState({
-    mySessionId : res 
-  });
+    const res = await GetSessionId(this.state.teamspaceIdx);
+    console.log(res);
+    this.setState({
+      mySessionId: res,
+    });
   }
   render() {
     // const { params } = this.props.match;
@@ -341,128 +345,160 @@ class Video extends Component {
 
     const mySessionId = this.state.mySessionId;
     const myUserName = this.state.myUserName;
-    const teamspaceIdx = sessionStorage.getItem('teamspaceIdx');
+    const teamspaceIdx = sessionStorage.getItem("teamspaceIdx");
     console.log("mySessionId: ", mySessionId);
     console.log("myUserName: ", myUserName);
     console.log(this.state);
-    const Location = window.location.pathname.split('/').pop()
+    const Location = window.location.pathname.split("/").pop();
 
     return (
-      <div>
+      <TOP>
+        <div>
+          <button type="button" onClick={() => console.log(this.state)}>
+            제발
+          </button>
+          <button type="button" onClick={() => this.getSessionId()}>
+            GetSession
+          </button>
+          <button type="button" onClick={() => DeleteViduSession()}>
+            세션 제거
+          </button>
+          <button type="button" onClick={this.getUserName}>
+            유저이리온
+          </button>
+          <button
+            type="button"
+            onClick={() => console.log(this.state.myUserName)}
+          >
+            제발 유저이름{" "}
+          </button>
 
-        <button type='button' onClick={()=> console.log(this.state)}>제발</button>
-        <button type='button' onClick={()=> this.getSessionId()}>제발</button>
-        <button type='button' onClick={()=> DeleteViduSession()}>삭제</button>
-        <button type='button' onClick={this.getUserName}>유저이리온</button>
-        <button type='button' onClick={()=> console.log(this.state.myUserName)}>제발 유저이름 </button>
-        
-        <button type='button' onClick={()=> console.log(Location)}>windowLocat </button>
+          <button type="button" onClick={() => console.log(Location)}>
+            windowLocat{" "}
+          </button>
+          <button type="button" onClick={() => console.log(this.state)}>
+            비디오체크
+          </button>
+          <h1> Team Video Conference</h1>
 
-        <button type='button' onClick={()=> console.log(this.state)}>비디오체크</button>
-        {this.state.session === undefined ? (
-          <div>
-            <p>Mela Team Video Conference</p>
-            <img src={icon} alt="으악" />
-            <div>
-              <h1>아무튼 들어가보기 </h1>
-              <form action="" onSubmit={this.joinSession}>
-                <label>Nombre : </label>
-                <input
-                  type="text"
-                  id="userName"
-                  value={myUserName}
-                  onChange={this.handleChangeUserName}
-                  required
-                />
-                <label>Session : </label>
-                <input
-                  type="text"
-                  id="sessionId"
-                  value={mySessionId}
-                  onChange={this.handleChangeSessionId}
-                />
-                <input
-                  type="submit"
-                  value="DIDNT I DO IT FOR U"
-                  name="commit"
-                />
-              </form>
-            </div>
-          </div>
-        ) : null}
-        {this.state.session !== undefined ? (
-          <div>
-            <div className="sessionHeader">
-              <h1>{mySessionId}</h1>
-              <input type="button" value="Leave" onClick={this.leaveSession} />
-              <input type="button" value="Switch" onClick={this.switchCamera} />
-              <input
-                type="button"
-                value="camera"
-                onClick={() => this.handleToggle("camera")}
-              />
-              <input
-                type="button"
-                value="mic"
-                onClick={() => this.handleToggle("mic")}
-              />
-            </div>
-            {/* 205~211 */}
-            {/* {this.state.mainStreamManager !== undefined ? (
-              <div className="VideoComponent">
-                <UserVideoComponent
-                  streamManager={this.state.mainStreamManager}
-                />
+          <MainContainer>
+            {this.state.session === undefined ? (
+              <div>
+                <img src={icon} alt="으악" />
+                <div>
+                  <h1>아무튼 들어가보기 </h1>
+                  <form action="" onSubmit={this.joinSession}>
+                    <label>Nombre : </label>
+                    <input
+                      type="text"
+                      id="userName"
+                      value={myUserName}
+                      onChange={this.handleChangeUserName}
+                      required
+                    />
+                    <label>Session : </label>
+                    <input
+                      type="text"
+                      id="sessionId"
+                      value={mySessionId}
+                      onChange={this.handleChangeSessionId}
+                    />
+                    <input
+                      type="submit"
+                      value="DIDNT I DO IT FOR U"
+                      name="commit"
+                    />
+                  </form>
+                </div>
               </div>
-            ) : null} */}
+            ) : null}
 
-            <div>
-              {/* 212 */}
-              {this.state.publisher !== undefined ? (
-                <div
-                  className=""
-                  onClick={() =>
-                    this.handleMainVideoStream(this.state.publisher)
-                  }
-                >
-                  <UserVideoComponent streamManager={this.state.publisher} />
+            {this.state.session !== undefined ? (
+              <div>
+                <div className="buttonHolder">
+                  <h1>{mySessionId}</h1>
+                  <input
+                    type="button"
+                    value="Leave"
+                    onClick={this.leaveSession}
+                  />
+                  <input
+                    type="button"
+                    value="Switch"
+                    onClick={this.switchCamera}
+                  />
+                  <input
+                    type="button"
+                    value="camera"
+                    onClick={() => this.handleToggle("camera")}
+                  />
+                  <input
+                    type="button"
+                    value="mic"
+                    onClick={() => this.handleToggle("mic")}
+                  />
+                  {/* 212 */}
                 </div>
-              ) : null}
-            </div>
-            <div>
-              {this.state.subscribers.map((sub, i) => (
-                <div
-                  key={sub.id}
-                  className=""
-                  onClick={() => this.handleMainVideoStream(sub)}
-                >
-                  <span>{sub.id}</span>
-                  <span>
-                    {this.state.isCamera ? (
-                      <div>'카메라가 켜져있습니다'</div>
-                    ) : (
-                      <div>'카메라가 꺼져있습니다'</div>
-                    )}
-                  </span>
-                  <UserVideoComponent streamManager={sub} />
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : null}
-      </div>
+
+                <VideoContainer>
+                  {this.state.publisher !== undefined ? (
+                    <div
+                      className="main-video"
+                      onClick={() =>
+                        this.handleMainVideoStream(this.state.publisher)
+                      }
+                    >
+                      <UserVideoComponent
+                        streamManager={this.state.publisher}
+                        isMain={true}
+                      />
+                    </div>
+                  ) : null}
+
+                  {this.state.subscribers.map((sub, i) => (
+                    <div
+                      key={sub.id}
+                      className={`sub-video ${i === 0 ? "main-video" : ""}`}
+                    >
+                      <UserVideoComponent streamManager={sub} />
+                    </div>
+                  ))}
+                </VideoContainer>
+              </div>
+            ) : null}
+          </MainContainer>
+        </div>
+      </TOP>
     );
   }
 }
 
 export default Video;
 
-const PA = styled.p`
-  color: red;
-  font-size: 20px;
+const TOP = styled.div`
+  color: white;
+  width: 100%;
 `;
 
-const MAINCONT = styled.div`
-  background-color: blue;
-  color: white;
+const VideoContainer = styled.div`
+  margin-top: 30px;
+  width: 70vw;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 10px;
+
+  .main-video {
+    grid-column: span 1;
+  }
+
+  .sub-video {
+    grid-column: span 1;
+  }
+
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
 `;
