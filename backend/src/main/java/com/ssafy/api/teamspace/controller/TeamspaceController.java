@@ -338,7 +338,7 @@ public class TeamspaceController {
         }
 
         if(teamspace.getSessionId() != null){
-            return ResponseEntity.status(200).body(teamspace.getSessionId());
+            return ResponseEntity.status(200).body(teamspace.getSessionId().getSessionId());
         }else{
             return ResponseEntity.status(500).body("Session id is not exist");
         }

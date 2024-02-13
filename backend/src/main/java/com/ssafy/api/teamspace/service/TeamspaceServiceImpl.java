@@ -347,7 +347,10 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     public void updateTeamspaceOpenViduSessionId(Long teamspaceIdx, String sessionId) {
         Teamspace teamspace = teamspaceRepository.getOne(teamspaceIdx);
 
-        teamspace.setSessionId(sessionId);
+        Meeting meeting = new Meeting();
+        meeting.setSessionId(sessionId);
+
+        teamspace.setSessionId(meeting);
         teamspaceRepository.save(teamspace);
     }
 }

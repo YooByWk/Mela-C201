@@ -28,6 +28,8 @@ public class QTeamspace extends EntityPathBase<Teamspace> {
 
     public final QUser host;
 
+    public final QMeeting sessionId;
+
     public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
 
     public final StringPath teamDescription = createString("teamDescription");
@@ -59,6 +61,7 @@ public class QTeamspace extends EntityPathBase<Teamspace> {
     public QTeamspace(Class<? extends Teamspace> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.host = inits.isInitialized("host") ? new QUser(forProperty("host")) : null;
+        this.sessionId = inits.isInitialized("sessionId") ? new QMeeting(forProperty("sessionId"), inits.get("sessionId")) : null;
         this.teamspaceBackgroundPictureFileIdx = inits.isInitialized("teamspaceBackgroundPictureFileIdx") ? new QFile(forProperty("teamspaceBackgroundPictureFileIdx")) : null;
         this.teamspacePictureFileIdx = inits.isInitialized("teamspacePictureFileIdx") ? new QFile(forProperty("teamspacePictureFileIdx")) : null;
     }

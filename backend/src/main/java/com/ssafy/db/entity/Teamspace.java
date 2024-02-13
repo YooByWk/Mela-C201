@@ -52,7 +52,7 @@ public class Teamspace {
 
     @OneToOne
     @JoinColumn(name = "session_id", referencedColumnName = "sessionId")
-    String sessionId;
+    Meeting sessionId;
 
     @Override
     public String toString() {

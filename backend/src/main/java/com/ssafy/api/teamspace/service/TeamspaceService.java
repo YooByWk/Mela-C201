@@ -5,6 +5,7 @@ import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
+import com.ssafy.db.entity.Meeting;
 import com.ssafy.db.entity.Schedule;
 import com.ssafy.db.entity.Teamspace;
 import org.springframework.web.multipart.MultipartFile;
