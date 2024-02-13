@@ -476,16 +476,18 @@ public class UserController {
 		int returnCode = userService.isAllowedToBrowsePortfolioAbstract(userEmail, targetUser);
 		//2. 조회할 수 있는 사용자
 		if(returnCode == 200) {
+
 			PortfolioAbstract portfolioAbstract = userService.browsePortfolioAbstract(userid);
 			List<PortfolioMusic> portfolioMusicList = portfolioMusicRepositorySupport.getPortfolioMusicListByUserIdx(targetUser);
 
-			Object[] returnVO = {portfolioAbstract, portfolioMusicList};
+			Object[] returnVO = {targetUser, portfolioAbstract, portfolioMusicList};
 
 			return ResponseEntity.status(200).body(returnVO);
 		//3. 조회할 수 없는 사용자 (searchAllow false)
 		} else {
 			return ResponseEntity.status(returnCode).body("Fail. Check error code");
 		}
+
 	}
 	@GetMapping("/recruit")
 	@ApiOperation(value = "구인글 조회", notes = "구인글 정보를 응답한다.")
