@@ -92,13 +92,22 @@ public class PortfolioController {
 
 
     @GetMapping("/totalsearchmusic/{word}")
-    public ResponseEntity<List<PortfolioMusic>> totalSearch(
+    public ResponseEntity<?> totalSearch(
 			@PathVariable(name = "word") String word
     ) {
-        List<PortfolioMusic> PortfolioMusicList = new ArrayList<>();
-        List<PortfolioMusic> PortfolioMusicByTitle = portfolioService.getPortfolioMusicListByTitle(word);
-        PortfolioMusicList.addAll(PortfolioMusicByTitle);
 
-        return ResponseEntity.status(200).body(PortfolioMusicList);
+
+        Object[] returnVO = new Object[2];
+        List<Object[]> returnList = new ArrayList<>();
+
+        List<PortfolioMusic> portfolioMusicByTitle = portfolioService.getPortfolioMusicListByTitle(word);
+
+        for(PortfolioMusic portfolioMusicItem : portfolioMusicByTitle){
+            returnVO[0] = portfolioMusicItem;
+            returnVO[1] = portfolioService.getPortfolioAbstractByUserIdx(portfolioMusicItem.getUserIdx());
+            returnList.add(returnVO);
+        }
+
+        return ResponseEntity.status(200).body(returnVO);
     }
 }
