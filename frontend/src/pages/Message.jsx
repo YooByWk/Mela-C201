@@ -5,20 +5,32 @@ import Stomp from "stompjs";
 import { RiMessage2Line } from "react-icons/ri";
 import { ChatList, CreateChat, EnterChat } from "../API/ChatAPI";
 import moment from "moment";
+import { useParams } from "react-router-dom";
+import useStore from "../status/store";
+
 
 function Message() {
-  const [chatRooms, setChatRooms] = useState([]);
-  const [userIdx, setUserIdx] = useState("");
-  const [otheruserid, setOtheruserid] = useState();
+  const { roomid } = useParams()
+  const [chatRooms, setChatRooms] = useState([]);  // 모든 채팅방
+  const [userIdx, setUserIdx] = useState("");  // 현재 유저
+  const [otheruserid, setOtheruserid] = useState();  // 채팅하는 다른 유저
   const [roomIdx, setRoomIdx] = useState("");
   const [room, setRoom] = useState({});
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState("");  // 보내는 메시지
+  const [messages, setMessages] = useState([]);  // 메시지 히스토리(모든 메시지)
+
+  const user = useStore((state) => state.user)
 
   useEffect(() => {
+    useStore.getState().fetchUser()
     findAllRooms();
+
+    if (user && roomid) {
+      enterRoom(roomid)
+    }
   }, []);
 
+  // 모든 채팅방 리스트 조회
   const findAllRooms = async () => {
     try {
       const response = await ChatList();
@@ -30,10 +42,11 @@ function Message() {
     }
   };
 
+
   const createRoom = async () => {
     if (otheruserid === "") {
       alert("방 제목을 입력해 주세요.");
-      return;
+      return
     } else {
       try {
         const response = await CreateChat({ otheruserid: otheruserid });
@@ -47,9 +60,19 @@ function Message() {
     }
   };
 
+  useEffect(() => {
+    if (user) {
+      setUserIdx(localStorage.getItem('userIdx'))
+      if (roomid) {
+        enterRoom(roomid)
+      }
+    }
+  }, [roomid])
+
   const enterRoom = (roomIdx) => {
-    const userIdx = prompt("대화명을 입력해 주세요.");
-    if (userIdx !== "") {
+    // const userIdx = prompt("대화명을 입력해 주세요.");
+    if (userIdx) {
+      console.log(userIdx)
       localStorage.setItem("wschat.userIdx", userIdx);
       localStorage.setItem("wschat.roomIdx", roomIdx);
     }
@@ -65,7 +88,6 @@ function Message() {
     setRoomIdx(localStorage.getItem("wschat.roomIdx"));
     setUserIdx(localStorage.getItem("wschat.userIdx"));
 
-    setRoomIdx("0cf86ea3-e713-421b-acb7-fd2176ebbd63");
     findRoom();
     connect();
   }, []);
@@ -81,9 +103,8 @@ function Message() {
 
   const sendMessage = () => {
     console.log("ws.connected: " + ws.connected);
-    console.log("ws.connected: " + ws.connected);
 
-    if (ws && ws.connected) {
+    if (ws && ws.connected && message.trim() !== '') {
       ws.send(
         "/pub/chat/message",
         {},
@@ -119,11 +140,6 @@ function Message() {
           const recv = JSON.parse(message.body);
           recvMessage(recv);
         });
-        // ws.send(
-        //   "/pub/chat/message",
-        //   {},
-        //   JSON.stringify({ type: "TALK", roomIdx, userIdx, message })
-        // );
         setMessage("");
       },
       (error) => {

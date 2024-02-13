@@ -16,13 +16,13 @@ export const ChatList = async () => {
     return response.data
 }
 
-// 채팅방 입장
+// 채팅방 생성
 export const CreateChat = async({ otheruserid }) => {
     const response = await ChatAPI.post(`/chatrooms/${otheruserid}`)
     return response.data
 }
 
-// 채팅 내역 조회(단일)
+// 채팅 내역 조회(단일) - 입장
 export const EnterChat = async ({ roomid }) => {
     const response = await ChatAPI.get(`/chatrooms/${roomid}`)
     return response.data

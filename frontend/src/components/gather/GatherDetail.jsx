@@ -110,6 +110,7 @@ useEffect(() => {
     setIsLiked(!isLiked)
   }
 
+  // 채팅 연결
   const [roomIdx, setRoomIdx] = useState('')
   const [otheruserid, setOtheruserid] = useState()
 
