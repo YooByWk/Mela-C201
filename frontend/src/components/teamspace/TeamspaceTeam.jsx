@@ -122,6 +122,7 @@ const ImageContainer = styled.div`
     p {
         color: white;
         position: absolute;
+        text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
         top: 9rem;
         left: 13rem;
         font-size: large;
@@ -131,6 +132,7 @@ const ImageContainer = styled.div`
 const H1 = styled.h1`
     color: white;
     position: absolute;
+    text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
     left: 13rem;
     top: 2rem;
 `

@@ -5,6 +5,7 @@ import { TeamspaceUpdate } from "../../API/TeamspaceAPI";
 import { TeamspaceInfo } from "../../API/TeamspaceAPI";
 import { IoReload } from "react-icons/io5";
 import moment from 'moment';
+import Datepicker from 'react-datepicker'
 
 
 function TeamspaceManage () {
@@ -18,8 +19,10 @@ function TeamspaceManage () {
       })
     
       const [imgFile, setImgFile] = useState('')
+      const [imgPreview, setImgPreview] = useState('')
       const [backImgFile, setBackImgFile] = useState('')
-      
+      const [backImgPreview, setBackImgPreview] = useState('')
+      const [changeDate, setChangeDate] = useState(new Date())
 
     useEffect(()=> {
         const getTeamspaceInfo = async() => {
@@ -31,13 +34,17 @@ function TeamspaceManage () {
             }
         } 
         getTeamspaceInfo()
-       
-    }, [])
+    }, [teamspaceIdx])
 
       const handleChange = async (e) => {
         setValues({...values,
         [e.target.id]: e.target.value,
         })
+      }
+
+      const handleDateChange = (date) => {
+        const formmatedDate = moment(date).format('YYYY-MM-DD')
+        setChangeDate(formmatedDate)
       }
     
       const handleImgFile = (e) => {
@@ -45,6 +52,7 @@ function TeamspaceManage () {
     
         if (e.target.files[0]) {
             setImgFile(e.target.files[0])
+            setImgPreview(URL.createObjectURL(e.target.files[0]))
         }
       }
     
@@ -53,6 +61,7 @@ function TeamspaceManage () {
     
         if (e.target.files[0]) {
             setBackImgFile(e.target.files[0])
+            setBackImgPreview(URL.createObjectURL(e.target.files[0]))
         }
       }
     
@@ -73,6 +82,7 @@ function TeamspaceManage () {
           const res = await TeamspaceUpdate({formData: formData, teamspaceId: teamspaceIdx})
           console.log(teamspaceIdx)
           console.log(res)
+          alert('정보가 업데이트 되었습니다.')
       } catch (err) {
           console.error(err)
       }
@@ -85,44 +95,62 @@ function TeamspaceManage () {
           <h2>마감일 변경</h2>
           <div className="update">
             <p>기존 마감일 : {moment(values.endDate).format('YY-MM-DD(ddd)')}</p>
-            <button className='button' type='submit'>
-              <IoReload className="icon"/>
-              <span>Update</span>
-            </button>
+            <div className="inputWrapper">
+              <label for="endDate">변경 마감일 : </label>
+              <MyDatePicker
+                id='endDate'
+                dateFormat='yyyy-MM-dd'
+                shouldCloseOnSelect
+                selected={changeDate}
+                onChange={handleDateChange}
+                popperPlacement="right"
+              />
+            </div>
+          </div>
+          <div className="description">
+            <h2>개요 변경</h2>
+              <textarea 
+                type="text" 
+                value={values.teamDescription}
+                id="teamDescription"
+                onChange={handleChange}
+                rows='7'
+              />
           </div>
         </div>
         <div className="iamge">
           <h2>프로젝트 이미지 변경</h2>
           <div className="image-body">
-            <div className="thumnail">
-              
+            <div className="thum-change">
+              <div className="thum">
+                <label className="label">썸네일 변경</label>
+                <div className="input">
+                  <input type="file" onChange={handleImgFile}/>
+                </div>
+              </div>
+              <div className="thumnail">
+                {imgPreview && <img src={imgPreview} alt="미리보기" />}
+              </div>
             </div>
-            <div className="thum">
-              <label htmlFor="">썸네일 변경</label>
-              <input type="file" onChange={handleImgFile}/>
-              <button className='button' type='submit'>
-                <IoReload className="icon"/>
-                <span>Update</span>
-              </button>
-            </div>
+            <hr />
             <div className="background">
-              <label htmlFor="">배경 이미지 변경</label>
-              <input type="file" onChange={handleBackFile}/>
-              <button className='button' type='submit'>
-                <IoReload className="icon"/>
-                <span>Update</span>
-              </button>
+              <div className="thum">
+                <label className="label">배경 이미지 변경</label>
+                <div className="input">
+                  <input type="file" onChange={handleBackFile}/>
+                </div>
+              </div>
+              <div className="back-thumnail">
+                {backImgPreview && <img src={backImgPreview} alt="미리보기" />}
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="description">
-        <h3>개요 변경</h3>
-          <textarea type="text" value={values.teamDescription} id="teamDescription" onChange={handleChange}/>
-          <button className='button' type='submit'>
-            <IoReload className="icon"/>
-            <span>Update</span>
-          </button>
+      <div className="bottom">
+        <button className='button' type='submit'>
+          <span>Save</span>
+        </button>
       </div>
     </Container>
     )
@@ -147,31 +175,106 @@ const Container = styled.form`
 
   .update {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    margin-top: 1rem;
+  }
+
+  .bottom {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .inputWrapper {
+    display: flex;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+  }
+
+  hr {
+    width: 100%;
+  }
+
+  .label {
+    font-size: large;
+  }
+
+  .input {
     margin-top: 1rem;
   }
 
   .button {
     background-color: #254ef8;
     border-radius: 20px;
-    margin-left: 1rem;
-  }
-
-  .icon {
-    margin-right: 5px;
+    border: none;
+    color: white;
+    height: 2rem;
+    width: 4rem;
+    align-self: flex-end;
+    margin-top: 1rem;
   }
 
   .image-body {
     margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .thum-change {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.2rem;
   }
 
   .image {
     flex: 1;
   }
 
+  .thumnail {
+    img {
+      width: 6rem;
+      height: 6rem;
+      border-radius: 50%;
+      border: 3px white solid;
+    }
+  }
+
+  .back-thumnail {
+    img {
+      width: 100%;
+      height: 6rem;
+      margin-top: 10px;
+      border: 3px white solid;
+    }
+  }
+
+  .background {
+    margin-top: 1rem;
+  }
+
   .description {
     display: flex;
     flex-direction: column;
     background-color: #151C2C;
+    margin-top: 3rem;
+    padding: 20px;
+    margin-right: 3rem;
+
+    textarea {
+      background-color: transparent;
+      border: none;
+      resize: none;
+      color: white;
+      margin-top: 1rem;
+      font-size: large;
+    }
   }
+`
+const MyDatePicker = styled(Datepicker)`
+  background-color: #202C44;
+  color: white;
+  border: none;
+  text-align: center;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
 `
