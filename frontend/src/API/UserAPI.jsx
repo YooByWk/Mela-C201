@@ -159,7 +159,7 @@ export const othersInfo = async (emailId) => {
 
 // 유저 검색
 export const userSearch = async (word) => {
-    console.log(word)
+    // console.log(word)
     const response = await UserApi.get(`/totalsearchuser/${word}`)
     return response.data
 }

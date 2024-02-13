@@ -137,7 +137,6 @@ const DefaultFileShape = (props) => {
 DefaultFileShape.defaultProps={
     title: 'Project name',
     content: '프로젝트 설명',
-    day: 'D-??',
     width: '1rem',
     image: '',
     onClick: () => {}

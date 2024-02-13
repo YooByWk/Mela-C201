@@ -22,7 +22,7 @@ function SearchPortfolio(props) {
         
     },[word])
 
-    console.log(values)
+    // console.log(values)
     return(
         <SearchContainer>
           {values.length === 0 ? (
