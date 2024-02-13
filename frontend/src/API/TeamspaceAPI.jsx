@@ -127,12 +127,28 @@ export const TeamspaceFileList = async(teamspaceId) => {
 
 // Web RTC functions with Openvidu
 export const createViduSession = async () => {
-  const response = await axios.post('http://localhost:8080/api/v1/openvidu/createSession', {
-    headers: {
-      'Authorization' : `Bearer ${localStorage.accessToken}`
-    }
-  })
-  return response.data
+  const accessToken = localStorage.getItem('accessToken'); 
+  if (!accessToken) {
+    console.error('Access token not found in localStorage');
+    return; 
+  }
+  try {
+    const response = await axios.post('http://localhost:8080/api/v1/openvidu/createsession', null, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.error('Error at creating Vidu session:', error);
+    throw error; // 에러를 다시 throw
+  }
 }
 
+export const getsessions = async () => {
+  const response = await axios.get('http://localhost:8080/api/v1/openvidu/getsessions')
+  console.log(response)
+  return response.data
+}
 

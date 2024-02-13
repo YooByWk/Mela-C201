@@ -116,8 +116,8 @@ public class OpenViduController {
         meetingPostReq.setSessionId(session.getSessionId());
 
         try {
-            meetingService.deleteAllSessionConsultantId(nowLoginuser.getEmailId());
-            logger.info("*** deleteAllSessionConsultantId 호출 : " + nowLoginuser.getEmailId() );
+//            meetingService.deleteAllSessionConsultantId(nowLoginuser.getEmailId());
+//            logger.info("*** deleteAllSessionConsultantId 호출 : " + nowLoginuser.getEmailId() );
 
             meetingService.createSession(meetingPostReq, nowLoginuser.getEmailId());
             logger.info("*** createSession 호출 : " + nowLoginuser.getEmailId());
