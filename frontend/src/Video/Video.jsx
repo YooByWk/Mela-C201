@@ -1,12 +1,12 @@
 import { Component } from "react";
 import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import icon from "../assets/icons/logo.png";
 import UserVideoComponent from "./UserVideoComponent";
-import { createViduSession } from "../API/TeamspaceAPI";
+import { createViduSession,  GetSessionId} from "../API/TeamspaceAPI";
 import { fetchUser } from "../API/UserAPI";
 
 const APPLICATION_SERVER_URL =
@@ -31,6 +31,7 @@ class Video extends Component {
       isCamera: false,
       isMic: false,
       isSpeaker: false,
+      teamspaceIdx: null
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -146,9 +147,8 @@ class Video extends Component {
       },
       () => {
         let mySession = this.state.session;
-
         // --- 3) Specify the actions when events take place in the session ---
-
+        
         // On every new Stream received...
         mySession.on("streamCreated", (event) => {
           // Subscribe to the Stream to receive it. Second parameter is undefined
@@ -156,42 +156,42 @@ class Video extends Component {
           var subscriber = mySession.subscribe(event.stream, undefined);
           var subscribers = this.state.subscribers;
           subscribers.push(subscriber);
-
+          
           // Update the state with the new subscribers
           this.setState({
             subscribers: subscribers,
           });
         });
-
+        
         // On every Stream destroyed...
         mySession.on("streamDestroyed", (event) => {
           // Remove the stream from 'subscribers' array
           this.deleteSubscriber(event.stream.streamManager);
         });
-
+        
         // On every asynchronous exception...
         mySession.on("exception", (exception) => {
           console.warn(exception);
         });
-
+        
         // --- 4) Connect to the session with a valid user token ---
-
+        
         // Get a token from the OpenVidu deployment
         this.getToken().then((token) => {
           // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
           // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
           mySession
-            .connect(token, { clientData: this.state.myUserName })
-            .then(async () => {
-              // --- 5) Get your own camera stream ---
-
-              // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
-              // element: we will manage it on our own) and with the desired properties
-              let publisher = await this.OV.initPublisherAsync(undefined, {
+          .connect(token, { clientData: this.state.myUserName })
+          .then(async () => {
+            // --- 5) Get your own camera stream ---
+            
+            // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
+            // element: we will manage it on our own) and with the desired properties
+            let publisher = await this.OV.initPublisherAsync(undefined, {
                 audioSource: undefined, // The source of audio. If undefined default microphone
                 videoSource: undefined, // The source of video. If undefined default webcam
-                publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
-                publishVideo: false, // Whether you want to start publishing with your video enabled or not
+                publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
+                publishVideo: true, // Whether you want to start publishing with your video enabled or not
                 resolution: "640x480", // The resolution of your video
                 frameRate: 30, // The frame rate of your video
                 insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
@@ -199,6 +199,7 @@ class Video extends Component {
               });
 
               // --- 6) Publish your stream ---
+              //////////////////////////////////////////////////////////////////////////
 
               mySession.publish(publisher);
 
@@ -315,20 +316,25 @@ class Video extends Component {
     return response.data; // The token
   }
   render() {
-    const Check = () => console.log(this.state);
+    // const { params } = this.props.match;
+    const Check = () => console.log(this.props);
+
     const mySessionId = this.state.mySessionId;
     const myUserName = this.state.myUserName;
+    const teamspaceIdx = sessionStorage.getItem('teamspaceIdx');
     console.log("mySessionId: ", mySessionId);
     console.log("myUserName: ", myUserName);
     console.log(this.state);
+    const Location = window.location.pathname
+    let A = Location.split('/').pop()
     return (
       <div>
         <button type='button' onClick={createViduSession}>제발</button>
         <button type='button' onClick={this.getUserName}>유저이리온</button>
         <button type='button' onClick={()=> console.log(this.state.myUserName)}>제발 유저이름 </button>
+        <button type='button' onClick={()=> console.log(A)}>windowLocat </button>
 
-
-        <button type='button'  onClick={Check}>체크</button>
+        <button type='button'  onClick={()=>GetSessionId(teamspaceIdx)}>체크</button>
         <button type='button' onClick={()=> console.log(this.state)}>비디오체크</button>
         {this.state.session === undefined ? (
           <div>
