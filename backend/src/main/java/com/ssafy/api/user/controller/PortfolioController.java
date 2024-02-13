@@ -109,6 +109,6 @@ public class PortfolioController {
             returnList.add(returnVO);
         }
 
-        return ResponseEntity.status(200).body(returnVO);
+        return ResponseEntity.status(200).body(returnList);
     }
 }
