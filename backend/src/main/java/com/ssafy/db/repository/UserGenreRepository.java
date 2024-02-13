@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserGenreRepository extends JpaRepository<UserGenre, Long> {
-    List<Genre> findGenreIdxByUserIdx(User userIdx);
+    List<UserGenre> findGenreIdxByUserIdx(User userIdx);
 
     @Modifying
     @Query("DELETE FROM UserGenre ug WHERE ug.userIdx = :user")
