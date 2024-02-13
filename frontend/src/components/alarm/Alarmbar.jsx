@@ -14,7 +14,7 @@ function Alarmbar () {
         const fetchData = async () => {
             const res = await notification()
             setData(res)
-            console.log(res)
+            // console.log(res)
         }
         fetchData()
     },[])

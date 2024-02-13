@@ -75,8 +75,10 @@ const FileContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  gap: 2px 10%;
   padding-top: 3%;
+  padding-left: 7%;
   overflow: scroll;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
@@ -101,7 +103,7 @@ const SideDiv = styled.div`
 
 
 const MainDiv = styled.div`
-  width: 67.5%;
+  width: 60%;
   background-color: ${(props) => props.theme.colours.point};
   border-radius: 50px;
   overflow: hidden;

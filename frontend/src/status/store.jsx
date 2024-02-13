@@ -6,6 +6,7 @@ const useStore = create(set => ({
   islogined: localStorage.accessToken ? true : false,
   setIsLogined : (logined) => set({ islogined: logined}),
   user : null,
+  userPortfolio : null,
   setUser : (user) => set({user: user}),
 
   fetchUser: async () => {
@@ -21,6 +22,7 @@ const useStore = create(set => ({
         }
       });
       set({user: response.data[0]})
+      set({userPortfolio : response.data[1]})
       localStorage.setItem('userIdx', response.data[0].userIdx)
       // console.log(response.data[0], '유저정보')
     }

@@ -159,10 +159,10 @@ function PortfolioAdd() {
         }
     }
 
-    // const handlePin = (e) => {
-    //     e.preventDefault()
-    //     setPinFixed(e.target.checked)
-    // }
+    const handlePin = (e) => {
+        e.preventDefault()
+        setPinFixed(e.target.checked)
+    }
 
     const handleModal = () => {
         setOpen(!open)
@@ -178,7 +178,7 @@ function PortfolioAdd() {
 
         const formData = new FormData()
         const body = JSON.stringify({
-            // pinFixed: pinFixed,
+            pinFixed: pinFixed,
             // fileDescription: fileDescription,
             title: title
         })
@@ -267,10 +267,10 @@ function PortfolioAdd() {
                     // style={{display: "none"}}
                     id="input-file"/>
                 </div>
-                {/* <div className='inputWrapper'>
+                <div className='inputWrapper'>
                     <label className='label'>pin고정</label>
                     <input type='checkbox' className='input' onChange={handlePin} />
-                </div> */}
+                </div>
                     {/* <FaFileUpload size={80}/> */}
                 </CustomBody>
                 <br/>

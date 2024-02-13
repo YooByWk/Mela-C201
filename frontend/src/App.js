@@ -12,8 +12,8 @@ import Boards from "./pages/Boards";
 import CommunityCreate from "./components/community/CommunityCreate";
 import CommunityDetail from "./components/community/CommunityDetail";
 import CommunityHome from "./components/community/CommunityHome";
-import TeamspaceMain from "./pages/TeamspaceMain";
 import CommunityEdit from "./components/community/CommunityEdit";
+import TeamspaceMain from "./pages/TeamspaceMain";
 import EmailVerify from "./pages/EmailVerify";
 import GatherHome from "./components/gather/GatherHome";
 import GatherCreate from "./components/gather/GatherCreate";
@@ -21,6 +21,8 @@ import GatherDetail from "./components/gather/GatherDetail";
 import GatherEdit from "./components/gather/GatherEdit";
 import ChangePassword from "./pages/ChangePassword";
 import Video from "./Video/Video";
+import TotalSearch from './pages/TotalSearch'
+
 
 function App() {
   return (
@@ -37,6 +39,7 @@ function App() {
 
             <Route path="/" element={<Landing />} />
             <Route path="/teamspace" element={<TeamspaceMain />} />
+            <Route path="/search/:word" element={<TotalSearch />} />
             <Route path="/signup/:emailId" element={<EmailVerify />} />
             <Route path="/gather" element={<Boards />}>
               <Route index element={<GatherHome />} />

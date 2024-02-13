@@ -76,26 +76,31 @@ const SearchBar = styled.form`
   };
 `
 
-const submitHandler = (event) => {
-  event.preventDefault();
-  window.alert('제출버튼확인')
-  // state 
-}
 
 function Navbar({backcolour, radius}) {
   const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState('')
   function LogoClick(event) {
     console.log(event, '홈으로 이동합니다.')
     navigate('/')
   }
   
+  const handleChange = async(e) => {
+    setSearchInput(e.target.value)
+  }
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+    navigate(`/search/${searchInput}`)
+  }
+
   return (
     < >
       <Container $backcolour={backcolour}>
         <img  src={logo} alt="" onClick={LogoClick} />
           <SearchBar onSubmit={submitHandler}>
           <FaSearch className='Icon'/>
-          <input type="search" spellCheck='false' placeholder='Search'  />
+          <input id="search" type="text" spellCheck='false' placeholder='Search' onChange={handleChange} />
           </SearchBar>
       <div className='MenuContainer'>
         <span><NavLink
