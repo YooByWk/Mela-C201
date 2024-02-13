@@ -50,7 +50,8 @@ public class Teamspace {
 
     String chatRoomIdx;
 
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
     @JoinColumn(name = "session_id", referencedColumnName = "sessionId")
     Meeting sessionId;
 
