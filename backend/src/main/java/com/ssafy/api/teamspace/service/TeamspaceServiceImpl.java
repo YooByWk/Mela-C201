@@ -342,4 +342,15 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     public Teamspace findById(Long teamspaceIdx) {
         return teamspaceRepository.findById(teamspaceIdx).get();
     }
+
+    @Override
+    public void updateTeamspaceOpenViduSessionId(Long teamspaceIdx, String sessionId) {
+        Teamspace teamspace = teamspaceRepository.getOne(teamspaceIdx);
+
+        Meeting meeting = new Meeting();
+        meeting.setSessionId(sessionId);
+
+        teamspace.setSessionId(meeting);
+        teamspaceRepository.save(teamspace);
+    }
 }

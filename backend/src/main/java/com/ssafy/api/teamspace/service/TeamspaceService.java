@@ -5,6 +5,7 @@ import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
+import com.ssafy.db.entity.Meeting;
 import com.ssafy.db.entity.Schedule;
 import com.ssafy.db.entity.Teamspace;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,4 +34,6 @@ public interface TeamspaceService {
     void uploadFile(long teamspaceid, MultipartFile[] multipartFiles, String fileDescription);
     List<com.ssafy.db.entity.File> getFileListByTeamspaceIdx(Teamspace teamspace);
     Teamspace findById(Long teamspaceIdx);
+
+    void updateTeamspaceOpenViduSessionId(Long teamspaceIdx, String sessionId);
 }

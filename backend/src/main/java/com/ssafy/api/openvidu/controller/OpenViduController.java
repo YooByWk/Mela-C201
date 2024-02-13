@@ -28,6 +28,7 @@ import javax.annotation.PostConstruct;
 
 import com.ssafy.api.openvidu.request.MeetingPostReq;
 import com.ssafy.api.openvidu.service.MeetingService;
+import com.ssafy.api.teamspace.service.TeamspaceService;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.db.entity.User;
@@ -61,6 +62,10 @@ public class OpenViduController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    TeamspaceService teamspaceService;
+
     public static final Logger logger = LoggerFactory.getLogger(OpenViduController.class);
     private final MeetingService meetingService;
     @Autowired
@@ -88,9 +93,10 @@ public class OpenViduController {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    @PostMapping("/createsession")
+    @PostMapping("/createsession/{teamspaceidx}")
     @ApiOperation(value = "방 생성을 위한 세션ID 생성")
-    public ResponseEntity<?> createSession(@ApiIgnore Authentication authentication)
+    public ResponseEntity<?> createSession(@ApiIgnore Authentication authentication,
+                                           @PathVariable Long teamspaceidx)
             throws OpenViduJavaClientException, OpenViduHttpException {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
@@ -122,6 +128,7 @@ public class OpenViduController {
 
             logger.info("*** createSession 메소드 종료");
             logger.info("*** 세션 생성 : " + session.getSessionId());
+            teamspaceService.updateTeamspaceOpenViduSessionId(teamspaceidx, session.getSessionId());
             return ResponseEntity.status(HttpStatus.OK).body(check);
         } catch (Exception e) {
 

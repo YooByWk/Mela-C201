@@ -175,12 +175,6 @@ function Sidebar({ className, paddingtop }) {
               </ListItem>
               <ListItem className="items">
                 <ListItemPrefix>
-                  <FaRegHeart />
-                </ListItemPrefix>
-                <span className="wd">Favorite</span>
-              </ListItem>
-              <ListItem className="items">
-                <ListItemPrefix>
                   <MdOutlineLogout />
                 </ListItemPrefix>
                 <span className="wd" onClick={logout}>Logout</span>

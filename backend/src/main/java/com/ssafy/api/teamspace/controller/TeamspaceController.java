@@ -320,4 +320,30 @@ public class TeamspaceController {
         }
     }
 
+
+    @GetMapping("/{teamspaceid}/getsessionid")
+    @ApiOperation(value = "팀스페이스에 생성된 화상채팅 session 조회", notes = "생성된sessionId가 있으면 String type의 sessionId를 반환합니다")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<String> getTeamspaceOpenViduSessionId(
+            @PathVariable(name = "teamspaceid") Long teamspaceid) {
+
+        Teamspace teamspace = null;
+        try {
+            teamspace = teamspaceService.findById(teamspaceid);
+        } catch (Exception e) {
+            return ResponseEntity.status(403).body("Invalid teamspace idx");
+        }
+
+        if(teamspace.getSessionId() != null){
+            return ResponseEntity.status(200).body(teamspace.getSessionId().getSessionId());
+        }else{
+            return ResponseEntity.status(500).body("Session id is not exist");
+        }
+
+
+    }
+
 }
