@@ -114,8 +114,6 @@ const SideDiv = styled.div`
 `;
 
 const MainContainer = styled.div`
-  /* display: flex;
-  flex-direction: column; */
   width: 60%;
 `
 const MainDiv = styled.div`
@@ -126,7 +124,7 @@ const MainDiv = styled.div`
   padding-top: 3%;
   padding-left: 2%;
   display: flex;
-  /* flex-direction: column; */
+  flex-direction: column;
   height: 70%;
   .Container {
     margin-top: 5%;

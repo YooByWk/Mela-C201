@@ -10,8 +10,8 @@ const Container = styled.div`
   // 참고 => https://bennettfeely.com/clippy/
   clip-path: polygon(47% 0, 61% 15%, 100% 15%, 100% 75%, 0 75%, 0 0);
   
-  width: 350px;
-  height: 320px;
+  width: 260px;
+  height: 270px;
     
   display: flex;
   /* flex-wrap: wrap; */
