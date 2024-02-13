@@ -98,17 +98,17 @@ public class PortfolioController {
     ) {
 
 
-        Object[] returnVO = new Object[2];
-        List<Object[]> returnList = new ArrayList<>();
 
         List<PortfolioMusic> portfolioMusicByTitle = portfolioService.getPortfolioMusicListByTitle(word);
 
+        List<Object[]> returnList = new ArrayList<>();
         for(PortfolioMusic portfolioMusicItem : portfolioMusicByTitle){
+            Object[] returnVO = new Object[2];
             returnVO[0] = portfolioMusicItem;
             returnVO[1] = portfolioService.getPortfolioAbstractByUserIdx(portfolioMusicItem.getUserIdx());
             returnList.add(returnVO);
         }
 
-        return ResponseEntity.status(200).body(returnVO);
+        return ResponseEntity.status(200).body(returnList);
     }
 }
