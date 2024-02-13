@@ -66,7 +66,6 @@ const Container = styled.div`
     .content-box {
         display: flex;
         flex-direction: row;
-        align-items: center;
     }
     
     .nowContent {

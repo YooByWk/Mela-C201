@@ -10,6 +10,7 @@ import com.ssafy.api.user.request.FilePostReq;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.db.entity.File;
 import com.ssafy.db.entity.Teamspace;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.TeamspaceFileRepository;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
@@ -121,25 +123,49 @@ public class TeamspaceController {
     })
     public ResponseEntity<TeamspaceRes> getTeamspace(@PathVariable(name = "teamspaceid") Long teamspaceId) {
         Teamspace teamspace = null;
+        TeamspaceRes teamspaceRes = null;
+        File teamspacePictureFile = null;
+        File teamspaceBackgroundPictureFile = null;
+        String teamspacePictureFileURL = null;
+        String teamspaceBackgroundPictureFileURL = null;
+
         try {
             teamspace = teamspaceService.getTeamspaceById(teamspaceId);
-            TeamspaceRes teamspaceRes = TeamspaceRes.of(teamspace);
+            teamspaceRes = TeamspaceRes.of(teamspace);
 
+            //1. 기본 이미지 URL 설정
             try {
-                String teamspacePictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspace.getTeamspacePictureFileIdx().getFileIdx());
-                String teamspaceBackgroundPictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspace.getTeamspaceBackgroundPictureFileIdx().getFileIdx());
-
-                teamspaceRes.setTeamspacePictureFileURL(teamspacePictureFileURL);
-                teamspaceRes.setTeamspaceBackgroundPictureFileURL(teamspaceBackgroundPictureFileURL);
-            } catch (NullPointerException e) {
+                teamspacePictureFile = fileService.getFileByFileIdx(teamspace.getTeamspacePictureFileIdx().getFileIdx());
+                teamspacePictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspacePictureFile.getFileIdx());
+            } catch (NoSuchElementException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
                 //e.printStackTrace();
                 //기본 이미지가 없는 경우
-                teamspaceRes.setTeamspacePictureFileURL(fileService.getDefaultTeamspacePictureImageUrl());
-                teamspaceRes.setTeamspaceBackgroundPictureFileURL(fileService.getDefaultTeamspaceBackgroundPictureImageUrl());
+                teamspacePictureFileURL = fileService.getDefaultTeamspacePictureImageUrl();
             }
+
+            //2. 배경 이미지 URL 설정
+            try {
+                teamspaceBackgroundPictureFile = fileService.getFileByFileIdx(teamspace.getTeamspaceBackgroundPictureFileIdx().getFileIdx());
+                teamspaceBackgroundPictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspaceBackgroundPictureFile.getFileIdx());
+            } catch (NoSuchElementException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                //e.printStackTrace();
+                //기본 이미지가 없는 경우
+                teamspaceBackgroundPictureFileURL = fileService.getDefaultTeamspaceBackgroundPictureImageUrl();
+            }
+
+            //이미지 설정
+            teamspaceRes.setTeamspacePictureFileURL(teamspacePictureFileURL);
+            teamspaceRes.setTeamspaceBackgroundPictureFileURL(teamspaceBackgroundPictureFileURL);
+            teamspaceRes.setTeamspacePictureFile(teamspacePictureFile);
+            teamspaceRes.setTeamspaceBackgroundPictureFile(teamspaceBackgroundPictureFile);
 
             return ResponseEntity.status(200).body(teamspaceRes);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(500).body(null);
         }
     }

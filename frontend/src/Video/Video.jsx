@@ -7,12 +7,15 @@ import axios from "axios";
 import icon from "../assets/icons/logo.png";
 import UserVideoComponent from "./UserVideoComponent";
 import { createViduSession } from "../API/TeamspaceAPI";
+import { fetchUser } from "../API/UserAPI";
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
 
+const OPENVIDU_SERVER_URL = "https://localhost:4443";
+const OPENVIDU_SERVER_SECRET = "mela";
+
 class Video extends Component {
-  
   // These properties are in the state's component in order to re-render the HTML whenever their values change
   constructor(props) {
     super(props);
@@ -23,10 +26,11 @@ class Video extends Component {
       myUserName: "Participant" + Math.floor(Math.random() * 100),
       session: undefined,
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
-      publisher: undefined,
-      subscribers: [],
-      isCamera : true,
-      isMic : true,
+      publisher: undefined, // 로컬 웹캠 스트림
+      subscribers: [], // 다른 사용자의 활성 스트림
+      isCamera: false,
+      isMic: false,
+      isSpeaker: false,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -37,37 +41,57 @@ class Video extends Component {
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.handleToggle = this.handleToggle.bind(this); // 마이크 카메라 토글
+    this.getUserName = this.getUserName.bind(this);
   }
-  handleToggle(target) { // 마이크 카메라 토글 입력 함수
+  async getUserName () {
+     const tempName = await fetchUser();
+      console.log(tempName);
+      this.setState({
+        myUserName: tempName[0].nickname,
+      });
+  }
+
+
+  handleToggle(target) {
+    // 마이크 카메라 토글 입력 함수
     switch (target) {
       case "camera":
-        this.setState({ isCamera: !this.state.isCamera },
-          () => {
-            console.log(this.state.isCamera)
-            this.state.publisher.publishVideo(this.state.isCamera);
-          });
+        this.setState({ isCamera: !this.state.isCamera }, () => {
+          console.log(this.state.isCamera);
+          this.state.publisher.publishVideo(this.state.isCamera);
+        });
 
         break;
       case "mic":
-        this.setState({ isMic: !this.state.isMic },()=>{
-          console.log(this.state.isMic)
+        this.setState({ isMic: !this.state.isMic }, () => {
+          console.log(this.state.isMic);
           this.state.publisher.publishAudio(this.state.isMic);
         });
         break;
+      case "speaker":
+        this.setState({ isSpeaker: !this.state.isSpeaker });
+        break;
+
       default:
         break;
     }
   }
   componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
+    console.log("유저이름 불러오기")
+    this.getUserName();
   }
-  
+
   createHandler = () => {
     console.log(this.state);
     createViduSession()
-    .then((res)=> {console.log(res)})
-    .catch((err)=>{console.log(err)})
-  }
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   componentWillUnmount() {
     window.removeEventListener("beforeunload", this.onbeforeunload);
@@ -121,7 +145,7 @@ class Video extends Component {
         session: this.OV.initSession(),
       },
       () => {
-        var mySession = this.state.session;
+        let mySession = this.state.session;
 
         // --- 3) Specify the actions when events take place in the session ---
 
@@ -166,8 +190,8 @@ class Video extends Component {
               let publisher = await this.OV.initPublisherAsync(undefined, {
                 audioSource: undefined, // The source of audio. If undefined default microphone
                 videoSource: undefined, // The source of video. If undefined default webcam
-                publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-                publishVideo: true, // Whether you want to start publishing with your video enabled or not
+                publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+                publishVideo: false, // Whether you want to start publishing with your video enabled or not
                 resolution: "640x480", // The resolution of your video
                 frameRate: 30, // The frame rate of your video
                 insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
@@ -227,7 +251,7 @@ class Video extends Component {
     });
   }
   async switchCamera(e) {
-    console.log(e);
+    // console.log(e);
     try {
       const devices = await this.OV.getDevices();
       var videoDevices = devices.filter(
@@ -291,7 +315,7 @@ class Video extends Component {
     return response.data; // The token
   }
   render() {
-    const Check =  ()=> console.log(this.state)
+    const Check = () => console.log(this.state);
     const mySessionId = this.state.mySessionId;
     const myUserName = this.state.myUserName;
     console.log("mySessionId: ", mySessionId);
@@ -299,11 +323,16 @@ class Video extends Component {
     console.log(this.state);
     return (
       <div>
-      <button onClick={createViduSession}>제발</button>
-      <button onClick={Check}>체크</button>
+        <button type='button' onClick={createViduSession}>제발</button>
+        <button type='button' onClick={this.getUserName}>유저이리온</button>
+        <button type='button' onClick={()=> console.log(this.state.myUserName)}>제발 유저이름 </button>
+
+
+        <button type='button'  onClick={Check}>체크</button>
+        <button type='button' onClick={()=> console.log(this.state)}>비디오체크</button>
         {this.state.session === undefined ? (
           <div>
-            <p>참여하기</p>
+            <p>Mela Team Video Conference</p>
             <img src={icon} alt="으악" />
             <div>
               <h1>아무튼 들어가보기 </h1>
@@ -338,17 +367,28 @@ class Video extends Component {
               <h1>{mySessionId}</h1>
               <input type="button" value="Leave" onClick={this.leaveSession} />
               <input type="button" value="Switch" onClick={this.switchCamera} />
-              <input type="button" value="camera" onClick={() => this.handleToggle("camera")} />
-              <input type="button" value="mic" onClick={() => this.handleToggle("mic")} />
+              <input
+                type="button"
+                value="camera"
+                onClick={() => this.handleToggle("camera")}
+              />
+              <input
+                type="button"
+                value="mic"
+                onClick={() => this.handleToggle("mic")}
+              />
             </div>
+            {/* 205~211 */}
             {/* {this.state.mainStreamManager !== undefined ? (
-              <div className='VideoComponent'>
+              <div className="VideoComponent">
                 <UserVideoComponent
                   streamManager={this.state.mainStreamManager}
                 />
               </div>
             ) : null} */}
+
             <div>
+              {/* 212 */}
               {this.state.publisher !== undefined ? (
                 <div
                   className=""
@@ -369,7 +409,11 @@ class Video extends Component {
                 >
                   <span>{sub.id}</span>
                   <span>
-                  {this.state.isCamera ? <div>'카메라가 켜져있습니다'</div> : <div>'카메라가 꺼져있습니다'</div>}
+                    {this.state.isCamera ? (
+                      <div>'카메라가 켜져있습니다'</div>
+                    ) : (
+                      <div>'카메라가 꺼져있습니다'</div>
+                    )}
                   </span>
                   <UserVideoComponent streamManager={sub} />
                 </div>

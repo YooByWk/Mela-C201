@@ -1,3 +1,4 @@
+import { button } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -10,7 +11,7 @@ const Container = styled.div`
   
   width: ${props => props.width};
   height: 80%;
-    
+  max-width: ${props => props.maxwidth};
   display: flex;
   /* flex-wrap: wrap; */
   flex-direction: column;
@@ -26,7 +27,6 @@ const Container = styled.div`
   padding-bottom: 4%;
   padding-left: 3vw;
   padding-right: 3vw;
-
 .titleday{
     display: flex;
     flex-direction: row;
@@ -74,23 +74,21 @@ const FolderNoImage = (props) => {
         <>
         <Container
             width={props.width}
+            maxWidth={props.maxwidth}
             onClick={props.onClick}
         >
-
             <div className='titleday'>
             <Title>
                 {props.title}
             </Title>
             <Day>
-                {props.day}
+            
+                {props.day? props.day : null}
             </Day>
             </div>
-
             <Content>
                 {props.content}
             </Content>
-
-
         </Container>
         </>
     )
@@ -99,8 +97,9 @@ const FolderNoImage = (props) => {
 FolderNoImage.defaultProps={
     title: 'Project name',
     content: '프로젝트 설명',
-    day: 'D-??',
+    day: null,
     width: '1rem',
+    maxwidth: '350px',
     height: '1rem',
     onClick: () => {}
 }
