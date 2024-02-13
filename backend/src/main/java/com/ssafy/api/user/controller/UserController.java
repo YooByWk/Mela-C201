@@ -35,6 +35,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
@@ -508,16 +509,19 @@ public class UserController {
 		int returnCode = userService.isAllowedToBrowsePortfolioAbstract(userEmail, targetUser);
 		//2. 조회할 수 있는 사용자
 		if(returnCode == 200) {
+
 			PortfolioAbstract portfolioAbstract = userService.browsePortfolioAbstract(userid);
 			List<PortfolioMusic> portfolioMusicList = portfolioMusicRepositorySupport.getPortfolioMusicListByUserIdx(targetUser);
+			targetUser.setPassword("");
 
-			Object[] returnVO = {portfolioAbstract, portfolioMusicList};
+			Object[] returnVO = {targetUser, portfolioAbstract, portfolioMusicList};
 
 			return ResponseEntity.status(200).body(returnVO);
 		//3. 조회할 수 없는 사용자 (searchAllow false)
 		} else {
 			return ResponseEntity.status(returnCode).body("Fail. Check error code");
 		}
+
 	}
 	@GetMapping("/recruit")
 	@ApiOperation(value = "구인글 조회", notes = "구인글 정보를 응답한다.")
@@ -552,20 +556,19 @@ public class UserController {
 			@ApiResponse(code = 200, message = "성공"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<List<User>> totalSearch(
-			@PathVariable(name = "검색어(사용자 이름 혹은 닉네임)") String word
+	public ResponseEntity<List<PortfolioAbstract>> totalSearch(
+			@PathVariable(name = "word") String word
 	) {
-		List<User> userList = new ArrayList<>();
-		List<User> userByName = userService.getUserByName(word);
-		List<User> userByNickname = userService.getUserByNickname(word);
-		if(userByName != null){
-			userList.addAll(userByName);
-		}
-		if(userByNickname != null){
-			userList.addAll(userByNickname);
-		}
+		List<PortfolioAbstract> userPortfolioAbstractList = new ArrayList<>();
+		List<User> userListByName = userService.getUserByNameOrNickname(word, word);
 
-		return ResponseEntity.status(200).body(userList);
+		for(User userItem : userListByName){
+			Optional<PortfolioAbstract> userPortAbst = portfolioAbstractRepository.findByUserIdx(userItem);
+			if(userPortAbst.isPresent()){
+				userPortfolioAbstractList.add(userPortAbst.get());
+			}
+		}
+		return ResponseEntity.status(200).body(userPortfolioAbstractList);
 	}
 
 }

@@ -119,24 +119,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> getUserByName(String userName) {
-		Optional<List<User>> userList = userRepository.findByNameContaining(userName);
-		if(userList.get().size() != 0){
-			return userList.get();
-		}else{
-			return null;
-		}
+	public List<User> getUserByNameOrNickname(String userName, String userNickname) {
+		List<User> userList = userRepository.findByNameContainingOrNicknameContaining(userName, userNickname);
+		return userList;
 	}
 
-	@Override
-	public List<User> getUserByNickname(String userNickname) {
-		Optional<List<User>> userList = userRepository.findByNicknameContaining(userNickname);
-		if(userList.get().size() != 0){
-			return userList.get();
-		}else{
-			return null;
-		}
-	}
 
 
 	@Override
