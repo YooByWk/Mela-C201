@@ -3,11 +3,8 @@ import styled from "styled-components"
 import { useParams } from "react-router-dom";
 import { TeamspaceUpdate } from "../../API/TeamspaceAPI";
 import { TeamspaceInfo } from "../../API/TeamspaceAPI";
-import CalendarBox from "./calendar/CalendarBox";
-
-const Container = styled.form`
-    color: white;
-`
+import { IoReload } from "react-icons/io5";
+import moment from 'moment';
 
 
 function TeamspaceManage () {
@@ -83,43 +80,98 @@ function TeamspaceManage () {
 
     return(
     <Container onSubmit={handleSubmit}>
-    <div>
-        마감일 변경
-        <CalendarBox />
-        기존 마감일 : {values.endDate}
-        선택된 마감일 : {}
-        <button className='button' type='submit'>
-              UPDATE
-        </button>
-    </div>
-    <div>
-        프로젝트 이미지 변경
-        <div>
-            썸네일 변경
-            <input type="file" onChange={handleImgFile}/>
+      <div className="date-image">
+        <div className="date">
+          <h2>마감일 변경</h2>
+          <div className="update">
+            <p>기존 마감일 : {moment(values.endDate).format('YY-MM-DD(ddd)')}</p>
             <button className='button' type='submit'>
-              UPDATE
-        </button>
-            배경 이미지 변경
-            <input type="file" onChange={handleBackFile}/>
-            <button className='button' type='submit'>
-              UPDATE
-        </button>
+              <IoReload className="icon"/>
+              <span>Update</span>
+            </button>
+          </div>
         </div>
-    </div>
-    <div>
-        개요 변경
-        <input type="text" value={values.teamDescription} id="teamDescription" onChange={handleChange}/>
-        <button className='button' type='submit'>
-              UPDATE
-        </button>
-    </div>
-    <div>
-        일정 관리
-        
-    </div>
+        <div className="iamge">
+          <h2>프로젝트 이미지 변경</h2>
+          <div className="image-body">
+            <div className="thumnail">
+              
+            </div>
+            <div className="thum">
+              <label htmlFor="">썸네일 변경</label>
+              <input type="file" onChange={handleImgFile}/>
+              <button className='button' type='submit'>
+                <IoReload className="icon"/>
+                <span>Update</span>
+              </button>
+            </div>
+            <div className="background">
+              <label htmlFor="">배경 이미지 변경</label>
+              <input type="file" onChange={handleBackFile}/>
+              <button className='button' type='submit'>
+                <IoReload className="icon"/>
+                <span>Update</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="description">
+        <h3>개요 변경</h3>
+          <textarea type="text" value={values.teamDescription} id="teamDescription" onChange={handleChange}/>
+          <button className='button' type='submit'>
+            <IoReload className="icon"/>
+            <span>Update</span>
+          </button>
+      </div>
     </Container>
     )
 }
 
 export default TeamspaceManage
+
+
+const Container = styled.form`
+    color: white;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+  .date-image {
+    display: flex;
+  }
+
+  .date {
+    flex: 1;
+  }
+
+  .update {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .button {
+    background-color: #254ef8;
+    border-radius: 20px;
+    margin-left: 1rem;
+  }
+
+  .icon {
+    margin-right: 5px;
+  }
+
+  .image-body {
+    margin-top: 1rem;
+  }
+
+  .image {
+    flex: 1;
+  }
+
+  .description {
+    display: flex;
+    flex-direction: column;
+    background-color: #151C2C;
+  }
+`

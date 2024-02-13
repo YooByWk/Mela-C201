@@ -57,6 +57,7 @@ const CustomBody = styled('div')(
       height: 2.5rem;
       color: white;
       flex-grow: 1;
+      border-radius: 5px;
     }
 
     & .label {
@@ -71,7 +72,20 @@ const CustomBody = styled('div')(
       border-radius: 5px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+    }
+
+    & .inputFile {
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+      position: absolute;
+    }
+
+    & .holder {
+      display: inline-block;
+      padding: 10px 20px;
+      cursor: pointer;
+      color: gray;
     }
   `
 )
@@ -151,6 +165,7 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
         <TriggerButton type="button" onClick={handleOpen} >
           <span>+</span>
         </TriggerButton>
+        <span style={{fontSize: 'x-large'}}>Create</span>
       
       <Modal
         aria-labelledby="unstyled-modal-title"
@@ -167,22 +182,22 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
           <div id="modal-description" className="modal-description">
             <div className='inputWrapper'>
               <label className='label'>배경 이미지</label>
-              <input type='file' className='input' onChange={handleBackFile} />
+              <input type='file' id='backInput' className='inputFile' onChange={handleBackFile} />
+              <label htmlFor="backInput" className='holder'>배경 이미지 추가하기</label>
             </div>
             <div className='inputWrapper'>
               <label className='label'>프로필 이미지</label>
-              <input type='file' className='input' onChange={handleImgFile} />
+              <input type='file' id='profileInput' className='inputFile' onChange={handleImgFile} />
+              <label htmlFor="profileInput" className='holder'>프로필 이미지 추가하기</label>
             </div>            
             <div className='inputWrapper'>
               <label className='label'>종료일</label>
               <input type='date' id='endDate' className='input' onChange={handleChange} />
             </div>
             <div className='inputWrapper'>
-              {/* <label className='label'>이름</label> */}
               <input type='text' id='teamName' className='input' onChange={handleChange} placeholder='팀 스페이스 이름을 입력해주세요. (최대 30자)'/>
             </div>            
             <div className='inputWrapper'>
-              {/* <label className='label'>설명</label> */}
               <input type='text' id='teamDescription' className='input' onChange={handleChange} placeholder='팀 스페이스 설명을 입력해주세요.'/>
             </div>
             <button className='button' type='submit'>
@@ -231,8 +246,6 @@ const StyledBackdrop = styled(Backdrop)`
   -webkit-tap-highlight-color: transparent;
 `
 
-
-
 const TriggerButton = styled('button')(
   ({ theme }) => css`
 
@@ -242,38 +255,25 @@ const TriggerButton = styled('button')(
   top: 30px;
 
   text-align: center;
-  margin-left: 8%;
-  margin-top: 4%;
+  margin-left: 2rem;
+  margin-top: 2rem;
+  margin-right: 1rem;
   font-size: x-large;
   color: #254EF8;
 
   border: 2px solid #254EF8;
-  background: white;
   border-radius: 4px;
 
-    /* & :hover {
-      width: 30px;
-      height: 30px;
-      left: 30px;
-      top: 30px;
-
-      text-align: center;      
-      margin-left: 8%;
-      margin-top: 4%;
-      font-size: xx-large;
+    &:hover {
       color: white;
-
-      border: 2px solid white;
       background: #254EF8;
-      border-radius: 4px;
-      
-    } */
+      cursor: pointer;
+    }
 
     .p {
       text-align: center;
     }
     `,
 )
-
 
 export default TeamspaceCreateModal
