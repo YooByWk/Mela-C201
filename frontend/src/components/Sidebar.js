@@ -91,24 +91,23 @@ function Sidebar({ className, paddingtop }) {
         console.log(err)
       } 
     }; userInfo()
-
-    const imageInfo = async() => {     
-      try {
-        if (portfolioValues.portfolio_picture_file_idx) {
-          const response = await getImg(portfolioValues.portfolio_picture_file_idx.fileIdx)
-          setImageURL(response.message)
-        } else{
-            setImageURL(defaultprofile)
-          }
-        } catch (err) {
-          console.error(err)
-        }
-      }
-      imageInfo()
-    
   }, [])
   
   useEffect(() => {
+      const imageInfo = async() => {     
+          try {
+            if (portfolioValues.portfolio_picture_file_idx) {
+              const response = await getImg(portfolioValues.portfolio_picture_file_idx.fileIdx)
+              setImageURL(response.message)
+            } else{
+                setImageURL(defaultprofile)
+              }
+          } catch (err) {
+              console.error(err)
+          }
+      }
+      imageInfo()
+  
     const follow = async () => {
       if (userValues.emailId) {
       try {
@@ -122,7 +121,7 @@ function Sidebar({ className, paddingtop }) {
     }
     }
     follow()
-  },[])
+  },[userValues])
 
   // const followList = async () => {
   //   try {

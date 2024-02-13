@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import DefaultButton from "../components/DefaultButton";
@@ -9,7 +9,9 @@ import { getImg } from "../API/FileAPI";
 import defaultprofile from '../assets/images/default-profile.png'
 
 function UserUpdateForm() {
+    const imgRef = useRef()
     const [imgFile, setImgFile] = useState('')
+    const [imgPreview, setImgPreview] = useState('')
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [selectedPositions, setSelectedPositions] = useState([]);
 
@@ -82,28 +84,35 @@ function UserUpdateForm() {
                 console.error(err)
             }
         }; getUserInfo()
-       
+
+    }, [])
+
+    useEffect(() => {
         const imageInfo = async() => {     
             try {
               if (portfolioValues.portfolio_picture_file_idx) {
                 const response = await getImg(portfolioValues.portfolio_picture_file_idx.fileIdx)
-                setImageURL(response.message)
+                setImgPreview(response.message)
               } else{
-                  setImageURL(defaultprofile)
+                  setImgPreview(defaultprofile)
                 }
             } catch (err) {
                 console.error(err)
             }
         }
         imageInfo()
-    }, [])
-
-
+    }, [userValues])
+    
     const handleImgFile = (e) => {
         e.preventDefault()
-        if (e.target.files[0]) {
-            setImgFile(e.target.files[0])
+        const file = imgRef.current.files[0]
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            setImgPreview(reader.result)
         }
+        // console.log(e.target.files[0])
+        setImgFile(e.target.files[0])
     }
 
     const handleUserChange = async (e) => {
@@ -152,9 +161,9 @@ function UserUpdateForm() {
         formData.append('portfolioAbstractPostReq', portfolio)
         formData.append('portfolioPicture', imgFile)
 
-        for (let key of formData.keys()) {
-            console.log(key, ":", formData.get(key));
-        }
+        // for (let key of formData.keys()) {
+        //     console.log(key, ":", formData.get(key));
+        // }
 
         try {
             await updateUser(formData)
@@ -191,11 +200,14 @@ function UserUpdateForm() {
             <Form onSubmit={handleSubmit}>
                 <ProfileImageWrapper>
                     <div className="image">
-                        <img src={imageURL} alt="프로필 이미지" />
+                    <img
+                        src={imgPreview} 
+                        alt="프로필 이미지"
+                    />
                     </div>
                     <input
                         type='file'
-
+                        ref={imgRef}
                         onChange={handleImgFile}
                     />
                 </ProfileImageWrapper>
