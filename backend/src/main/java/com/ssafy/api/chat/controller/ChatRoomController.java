@@ -72,11 +72,11 @@ public class ChatRoomController {
         return ResponseEntity.status(200).body(res);
     }
 
-    @PostMapping("")
+    @PostMapping("/{otheruserid}")
     @ApiOperation(value = "채팅방 입장", notes = "유저1과 유저2의 채팅방에 입장한다.")
     public ResponseEntity<String> enterChatRoom(
             @ApiIgnore Authentication authentication,
-            @RequestBody Long otherUserIdx
+            @PathVariable(name = "otheruserid") Long otherUserIdx
     ) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userEmail = userDetails.getUsername();
