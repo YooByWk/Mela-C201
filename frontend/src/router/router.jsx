@@ -76,7 +76,7 @@ function AppRouter({ className }) {
             />
 
           <Route
-            path='/message' element={<Message />}
+            path='/message/:roomid' element={<Message />}
             />
 
           <Route
