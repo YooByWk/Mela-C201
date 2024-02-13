@@ -1,21 +1,23 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import defaultimage from '../../assets/images/default-image.png'
+import defaultprofile from '../../assets/images/default-profile.png'
+
 import { getImg } from "../../API/FileAPI";
 
 function DefaultPortfolioShape(props) {
-    const [profileImageURL, setProfileImageURL] = useState()
-    const [albumImageURL, setAlbumImageURL] = useState()
+    const [profileImageURL, setProfileImageURL] = useState('')
+    const [albumImageURL, setAlbumImageURL] = useState('')
 
     useEffect(() => {
       const profileImageInfo = async() => {     
         try {
-          if (props.image) {
-            const response = await getImg(props.image.fileIdx)
+          if (props.profileImage) {
+            const response = await getImg(props.profileImage.fileIdx)
             setProfileImageURL(response.message)
           }
            else {
-            setProfileImageURL(defaultimage)
+            setProfileImageURL(defaultprofile)
           }
           } catch (err) {
             console.error(err)  
@@ -26,8 +28,8 @@ function DefaultPortfolioShape(props) {
         
         const albumImageInfo = async() => {     
           try {
-            if (props.image) {
-              const response = await getImg(props.image.fileIdx)
+            if (props.albumImage) {
+              const response = await getImg(props.albumImage.fileIdx)
               setAlbumImageURL(response.message)
             }
              else {
@@ -41,6 +43,7 @@ function DefaultPortfolioShape(props) {
           albumImageInfo()
 
       },[])
+
     return(
         <Container
         >
@@ -48,7 +51,7 @@ function DefaultPortfolioShape(props) {
               src={albumImageURL} 
               alt="앨범 이미지"
               />
-            <div className='userInfo'>
+            <UserInfo>
             <Profile 
               src={profileImageURL} 
               alt="프로필 이미지"
@@ -56,7 +59,7 @@ function DefaultPortfolioShape(props) {
             <Content>
                 {props.nickname}
             </Content>
-            </div>
+            </UserInfo>
 
         </Container>
     )
@@ -65,21 +68,32 @@ function DefaultPortfolioShape(props) {
 export default DefaultPortfolioShape
 
 const Container = styled.div`
-    width: 50px;
-    height: 50px;
+    width: 250px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
 `
-const Album = styled.image`
+const Album = styled.img`
     width: 90%;
-    height: 60%;
+    height: 75%;
     border-radius: 10%;
 `
-
-const Profile = styled.div`
-    width: 5px;
-    height: 5px;
+const UserInfo = styled.div`
+  padding-top: 3%;
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  height: 20%;
+  align-items: center;
+`
+const Profile = styled.img`
+    width: 20%;
+    height: 100%;
     border-radius: 50%;
 `
 
 const Content = styled.p`
   color: white;
+  padding-left: 10%;
+  font-weight: bold;
 `

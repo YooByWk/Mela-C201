@@ -157,6 +157,13 @@ export const othersInfo = async (emailId) => {
     return response.data
 }
 
+// 유저 검색
+export const userSearch = async (word) => {
+    console.log(word)
+    const response = await UserApi.get(`/totalsearchuser/${word}`)
+    return response.data
+}
+
 // // 팔로워 리스트
 // export const followerList = async (emailId) => {
 //     const response = await UserApi.get(`/${emailId}/followees`)

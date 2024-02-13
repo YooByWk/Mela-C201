@@ -30,8 +30,9 @@ function TeamspaceDetail () {
         <SideDiv>
           <Sidebar paddingtop="6vh"/>
         </SideDiv>
-        <MainDiv>
-          <Navbar backcolour="10" />
+        <MainContainer>
+        <Navbar />
+        <P>Search</P>
           <Header>
             <TabMenu>
                 {menuArr.map((el, index) => (
@@ -43,12 +44,12 @@ function TeamspaceDetail () {
                 ))}
             </TabMenu>
           </Header>
-          <div className='content-box'>
+        <MainDiv>
               <div className='nowContent'>
                   {menuArr[currentTab].content}
               </div>
-          </div>
         </MainDiv>
+        </MainContainer>
         <RSideDiv>
             <Alarmbar />
         </RSideDiv>
@@ -62,8 +63,15 @@ const Header = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
+    padding-top: 1%;
 `
 
+const P = styled.p`
+  font-size: x-large;
+  padding-top: 5%;
+  padding-left: 7%;
+  font-weight: bold;
+`
 const TabMenu = styled.ul`
     color: white;
     font-weight: bold;
@@ -105,17 +113,20 @@ const SideDiv = styled.div`
   padding-left: 1%;
 `;
 
-
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 const MainDiv = styled.div`
-  width: 67.5%;
+  width: 100%;
   background-color: ${(props) => props.theme.colours.point};
   border-radius: 50px;
   overflow: hidden;
-  padding-top: 1%;
+  padding-top: 3%;
   padding-left: 2%;
   display: flex;
   flex-direction: column;
-
+  height: 70%;
   .Container {
     margin-top: 5%;
     h1 {

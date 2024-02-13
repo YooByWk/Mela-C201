@@ -20,19 +20,28 @@ function SearchPortfolio(props) {
         }
         info()
         
-    },[])
+    },[word])
 
+    console.log(values)
     return(
         <SearchContainer>
-        {Object.entries(values).map(([key, value]) => (
-          <DefaultPortfolioShape 
-              key={value.portfolioMusicIdx}
-              albumImage={value.albumArtFileIdx.fileIdx}
-              content={value.userIdx.nickname}
-              profileImage={value.teamspacePictureFileIdx}
-            //   onClick={(event) => Navi(`/teamspace/${value.teamspaceIdx}`)}
-          />
-        ))}
+          {values.length === 0 ? (
+            <>
+            <H1>일치하는 검색 결과가 없습니다.</H1>
+          </>
+          ) : (
+          <>
+            {Object.entries(values).map(([key, value]) => (
+              <DefaultPortfolioShape 
+                  key={value[0].portfolioMusicIdx}
+                  albumImage={value[0].albumArtFileIdx}
+                  nickname={value[0].userIdx.nickname}
+                  profileImage={value[1].portfolio_picture_file_idx}
+                //   onClick={(event) => Navi(`/teamspace/${value.teamspaceIdx}`)}
+              />
+            ))}
+          </>
+          )}
       </SearchContainer>
     )
 }
@@ -51,4 +60,8 @@ const SearchContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`
+
+const H1 = styled.p`
+  color: white;
 `
