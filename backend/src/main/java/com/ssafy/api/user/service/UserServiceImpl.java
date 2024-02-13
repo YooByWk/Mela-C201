@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
 		//클라이언트에서 프로필 사진을 업로드 했다면 (파일이 비어있지 않다면)
 		if(portfolioPicture != null) {
 			//1. 프로필 사진 저장 (Amazon S3, file 테이블)
-			com.ssafy.db.entity.File file = fileService.saveFile(portfolioPicture, "");
+			com.ssafy.db.entity.File file = fileService.saveFile(portfolioPicture, "", user);
 			PortfolioAbstract portfolioAbstract = null;
 
 			try {

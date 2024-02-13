@@ -105,7 +105,7 @@ public class ShortsServiceImpl implements  ShortsService {
     }
 
     @Override
-    public int uploadShorts(Shorts shorts, MultipartFile multipartFile, ShortsPostReq shortsPostReq) {
+    public int uploadShorts(Shorts shorts, MultipartFile multipartFile, ShortsPostReq shortsPostReq, User user) {
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());                            //클라이언트가 업로드한 파일의 확장자 추출
 
         //1. 지원하는 비디오 확장자인지 검사
@@ -114,7 +114,7 @@ public class ShortsServiceImpl implements  ShortsService {
         }
 
         //2. Amazon S3에 동영상 업로드
-        com.ssafy.db.entity.File file = fileService.saveFile(multipartFile, shortsPostReq.getFileDescription());
+        com.ssafy.db.entity.File file = fileService.saveFile(multipartFile, shortsPostReq.getFileDescription(), user);
 
         //3. file 테이블에 관련 정보 저장
         file = fileService.addTableRecord(file);

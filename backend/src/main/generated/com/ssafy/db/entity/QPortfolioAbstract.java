@@ -52,7 +52,7 @@ public class QPortfolioAbstract extends EntityPathBase<PortfolioAbstract> {
 
     public QPortfolioAbstract(Class<? extends PortfolioAbstract> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.portfolio_picture_file_idx = inits.isInitialized("portfolio_picture_file_idx") ? new QFile(forProperty("portfolio_picture_file_idx")) : null;
+        this.portfolio_picture_file_idx = inits.isInitialized("portfolio_picture_file_idx") ? new QFile(forProperty("portfolio_picture_file_idx"), inits.get("portfolio_picture_file_idx")) : null;
         this.userIdx = inits.isInitialized("userIdx") ? new QUser(forProperty("userIdx")) : null;
     }
 

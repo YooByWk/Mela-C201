@@ -8,14 +8,17 @@ import com.ssafy.api.teamspace.request.ScheduleUpdatePutReq;
 import com.ssafy.api.teamspace.request.TeamspaceRegisterPostReq;
 import com.ssafy.api.teamspace.request.TeamspaceUpdatePutReq;
 import com.ssafy.api.teamspace.response.TeamspaceMemberListRes;
+import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.util.NotificationUtil;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -73,7 +76,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     private String[] supportedImageExtensions = {"png", "jpg", "jpeg"};
 
     @Override
-    public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx, MultipartFile teamspacePicture, MultipartFile teamspaceBackgroundPicture) {
+    public Teamspace createTeamspace(TeamspaceRegisterPostReq registerInfo, Long userIdx, MultipartFile teamspacePicture, MultipartFile teamspaceBackgroundPicture, User user) {
         com.ssafy.db.entity.File teamspacePictureRecord = null;
         com.ssafy.db.entity.File teamspaceBackgroundPictureRecord = null;
 
@@ -83,7 +86,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
             String extension = FilenameUtils.getExtension(teamspacePicture.getOriginalFilename());
 
             if(isValidImageExtension(extension)) {
-                teamspacePictureRecord = fileService.saveFile(teamspacePicture, "");
+                teamspacePictureRecord = fileService.saveFile(teamspacePicture, "", user);
                 teamspacePictureRecord = fileService.addTableRecord(teamspacePictureRecord);
             }
         }
@@ -94,7 +97,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
             String extension = FilenameUtils.getExtension(teamspaceBackgroundPicture.getOriginalFilename());
 
             if(isValidImageExtension(extension)) {
-                teamspaceBackgroundPictureRecord = fileService.saveFile(teamspaceBackgroundPicture, "");
+                teamspaceBackgroundPictureRecord = fileService.saveFile(teamspaceBackgroundPicture, "", user);
                 teamspaceBackgroundPictureRecord = fileService.addTableRecord(teamspaceBackgroundPictureRecord);
             }
         }
@@ -129,7 +132,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     }
 
     @Override
-    public Teamspace updateTeamspace(Teamspace teamspace, TeamspaceUpdatePutReq updateInfo, MultipartFile teamspacePicture, MultipartFile teamspaceBackgroundPicture) {
+    public Teamspace updateTeamspace(Teamspace teamspace, TeamspaceUpdatePutReq updateInfo, MultipartFile teamspacePicture, MultipartFile teamspaceBackgroundPicture, User user) {
         // 파일 삭제
         if (teamspace.getTeamspacePictureFileIdx() != null) {
             fileRepository.delete(teamspace.getTeamspacePictureFileIdx());
@@ -151,7 +154,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
             String extension = FilenameUtils.getExtension(teamspacePicture.getOriginalFilename());
 
             if(isValidImageExtension(extension)) {
-                teamspacePictureRecord = fileService.saveFile(teamspacePicture, "");
+                teamspacePictureRecord = fileService.saveFile(teamspacePicture, "", user);
                 teamspacePictureRecord = fileService.addTableRecord(teamspacePictureRecord);
             }
         }
@@ -166,7 +169,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
             String extension = FilenameUtils.getExtension(teamspaceBackgroundPicture.getOriginalFilename());
 
             if(isValidImageExtension(extension)) {
-                teamspaceBackgroundPictureRecord = fileService.saveFile(teamspaceBackgroundPicture, "");
+                teamspaceBackgroundPictureRecord = fileService.saveFile(teamspaceBackgroundPicture, "", user);
                 teamspaceBackgroundPictureRecord = fileService.addTableRecord(teamspaceBackgroundPictureRecord);
             }
         }
@@ -307,11 +310,11 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     }
 
     @Override
-    public void uploadFile(long teamspaceid, MultipartFile[] multipartFiles, String fileDescription) {
+    public void uploadFile(long teamspaceid, MultipartFile[] multipartFiles, String fileDescription, User user) {
         for(MultipartFile multipartFile : multipartFiles) {
             if(multipartFile != null) {
                 //1. Amazon S3 파일 업로드
-                com.ssafy.db.entity.File file = fileService.saveFile(multipartFile, fileDescription);
+                com.ssafy.db.entity.File file = fileService.saveFile(multipartFile, fileDescription, user);
                 //2. file 테이블에 저장
                 file = fileService.addTableRecord(file);
 
