@@ -3,7 +3,7 @@ import axios from 'axios'
 let ACCESS_TOKEN = localStorage.getItem('accessToken')
 
 export const ChatAPI = axios.create({
-    baseURL: 'http://localhost:8080/api/v1/chat',
+    baseURL: 'http://localhost:8080/api/v1',
     headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${ACCESS_TOKEN}`,
@@ -17,8 +17,8 @@ export const ChatList = async () => {
 }
 
 // 채팅방 입장
-export const CreateChat = async({ otherUserIdx }) => {
-    const response = await ChatAPI.post(`/chatrooms`, {otherUserIdx})
+export const CreateChat = async({ otheruserid }) => {
+    const response = await ChatAPI.post(`/chatrooms/${otheruserid}`)
     return response.data
 }
 

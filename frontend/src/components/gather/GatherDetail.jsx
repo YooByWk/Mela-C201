@@ -7,6 +7,8 @@ import { RecruitDetail } from "../../API/GatherAPI";
 import useStore from "../../status/store";
 import { useNavigate, useParams } from "react-router-dom";
 import { GetComment, CreateComment,BoardDelete, CommentDelete, checkBoardLike, BoardLike} from "../../API/BoardAPI";
+import DefaultButton from '../DefaultButton'
+import { ChatList, CreateChat, EnterChat } from "../../API/ChatAPI";
 
 const GatherDetail = () => {
   const [data, setData] = useState(null);
@@ -108,6 +110,23 @@ useEffect(() => {
     setIsLiked(!isLiked)
   }
 
+  const [roomIdx, setRoomIdx] = useState('')
+  const [otheruserid, setOtheruserid] = useState()
+
+  const handleChat = async () => {
+    const otheruserid = data.userIdx
+
+    try {
+      const response = await CreateChat({ otheruserid: otheruserid })
+      console.log(response)
+      setRoomIdx(response)
+      Navigate(`/message/${response}`)
+      setOtheruserid("");
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   ////////////
   if (data) {
   return (
@@ -127,6 +146,11 @@ useEffect(() => {
       <p>글 번호 : {gatherIdx}</p>
       <h1>제목 : {data.title}</h1>
       <h3>작성자 : {data.nickname}</h3>
+      <DefaultButton
+        text={'채팅연결'}
+        width={'4rem'}
+        onClick={handleChat}
+      />
       <h3>내용 : {data.content}</h3>
       <h3>게시일 : {data.registDate}</h3>
       <h3>마감일 : {data.endDate}</h3>
