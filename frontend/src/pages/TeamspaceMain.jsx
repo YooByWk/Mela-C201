@@ -23,21 +23,6 @@ function TeamspaceMain () {
     teamspacePictureFileIdx: {},
   })
 
-  // useEffect(() => {
-  //   const myTeamspaceList = async() => {     
-  //     try {
-  //         const teamspace = await TeamspaceList()
-  //         setValues(teamspace)
-  //       } catch (err) {
-  //         console.error(err)
-  //       }
-  //     }; 
-      
-  //     myTeamspaceList()
-      
-  //   },[])
-
-
 useEffect(() => {
   const myTeamspaceList = async() => {     
     try {
@@ -52,6 +37,7 @@ useEffect(() => {
 
   },[newTeamspace])
 
+
   return ( 
     <TeamspaceContainer>
       <SideDiv>
@@ -59,22 +45,21 @@ useEffect(() => {
       </SideDiv>
       
       <MainDiv>
-      <Navbar backcolour="10" />
-        <Outlet />
-        {/* <h1>팀 스페이스 공간입니다.</h1> */}
-        <TeamspaceCreateModal />
-        <FileContainer>
-        {Object.entries(values).map(([key, value]) => (
-          <DefaultFileShape 
-              key={value.teamspaceIdx}
-              title={value.teamName}
-              content={value.teamDescription}
-              day={value.endDate}
-              image={value.teamspacePictureFileIdx}
-              onClick={(event) => Navi(`/teamspace/${value.teamspaceIdx}`)}
-          />
-        ))}
-        </FileContainer>
+        <Navbar backcolour="10" />
+          <Outlet />
+          <TeamspaceCreateModal />
+          <FileContainer>
+            {Object.entries(values).map(([key, value]) => (
+              <DefaultFileShape 
+                  key={value.teamspaceIdx}
+                  title={value.teamName}
+                  content={value.teamDescription}
+                  day={value.endDate}
+                  image={value.teamspacePictureFileIdx}
+                  onClick={(event) => Navi(`/teamspace/${value.teamspaceIdx}`)}
+              />
+            ))}
+          </FileContainer>
       </MainDiv>
       <RSideDiv>
           <Alarmbar />

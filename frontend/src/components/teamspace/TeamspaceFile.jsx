@@ -7,106 +7,6 @@ import { Dialog, DialogHeader, DialogBody } from '@material-tailwind/react'
 import { Navigate } from "react-router-dom";
 import { uploadTeamspaceFile, TeamspaceFileList } from "../../API/TeamspaceAPI"
 
-const H1 = styled.h1`
-    color: white;
-`
-
-const CloseButton = styled.button`
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    position: absolute;
-    top: 3px;
-    right: 3px;
-`
-
-const CustomDialog = styled(Dialog)`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: fixed;
-    width: 40rem;
-    height: 25rem;
-    top: 30%;
-    right: 30%;
-    background-color: #151C2C;
-    padding: 20px;
-    color: white;
-    
-`
-
-const CustomHeader = styled(DialogHeader)`
-    text-align: center;
-    line-height: 1.5rem;
-    margin-bottom: 2rem;
-    text-decoration: underline;
-    text-decoration-color: #254EF8;
-`
-
-const CustomBody = styled(DialogBody)`
-    margin: 0;
-    line-height: 1.5rem;
-    font-weight: 400;
-    margin-bottom: 4px;
-
-    & .button {
-      background-color: #254EF8;
-      border: none;
-      border-radius: 5px;
-      color: white;
-      width: 100%;
-      height: 2.5rem;
-      font-size: medium;
-      margin-top: 10px;
-    }
-
-    & .input {
-      background-color: #151c2c;
-      border: none;
-      height: 2.5rem;
-      color: white;
-      flex-grow: 1;
-    }
-
-    & .label {
-      color: #254EF8;
-      font-weight: bold;
-      padding: 10px;
-    }
-
-    & .inputWrapper {
-      background-color: #151c2c;
-      margin-bottom: 1rem;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    & .label-file-album {
-        padding: 6px 25px;
-        background-color:#FF6600;
-        border-radius: 4px;
-        color: white;
-        cursor: pointer;
-    }
-
-    & .label-file {
-        padding: 6px 25px;
-        background-color:#FF6600;
-        border-radius: 4px;
-        color: white;
-        cursor: pointer;
-    }
-`
-const Div = styled.div`
-    color: white;
-`
-
-const ButtonContainer = styled.div`
-    padding-left: 93%;
-`
 
 function TeamspaceFile () {
     const [open, setOpen] = useState(false)
@@ -185,65 +85,70 @@ function TeamspaceFile () {
 
     return(
     <>
-        <ButtonContainer>
-        <DefaultButton 
-            text={'Upload'}
-            backgroundcolor={'#873FFA'}
-            fontcolor={'white'}
-            width={'80px'}
-            onClick={handleModal}
-            height={'30px'}
-        />
-        </ButtonContainer>
-        <div>
-            {values ?  (
-                    <>
-                    {Object.entries(values).map(([key, value]) => (
-                    <Div key={value.fileIdx}>
-                        File Description={value.fileDescription}
-                        <br/>
-                        title={value.originalFilename}
-                        <br/>
-                        ===================================================
-                    </Div>
-                  ))}
-                    </>
-                ) : (
-                    <Div>
-                    업로드 된 파일이 없습니다.
-                    </Div>
-                )
-            }
-        </div>
+        <CustomBackdrop open={open} onClick={handleModal}/>
+        <Container>
+            <div>
+                {values ?  (
+                        <>
+                        {Object.entries(values).map(([key, value]) => (
+                        <Div key={value.fileIdx}>
+                            File Description={value.fileDescription}
+                            <br/>
+                            title={value.originalFilename}
+                            <br/>
+                            ===================================================
+                        </Div>
+                    ))}
+                        </>
+                    ) : (
+                        <Div>
+                        업로드 된 파일이 없습니다.
+                        </Div>
+                    )
+                }
+            </div>
+            <DefaultButton 
+                text={'Upload'}
+                backgroundcolor={'#873FFA'}
+                fontcolor={'white'}
+                width={'80px'}
+                onClick={handleModal}
+                height={'30px'}
+            />
+        </Container>
 
         
         {/* 업로드 모달 */}
         <CustomDialog open={open} handler={handleModal}>
                 <CustomHeader>
-                    <h3>팀스페이스 파일 업로드</h3>
+                    <h3>File upload</h3>
                     <CloseButton onClick={handleModal}>
                         <IoMdClose size={30} />
                     </CloseButton>
                 </CustomHeader>
                 <CustomBody>
-                <div className='inputWrapper'>
-                    <label className='label'>File Description</label>
-                    <input type='text' className='input' placeholder='설명' onChange={handleDescription} />
-                </div>
-                <div className='inputWrapper'>
-                    {/* <label className='label-file' for="input-file">업로드 할 파일</label> */}
-                    <input 
-                    type='file' 
-                    className='input' 
-                    onChange={handleFile}  
-                    // style={{display: "none"}}
-                    id="input-file"
-                    />
-                </div>
-                    {/* <FaFileUpload size={80}/> */}
+                    <div className='inputWrapper'>
+                        <label className='label'>File Description</label>
+                        <input type='text' className='input' placeholder='설명' onChange={handleDescription} />
+                        
+                    </div>
+                    <div className="body">
+                        <div className='input-btn'>
+                            <input 
+                            type='file'
+                            className='inputFile' 
+                            onChange={handleFile}  
+                            id="input-file"
+                            />
+                            <label htmlFor="input-file" className="holder">파일 추가</label>
+                        </div>
+                        {file ? (<p>{file.name}</p>)
+                        : (<p>등록된 파일이 없습니다.</p>)
+                        }
+                    </div>
                 </CustomBody>
                 <br/>
-                <button onClick={handleUpload}>
+                <button onClick={handleUpload} className="upload-btn">
                     업로드
                 </button>
             </CustomDialog>
@@ -252,3 +157,150 @@ function TeamspaceFile () {
 }
 
 export default TeamspaceFile
+
+
+const Container = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+
+const CloseButton = styled.button`
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+`
+
+const CustomDialog = styled(Dialog)`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    width: 40rem;
+    height: 25rem;
+    top: 20%;
+    right: 25%;
+    padding: 20px;
+    color: white;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #0C0A15 0%, #171930 100%);
+    justify-content: center;
+    border: 1px solid #254EF8;
+
+    .upload-btn {
+        background-color: #254EF8;
+        border: none;
+        width: 50%;
+        height: 2rem;
+        color: white;
+        border-radius: 10px;
+        font-size: medium;
+    }
+`
+
+const CustomHeader = styled(DialogHeader)`
+    text-align: center;
+    line-height: 2rem;
+    margin-bottom: 2rem;
+    text-decoration: underline;
+    text-decoration-color: #254EF8;
+`
+
+const CustomBody = styled(DialogBody)`
+    margin: 0;
+    line-height: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 4px;
+
+    & .button {
+      background-color: #254EF8;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      width: 100%;
+      height: 2.5rem;
+      font-size: medium;
+      margin-top: 10px;
+    }
+
+    & .input {
+      background-color: #151c2c;
+      border: none;
+      height: 2.5rem;
+      color: white;
+    }
+
+    & .input-btn {
+        border-radius: 20px;
+        border: 2px solid #254EF8;
+        width: 7rem;
+    }
+
+    & .label {
+      color: #254EF8;
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    & .inputWrapper {
+      background-color: #151c2c;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    & .inputFile {
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+        position: absolute;
+    }
+
+    & .body {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    & .label-file-album {
+        padding: 6px 25px;
+        background-color:#FF6600;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+    }
+
+    & .label-file {
+        padding: 6px 25px;
+        background-color:#FF6600;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+    }
+
+    & .holder {
+      display: inline-block;
+      padding: 10px 20px;
+      cursor: pointer;
+      color: gray;
+    }
+`
+const Div = styled.div`
+    color: white;
+`
+
+const CustomBackdrop = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1040;
+    display: ${({ open }) => (open ? "block" : "none")};
+`

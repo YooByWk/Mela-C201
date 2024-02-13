@@ -8,30 +8,7 @@ import defaultTeamspaceImage from "../../assets/images/default-image.png"
 import defaultProfile from "../../assets/images/default-profile.png"
 import { getImg } from "../../API/FileAPI"
 
-const H1 = styled.h1`
-    color: white;
-`
 
-const ImageContainer = styled.div`
-    position: relative;
-`
-const BackgroundImage = styled.img`
-    background-image: url(backImgURL);
-    width: 57vw;
-    height: 33vh;
-    border-radius: 20px;
-    margin-left: 2%;
-`
-
-const TeamspaceImage = styled.img`
-    width: 20%;
-    height: 25%;
-    border-radius: 50%;
-    position: absolute;
-    top: 75%;
-    left: 15%;
-    transform: translate(-50%, -50%);
-`
 function TeamspaceTeam () {
     const { teamspaceIdx } = useParams()
     const [values, setValues] = useState({})
@@ -111,13 +88,12 @@ function TeamspaceTeam () {
     return(
         <>
         <Container>
-            {/* <H1>{values.teamName}</H1> */}
-
             <ImageContainer>
                 <BackgroundImage src={backImgURL} alt="팀스페이스 배경 이미지"/>
                 <TeamspaceImage src={teamspaceImgURL} alt="팀스페이스 이미지" />
+                <H1>{values.teamName}</H1>
+                <p>{values.teamDescription}</p>
             </ImageContainer>
-            {/* <CalendarBar /> */}
             {/* <H1>Members</H1> */}
             {/* {Object.entries(members).map(([key, member]) => (
             <TeamspaceMemberCard 
@@ -139,6 +115,39 @@ const Container = styled.div`
     justify-content: space-evenly;
     padding: 5px;
 `
-// const H1 = styled.h1`
-//     color: white;
-//`
+
+const ImageContainer = styled.div`
+    position: relative;
+
+    p {
+        color: white;
+        position: absolute;
+        top: 9rem;
+        left: 13rem;
+        font-size: large;
+    }
+`
+    
+const H1 = styled.h1`
+    color: white;
+    position: absolute;
+    left: 13rem;
+    top: 2rem;
+`
+
+const BackgroundImage = styled.img`
+    background-image: url(backImgURL);
+    width: 57vw;
+    height: 33vh;
+    border-radius: 20px;
+`
+
+const TeamspaceImage = styled.img`
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    position: absolute;
+    top: 7rem;
+    left: 6rem;
+    transform: translate(-50%, -50%);
+    `
