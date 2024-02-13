@@ -125,8 +125,11 @@ export const TeamspaceFileList = async (teamspaceId) => {
   return response.data;
 };
 
+
+
+
 // Web RTC functions with Openvidu
-export const createViduSession = async () => {
+export const createViduSession = async (teamspaceIdx) => {
   const accessToken = localStorage.getItem("accessToken");
   if (!accessToken) {
     console.error("Access token not found in localStorage");
@@ -134,7 +137,7 @@ export const createViduSession = async () => {
   }
   try {
     const response = await axios.post(
-      "http://localhost:8080/api/v1/openvidu/createsession",
+      `http://localhost:8080/api/v1/openvidu/createsession/${teamspaceIdx}`,
       null,
       {
         headers: {
@@ -169,12 +172,22 @@ export const GetSessionId = async (teamspaceidx) => {
         },
       }
     );
-    console.log(response);
-    alert(response.data);
+    console.log(response, 'teamspaceIdx');
+    // alert(response.data);
     return response.data;
   } catch (error) {
     alert("팀 스페이스 방이 없습니다. 방을 생성해주세요");
+    return 500
   }
 };
 
 // 작동 굿
+
+export const DeleteViduSession = async (sessionId) => {
+  const response = await axios.delete(
+    `http://localhost:8080/api/v1/openvidu/deletesession/${sessionId}`
+  );
+  console.log(response);
+  alert('성공?')
+  return response;
+}
