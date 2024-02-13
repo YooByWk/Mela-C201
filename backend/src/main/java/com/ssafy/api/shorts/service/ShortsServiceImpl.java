@@ -51,10 +51,8 @@ public class ShortsServiceImpl implements  ShortsService {
     @Override
     public List<Shorts> getShortsList(User nowLoginUser) {
         //1. 현재 사용자의 선호장르, 싫어요 표시한 쇼츠의 리스트를 가져오기
-//        List<Genre> preferedGenre = userGenreRepository.findGenreIdxByUserIdx(nowLoginUser).get();  //사용자의 선호장르
-//        List<Shorts> dislikedShorts = shortsDislikeRepository.findShortsIdxByUserIdx(nowLoginUser).get();   //사용자가 싫어요 표시한 쇼츠 리스트
-        List<Genre> preferedGenre = userGenreRepository.findGenreIdxByUserIdx(nowLoginUser);  //사용자의 선호장르
-        List<Shorts> dislikedShorts = shortsDislikeRepository.findShortsIdxByUserIdx(nowLoginUser).get();   //사용자가 싫어요 표시한 쇼츠 리스트
+        List<UserGenre> preferedGenre = userGenreRepository.findGenreIdxByUserIdx(nowLoginUser);        //사용자의 선호장르
+        List<Shorts> dislikedShorts = shortsDislikeRepository.findShortsIdxByUserIdx(nowLoginUser);     //사용자가 싫어요 표시한 쇼츠 리스트
 
         //1.1 싫어요 표시한 쇼츠의 idx값을 가져오기
         List<Shorts> dislikedShortsIdx = new ArrayList<>();
@@ -76,8 +74,7 @@ public class ShortsServiceImpl implements  ShortsService {
         for(Shorts shorts : shortsList){
             //쇼츠업로더의 userIdx
             User shortsUploaderUserIdx = shorts.getUserIdx();
-//            List<Genre> uploaderPreferedGenre = userGenreRepository.findGenreIdxByUserIdx(shortsUploaderUserIdx).get();
-            List<Genre> uploaderPreferedGenre = userGenreRepository.findGenreIdxByUserIdx(shortsUploaderUserIdx);
+            List<UserGenre> uploaderPreferedGenre = userGenreRepository.findGenreIdxByUserIdx(shortsUploaderUserIdx);
             isShortsAdd = false;
             //사용자가 싫어요 표시한 쇼츠라면 반환리스트에서 제외
             if(dislikedShortsIdx.contains(shorts.getShortsIdx())){

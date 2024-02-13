@@ -163,7 +163,7 @@ public class TeamspaceServiceImpl implements TeamspaceService{
         if(teamspaceBackgroundPicture != null) {
             //기존 배경 이미지 삭제
             if(teamspace.getTeamspacePictureFileIdx() != null) {
-                fileRepository.delete(teamspace.getTeamspaceBackgroundPictureFileIdx());
+                fileRepository.deleteById(teamspace.getTeamspacePictureFileIdx().getFileIdx());
             }
             //클라이언트가 업로드한 파일의 확장자 추출
             String extension = FilenameUtils.getExtension(teamspaceBackgroundPicture.getOriginalFilename());

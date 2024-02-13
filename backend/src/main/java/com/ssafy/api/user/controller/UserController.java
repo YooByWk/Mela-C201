@@ -116,21 +116,17 @@ public class UserController {
 			//3. 유저 포지션
 			try {
 				returnVO[2] = userPositionRepository.findPositionIdxByUserIdx(user);
-				System.err.println("userPositionRepository.findPositionIdxByUserIdx(user): " + userPositionRepository.findPositionIdxByUserIdx(user));
 			} catch (Exception e) {
 				//TODO: 주석하기
 				e.printStackTrace();
-				System.err.println("예외 발생 1");
 			}
 
 			//4. 유저 장르
 			try {
 				returnVO[3] = userGenreRepository.findGenreIdxByUserIdx(user);
-				System.err.println("userGenreRepository.findGenreIdxByUserIdx(user): " + userGenreRepository.findGenreIdxByUserIdx(user));
 			} catch (Exception e) {
 				//TODO: 주석하기
 				e.printStackTrace();
-				System.err.println("예외 발생 2");
 			}
 
 			return ResponseEntity.status(200).body(returnVO);
