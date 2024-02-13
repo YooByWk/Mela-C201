@@ -4,33 +4,24 @@ import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { RiMessage2Line } from "react-icons/ri";
 import { ChatList, CreateChat, EnterChat } from "../API/ChatAPI";
-import moment from "moment";
-import { useParams } from "react-router-dom";
+import moment from 'moment'
 import useStore from "../status/store";
+import { useParams } from 'react-router-dom'
 
 
-function Message() {
+function Message () {
   const { roomid } = useParams()
-  const [chatRooms, setChatRooms] = useState([]);  // 모든 채팅방
-  const [userIdx, setUserIdx] = useState("");  // 현재 유저
-  const [otheruserid, setOtheruserid] = useState();  // 채팅하는 다른 유저
+  const [chatRooms, setChatRooms] = useState([]);
   const [roomIdx, setRoomIdx] = useState("");
-  const [room, setRoom] = useState({});
-  const [message, setMessage] = useState("");  // 보내는 메시지
-  const [messages, setMessages] = useState([]);  // 메시지 히스토리(모든 메시지)
-
+  const [userIdx, setUserIdx] = useState("");
+  const [otheruserid, setOtheruserid] = useState();
   const user = useStore((state) => state.user)
 
   useEffect(() => {
     useStore.getState().fetchUser()
     findAllRooms();
-
-    if (user && roomid) {
-      enterRoom(roomid)
-    }
   }, []);
 
-  // 모든 채팅방 리스트 조회
   const findAllRooms = async () => {
     try {
       const response = await ChatList();
@@ -42,15 +33,14 @@ function Message() {
     }
   };
 
-
   const createRoom = async () => {
     if (otheruserid === "") {
       alert("방 제목을 입력해 주세요.");
-      return
+      return;
     } else {
       try {
         const response = await CreateChat({ otheruserid: otheruserid });
-        console.log(response);
+        console.log(response)
         setOtheruserid("");
         findAllRooms();
       } catch (err) {
@@ -58,27 +48,21 @@ function Message() {
         alert("채팅방 개설에 실패하였습니다.");
       }
     }
-  };
-
-  useEffect(() => {
-    if (user) {
-      setUserIdx(localStorage.getItem('userIdx'))
-      if (roomid) {
-        enterRoom(roomid)
-      }
-    }
-  }, [roomid])
+  }
 
   const enterRoom = (roomIdx) => {
     // const userIdx = prompt("대화명을 입력해 주세요.");
-    if (userIdx) {
-      console.log(userIdx)
+    if (user) {
+      setUserIdx(localStorage.getItem('userIdx'))
       localStorage.setItem("wschat.userIdx", userIdx);
       localStorage.setItem("wschat.roomIdx", roomIdx);
+      setRoomIdx(roomIdx)
     }
-  };
+  }
 
-  // -----------------------
+  const [room, setRoom] = useState({});
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
   let sock = new SockJS("//localhost:8080/ws-stomp");
   let ws = Stomp.over(sock);
@@ -90,7 +74,7 @@ function Message() {
 
     findRoom();
     connect();
-  }, []);
+  }, [])
 
   const findRoom = async (roomIdx) => {
     try {
@@ -99,7 +83,7 @@ function Message() {
     } catch (err) {
       console.log(err);
     }
-  };
+  }
 
   const sendMessage = () => {
     console.log("ws.connected: " + ws.connected);
@@ -110,50 +94,52 @@ function Message() {
         {},
         JSON.stringify({ type: "TALK", roomIdx, userIdx, message })
       );
-      // setMessage("");
+      setMessage("");
     } else {
       // WebSocket 연결이 설정되지 않은 경우, 메시지를 보낼 수 없음을 사용자에게 알림
       console.error("WebSocket 연결이 설정되지 않았습니다.");
       connect();
     }
-  };
+  }
 
   const recvMessage = (recv) => {
-    setMessages([
+    setMessages((prevMessages) => [
+      ...prevMessages,
       {
         type: recv.type,
         userIdx: recv.userIdx,
         message: recv.message,
       },
-      ...messages,
-    ]);
-  };
+    ])
+  }
 
   const connect = () => {
+    if (!roomIdx) {
+      console.error()
+      return
+    }
+
     sock = new SockJS("//localhost:8080/ws-stomp");
     ws = Stomp.over(sock);
 
-    ws.connect(
-      {},
-      (frame) => {
+    ws.connect({}, (frame) => {
         ws.subscribe(`/sub/chat/room/${roomIdx}`, (message) => {
-          const recv = JSON.parse(message.body);
+        const recv = JSON.parse(message.body);
           recvMessage(recv);
         });
-        setMessage("");
-      },
-      (error) => {
-        if (reconnect++ <= 5) {
-          setTimeout(() => {
-            console.log("connection reconnect");
-            connect();
-          }, 10 * 1000);
+      }, (error) => {
+        console.error()
+        if (reconnect++ < 5) {
+          setTimeout(connect, 5000)
         }
-      }
-    );
+      })
+  }
 
-    console.log("connect()!!!" + ws.connected);
-  };
+  useEffect(() => {
+    if (roomIdx) {
+      connect()
+    }
+  }, [roomIdx])
 
   return (
     <Container>
@@ -218,8 +204,7 @@ function Message() {
     </Container>
   );
 }
-
-export default Message;
+export default Message
 
 const Container = styled.div`
   display: flex;
@@ -268,4 +253,4 @@ const Container = styled.div`
     height: 2rem;
     color: white;
   }
-`;
+`
