@@ -34,6 +34,7 @@ public class FileController {
     @Autowired
     AmazonS3 amazonS3Client;
 
+    //FIXME: 테스트 코드이므로 file 테이블에 삽입 작업 없음 (코드 재사용 유의)
     @PostMapping(value = "/upload", consumes = MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "파일 업로드 (테스트용)", notes = "파일을 업로드합니다.")
     @ApiResponses({

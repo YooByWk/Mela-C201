@@ -3,6 +3,8 @@ package com.ssafy.db.entity;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -34,6 +36,13 @@ public class File {
     //파일 크기 (용량)
     @NotNull @Column
     Long fileSize;
+
+    //업로더
+    @ManyToOne
+    @JoinColumn(name = "user_idx", referencedColumnName = "userIdx")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
+    User userIdx;
 
     @Override
     public String toString() {
