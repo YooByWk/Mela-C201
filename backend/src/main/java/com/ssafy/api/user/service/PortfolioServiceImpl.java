@@ -37,7 +37,7 @@ public class PortfolioServiceImpl implements PortfolioService {
                     file = fileService.saveFile(mf, portfolioMusicPostReq.getFileDescription(), user);
                     file = fileService.addTableRecord(file);
                     portfolioMusic.setMusicFileIdx(file);
-                } else if (extension.equals("txt") || extension.equals("xml")) {                                 //2-4-2. 가사 파일 (pdf, xml)
+                } else if (extension.equals("txt") || extension.equals("xml")) {                                 //2-4-2. 가사 파일 (txt, xml)
                     file = fileService.saveFile(mf, portfolioMusicPostReq.getFileDescription(), user);
                     file = fileService.addTableRecord(file);
                     portfolioMusic.setLyricFileIdx(file);

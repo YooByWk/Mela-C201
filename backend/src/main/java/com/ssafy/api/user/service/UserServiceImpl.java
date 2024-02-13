@@ -55,6 +55,18 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserPositionRepositorySupport userPositionRepositorySupport;
 
+	@Autowired
+	UserGenreRepository userGenreRepository;
+
+	@Autowired
+	UserPositionRepository userPositionRepository;
+
+	@Autowired
+	GenreRepository genreRepository;
+
+	@Autowired
+	PositionRepository positionRepository;
+
 	Random random = new Random();
 	CSVParser frontWords = new CSVParser("front_words");
 	CSVParser backWords = new CSVParser("back_words");
@@ -156,6 +168,51 @@ public class UserServiceImpl implements UserService {
 			user.setBirth(userUpdateInfo.getBirth());
 			user.setGender(userUpdateInfo.getGender());
 			user.setSearchAllow(userUpdateInfo.isSearchAllow());
+
+			//TODO: 희망 장르 삭제될 때 user 삭제되는지 확인 필요
+			//1-1. 기존 회원의 선호 장르 레코드 삭제
+			try {
+				userGenreRepository.deleteAllRecordsByUserIdx(user);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			//1-2. 기존 회원의 희망 포지션 레코드 삭제
+			try {
+				userPositionRepository.deleteAllRecordsByUserIdx(user);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			//2-1. 새로 입력받은 회원의 선호 장르 추가
+			List<Long> genreLong = userUpdateInfo.getGenre();
+
+			//장르 추가
+			for(long l : genreLong) {
+				Genre genre = genreRepository.findById(l).get();
+
+				UserGenre userGenre = new UserGenre();
+				userGenre.setUserIdx(user);
+				userGenre.setGenreIdx(genre);
+
+				//DB 저장
+				userGenreRepository.save(userGenre);
+			}
+
+			//2-2. 새로 입력받은 회원의 희망 포지션 추가
+			List<Long> positionLong = userUpdateInfo.getPosition();
+
+			//포지션 추가
+			for(long l : positionLong) {
+				Position position = positionRepository.findById(l).get();
+
+				UserPosition userPosition = new UserPosition();
+				userPosition.setUserIdx(user);
+				userPosition.setPositionIdx(position);
+
+				//DB 저장
+				userPositionRepository.saveAndFlush(userPosition);
+			}
 
 			userRepository.saveAndFlush(user);
 		}
