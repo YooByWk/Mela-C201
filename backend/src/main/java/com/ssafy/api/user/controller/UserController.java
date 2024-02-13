@@ -33,6 +33,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
@@ -530,7 +531,10 @@ public class UserController {
 		List<User> userListByName = userService.getUserByNameOrNickname(word, word);
 
 		for(User userItem : userListByName){
-			userPortfolioAbstractList.add(portfolioAbstractRepository.findByUserIdx(userItem).get());
+			Optional<PortfolioAbstract> userPortAbst = portfolioAbstractRepository.findByUserIdx(userItem);
+			if(userPortAbst.isPresent()){
+				userPortfolioAbstractList.add(userPortAbst.get());
+			}
 		}
 		return ResponseEntity.status(200).body(userPortfolioAbstractList);
 	}
