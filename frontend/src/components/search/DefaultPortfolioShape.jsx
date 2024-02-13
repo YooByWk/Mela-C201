@@ -72,6 +72,7 @@ const Container = styled.div`
     height: 200px;
     display: flex;
     flex-direction: column;
+    padding-bottom: 3%;
 `
 const Album = styled.img`
     width: 90%;
@@ -79,7 +80,7 @@ const Album = styled.img`
     border-radius: 10%;
 `
 const UserInfo = styled.div`
-  padding-top: 3%;
+  padding-top: 5%;
   display: flex;
   flex-direction: row;
   width: 90%;
