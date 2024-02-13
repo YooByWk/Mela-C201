@@ -32,9 +32,9 @@ public class TeamspaceRes {
     @ApiModelProperty(name="teamspace host")
     User host;
     @ApiModelProperty(name="teamspace 썸네일")
-    File teamspacePictureFileIdx;
+    File teamspacePictureFile;
     @ApiModelProperty(name="teamspace 배경사진")
-    File teamspaceBackgroundPictureFileIdx;
+    File teamspaceBackgroundPictureFile;
 
     @Autowired
     FileService fileService;
@@ -60,4 +60,20 @@ public class TeamspaceRes {
         return res;
     }
 
+    @Override
+    public String toString() {
+        return "TeamspaceRes{" +
+                "teamspaceIdx=" + teamspaceIdx +
+                ", teamName='" + teamName + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", teamDescription='" + teamDescription + '\'' +
+                ", host=" + host +
+                ", teamspacePictureFile=" + teamspacePictureFile +
+                ", teamspaceBackgroundPictureFile=" + teamspaceBackgroundPictureFile +
+                ", fileService=" + fileService +
+                ", teamspacePictureFileURL='" + teamspacePictureFileURL + '\'' +
+                ", teamspaceBackgroundPictureFileURL='" + teamspaceBackgroundPictureFileURL + '\'' +
+                '}';
+    }
 }
