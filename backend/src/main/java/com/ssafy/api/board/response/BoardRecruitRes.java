@@ -78,7 +78,6 @@ public class BoardRecruitRes {
 
         List<String> tmp = new ArrayList<>();
         for (Position position : positions) {
-//            System.err.println("position.getPositionName(): " + position.getPositionName());    //예: 보컬
             tmp.add(position.getPositionName());
         }
 
