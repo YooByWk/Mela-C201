@@ -130,21 +130,16 @@ public class TeamspaceController {
         String teamspaceBackgroundPictureFileURL = null;
 
         try {
-            System.err.println("teamspaceId: " + teamspaceId);
             teamspace = teamspaceService.getTeamspaceById(teamspaceId);
             teamspaceRes = TeamspaceRes.of(teamspace);
 
             //1. 기본 이미지 URL 설정
             try {
-                System.err.println("실행 1-1");
                 teamspacePictureFile = fileService.getFileByFileIdx(teamspace.getTeamspacePictureFileIdx().getFileIdx());
                 teamspacePictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspacePictureFile.getFileIdx());
-//                teamspacePictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspace.getTeamspacePictureFileIdx().getFileIdx());
-                System.err.println("실행 1-2");
             } catch (NoSuchElementException e) {
                 e.printStackTrace();
             } catch (Exception e) {
-                System.err.println("예외 1");
                 //e.printStackTrace();
                 //기본 이미지가 없는 경우
                 teamspacePictureFileURL = fileService.getDefaultTeamspacePictureImageUrl();
@@ -152,36 +147,24 @@ public class TeamspaceController {
 
             //2. 배경 이미지 URL 설정
             try {
-                System.err.println("실행 2-1");
                 teamspaceBackgroundPictureFile = fileService.getFileByFileIdx(teamspace.getTeamspaceBackgroundPictureFileIdx().getFileIdx());
                 teamspaceBackgroundPictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspaceBackgroundPictureFile.getFileIdx());
-//                teamspaceBackgroundPictureFileURL = fileService.getImageUrlBySaveFileIdx(teamspace.getTeamspaceBackgroundPictureFileIdx().getFileIdx());
-                System.err.println("실행 2-2");
             } catch (NoSuchElementException e) {
                 e.printStackTrace();
             } catch (Exception e) {
-                System.err.println("예외 2");
                 //e.printStackTrace();
                 //기본 이미지가 없는 경우
                 teamspaceBackgroundPictureFileURL = fileService.getDefaultTeamspaceBackgroundPictureImageUrl();
             }
 
             //이미지 설정
-            System.err.println("실행 3");
-            System.err.println("teamspacePictureFileURL: " + teamspacePictureFileURL);
-            System.err.println("teamspaceBackgroundPictureFileURL: " + teamspaceBackgroundPictureFileURL);
-            System.err.println("실행 4");
             teamspaceRes.setTeamspacePictureFileURL(teamspacePictureFileURL);
-            System.err.println("실행 5");
             teamspaceRes.setTeamspaceBackgroundPictureFileURL(teamspaceBackgroundPictureFileURL);
-            System.err.println("실행 6");
             teamspaceRes.setTeamspacePictureFile(teamspacePictureFile);
-            System.err.println("실행 7");
             teamspaceRes.setTeamspaceBackgroundPictureFile(teamspaceBackgroundPictureFile);
 
             return ResponseEntity.status(200).body(teamspaceRes);
         } catch (Exception e) {
-            System.err.println("전체 예외");
             e.printStackTrace();
             return ResponseEntity.status(500).body(null);
         }
