@@ -2,13 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import DefaultButton from "./DefaultButton";
-
+import { useParams } from "react-router-dom";
 
 function PortfolioPin() {
     const navigate = useNavigate()
-
+    const emailIdInfo = useParams()
+    // console.log(emailIdInfo.emailId)
     const goPortfolioAdd = () => {
-        navigate('/musics')
+        navigate(`/${emailIdInfo.emailId}/musics`)
     }
 
     return (
