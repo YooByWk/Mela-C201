@@ -9,22 +9,25 @@ import { othersInfo } from "../API/UserAPI";
 import Alarmbar from '../components/alarm/Alarmbar'
 import styled from 'styled-components';
 import Feed from '../components/Feed';
+// import { isFollow } from "../API/UserAPI";
 
 
 function Portfolio() {
 
     // 내가 들어간 포트폴리오
     const { emailId } = useParams()
-    const [ current, setCurrent ] = useState('')
+    const [ currentUser, setCurrentUser ] = useState('')
+    const [ currentUserPortfolio, setCurrentUserPortfolio ] = useState('')
     // 현재 로그인 한 사람
-    const { fetchUser, user } = useStore()
+    const { fetchUser, user, userPortfolio } = useStore()
     
     useEffect(() => {
         const info = async() => {
             try {
                 const userInfo = await fetchUser()
                 const otherInfo = await othersInfo(emailId)
-                setCurrent(otherInfo)
+                setCurrentUser(otherInfo[0])
+                setCurrentUserPortfolio(otherInfo[1])
             } catch (err) {
                 console.log(err)
             }
@@ -32,13 +35,13 @@ function Portfolio() {
         info()
         }, [emailId])
 
-    // console.log(emailId)
-    console.log(current)
-
     const userProps = {
-        currentUser: current,
-        loginUser: user
+        currentUser: currentUser,
+        currentUserPortfolio: currentUserPortfolio,
+        loginUser: user,
+        loginPortfolio: userPortfolio
     }
+
     return (
         <>
             {user ?

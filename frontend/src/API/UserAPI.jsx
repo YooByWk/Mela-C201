@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { addYears } from 'date-fns'
 
 let ACCESS_TOKEN = localStorage.getItem('accessToken')
 
@@ -96,6 +97,14 @@ export const followUser = async (userId) => {
     return response.data
 }
 
+// 팔로우 관계인지 확인
+export const isFollow = async (userId) => {
+    // console.log(userId)
+    const response = await UserApi.get(`/${userId}/isfollow`)
+    // console.log(response)
+    return response.data
+}
+
 // 이메일 중복 확인
 export const emailCheck = async ({emailId}) => {
     console.log(emailId,'유저API 이메일')
@@ -123,7 +132,7 @@ export const notification = async () => {
             'Authorization': `Bearer ${localStorage.accessToken}`,
         }
     })
-    console.log(response)
+    // console.log(response)
     return response.data
 }
 
@@ -147,3 +156,22 @@ export const othersInfo = async (emailId) => {
     // console.log(response)
     return response.data
 }
+
+// 유저 검색
+export const userSearch = async (word) => {
+    // console.log(word)
+    const response = await UserApi.get(`/totalsearchuser/${word}`)
+    return response.data
+}
+
+// // 팔로워 리스트
+// export const followerList = async (emailId) => {
+//     const response = await UserApi.get(`/${emailId}/followees`)
+//     return response.data
+// }
+
+// // 팔로잉 리스트
+// export const followingList = async (emailId) => {
+//     const response = await UserApi.get(`/${emailId}/followers`)
+//     return response.data
+// }
