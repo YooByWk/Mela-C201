@@ -8,8 +8,8 @@ import { MdOutlineLocalFireDepartment, MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
 import useStore from "../status/store";
 import {isLogined} from "../status/store";
-import { follower } from "../API/UserAPI";
-import { followee } from "../API/UserAPI";
+import { follower, followerList } from "../API/UserAPI";
+import { followee, followingList } from "../API/UserAPI";
 import { fetchUser } from "../API/UserAPI";
 import { getImg } from "../API/FileAPI";
 import defaultprofile from '../assets/images/default-profile.png'
@@ -109,7 +109,7 @@ function Sidebar({ className, paddingtop }) {
   }, [])
   
   useEffect(() => {
-    const followList = async () => {
+    const follow = async () => {
       if (userValues.emailId) {
       try {
       const getFollower = await follower(userValues.emailId)
@@ -121,9 +121,14 @@ function Sidebar({ className, paddingtop }) {
       }
     }
     }
-    followList()
+    follow()
   },[])
 
+  // const followList = async () => {
+  //   try {
+  //     await followerList(userValues.emailId)
+  //   }
+  // }
   // console.log(followers)
   // console.log(followings)
 
@@ -139,7 +144,9 @@ function Sidebar({ className, paddingtop }) {
             />
             <div className="name-follow">
               <H3> {userValues.nickname} </H3>
-              <P>팔로워 {followers.length} </P> <br></br><P> 팔로잉 {followings.length}</P>
+              {/* <P onClick={}>팔로워 {followers.length} </P>  */}
+              <br></br>
+              <P>팔로잉 {followings.length}</P>
             </div>
           </div>
           <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4">

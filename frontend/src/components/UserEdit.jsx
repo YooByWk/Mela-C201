@@ -14,6 +14,7 @@ function UserEdit(props) {
     const [isFollowed, setIsFollowed] = useState(false)
     const [currentUser, setCurrentUser] = useState(props.currentUser);
     const [loginUser, setLoginUser] = useState(props.loginUser);
+    const [loginUserPortfolio, setLoginUserPortfolio] = useState(props.loginPortfolio);
     // const currentUser = props.currentUser
     // const loginUser = props.loginUser
 
@@ -61,6 +62,9 @@ function UserEdit(props) {
         </div>
     }
 
+    const instagramURL = loginUserPortfolio.instagram
+    const youtubeURL = loginUserPortfolio.youtube
+
     return (
         <>      
         <Container>
@@ -94,10 +98,10 @@ function UserEdit(props) {
                     <p></p>
                     <input type="file" onChange={profileImg} ref={imgRef}/>
                     <p>Like genre : </p>
-                    <p>Position : </p>                        {/* 주석처리 부분 정보 누락으로, 수정 요망 */}
+                    <p>Position : </p>                       
                     <p>SNS</p>
-                    {/* <p>instagram : { loginUser[1].instagram }</p> */}
-                    {/* <p>youtube : {loginUser[1].youtube }</p> */}
+                    <URL onClick={() => {window.open(instagramURL)}}>인스타그램</URL>
+                    <URL onClick={() => {window.open(youtubeURL)}}>유튜브</URL>
                 </div>
                 </>
             ) : (
@@ -168,4 +172,8 @@ const Img = styled.img`
     height: 5rem;
     width: 5rem;
     border-radius: 10;
+`
+
+const URL = styled.div`
+    width: fit-content;
 `

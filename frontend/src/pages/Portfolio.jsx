@@ -17,7 +17,7 @@ function Portfolio() {
     const { emailId } = useParams()
     const [ current, setCurrent ] = useState('')
     // 현재 로그인 한 사람
-    const { fetchUser, user } = useStore()
+    const { fetchUser, user, userPortfolio } = useStore()
     
     useEffect(() => {
         const info = async() => {
@@ -34,10 +34,11 @@ function Portfolio() {
 
     // console.log(emailId)
     console.log(current)
-
+    console.log(userPortfolio)
     const userProps = {
         currentUser: current,
-        loginUser: user
+        loginUser: user,
+        loginPortfolio: userPortfolio
     }
     return (
         <>
