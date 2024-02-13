@@ -262,22 +262,28 @@ public class OpenViduController {
 
     @DeleteMapping("/deletesession/{sessionId}")
     @ApiOperation(value = "세션ID로 생성된 방 삭제")
-    public ResponseEntity<?> deleteSession(@PathVariable("sessionId") @ApiParam(value = "세션 아이디", required = true) String sessionId) {
+    public ResponseEntity<?> deleteSession(@PathVariable("sessionId") @ApiParam(value = "세션 아이디", required = true) String sessionId) throws Exception{
 
         Map<String, Object> check = new HashMap<>();
 
         logger.info("*** deleteSession - 호출");
 
-        try {
-            meetingService.deleteMeeting(sessionId);
+        meetingService.deleteMeeting(sessionId);
 
-            check.put("msg", "success");
+        check.put("msg", "success");
 
-            return ResponseEntity.status(HttpStatus.OK).body(check);
-        } catch (Exception e) {
-            check.put("msg", "fail");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(check);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(check);
+
+//        try {
+//            meetingService.deleteMeeting(sessionId);
+//
+//            check.put("msg", "success");
+//
+//            return ResponseEntity.status(HttpStatus.OK).body(check);
+//        } catch (Exception e) {
+//            check.put("msg", "fail");
+//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(check);
+//        }
 
     }
 }

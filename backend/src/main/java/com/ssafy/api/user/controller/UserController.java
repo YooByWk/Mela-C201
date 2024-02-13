@@ -523,17 +523,16 @@ public class UserController {
 			@ApiResponse(code = 200, message = "성공"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<List<User>> totalSearch(
+	public ResponseEntity<List<PortfolioAbstract>> totalSearch(
 			@PathVariable(name = "word") String word
 	) {
-		List<User> userList = new ArrayList<>();
-		List<User> userByName = userService.getUserByNameOrNickname(word, word);
-//		List<User> userByNickname = userService.getUserByNickname(word);
+		List<PortfolioAbstract> userPortfolioAbstractList = new ArrayList<>();
+		List<User> userListByName = userService.getUserByNameOrNickname(word, word);
 
-		userList.addAll(userByName);
-//		userList.addAll(userByNickname);
-
-		return ResponseEntity.status(200).body(userList);
+		for(User userItem : userListByName){
+			userPortfolioAbstractList.add(portfolioAbstractRepository.findByUserIdx(userItem).get());
+		}
+		return ResponseEntity.status(200).body(userPortfolioAbstractList);
 	}
 
 }
