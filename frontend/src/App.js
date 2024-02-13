@@ -23,6 +23,7 @@ import ChangePassword from "./pages/ChangePassword";
 import Video from "./Video/Video";
 import TotalSearch from './pages/TotalSearch'
 
+
 function App() {
   return (
     <Fragment>
@@ -31,6 +32,10 @@ function App() {
         <BrowserRouter>
           <Routes>
           <Route path='video' element={<Video />} />
+          {/* <Route
+          path='/teamspace/video/:teamspaceIdx' element={<Video/>} 
+          /> */}
+
 
             <Route path="/" element={<Landing />} />
             <Route path="/teamspace" element={<TeamspaceMain />} />

@@ -15,6 +15,7 @@ import TeamspaceDetail from '../pages/TeamspaceDetail';
 import ForgotPassword from '../pages/ForgotPassword';
 import AlarmMain from '../pages/AlarmMain';
 import SequenceMain from './../sequence/SequenceMain';
+import Video from '../Video/Video';
 import TotalSearch from '../pages/TotalSearch';
 
 function AppRouter({ className }) {
@@ -50,6 +51,13 @@ function AppRouter({ className }) {
           <Route 
           path='/teamspace/:teamspaceIdx/management' element={<TeamspaceManage/>} 
           />
+          
+          <Route
+          path='/teamspace/video/:teamspaceIdx' element={<Video/>} 
+          />
+          {/* <Route
+          path='/teamspace/video/:teamspaceIdx' element={<Video/>} 
+          /> */}
 
           <Route
             path='/signup' element={<SignupModal />}
