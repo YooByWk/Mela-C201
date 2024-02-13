@@ -73,11 +73,8 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Override
     public List<PortfolioMusic> getPortfolioMusicListByTitle(String word) {
-        Optional<List<PortfolioMusic>> portfolioMusicList = portfolioMusicRepository.findByTitleContaining(word);
-        if(portfolioMusicList.get().size() != 0){
-            return portfolioMusicList.get();
-        }else{
-            return null;
-        }
+        List<PortfolioMusic> portfolioMusicList = portfolioMusicRepository.findByTitleContaining(word);
+
+        return portfolioMusicList;
     }
 }
