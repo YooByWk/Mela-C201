@@ -10,6 +10,7 @@ import com.ssafy.db.repository.JoinChatRoomRepositorySupport;
 import com.ssafy.db.repository.TeamspaceRepository;
 import com.ssafy.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -17,8 +18,10 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @Repository
 public class ChatRoomService {
@@ -82,10 +85,15 @@ public class ChatRoomService {
     }
 
     // 방 생성
-    public String enterOneToOneRoom(Long userIdx1, Long userIdx2) {
+    public String enterOneToOneRoom(Long userIdx1, Long userIdx2) throws EntityNotFoundException{
         User user1 = userRepository.getOne(userIdx1);
-        User user2 = userRepository.getOne(userIdx2);
+        User user2 = userRepository.findById(userIdx2).orElse(null);
 
+        if(user2 == null) {
+            throw new EntityNotFoundException();
+        }
+
+        log.debug("user2 {}", user2);
         String roomIdx = joinChatRoomRepositorySupport.checkIfUserInSameChatRoom(user1, user2);
 
         // 처음 생성되는 경우

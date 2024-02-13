@@ -7,13 +7,17 @@ import com.ssafy.api.chat.response.ChatMessageRes;
 import com.ssafy.api.chat.response.ChatRoomRes;
 import com.ssafy.api.chat.service.ChatRoomService;
 import com.ssafy.api.chat.service.ChatService;
+import com.ssafy.api.user.response.UserLoginPostRes;
 import com.ssafy.api.user.response.UserRes;
 import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
+import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.JoinChatRoom;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.persistence.EntityNotFoundException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -74,6 +80,12 @@ public class ChatRoomController {
 
     @PostMapping("/{otheruserid}")
     @ApiOperation(value = "채팅방 입장", notes = "유저1과 유저2의 채팅방에 입장한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+            @ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+            @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+            @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+    })
     public ResponseEntity<String> enterChatRoom(
             @ApiIgnore Authentication authentication,
             @PathVariable(name = "otheruserid") Long otherUserIdx
@@ -82,9 +94,15 @@ public class ChatRoomController {
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
 
-        String roomIdx = chatRoomService.enterOneToOneRoom(user.getUserIdx(), otherUserIdx);
+        try {
+            String roomIdx = chatRoomService.enterOneToOneRoom(user.getUserIdx(), otherUserIdx);
 
-        return ResponseEntity.status(200).body(roomIdx);
+            return ResponseEntity.status(200).body(roomIdx);
+        } catch (EntityNotFoundException e) {
+            // 존재하지 않는 유지
+            return ResponseEntity.status(404).body(null);
+        }
+
     }
 
     @GetMapping("/{roomid}")
