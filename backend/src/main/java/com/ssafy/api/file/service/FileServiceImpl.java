@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import com.ssafy.api.user.service.PortfolioService;
 import com.ssafy.common.exception.handler.NotValidExtensionException;
+import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.FileRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,7 +136,7 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription) {
+    public com.ssafy.db.entity.File saveFile(MultipartFile multipartFile, String fileDescription, User user) {
         com.ssafy.db.entity.File file = new com.ssafy.db.entity.File();
 
         //1. 업로드 한 파일이 비어있는지 확인
@@ -192,6 +193,7 @@ public class FileServiceImpl implements FileService {
             file.setSaveFilename(uuid.toString() + "_" + multipartFile.getOriginalFilename());  //3. 저장되는 파일 명
             file.setFileDescription(fileDescription);                                           //4. 파일 설명
             file.setFileSize(convertedFile.length());                                           //5. 파일 크기 (용량)
+            file.setUserIdx(user);
 
             //MultipartFile -> File로 변환하면서 로컬에 저장된 파일 삭제
             removeFile(convertedFile);

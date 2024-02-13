@@ -64,7 +64,7 @@ public class TeamspaceController {
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
 
-        Teamspace teamspace = teamspaceService.createTeamspace(registerInfo, user.getUserIdx(), teamspacePicture, teamspaceBackgroundPicture);
+        Teamspace teamspace = teamspaceService.createTeamspace(registerInfo, user.getUserIdx(), teamspacePicture, teamspaceBackgroundPicture, user);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, teamspace.getTeamspaceIdx() + ""));
     }
@@ -77,15 +77,20 @@ public class TeamspaceController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<? extends  BaseResponseBody> updateTeamspace(
+            @ApiIgnore Authentication authentication,
             @RequestPart @ApiParam(value="팀스페이스 수정 정보", required = true) TeamspaceUpdatePutReq updateInfo,
             @PathVariable(name = "teamspaceid") Long teamspaceId,
             @RequestPart(required = false) MultipartFile teamspacePicture,
             @RequestPart(required = false) MultipartFile teamspaceBackgroundPicture) {
 
+        //1. 토큰으로부터 사용자 확인 후 VO에 설정
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        User user = userDetails.getUser();
+
         try{
             Teamspace teamspace = teamspaceService.getTeamspaceById(teamspaceId);
 
-            teamspaceService.updateTeamspace(teamspace, updateInfo, teamspacePicture, teamspaceBackgroundPicture);
+            teamspaceService.updateTeamspace(teamspace, updateInfo, teamspacePicture, teamspaceBackgroundPicture, user);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(401).body(BaseResponseBody.of(404, "not found"));
@@ -264,10 +269,12 @@ public class TeamspaceController {
             @RequestPart(value = "file", required = true) MultipartFile[] multipartFiles) {
 
         SsafyUserDetails userDetails = null;
+        User user = null;
 
         //1-1. 로그인한 사용자 체크 (토큰 확인)
 		try {
 			userDetails = (SsafyUserDetails) authentication.getDetails();
+            user = userDetails.getUser();
 		} catch(NullPointerException e) {
 			e.printStackTrace();
 
@@ -284,7 +291,7 @@ public class TeamspaceController {
         }
 
         //3. 파일 업로드
-        teamspaceService.uploadFile(teamspaceid, multipartFiles, filePostReq.getFileDescription());
+        teamspaceService.uploadFile(teamspaceid, multipartFiles, filePostReq.getFileDescription(), user);
 
         //4. 응답
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
