@@ -64,7 +64,7 @@ function AppRouter({ className }) {
           />
 
           <Route
-            path='/musics' element={<PortfolioAll />}
+            path='/:emailId/musics' element={<PortfolioAll />}
             />
 
           <Route
