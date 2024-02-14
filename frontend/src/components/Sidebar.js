@@ -14,6 +14,7 @@ import { fetchUser } from "../API/UserAPI";
 import { getImg } from "../API/FileAPI";
 import defaultprofile from '../assets/images/default-profile.png'
 
+
 const SideContainer = styled.div`
   color: white;
   padding-top: ${props => props.$paddingtop || '0'};
@@ -68,6 +69,8 @@ margin-bottom:5px;
 const P = styled.p`
 color: grey;
 `
+
+
 function Sidebar({ className, paddingtop }) {
   const { logout } = useStore()
   const [userValues, setUserValues] = useState({})

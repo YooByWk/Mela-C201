@@ -80,6 +80,10 @@ function AppRouter({ className }) {
             />
 
           <Route
+            path='/message' element={<Message />}
+            />
+
+          <Route
             path='/forgotPassword' element={<ForgotPassword />}
             />
 
