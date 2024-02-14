@@ -28,7 +28,7 @@ function CommunityDetail() {
   const [commentCount, setCommentCount] = useState(0);
   const Navigate = useNavigate();
   const currentUserIdx = Number(localStorage.getItem("userIdx"));
-  
+
   useEffect(() => {
     const fetchData = async () => {
       if (currentUserIdx !== null) {
@@ -42,7 +42,6 @@ function CommunityDetail() {
     };
     fetchData();
   }, [currentUserIdx, boardIdx]);
-
 
   const CommentDeleteHandler = async (commentIdx) => {
     try {
@@ -140,7 +139,7 @@ function CommunityDetail() {
     if (currentUserIdx === null) {
       return;
     }
-    console.log('asd',currentUserIdx)
+    console.log("asd", currentUserIdx);
     // 유저가 좋아요를 했는가 확인하고
     const check = async () => {
       console.log(isLiked);
@@ -242,13 +241,12 @@ function CommunityDetail() {
           <div className="comment-title">
             <GoBell className="icon" />
             <span>댓글</span>
-            <div className="comment-count">{commentCount}</div>
+            <div className="comment-count">{comments && comments.length}</div>
           </div>
           <hr key="" />
         </>
       )}
       <div className="comment-list">
-
         <ul>
           {comments && comments.length > 0 ? (
             comments.reverse().map((comment) => {
@@ -265,9 +263,7 @@ function CommunityDetail() {
                           onClick={() =>
                             CommentDeleteHandler(comment.commentIdx)
                           }
-                        >
-                          <p>12131</p>
-                        </FaTrashAlt>
+                        ></FaTrashAlt>
                       )}
                     </div>
                     <br />
@@ -382,6 +378,7 @@ const MainDiv = styled.div`
       margin-right: 1rem;
     }
   }
+
   .comment {
     background-color: #202c44;
     display: flex;

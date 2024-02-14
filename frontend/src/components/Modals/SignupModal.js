@@ -151,9 +151,9 @@ function SignupModal({className, fontSize, padding}) {
               </div>
               <div className='inputWrapper'>
                 <label className='label'>Password</label>
-                <input type='password' placeholder='8-20자 영어, 숫자, 특수문자 조합'
+                <input type='password' placeholder='8-25자 영어, 숫자, 특수문자 조합'
                   id='password' onChange={handleChange} className='input' required
-                  pattern='^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$'
+                  pattern='^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,25}$'
                 />
               </div>
               <div className='inputWrapper'>
@@ -170,7 +170,7 @@ function SignupModal({className, fontSize, padding}) {
               </div>
               <div className='inputWrapper'>
                 <label className='label'>Nickname</label>
-                <input type='text' placeholder='최대 32자' id='nickname' onChange={handleChange} className='input'/>
+                <input type='text' placeholder='최대 25자' id='nickname' onChange={handleChange} className='input'/>
                 <input type='button' onClick={checkNickname} value='중복 확인' className='checkButton' />
               </div>
               <div className='gender-birth'>

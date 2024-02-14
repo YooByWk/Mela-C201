@@ -129,6 +129,7 @@ const Container = styled.div`
     flex-grow: 1;
     border-radius: 10px;
     margin-bottom: 20px;
+    resize: none;
   }
 
   .btnWrapper {
