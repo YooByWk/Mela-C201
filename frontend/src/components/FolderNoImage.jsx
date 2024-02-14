@@ -86,7 +86,7 @@ const FolderNoImage = (props) => {
         <>
         <Container
             width={props.width}
-            maxWidth={props.maxwidth}
+            maxwidth={props.maxwidth}
             onClick={props.onClick}
         >
             <div className='titleday'>
