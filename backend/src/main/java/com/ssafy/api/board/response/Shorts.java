@@ -1,5 +1,7 @@
-package com.ssafy.db.entity;
+package com.ssafy.api.board.response;
 
+import com.ssafy.db.entity.File;
+import com.ssafy.db.entity.User;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,31 +10,20 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
-@Entity
 @Getter
 @Setter
 public class Shorts {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     Long shortsIdx;
 
-
-    @ManyToOne
-    @JoinColumn(name = "user_idx", referencedColumnName = "userIdx")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
     User userIdx;
 
     String title;
 
     String description;
 
-    @ManyToOne
-    @JoinColumn(name="shorts_path_file_idx", referencedColumnName="fileIdx")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
     File shortsPathFileIdx;
+
+    String fileURL;
 
     @Override
     public String toString() {
@@ -42,6 +33,7 @@ public class Shorts {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", shortsPathFileIdx=" + shortsPathFileIdx +
+                ", fileURL='" + fileURL + '\'' +
                 '}';
     }
 }

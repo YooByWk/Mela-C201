@@ -49,15 +49,21 @@ public class ShortsServiceImpl implements  ShortsService {
     }
 
     @Override
-    public List<Shorts> getShortsList(User nowLoginUser) {
+    public List<com.ssafy.api.board.response.Shorts> getShortsList(User nowLoginUser) {
         //1. 현재 사용자의 선호장르, 싫어요 표시한 쇼츠의 리스트를 가져오기
         List<UserGenre> preferedGenre = userGenreRepository.findGenreIdxByUserIdx(nowLoginUser);        //사용자의 선호장르
-        List<Shorts> dislikedShorts = shortsDislikeRepository.findShortsIdxByUserIdx(nowLoginUser);     //사용자가 싫어요 표시한 쇼츠 리스트
+//        List<Shorts> dislikedShorts = shortsDislikeRepository.findShortsIdxByUserIdx(nowLoginUser);     //사용자가 싫어요 표시한 쇼츠 리스트
+        List<ShortsDislike> shortsDislikeList = shortsDislikeRepository.findShortsIdxByUserIdx(nowLoginUser);     //사용자가 싫어요 표시한 쇼츠 리스트
+        System.err.println("shortsDislikeList.size(): " + shortsDislikeList.size());
+        for(ShortsDislike shortsDislike : shortsDislikeList) {
+            System.err.println("shortsDislike: " + shortsDislike);
+        }
+        System.err.println("shortsDislike 끝");
 
         //1.1 싫어요 표시한 쇼츠의 idx값을 가져오기
         List<Shorts> dislikedShortsIdx = new ArrayList<>();
-        for(Shorts disShort : dislikedShorts){
-            dislikedShortsIdx.add(disShort);
+        for(ShortsDislike shortsDislike : shortsDislikeList){
+            dislikedShortsIdx.add(shortsDislike.getShortsIdx());
         }
 
         //2. 사용자가 싫어요 표시한 쇼츠를 제외하고 쇼츠리스트 전체를 가져오기
@@ -67,31 +73,90 @@ public class ShortsServiceImpl implements  ShortsService {
 //        System.out.println(shortsList.size());
 //        System.out.println("++++++++++++++++++++++++++++++++");
         List<Shorts> shortsList = shortsRepository.findAll();
+        System.err.println("shortsList");
+        for(Shorts shorts : shortsList) {
+            System.err.println("shorts: " + shorts);
+        }
 
         //3. 가져온 쇼츠 리스트에서 쇼츠를 올린 사람의 장르를, 현재 사용자의 선호장르와 비교하여 쇼츠 리스트를 추출함
         List<Shorts> selectedShortsList = new ArrayList<>();
+        List<com.ssafy.api.board.response.Shorts> selectedShortsListResponse = new ArrayList<>();
+
         boolean isShortsAdd;
-        for(Shorts shorts : shortsList){
+        for(Shorts shorts : shortsList) {
             //쇼츠업로더의 userIdx
             User shortsUploaderUserIdx = shorts.getUserIdx();
             List<UserGenre> uploaderPreferedGenre = userGenreRepository.findGenreIdxByUserIdx(shortsUploaderUserIdx);
             isShortsAdd = false;
+            System.err.println("for문");
             //사용자가 싫어요 표시한 쇼츠라면 반환리스트에서 제외
-            if(dislikedShortsIdx.contains(shorts.getShortsIdx())){
+            System.err.println("shorts.getShortsIdx(): " + shorts.getShortsIdx());
+//            if(dislikedShortsIdx.contains(shorts.getShortsIdx())){
+            if(dislikedShortsIdx.contains(shorts)){
+                System.err.println("조건문 1");
                 continue;
             }
 
             //업로드한 사용자의 선호 장르가 없다면 일단 반환리스트에 추가
             if(uploaderPreferedGenre.size() == 0){
-                selectedShortsList.add(shorts);
+                System.err.println("조건문 2");
+//                selectedShortsList.add(shorts);
+                com.ssafy.api.board.response.Shorts shortsResponse = new com.ssafy.api.board.response.Shorts();
+                //setter 호출
+                shortsResponse.setShortsIdx(shorts.getShortsIdx());
+                shortsResponse.setUserIdx(shorts.getUserIdx());
+                shortsResponse.setTitle(shorts.getTitle());
+                shortsResponse.setDescription(shorts.getDescription());
+                shortsResponse.setShortsPathFileIdx(shorts.getShortsPathFileIdx());
+
+                String videoUrl = null;
+
+                //fileservice를 이용해 Amazon S3 영상 링크 가져오기
+                try {
+                    videoUrl = fileService.getVideoUrlBySaveFileIdx(shorts.getShortsPathFileIdx().getFileIdx());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //com.ssafy.api.board.response.Shorts DTO에 영상 링크 설정
+                System.err.println("videoUrl: " + videoUrl);
+                shortsResponse.setFileURL(videoUrl);
+                //리스트 추가
+                selectedShortsListResponse.add(shortsResponse);
+
                 continue;
             }
 
             //업로드한 사용자의 선호장르가 있다면, 로그인한 사용자의 선호장르와 비교하여 반환리스트에 추가
             for(int i=0; i<preferedGenre.size(); i++){
+                System.err.println("for문 i: " + i);
                 for(int j=0; j<uploaderPreferedGenre.size(); j++){
+                    System.err.println("for문 j: " + j);
                     if(preferedGenre.get(i).getGenreIdx() == uploaderPreferedGenre.get(j).getGenreIdx()){
-                        selectedShortsList.add(shorts);
+                        System.err.println("for문 안 if문");
+//                        selectedShortsList.add(shorts);
+
+                        com.ssafy.api.board.response.Shorts shortsResponse = new com.ssafy.api.board.response.Shorts();
+                        //setter 호출
+                        shortsResponse.setShortsIdx(shorts.getShortsIdx());
+                        shortsResponse.setUserIdx(shorts.getUserIdx());
+                        shortsResponse.setTitle(shorts.getTitle());
+                        shortsResponse.setDescription(shorts.getDescription());
+                        shortsResponse.setShortsPathFileIdx(shorts.getShortsPathFileIdx());
+
+                        String videoUrl = null;
+
+                        //fileservice를 이용해 Amazon S3 영상 링크 가져오기
+                        try {
+                            videoUrl = fileService.getVideoUrlBySaveFileIdx(shorts.getShortsPathFileIdx().getFileIdx());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        //com.ssafy.api.board.response.Shorts DTO에 영상 링크 설정
+                        shortsResponse.setFileURL(videoUrl);
+                        //리스트 추가
+                        selectedShortsListResponse.add(shortsResponse);
                         isShortsAdd = true;
                         break;
                     }
@@ -100,7 +165,8 @@ public class ShortsServiceImpl implements  ShortsService {
             }
         }
 
-        return selectedShortsList;
+//        return selectedShortsList;
+        return selectedShortsListResponse;
 //        return shortsList;
     }
 
