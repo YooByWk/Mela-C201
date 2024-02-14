@@ -1,15 +1,15 @@
 import axios from "axios";
 import { GetComment } from './BoardAPI';
 
-const URL = 'http://localhost:8080/api/v1/recruit'
+const URL = process.env.REACT_APP_API_URL+'/recruit'
 
 
 export const GatherAPI = axios.create({ 
-  baseURL: 'http://localhost:8080/api/v1/recruit'
+  baseURL: process.env.REACT_APP_API_URL+'/recruit'
 }) 
 
 export const GatherAPIAuth = axios.create({
-  baseURL: 'http://localhost:8080/api/v1/recruit',
+  baseURL: process.env.REACT_APP_API_URL+'/recruit',
   headers: { 'Authorization': `Bearer ${localStorage.accessToken}` }
  })
 

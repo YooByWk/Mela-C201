@@ -3,14 +3,14 @@ import axios from 'axios'
 let ACCESS_TOKEN = localStorage.getItem('accessToken')
 
 export const ShortsAPI = axios.create({
-    baseURL: 'http://localhost:8080/api/v1/shorts',
+    baseURL: process.env.REACT_APP_API_URL + '/shorts',
     headers:  {
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
     },
 })
 
 export const ShortsAPI2 = axios.create({
-    baseURL: 'http://localhost:8080/api/v1/shorts',
+    baseURL: process.env.REACT_APP_API_URL + '/shorts',
     headers:  {
         'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,

@@ -54,8 +54,8 @@ export const Chatting = props => {
 
     const connect = () => {
         // if (!roomIdx) return
-
-        sock = new SockJS("//localhost:8080/ws-stomp")
+        const a = process.env.REACT_APP_API_URL
+        sock = new SockJS(process.env.REACT_APP_API_URL2 + "/ws-stomp")
         ws = Stomp.over(sock)
 
         ws.connect(

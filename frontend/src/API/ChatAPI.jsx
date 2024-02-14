@@ -3,7 +3,7 @@ import axios from 'axios'
 let ACCESS_TOKEN = localStorage.getItem('accessToken')
 
 export const ChatAPI = axios.create({
-    baseURL: 'http://localhost:8080/api/v1',
+    baseURL: process.env.REACT_APP_API_URL,
     headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${ACCESS_TOKEN}`,

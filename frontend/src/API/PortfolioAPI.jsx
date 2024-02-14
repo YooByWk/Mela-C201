@@ -3,7 +3,7 @@ import axios from 'axios';
 let ACCESS_TOKEN = localStorage.getItem('accessToken')
 
 export const PortfolioAPI = axios.create({
-    baseURL: 'http://localhost:8080/api/v1/users',
+    baseURL: process.env.REACT_APP_API_URL + '/portfolios',
     headers: {
     'Content-Type': 'multipart/form-data',
     'Authorization': `Bearer ${ACCESS_TOKEN}`,

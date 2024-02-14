@@ -4,7 +4,7 @@ import { addYears } from 'date-fns'
 let ACCESS_TOKEN = localStorage.getItem('accessToken')
 
 export const UserApi = axios.create({
-    baseURL: 'http://localhost:8080/api/v1/users',
+    baseURL: process.env.REACT_APP_API_URL+'/users',
     headers:  {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
@@ -12,7 +12,7 @@ export const UserApi = axios.create({
 })
 
 const UserApi2 = axios.create({
-    baseURL: 'http://localhost:8080/api/v1/users',
+    baseURL: process.env.REACT_APP_API_URL+'/users',
     headers: {
         'Authorization': `Bearer ${localStorage.accessToken}`,
     },
@@ -36,7 +36,7 @@ export const fetchUser = async () => {
         console.log('토큰이 없습니다')
         return
     }
-    const response = await axios.get(`http://localhost:8080/api/v1/users/myinfo`, {
+    const response = await axios.get(process.env.REACT_APP_API_URL+`/users/myinfo`, {
         headers: {
             'Authorization': `Bearer ${localStorage.accessToken}`,
         }
@@ -47,7 +47,7 @@ export const fetchUser = async () => {
 // 회원수정
 export const updateUser = async (formdata) => {
     try {
-        const response = await axios.put('http://localhost:8080/api/v1/users/myinfo', formdata, {
+        const response = await axios.put(process.env.REACT_APP_API_URL+'/users/myinfo', formdata, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization' : `Bearer ${localStorage.accessToken}`
@@ -69,7 +69,7 @@ export const deleteUser = async () => {
 // 나를 팔로우 한 사람 조회
 export const follower = async (userId) => {
     
-    const response = await axios.get(`http://localhost:8080/api/v1/users/${userId}/followees`,{
+    const response = await axios.get(process.env.REACT_APP_API_URL+`/users/${userId}/followees`,{
         headers: {
             'Authorization': `Bearer ${localStorage.accessToken}`,
         }
@@ -80,7 +80,7 @@ export const follower = async (userId) => {
 
 // 내가 팔로우 한 사람 조회
 export const followee = async (userId) => {
-    const response = await axios.get(`http://localhost:8080/api/v1/users/${userId}/followers`, {
+    const response = await axios.get(process.env.REACT_APP_API_URL+`/users/${userId}/followers`, {
         headers: {
             'Authorization': `Bearer ${localStorage.accessToken}`,
         }
@@ -108,7 +108,7 @@ export const isFollow = async (userId) => {
 // 이메일 중복 확인
 export const emailCheck = async ({emailId}) => {
     console.log(emailId,'유저API 이메일')
-    const response = await axios.get(`http://localhost:8080/api/v1/users/emailid/${emailId}`)
+    const response = await axios.get(process.env.REACT_APP_API_URL+`/users/emailid/${emailId}`)
     // console.log(response)
     
     return response.data
@@ -127,7 +127,7 @@ export const notification = async () => {
         console.log('토큰이 없습니다')
         return
     }
-    const response = await axios.get(`http://localhost:8080/api/v1/users/notifications`, {
+    const response = await axios.get(process.env.REACT_APP_API_URL+`/users/notifications`, {
         headers: {
             'Authorization': `Bearer ${localStorage.accessToken}`,
         }

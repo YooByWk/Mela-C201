@@ -3,7 +3,7 @@ import axios from "axios";
 let ACCESS_TOKEN = localStorage.getItem("accessToken");
 
 export const TeamspaceAPI = axios.create({
-  baseURL: "http://localhost:8080/api/v1/teamspaces",
+  baseURL: process.env.REACT_APP_API_URL+"/teamspaces",
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${ACCESS_TOKEN}`,
@@ -22,7 +22,7 @@ export const TeamspaceList = async () => {
 export const TeamspaceGenerate = async (formdata) => {
   try {
     const response = await axios.post(
-      "http://localhost:8080/api/v1/teamspaces",
+      process.env.REACT_APP_API_URL + "/teamspaces",
       formdata,
       {
         headers: {
@@ -48,7 +48,7 @@ export const TeamspaceInfo = async (teamspaceId) => {
 export const TeamspaceUpdate = async ({ formData, teamspaceId }) => {
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/v1/teamspaces/${teamspaceId}`,
+      process.env.REACT_APP_API_URL+`/teamspaces/${teamspaceId}`,
       formData,
       {
         headers: {
@@ -102,7 +102,7 @@ export const uploadTeamspaceFile = async ({ formData, teamspaceid }) => {
 
   try {
     const response = await axios.post(
-      `http://localhost:8080/api/v1/teamspaces/${teamspaceid}/file`,
+      process.env.REACT_APP_API_URL + `/teamspaces/${teamspaceid}/file`,
       formData,
       {
         headers: {
@@ -137,7 +137,7 @@ export const createViduSession = async (teamspaceIdx) => {
   }
   try {
     const response = await axios.post(
-      `http://localhost:8080/api/v1/openvidu/createsession/${teamspaceIdx}`,
+      process.env.REACT_APP_API_URL + `/openvidu/createsession/${teamspaceIdx}`,
       null,
       {
         headers: {
@@ -155,7 +155,7 @@ export const createViduSession = async (teamspaceIdx) => {
 
 export const getsessions = async () => {
   const response = await axios.get(
-    "http://localhost:8080/api/v1/openvidu/getsessions"
+    process.env.REACT_APP_API_URL+"/openvidu/getsessions"
   );
   console.log(response);
   return response.data;
@@ -165,7 +165,7 @@ export const getsessions = async () => {
 export const GetSessionId = async (teamspaceidx) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/v1/teamspaces/${teamspaceidx}/getsessionid`,
+      process.env.REACT_APP_API_URL+`/teamspaces/${teamspaceidx}/getsessionid`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.accessToken}`,
@@ -185,7 +185,7 @@ export const GetSessionId = async (teamspaceidx) => {
 
 export const DeleteViduSession = async (sessionId) => {
   const response = await axios.delete(
-    `http://localhost:8080/api/v1/openvidu/deletesession/${sessionId}`
+    process.env.REACT_APP_API_URL+`/openvidu/deletesession/${sessionId}`
   );
   console.log(response);
   alert('성공?')
