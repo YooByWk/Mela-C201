@@ -10,13 +10,13 @@ function Selfshorts() {
             <div className="header">
                 <Title>Self-shorts</Title>
                 <ShortsUploadModal />
-                <DefaultButton 
+                {/* <DefaultButton 
                     text={'Add'}
                     backgroundcolor={'#254ef8'}
                     fontcolor={'white'}
                     width={'4rem'}
                     height={'2rem'}
-                />
+                /> */}
             </div>
         </Container>
         </>

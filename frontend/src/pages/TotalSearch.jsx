@@ -68,7 +68,7 @@ const Header = styled.div`
 
 const P = styled.p`
   font-size: x-large;
-  padding-top: 5%;
+  padding-top: 3%;
   padding-left: 7%;
   font-weight: bold;
 `
@@ -77,8 +77,8 @@ const TabMenu = styled.ul`
     font-weight: bold;
     display: flex;
     flex-direction: row;
-    margin-top: 20px;
-    margin-bottom: 10px;
+    margin-top: 8px;
+    margin-bottom: px;
 
     // 메뉴 css
     .submenu {
@@ -115,9 +115,11 @@ const SideDiv = styled.div`
 
 const MainContainer = styled.div`
   width: 60%;
+  height: 700px;
 `
 const MainDiv = styled.div`
   width: 100%;
+  height: 600px;
   background-color: ${(props) => props.theme.colours.point};
   border-radius: 50px;
   overflow: hidden;
@@ -126,6 +128,12 @@ const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
   height: 70%;
+  overflow: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
   .Container {
     margin-top: 5%;
     h1 {

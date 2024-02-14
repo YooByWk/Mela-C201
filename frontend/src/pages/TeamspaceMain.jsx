@@ -99,11 +99,13 @@ const TeamspaceContainer = styled.div`
 const SideDiv = styled.div`
   width: 12.5vw;
   padding-left: 1%;
+  height: 50vh;
 `;
 
 
 const MainDiv = styled.div`
-  width: 60%;
+  width: 64%;
+  height: 600px;
   background-color: ${(props) => props.theme.colours.point};
   border-radius: 50px;
   overflow: hidden;

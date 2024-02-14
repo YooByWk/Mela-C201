@@ -49,7 +49,8 @@ const SideDiv = styled.div`
 `;
 
 const MainDiv = styled.div`
-  width: 67.5%;
+  width: 64%;
+  height: 600px;
   background-color: ${(props) => props.theme.colours.point};
   border-radius: 50px;
   overflow-x: hidden;
