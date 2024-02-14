@@ -82,7 +82,7 @@ function Landing() {
               </Titles>
             </InnerContainer>
           </ContentsContainer>
-          <ContentsContainer>
+          {/* <ContentsContainer>
             <InnerContainer>
               <img src={RightDouble} alt="" />
               <h1> Popular Musicians</h1>
@@ -90,7 +90,7 @@ function Landing() {
                 <img src={LeftDouble} alt="" />
               </Titles>
             </InnerContainer>
-          </ContentsContainer>
+          </ContentsContainer> */}
           <ContentsContainer>
             <InnerContainer>
               <img src={RightDouble} alt="" />
@@ -183,6 +183,7 @@ const InnerContainer = styled.div`
     padding-bottom: 5%;
   }
 `;
+
 const ContentsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -196,6 +197,7 @@ const ContentsContainer = styled.div`
     align-items: baseline;
   }
 `;
+
 const Titles = styled.div`
   position: relative;
   img {
@@ -203,6 +205,7 @@ const Titles = styled.div`
     top: 50%;
   }
 `;
+
 const LandingImageDiv = styled.div`
   background-image: url(${mainImage});
   background-size: 100% auto;

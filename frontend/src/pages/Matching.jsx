@@ -1,15 +1,28 @@
-// TODO: 사용 안하는 코드 지우기
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import SockJS from "sockjs-client";
-import Stomp from "stompjs";
-import { RiMessage2Line } from "react-icons/ri";
-import { ChatList, CreateChat, EnterChat } from "../API/ChatAPI";
+import { useEffect, useState } from "react";
+import { shortsList } from "../API/ShortsAPI";
+import { getVideo } from "../API/FileAPI";
 
-function Matching () {
-    return (
-        <>
-        <h1>Matching 페이지</h1>
-        </>
-    )
-}
+function Matching() {
+    const [list, setList] = useState()
+
+    useEffect(() => {
+        const getList = async() => {
+            try {
+                const response = await shortsList()
+                setList(response)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+        getList()
+    }, []);
+
+    return ( 
+      <>
+      <h1>Matching 페이지.</h1>
+      </>
+     );
+  }
+  
+  export default Matching

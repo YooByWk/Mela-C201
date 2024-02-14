@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import DefaultButton from "./DefaultButton";
-
+import ShortsUploadModal from "./Modals/ShortsUpload";
 
 function Selfshorts() {
     return (
@@ -9,6 +9,7 @@ function Selfshorts() {
         <Container>
             <div className="header">
                 <Title>Self-shorts</Title>
+                <ShortsUploadModal />
                 <DefaultButton 
                     text={'Add'}
                     backgroundcolor={'#254ef8'}

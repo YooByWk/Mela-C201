@@ -104,7 +104,7 @@ function Navbar({backcolour, radius}) {
           </SearchBar>
       <div className='MenuContainer'>
         <span><NavLink
-        style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/gather/1'>Gather</NavLink></span>
+        style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/maingather'>Gather</NavLink></span>
         <span><NavLink
         style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/teamspace'>Team Space</NavLink></span>
         <span><NavLink

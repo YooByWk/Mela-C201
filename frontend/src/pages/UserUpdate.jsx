@@ -39,7 +39,7 @@ function UserUpdateForm() {
     const handleGenreChange = (event) => {
         const { checked, value } = event.target;
         if (checked && selectedGenres.length < 3) {
-          setSelectedGenres([...selectedGenres, value]);
+          setSelectedGenres([...selectedGenres, genres.indexOf(value)+1]);
         } else if (!checked) {
           setSelectedGenres(selectedGenres.filter((genre) => genre !== value));
         } 
@@ -49,12 +49,13 @@ function UserUpdateForm() {
       const handlePositionChange = (event) => {
         const { checked, value } = event.target;
         if (checked) {
-          setSelectedPositions([...selectedPositions, value]);
+          setSelectedPositions([...selectedPositions, positions.indexOf(value)+1]);
         } else if (!checked) {
           setSelectedPositions(
             selectedPositions.filter((position) => position !== value)
           );
         }
+        console.log(selectedPositions);
       };
     // 나머지 해야함  //
 
@@ -63,7 +64,9 @@ function UserUpdateForm() {
         nickname: '',
         gender: '',
         birth: '',
-        searchAllow: ''
+        searchAllow: '',
+        genre: [],
+        position: []
     })
 
     const [portfolioValues, setPortfolioValues] = useState({
@@ -72,7 +75,6 @@ function UserUpdateForm() {
         youtube:''
     })
 
-    const [imageURL, setImageURL] = useState()
 
     useEffect(()=> {
         const getUserInfo = async() => {
@@ -80,6 +82,8 @@ function UserUpdateForm() {
                 const res = await fetchUser()
                 setUserValues(res[0])
                 setPortfolioValues(res[1])
+                setSelectedPositions(res[2])
+                setSelectedGenres(res[3])
             } catch (err) {
                 console.error(err)
             }
@@ -105,15 +109,13 @@ function UserUpdateForm() {
     
     const handleImgFile = (e) => {
         e.preventDefault()
-        const file = imgRef.current.files[0]
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onloadend = () => {
-            setImgPreview(reader.result)
+    
+        if (e.target.files[0]) {
+            setImgFile(e.target.files[0])
+            setImgPreview(URL.createObjectURL(e.target.files[0]))
         }
-        // console.log(e.target.files[0])
-        setImgFile(e.target.files[0])
-    }
+        console.log(imgFile)
+      }
 
     const handleUserChange = async (e) => {
         setUserValues({...userValues,
@@ -148,9 +150,11 @@ function UserUpdateForm() {
             nickname: userValues.nickname,
             gender: userValues.gender,
             birth: userValues.birth,
-            searchAllow: userValues.searchAllow
+            searchAllow: userValues.searchAllow,
+            genre: selectedGenres,
+            position: selectedPositions
         })
-
+        // console.log(user)
         const portfolio = JSON.stringify({
             instagram: portfolioValues.instagram,
             selfIntro: portfolioValues.selfIntro,
@@ -207,7 +211,6 @@ function UserUpdateForm() {
                     </div>
                     <input
                         type='file'
-                        ref={imgRef}
                         onChange={handleImgFile}
                     />
                 </ProfileImageWrapper>

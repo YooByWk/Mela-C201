@@ -96,6 +96,9 @@ function TeamspaceFile () {
                             <br/>
                             title={value.originalFilename}
                             <br/>
+                            <Profile src={value.uploaderProfileImageUrl} alt="프로필 이미지" />
+                            {value.userIdx.nickname}
+                            <br/>
                             ===================================================
                         </Div>
                     ))}
@@ -303,4 +306,10 @@ const CustomBackdrop = styled.div`
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 1040;
     display: ${({ open }) => (open ? "block" : "none")};
+`
+
+const Profile = styled.img`
+    width: 50px;
+    height: 50px;
+    border-radius:50%;
 `

@@ -21,3 +21,9 @@ export const uploadFile = async (formData) => {
     const response = await FileAPI.post(`/upload`, formData)
     return response.data
 }
+
+// 단일 동영상 조회
+export const getVideo = async (fileIdx) => {
+    const response = await FileAPI.get(`/videos/${fileIdx}`)
+    return response.data
+}

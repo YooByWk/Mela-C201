@@ -68,6 +68,7 @@ margin-bottom:5px;
 
 const P = styled.p`
 color: grey;
+padding-top: 5%;
 `
 
 
@@ -124,7 +125,7 @@ function Sidebar({ className, paddingtop }) {
     }
     }
     follow()
-  },[userValues])
+  },[userValues, portfolioValues])
 
   // const followList = async () => {
   //   try {
@@ -146,8 +147,7 @@ function Sidebar({ className, paddingtop }) {
             />
             <div className="name-follow">
               <H3> {userValues.nickname} </H3>
-              {/* <P onClick={}>팔로워 {followers.length} </P>  */}
-              <br></br>
+              <P>팔로워 {followers.length} </P> 
               <P>팔로잉 {followings.length}</P>
             </div>
           </div>

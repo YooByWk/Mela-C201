@@ -12,9 +12,9 @@ export const TeamspaceAPI = axios.create({
 
 // 나의 팀스페이스 조회
 export const TeamspaceList = async () => {
-  console.log(ACCESS_TOKEN, "토큰");
+  // console.log(ACCESS_TOKEN, "토큰");
   const response = await TeamspaceAPI.get(`/`);
-  console.log(response);
+  // console.log(response);
   return response.data;
 };
 
@@ -53,8 +53,8 @@ export const TeamspaceUpdate = async ({ formData, teamspaceId }) => {
       {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.accessToken}`,
-        },
+          Authorization: `Bearer ${ACCESS_TOKEN}`
+        }
       }
     );
     return response.data;
