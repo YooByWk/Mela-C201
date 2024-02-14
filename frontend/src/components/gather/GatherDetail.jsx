@@ -8,7 +8,7 @@ import useStore from "../../status/store";
 import { useNavigate, useParams } from "react-router-dom";
 import { GetComment, CreateComment,BoardDelete, CommentDelete, checkBoardLike, BoardLike} from "../../API/BoardAPI";
 import DefaultButton from '../DefaultButton'
-import { ChatList, CreateChat, EnterChat } from "../../API/ChatAPI";
+import { CreateChat } from "../../API/ChatAPI";
 
 const GatherDetail = () => {
   const [data, setData] = useState(null);

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import SockJS from "sockjs-client";
-import Stomp from "stompjs";
 import { RiMessage2Line } from "react-icons/ri";
-import { ChatList, CreateChat, EnterChat } from "../API/ChatAPI";
+import { ChatList, EnterChat } from "../API/ChatAPI";
 import moment from "moment";
 import useStore from "../status/store";
 import { useParams } from "react-router-dom";
+import {Chatting} from "../components/Chatting";
+
 
 let sock;
 let ws;
@@ -17,191 +17,148 @@ function Message() {
   const [roomIdx, setRoomIdx] = useState("");
   const [userIdx, setUserIdx] = useState("");
   const [otheruserid, setOtheruserid] = useState();
+  const [room, setRoom] = useState({});
+  const [otherNickname, setOtherNickname] = useState('')
+
+  // const [userValue, setUserValue] = useState('')
+  // const [myProfile, setMyProfile] = useState('')
+  // const [otherValue, setOtherValue] = useState('')
+  // const [otherProfile, setOtherProfile] = useState('')
+  // const [imgUrl, setImgUrl] = useState('')
   const user = useStore((state) => state.user);
 
   useEffect(() => {
     useStore.getState().fetchUser();
     findAllRooms();
-  }, []);
+
+    // const fetch = async() => {
+    //   try {
+    //     const myinfo = await fetchUser()
+    //     setUserValue(myinfo)
+    //   } catch (err) {
+    //     console.log(err)
+    //   }
+    // }
+
+  }, [])
 
   const findAllRooms = async () => {
     try {
       const response = await ChatList();
       console.log("findAllRooms : ", response);
-      setChatRooms(response);
-      console.log("response chatRooms: ", chatRooms);
+      setChatRooms(response)
+
+      // const otherInfos = response.map(async (room) => {
+      //   const res = await othersInfo(room.user.emailId)
+      //   setOtherValue(res)
+      //   setOtherProfile(res[1])
+      // })
+
     } catch (err) {
       console.log(err);
     }
-  };
+  }
 
-  const createRoom = async () => {
-    if (otheruserid === "") {
-      alert("방 제목을 입력해 주세요.");
-      return;
-    } else {
-      try {
-        const response = await CreateChat({ otheruserid: otheruserid });
-        console.log(response);
-        setOtheruserid("");
-        findAllRooms();
-      } catch (err) {
-        console.log(err);
-        alert("채팅방 개설에 실패하였습니다.");
-      }
-    }
-  };
+  // useEffect(() => {
+  //   const imginfo = async () => {
+  //     try {
+  //       if (otherProfile.portfolio_picture_file_idx) {
+  //         const res = await getImg(otherProfile.portfolio_picture_file_idx)
+  //       }
+  //     }
+  //   }
 
-  const enterRoom = (roomIdx) => {
-    // const userIdx = prompt("대화명을 입력해 주세요.");
+  // })
+  
+  // if (res[1].portfolio_picture_file_idx) {
+  //   const imginfo = await getImg(res[1].portfolio_picture_file_idx.fileIdx)
+  //   setOtherProfile(imginfo)
+  // } else {
+  //   setImgUrl(defaultprofile)
+  // }
+
+  const enterRoom = (roomIdx, nickname) => {
     if (user) {
       setUserIdx(localStorage.getItem("userIdx"));
-      localStorage.setItem("wschat.userIdx", userIdx);
-      localStorage.setItem("wschat.roomIdx", roomIdx);
+      // localStorage.setItem("wschat.userIdx", userIdx);
+      // localStorage.setItem("wschat.roomIdx", roomIdx);
       setRoomIdx(roomIdx);
+      console.log("학인 ", nickname)
+      setOtherNickname(nickname)
     }
   };
 
-  const [room, setRoom] = useState({});
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-
-  let reconnect = 0;
   const params = useParams();
+
   useEffect(() => {
-    console.log("params: ", params);
     console.log("params.roomid: ", params.roomid);
 
     setRoomIdx(params.roomid);
     setUserIdx(localStorage.getItem("wschat.userIdx"));
 
     console.log("roomidx : ", roomIdx);
-
-    findRoom();
-    connect();
   }, []);
 
-  const findRoom = async (roomIdx) => {
-    try {
-      const response = await EnterChat(roomIdx);
-      setRoom(response);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const sendMessage = () => {
-    console.log("ws.connected: " + ws.connected);
-    console.log("roomIDx : ", roomIdx);
-
-    if (ws && ws.connected && message.trim() !== "") {
-      ws.send("/pub/chat/message", {}, JSON.stringify({ type: "TALK", roomIdx, userIdx, message }));
-      setMessage("");
-    } else {
-      // WebSocket 연결이 설정되지 않은 경우, 메시지를 보낼 수 없음을 사용자에게 알림
-      console.error("WebSocket 연결이 설정되지 않았습니다.");
-      connect();
-    }
-  };
-
-  const recvMessage = (recv) => {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        type: recv.type,
-        userIdx: recv.userIdx,
-        message: recv.message,
-      },
-    ]);
-  };
-
-  const connect = () => {
-    if (!roomIdx) {
-      console.error();
-      return;
-    }
-
-    sock = new SockJS("//localhost:8080/ws-stomp");
-    ws = Stomp.over(sock);
-
-    ws.connect(
-      {},
-      (frame) => {
-        ws.subscribe(`/sub/chat/room/${roomIdx}`, (message) => {
-          const recv = JSON.parse(message.body);
-          recvMessage(recv);
-        });
-      },
-      (error) => {
-        console.error();
-        if (reconnect++ < 5) {
-          setTimeout(connect, 5000);
-        }
-      }
-    );
-  };
-
-  useEffect(() => {
-    if (roomIdx) {
-      connect();
-    }
-  }, [roomIdx]);
 
   return (
     <Container>
-      <div className="select-chat">
-        <div className="chat-title">
-          <h2>{room.name}</h2>
-        </div>
-        <div className="input-wrppaer">
-          <input
-            type="text"
-            className="input"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+      {roomIdx ? (
+        <div className="chatting-wrapper">
+          <Chatting
+            roomIdx={roomIdx}
+            recvUser={otherNickname}
           />
-          <div className="button-wrapper">
-            <button className="btn" type="button" onClick={sendMessage}>
-              Send
-            </button>
-          </div>
         </div>
-        <ul className="list-group">
-          {messages.map((message, index) => (
-            <li key={index} className="list-item">
-              {message.userIdx} - {message.message}
-            </li>
-          ))}
-        </ul>
-      </div>
+      ) : (
+        <div className="chatting-wrapper">
+
+        </div>
+      )}
       <div className="room-list">
         <div className="header">
-          <RiMessage2Line />
+          <div className="icon">
+            <RiMessage2Line />
+          </div>
           <h3>Inbox</h3>
         </div>
-        <div className="input-wrapper">
-          <input
-            type="text"
-            className="input"
-            value={otheruserid}
-            onChange={(e) => setOtheruserid(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && createRoom()}
-          />
-          <div className="button-wrapper">
-            <button className="btn" type="button" onClick={createRoom}>
-              Create
-            </button>
-          </div>
-        </div>
-        <ul className="list-group">
-          {chatRooms.map((room) => (
-            <li key={room.roomIdx} className="list-item" onClick={() => enterRoom(room.roomIdx)}>
-              {room.user.nickname} - {room.lastSendMessage} :{" "}
-              {moment(room.lastSendTime).format("YY-MM-DD HH:mm:ss")}
-            </li>
-          ))}
-        </ul>
+        {roomIdx ? (
+          <Chat>
+            <ul className="list-group">
+              {chatRooms.map((room) => (
+                <li key={room.roomIdx} className="list-item" onClick={() => enterRoom(room.roomIdx, room.user.nickname)}>
+                  {room.lastSendMessage ? 
+                    (<>
+                      <div>
+                        <div className="user">
+                          {room.user.nickname}
+                        </div>
+                        <div className="message">
+                          <p>{room.lastSendMessage}</p>
+                          <p style={{ color: 'gray' }}>{moment(room.lastSendTime).format("YY-MM-DD HH:mm:ss")}</p>
+                        </div>
+                      </div>
+                    </>
+                    )
+                    : (
+                        <>
+                          <div>
+                            <div className="user">
+                              {room.user.nickname}
+                            </div>
+                            <div className="message-not">
+                              <p>아직 대화를 시작하지 않았습니다.</p>
+                            </div>
+                          </div>
+                        </>
+                    )
+                  }
+                </li>
+              ))}
+            </ul>
+          </Chat>
+        ):(
+          <p>현재 채팅 중인 방이 없습니다.</p>
+        )}
       </div>
     </Container>
   );
@@ -213,9 +170,8 @@ const Container = styled.div`
   width: 100%;
   color: white;
 
-  .select-chat {
+  .chatting-wrapper {
     flex: 3;
-    margin-left: 1rem;
     padding: 20px;
   }
 
@@ -229,30 +185,42 @@ const Container = styled.div`
 
   .header {
     display: flex;
+    margin-bottom: 1rem;
+    align-items: center;
+    font-weight: bold;
   }
 
-  .input-wrapper {
-    display: flex;
-    margin-top: 1rem;
+  .icon {
+    margin-right: 1rem;
   }
+`
 
-  .input {
-    background-color: #151c2c;
-    border: none;
-    height: 2rem;
+const Chat = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  
+  &:hover{
+    background-color: #151C2C;
+    color: white;
     border-radius: 10px;
-    color: white;
+    cursor: pointer;
   }
 
-  .button-wrapper {
-    display: flex;
+  .user {
+    font-weight: bold;
+    font-size: large;
   }
 
-  button {
-    background-color: #254ef8;
-    border: none;
-    border-radius: 5px;
-    height: 2rem;
-    color: white;
+  .message-not {
+    margin-top: 0.5rem;
+    color: gray;
   }
-`;
+
+  .message {
+    margin-top: 0.5rem;
+  }
+`
