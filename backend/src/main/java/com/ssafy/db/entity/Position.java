@@ -13,18 +13,15 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-//FIXME: 테스트
 @Table(name = "position")
 public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
-    //FIXME: 테스트
     @Column(name = "position_idx")
     Long positionIdx;
 
     @NotNull
-    //FIXME: 테스트
     @Column(name = "position_name")
     String positionName;
 

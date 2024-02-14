@@ -298,7 +298,6 @@ public class TeamspaceController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
-    //FIXME: 작업 중
     @GetMapping("/{teamspaceid}/file")
     @ApiOperation(value = "팀스페이스 파일 조회", notes = "html <img> 태그에 넣을 수 있는 이미지의 주소를 반환합니다.")
     @ApiResponses({

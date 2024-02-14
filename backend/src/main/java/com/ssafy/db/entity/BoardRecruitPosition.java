@@ -24,7 +24,6 @@ public class BoardRecruitPosition {
     BoardRecruit boardRecruitIdx;
 
     @ManyToOne
-    //FIXME: 테스트 중!
 //    @JoinColumn(name="position_idx", referencedColumnName="positionIdx")
     @JoinColumn(name="position_idx", referencedColumnName="position_idx")
     @OnDelete(action = OnDeleteAction.CASCADE)

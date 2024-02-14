@@ -10,17 +10,13 @@ import javax.transaction.Transactional;
 @Service
 @Transactional
 public class PositionServiceImpl {
-    //FIXME: 테스트 중! (테이블이 비어있으면 레코드 추가)
     @Autowired
     PositionRepository positionRepository;
 
-    //FIXME: 테스트 중! (테이블이 비어있으면 레코드 추가)
+    //테이블이 비어있으면 레코드 추가
     @PostConstruct
     public void init() {
-        System.err.println("PositionRepository init 실행됨!");
-
         if(positionRepository.count() != 6) {
-            System.err.println("PositionRepository 조건문");
             positionRepository.deleteAll();
             positionRepository.init();
         }

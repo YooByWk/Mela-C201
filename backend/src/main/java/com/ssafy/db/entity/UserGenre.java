@@ -24,7 +24,6 @@ public class UserGenre {
     User userIdx;
 
     @ManyToOne
-    //FIXME: 테스트 중!
 //    @JoinColumn(name="genre_idx", referencedColumnName="genreIdx")
     @JoinColumn(name="genre_idx", referencedColumnName="genre_idx")
     @OnDelete(action = OnDeleteAction.CASCADE)
