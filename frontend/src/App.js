@@ -1,6 +1,6 @@
 import "./App.scss";
 import { Fragment } from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, HashRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import GlobalStyle from "./styles/GlobalStyle";
@@ -29,7 +29,7 @@ function App() {
     <Fragment>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
           <Route path='video' element={<Video />} />
           {/* <Route
@@ -83,7 +83,7 @@ function App() {
           <Link to="/user">Signup</Link>||
           <Link to="/login">SignIn</Link>||
           <Link to="/community"> community </Link> */}
-        </BrowserRouter>
+        </HashRouter>
       </ThemeProvider>
     </Fragment>
   );
