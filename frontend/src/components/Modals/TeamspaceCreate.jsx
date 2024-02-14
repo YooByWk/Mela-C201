@@ -95,6 +95,7 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   
+  const Navi = useNavigate()
   // 시작 날짜는 오늘 날짜
   const today = new Date()
   // oooo-oo-oo 형식 맞추기
@@ -151,9 +152,9 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
 
     try {
       const res = await TeamspaceGenerate(formData)
-      console.log(res)
-      // Navigate(`../${res.data.message}`)
+      // console.log(res)
       alert('팀스페이스 생성이 완료되었습니다.')
+      Navi(`../teamspace/${res.message}`)
       setOpen(!open)
   } catch (err) {
       console.error(err)
