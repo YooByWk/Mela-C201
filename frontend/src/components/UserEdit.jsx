@@ -6,7 +6,8 @@ import { fetchUser, followUser } from '../API/UserAPI';
 import defaultprofile from '../assets/images/default-profile.png'
 import { getImg } from "../API/FileAPI";
 import { isFollow } from "../API/UserAPI";
-
+import instagram from "../assets/images/instagram.png"
+import youtube from "../assets/images/youtube.png"
 
 function UserEdit(props) {
     const [isFollowed, setIsFollowed] = useState('')
@@ -132,8 +133,10 @@ function UserEdit(props) {
                     <p>Like genre : </p>
                     <p>Position : </p>                       
                     <p>SNS</p>
-                    <URL onClick={() => {window.open(instagramURL)}}>인스타그램</URL>
-                    <URL onClick={() => {window.open(youtubeURL)}}>유튜브</URL>
+                    <URL onClick={() => {window.open(instagramURL)}} src="instagram" alt="인스타그램">
+                    </URL>
+                    <URL onClick={() => {window.open(youtubeURL)}} src="youtube" alt="유튜브">
+                    </URL>
                 </div>
                 </>
             ) : (
