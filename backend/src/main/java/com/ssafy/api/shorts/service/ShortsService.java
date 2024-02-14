@@ -17,6 +17,6 @@ public interface ShortsService {
     void setShortsLike(User user, Long shortsId);
     void setShortsDislike(User user, Long shortsId);
     long getShortsIdxByFileIdx(long shortsIdx);
-
+    List<Shorts> getShortsListByUserIdx(User user);
     Long getShortsSize();
 }

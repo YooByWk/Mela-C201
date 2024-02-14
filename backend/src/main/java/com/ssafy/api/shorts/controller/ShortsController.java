@@ -60,20 +60,57 @@ public class ShortsController {
     @ApiOperation(value = "내가 업로드한 쇼츠 동영상 리스트", notes = "내가 업로드한 쇼츠 동영상 리스트를 가져온다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
-            //TODO: 로그인하지 않은 사용자 에러 코드 추가
             @ApiResponse(code = 401, message = "인증 실패"),
             @ApiResponse(code = 500, message = "서버 오류"),
     })
-    public ResponseEntity<List<com.ssafy.api.board.response.Shorts>> myShortList (
-            @ApiIgnore Authentication authentication)
-    {
-        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
-        String userEmail = userDetails.getUsername();
-        User nowLoginUser = userService.getUserByEmail(userEmail);
+    public ResponseEntity<?> myShortList (
+            @ApiIgnore Authentication authentication) {
 
-        List<com.ssafy.api.board.response.Shorts> shortsList = shortsService.getShortsList(nowLoginUser);
+        SsafyUserDetails userDetails = null;
+        User user = null;
 
-        return ResponseEntity.status(200).body(shortsList);
+        //1-1. 로그인한 사용자 체크 (토큰 확인)
+        try {
+            userDetails = (SsafyUserDetails) authentication.getDetails();
+            user = userDetails.getUser();
+        } catch(NullPointerException e) {
+            e.printStackTrace();
+
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Authentication failed!"));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        //2. 로그인한 사용자의 쇼츠 리스트 가져옴
+        List<Shorts> shortsList = shortsService.getShortsListByUserIdx(user);
+        List<com.ssafy.api.board.response.Shorts> shortsListResponse = new ArrayList<>();
+
+        for(Shorts shorts : shortsList) {
+            com.ssafy.api.board.response.Shorts shortsResponse = new com.ssafy.api.board.response.Shorts();
+
+            //setter 호출
+            shortsResponse.setShortsIdx(shorts.getShortsIdx());
+            shortsResponse.setUserIdx(shorts.getUserIdx());
+            shortsResponse.setTitle(shorts.getTitle());
+            shortsResponse.setDescription(shorts.getDescription());
+            shortsResponse.setShortsPathFileIdx(shorts.getShortsPathFileIdx());
+
+            String videoUrl = null;
+
+            //fileservice를 이용해 Amazon S3 영상 링크 가져오기
+            try {
+                videoUrl = fileService.getVideoUrlBySaveFileIdx(shorts.getShortsPathFileIdx().getFileIdx());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            //com.ssafy.api.board.response.Shorts DTO에 영상 링크 설정
+            shortsResponse.setFileURL(videoUrl);
+            //리스트 추가
+            shortsListResponse.add(shortsResponse);
+        }
+
+        return ResponseEntity.status(200).body(shortsListResponse);
     }
 
     //FIXME: 삭제 (여러 (동시 접속) 사용자 환경에서 static 사용 불가, 이전 로그인 사용자의 Shorts 리스트가 남아 있어 잘못된 리스트 반환하게 됨)
