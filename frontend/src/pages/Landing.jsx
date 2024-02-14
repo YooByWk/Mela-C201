@@ -108,6 +108,7 @@ function Landing() {
                     content={gather.content}
                     day={gather.endDate}
                     width="12vw"
+                    height="50vh"
                     maxwidth="400px"
                     onClick={(event) =>
                       Navi(`/gather/detail/${gather.boardRecruitIdx}`)

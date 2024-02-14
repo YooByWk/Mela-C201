@@ -45,25 +45,44 @@ function Gather() {
 
     const recommendLimitList = () => {
       const result = []
-      for (let i = 0; i < 3; i++) {
-        result.push(recommend[i])
+      if (recommend.length > 3) {
+        for (let i = 0; i < 3; i++) {
+          result.push(recommend[i])
+        }
+      } else {
+        for (let i = 0; i < recommend.length; i++) {
+          result.push(recommend[i])
+        }
       }
       return result
     }
 
     const myGatherLimitList = () => {
       const result = []
-      for (let i = 0; i < 3; i++) {
-        result.push(myGather[i])
+      if (myGather.length > 3) {
+        for (let i = 0; i < 3; i++) {
+          result.push(myGather[i])
+        }
+      } else {
+        for (let i = 0; i < myGather.length; i++) {
+          result.push(myGather[i])
+        }
       }
       return result
     }
 
     const shortsLimitList = () => {
       const result = []
-      for (let i = 0; i < 3; i++) {
-        result.push(shorts[i])
+      if (shorts.length > 3) {
+        for (let i = 0; i < 3; i++) {
+          result.push(shorts[i])
+        }
+      } else {
+        for (let i = 0; i < shorts.length; i++) {
+          result.push(shorts[i])
+        }
       }
+      
       return result
     }
 

@@ -17,11 +17,11 @@ import defaultprofile from '../assets/images/default-profile.png'
 const SideContainer = styled.div`
   color: white;
   padding-top: ${props => props.$paddingtop || '0'};
-  margin-left:10px;
+  margin-left:30px;
   /* text-align: center; */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   width: 12vw;
   .items {
     margin-top: 30px;
