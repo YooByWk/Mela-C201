@@ -206,7 +206,7 @@ const Title = styled.h3`
 const Img = styled.img`
     height: 5rem;
     width: 5rem;
-    border-radius: 10;
+    border-radius: 50%;
 `
 
 const URL = styled.div`

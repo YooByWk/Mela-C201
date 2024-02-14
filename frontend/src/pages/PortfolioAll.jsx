@@ -113,7 +113,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   padding-top: 3%;
   overflow: scroll;
   -ms-overflow-style: none; /* IE and Edge */
