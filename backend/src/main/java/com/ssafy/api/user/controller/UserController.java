@@ -83,7 +83,6 @@ public class UserController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
-	//TODO: 선호 장르, 포지션 추가
 	@GetMapping("/myinfo")
 	@ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
 	@ApiResponses({
@@ -106,28 +105,21 @@ public class UserController {
 			userDetails = (SsafyUserDetails) authentication.getDetails();
 			User user = userDetails.getUser();
 
-			//FIXME: ArrayIndexOutOfBoundsException 원인 될 수 있음!
+			//ArrayIndexOutOfBoundsException 원인 될 수 있음
 			Object[] returnVO = new Object[4];
 
 			//1. 유저 기본 정보
 			returnVO[0] = user;														//user 객체 반환 (user_idx, birth, email_domain, email_id, gender, jwt_token, name, nickname, password, search_allow, user_type)
 
 			//2. 유저 포트폴리오
-//			returnVO[1] = portfolioAbstractRepository.findByUserIdx(user).get();	//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
 			returnVO[1] = portfolioAbstractRepository.findByUserIdx(user);			//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
 
 			//3. 유저 포지션
-//			ArrayList<String> userPositionList = new ArrayList<>();
 			ArrayList<Long> userPositionList = new ArrayList<>();
 			try {
-//				returnVO[2] = userPositionRepository.findPositionIdxByUserIdx(user);
-//				List<Position> positionList = userPositionRepository.findPositionIdxByUserIdx(user);
 				List<UserPosition> positionList = userPositionRepository.findPositionIdxByUserIdx(user);
 
-//				for(Position position : positionList) {
 				for(UserPosition userPosition : positionList) {
-//					userPositionList.add(position.getPositionName());
-//					userPositionList.add(userPosition.getPositionIdx().getPositionName());
 					userPositionList.add(userPosition.getPositionIdx().getPositionIdx());
 				}
 			} catch (Exception e) {
@@ -136,23 +128,15 @@ public class UserController {
 			returnVO[2] = userPositionList;
 
 			//4. 유저 장르
-//			ArrayList<String> userGenreList = new ArrayList<>();
 			ArrayList<Long> userGenreList = new ArrayList<>();
 			try {
-//				returnVO[3] = userGenreRepository.findGenreIdxByUserIdx(user);
 				List<UserGenre> genreList = userGenreRepository.findGenreIdxByUserIdx(user);
 
 				for(UserGenre userGenre : genreList) {
-//					Genre genre = genreRepository.findById(userGenre.getUserGenreIdx()).get();
-//					genre.getGenreName();
-					System.err.println("userGenre: " + userGenre);
-					//TODO: user 장르 String에 저장
-//					String userPosition = genreRepository.findById(userGenre.getGenreIdx().getGenreIdx()).get().getGenreName();
 					long userPosition = genreRepository.findById(userGenre.getGenreIdx().getGenreIdx()).get().getGenreIdx();
 					userGenreList.add(userPosition);
 				}
 			} catch (Exception e) {
-				//TODO: 주석하기
 				e.printStackTrace();
 			}
 			returnVO[3] = userGenreList;
@@ -169,7 +153,6 @@ public class UserController {
 		return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Server failed!"));
 	}
 
-	//TODO: 선호 장르, 포지션 추가
 	@PutMapping(value = "/myinfo", consumes = MULTIPART_FORM_DATA_VALUE)
 	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인한 회원 본인의 정보를 수정한다.")
 	@ApiResponses({
