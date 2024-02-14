@@ -16,10 +16,7 @@ import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.*;
-import com.ssafy.db.repository.PortfolioAbstractRepository;
-import com.ssafy.db.repository.PortfolioMusicRepositorySupport;
-import com.ssafy.db.repository.UserGenreRepository;
-import com.ssafy.db.repository.UserPositionRepository;
+import com.ssafy.db.repository.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +60,12 @@ public class UserController {
 	@Autowired
 	UserGenreRepository userGenreRepository;
 
+	@Autowired
+	PositionRepository positionRepository;
+
+	@Autowired
+	GenreRepository genreRepository;
+
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드 ...를</strong>를 통해 회원가입 한다.")
 	@ApiResponses({
@@ -89,7 +92,6 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-//	public ResponseEntity<UserRes> getUserInfo(@ApiIgnore Authentication authentication) {
 	public ResponseEntity<?> getUserInfo(@ApiIgnore Authentication authentication) {
 		/**
 		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
@@ -115,20 +117,45 @@ public class UserController {
 			returnVO[1] = portfolioAbstractRepository.findByUserIdx(user);			//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
 
 			//3. 유저 포지션
+//			ArrayList<String> userPositionList = new ArrayList<>();
+			ArrayList<Long> userPositionList = new ArrayList<>();
 			try {
-				returnVO[2] = userPositionRepository.findPositionIdxByUserIdx(user);
+//				returnVO[2] = userPositionRepository.findPositionIdxByUserIdx(user);
+//				List<Position> positionList = userPositionRepository.findPositionIdxByUserIdx(user);
+				List<UserPosition> positionList = userPositionRepository.findPositionIdxByUserIdx(user);
+
+//				for(Position position : positionList) {
+				for(UserPosition userPosition : positionList) {
+//					userPositionList.add(position.getPositionName());
+//					userPositionList.add(userPosition.getPositionIdx().getPositionName());
+					userPositionList.add(userPosition.getPositionIdx().getPositionIdx());
+				}
 			} catch (Exception e) {
-				//TODO: 주석하기
 				e.printStackTrace();
 			}
+			returnVO[2] = userPositionList;
 
 			//4. 유저 장르
+//			ArrayList<String> userGenreList = new ArrayList<>();
+			ArrayList<Long> userGenreList = new ArrayList<>();
 			try {
-				returnVO[3] = userGenreRepository.findGenreIdxByUserIdx(user);
+//				returnVO[3] = userGenreRepository.findGenreIdxByUserIdx(user);
+				List<UserGenre> genreList = userGenreRepository.findGenreIdxByUserIdx(user);
+
+				for(UserGenre userGenre : genreList) {
+//					Genre genre = genreRepository.findById(userGenre.getUserGenreIdx()).get();
+//					genre.getGenreName();
+					System.err.println("userGenre: " + userGenre);
+					//TODO: user 장르 String에 저장
+//					String userPosition = genreRepository.findById(userGenre.getGenreIdx().getGenreIdx()).get().getGenreName();
+					long userPosition = genreRepository.findById(userGenre.getGenreIdx().getGenreIdx()).get().getGenreIdx();
+					userGenreList.add(userPosition);
+				}
 			} catch (Exception e) {
 				//TODO: 주석하기
 				e.printStackTrace();
 			}
+			returnVO[3] = userGenreList;
 
 			return ResponseEntity.status(200).body(returnVO);
 		} catch(NullPointerException e) {
