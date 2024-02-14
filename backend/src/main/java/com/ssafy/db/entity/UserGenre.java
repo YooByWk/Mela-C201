@@ -28,4 +28,13 @@ public class UserGenre {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     Genre genreIdx;
+
+    @Override
+    public String toString() {
+        return "UserGenre{" +
+                "userGenreIdx=" + userGenreIdx +
+                ", userIdx=" + userIdx +
+                ", genreIdx=" + genreIdx +
+                '}';
+    }
 }
