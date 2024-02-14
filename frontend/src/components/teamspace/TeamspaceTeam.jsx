@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom"
 import defaultBackImage from "../../assets/images/default-cover.jpg"
 import defaultTeamspaceImage from "../../assets/images/default-image.png"
 import defaultProfile from "../../assets/images/default-profile.png"
-import { getImg } from "../../API/FileAPI"
 
 
 function TeamspaceTeam () {
@@ -17,21 +16,17 @@ function TeamspaceTeam () {
     const [profileURL, setProfileURL] = useState()
 
     // 멤버 정보
-    const [members, setMembers] = useState({
-        nickname: "",
-        position: "",
-        // profile: "" 
-    })
+    const [members, setMembers] = useState([])
 
     useEffect(() => {
         const info = async() => {
             try {
                 const teamInfo = await TeamspaceInfo(teamspaceIdx)
                 setValues(teamInfo)
-
+            
                 const memberInfo = await TeamspaceMember(teamspaceIdx)
                 setMembers(memberInfo)
-
+                
             } catch (err) {
                 console.log(err)
             }
@@ -69,22 +64,9 @@ function TeamspaceTeam () {
             
             teamImgInfo()
 
-        // const profileImgInfo = async() => {     
-        //     try {
-        //         if (members.profile) {
-        //         setProfileURL(values.teamspaceBackgroundPictureFileURL)
-        //         } else{
-        //             setProfileURL(defaultProfile)
-        //         }
-        //         } catch (err) {
-        //         console.error(err)
-        //         }
-        //     }
-            
-        //     profileImgInfo()
-
     },[values])
 
+    // console.log(members)
     return(
         <>
         <Container>
@@ -94,14 +76,17 @@ function TeamspaceTeam () {
                 <H1>{values.teamName}</H1>
                 <p>{values.teamDescription}</p>
             </ImageContainer>
-            {/* <H1>Members</H1> */}
-            {/* {Object.entries(members).map(([key, member]) => (
-            <TeamspaceMemberCard 
-                key={member.userIdx}
-                name={member.nickname}
-                position={member.position}
-            />
-            ))} */}
+            <br/>
+            <H2>Members</H2>
+            <br/>
+            {Object.entries(members).map(([key, member]) => (
+            <TeamspaceMemberCard key={member.userIdx}> 
+                <Profile src={member.profileImageURL} alt="프로필 이미지" />
+                <Nickname>
+                {member.nickname}
+                </Nickname>
+            </TeamspaceMemberCard>
+            ))}
         </Container>
         </>
     )
@@ -112,6 +97,7 @@ export default TeamspaceTeam
 
 const Container = styled.div`
     display: flex;
+    flex-direction: column; 
     justify-content: space-evenly;
     padding: 5px;
 `
@@ -153,3 +139,28 @@ const TeamspaceImage = styled.img`
     left: 6rem;
     transform: translate(-50%, -50%);
     `
+
+const TeamspaceMemberCard = styled.div`
+    width: 200px;
+    height: 250px;
+    border-radius: 15%;
+    background-color: #151C2C;
+    text-align: center;
+`
+
+const Profile = styled.img`
+    width: 170px;
+    height: 170px;
+    border-radius: 15%;
+    text-align: center;
+    margin-top: 10%;
+`
+
+const H2 = styled.h2`
+    color: white;
+`
+
+const Nickname = styled.p`
+    color: white;
+    padding-top: 10%;
+`

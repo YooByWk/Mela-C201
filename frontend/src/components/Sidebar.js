@@ -121,7 +121,7 @@ function Sidebar({ className, paddingtop }) {
     }
     }
     follow()
-  },[userValues])
+  },[userValues, portfolioValues])
 
   // const followList = async () => {
   //   try {
