@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import static com.ssafy.common.util.ExtensionUtil.isValidVideoExtension;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,8 @@ public class ShortsServiceImpl implements  ShortsService {
     @Autowired
     UserGenreRepository userGenreRepository;
 
+    @Autowired
+    UserShortsQueueRepository userShortsQueueRepository;
 
     //지원하는 동영상 확장자 ArrayList
     String[] supportedVideoExtension = {"MKV", "MP4", "AVI"};
@@ -246,6 +249,43 @@ public class ShortsServiceImpl implements  ShortsService {
     }
 
     @Override
+    public com.ssafy.api.board.response.Shorts getSingleShortsByUserIdx(User user) {
+        //1-1. 로그인한 사용자의 쇼츠 동영상 리스트 로드
+        List<UserShortsQueue> userShortsQueueList = userShortsQueueRepository.findByUserIdx(user);
+
+        //1-2. 로그인한 사용자의 쇼츠 동영상 리스트가 UserShortsQueue 테이블에 없다면 새로 로드 후 테이블에 추가
+        if(userShortsQueueList == null || userShortsQueueList.isEmpty()) {
+            List<Shorts> shortsList = getShortsListByUserIdx(user);
+            Collections.shuffle(shortsList);                        //순서 무작위로 변경
+            saveRecordIntoUserShortsQueueTable(shortsList, user);
+        }
+
+        UserShortsQueue userShortsQueue = userShortsQueueRepository.getSingleRecord(user);
+
+        Shorts shorts = userShortsQueue.getShortsIdx();
+        com.ssafy.api.board.response.Shorts shortsResponse = new com.ssafy.api.board.response.Shorts();
+        String videoUrl = null;
+
+        //setter 호출
+        shortsResponse.setShortsIdx(shorts.getShortsIdx());
+        shortsResponse.setUserIdx(shorts.getUserIdx());
+        shortsResponse.setTitle(shorts.getTitle());
+        shortsResponse.setDescription(shorts.getDescription());
+        shortsResponse.setShortsPathFileIdx(shorts.getShortsPathFileIdx());
+
+        //fileservice를 이용해 Amazon S3 영상 링크 가져오기
+        try {
+            videoUrl = fileService.getVideoUrlBySaveFileIdx(shorts.getShortsPathFileIdx().getFileIdx());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        shortsResponse.setFileURL(videoUrl);
+
+        return shortsResponse;
+    }
+
+    @Override
     public List<Shorts> getShortsListByUserIdx(User user) {
         List<Shorts> shortsList = shortsRepository.findByUserIdx(user);
 
@@ -254,5 +294,17 @@ public class ShortsServiceImpl implements  ShortsService {
 
     public Long getShortsSize() {
         return shortsRepository.countBy();
+    }
+
+    @Override
+    public void saveRecordIntoUserShortsQueueTable(List<Shorts> shorts, User user) {
+        for(Shorts data : shorts) {
+            UserShortsQueue userShortsQueue = new UserShortsQueue();
+            userShortsQueue.setUserIdx(user);
+            userShortsQueue.setShortsIdx(data);
+
+            userShortsQueueRepository.save(userShortsQueue);
+        }
+
     }
 }

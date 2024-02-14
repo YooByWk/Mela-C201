@@ -42,16 +42,28 @@ public class ShortsController {
     @ApiOperation(value = "쇼츠 동영상 리스트", notes = "자신이 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 리스트를 가져온다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
             @ApiResponse(code = 500, message = "삭제 실패"),
     })
-    public ResponseEntity<List<com.ssafy.api.board.response.Shorts>> shortList (
-            @ApiIgnore Authentication authentication)
-    {
-        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
-        String userEmail = userDetails.getUsername();
-        User nowLoginUser = userService.getUserByEmail(userEmail);
+    public ResponseEntity<?> shortList (
+            @ApiIgnore Authentication authentication) {
+        SsafyUserDetails userDetails = null;
+        User user = null;
 
-        List<com.ssafy.api.board.response.Shorts> shortsList = shortsService.getShortsList(nowLoginUser);
+        //1. 로그인한 사용자 체크 (토큰 확인)
+        try {
+            userDetails = (SsafyUserDetails) authentication.getDetails();
+            user = userDetails.getUser();
+        } catch(NullPointerException e) {
+            e.printStackTrace();
+
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Authentication failed!"));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        //2. 로그인한 사용자가 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 리스트를 가져옴
+        List<com.ssafy.api.board.response.Shorts> shortsList = shortsService.getShortsList(user);
 
         return ResponseEntity.status(200).body(shortsList);
     }
@@ -152,6 +164,39 @@ public class ShortsController {
         return ResponseEntity.status(200).body(shortsList.get(randNum));
     }
      */
+
+    //TODO: 새로 작성 중
+    @GetMapping("/getshort")
+    @ApiOperation(value = "쇼츠 동영상 가져오기", notes = "자신이 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 한개를 가져온다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 500, message = "삭제 실패"),
+    })
+//    public ResponseEntity<com.ssafy.api.board.response.Shorts> getOneShort (
+    public ResponseEntity<?> getOneShort (
+            @ApiIgnore Authentication authentication) {
+
+        SsafyUserDetails userDetails = null;
+        User user = null;
+
+        //1. 로그인한 사용자 체크 (토큰 확인)
+        try {
+            userDetails = (SsafyUserDetails) authentication.getDetails();
+            user = userDetails.getUser();
+        } catch(NullPointerException e) {
+            e.printStackTrace();
+
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Authentication failed!"));
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        //2. 로그인한 사용자가 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 리스트를 가져옴
+        com.ssafy.api.board.response.Shorts shortsResponse = shortsService.getSingleShortsByUserIdx(user);
+
+        return ResponseEntity.status(200).body(shortsResponse);
+    }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "쇼츠 동영상 등록", notes = "쇼츠 동영상을 등록한다.")

@@ -19,4 +19,6 @@ public interface ShortsService {
     long getShortsIdxByFileIdx(long shortsIdx);
     List<Shorts> getShortsListByUserIdx(User user);
     Long getShortsSize();
+    com.ssafy.api.board.response.Shorts getSingleShortsByUserIdx(User user);
+    void saveRecordIntoUserShortsQueueTable(List<Shorts> shorts, User user);
 }
