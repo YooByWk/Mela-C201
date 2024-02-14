@@ -29,6 +29,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.persistence.EntityNotFoundException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -122,13 +123,18 @@ public class ChatRoomController {
         // 채팅 내역에 필요한 정보 설정
         List<ChatMessageRes> res = new ArrayList<>();
         for (ChatMessage chatMessage : messages) {
+            log.info("chatInfo chatMessage: {}", messages);
+            User other = userService.getUserByUserIdx(Long.valueOf(chatMessage.getUserIdx()));
+
             ChatMessageRes tmp = new ChatMessageRes();
             tmp.setMessage(chatMessage.getMessage());
-            tmp.setUser(userService.getUserByUserIdx(Long.valueOf(chatMessage.getUserIdx())));
+            tmp.setUser(other);
             tmp.setSendTime(chatMessage.getSendTime());
+            tmp.setNickname(other.getNickname());
             res.add(tmp);
         }
 
+        Collections.reverse(res);
         return ResponseEntity.status(200).body(res);
     }
 
