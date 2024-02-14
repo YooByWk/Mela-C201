@@ -29,12 +29,6 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/api/v1/shorts")
 public class ShortsController {
-//    static List<Shorts> shortsList = null;
-    static List<com.ssafy.api.board.response.Shorts> shortsList = new ArrayList<>();
-
-    static int[] usedShorts = null;
-
-    static int MAX_PICKED=0;
     @Autowired
     FileService fileService;
 
@@ -44,33 +38,26 @@ public class ShortsController {
     @Autowired
     UserService userService;
 
-
-
     @GetMapping()
     @ApiOperation(value = "쇼츠 동영상 리스트", notes = "자신이 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 리스트를 가져온다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "삭제 실패"),
     })
-//    public ResponseEntity<List<Shorts>> shortList (
     public ResponseEntity<List<com.ssafy.api.board.response.Shorts>> shortList (
             @ApiIgnore Authentication authentication)
     {
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         String userEmail = userDetails.getUsername();
         User nowLoginUser = userService.getUserByEmail(userEmail);
-//        if(shortsList == null){
-        if(shortsList.isEmpty()) {
-            System.err.println("shortsList empty!!");
-            shortsList = shortsService.getShortsList(nowLoginUser);
-        }
-//        shortsList.get(0).getShortsPathFileIdx().getFileIdx()
-        System.err.println("shortsList: " + shortsList);
+
+        List<com.ssafy.api.board.response.Shorts> shortsList = shortsService.getShortsList(nowLoginUser);
 
         return ResponseEntity.status(200).body(shortsList);
     }
 
-    //FIXME: 삭제해야할 듯 (여러 사용자 환경에서 static 사용 불가)
+    //FIXME: 삭제 (여러 (동시 접속) 사용자 환경에서 static 사용 불가, 이전 로그인 사용자의 Shorts 리스트가 남아 있어 잘못된 리스트 반환하게 됨)
+    /*
     @GetMapping("/getshort")
     @ApiOperation(value = "쇼츠 동영상 가져오기", notes = "자신이 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 한개를 가져온다.")
     @ApiResponses({
@@ -107,6 +94,7 @@ public class ShortsController {
 
         return ResponseEntity.status(200).body(shortsList.get(randNum));
     }
+     */
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "쇼츠 동영상 등록", notes = "쇼츠 동영상을 등록한다.")

@@ -66,12 +66,11 @@ public class FileController {
     @GetMapping(value = "/download")
     @ApiOperation(value = "파일 다운로드", notes = "파일을 다운로드합니다.")
     public ResponseEntity<byte[]> downloadFile(String filePath) {
-//    public ResponseEntity<?> downloadFile(String filePath) {
         try {
-//            ArrayList<Object> returnVO = new ArrayList<>();
+            //ArrayList<Object> returnVO = new ArrayList<>();
             byte[] bytes = fileService.getFile(filePath);
             //1. 응답에 파일 저장
-//            returnVO.add(bytes);
+            //returnVO.add(bytes);
             String uploaderProfileImageUrl = null;
 
             String fileName = URLEncoder.encode(filePath, "UTF-8").replaceAll("\\+", "%20");
@@ -98,10 +97,10 @@ public class FileController {
                 e.printStackTrace();
             }
 
-//            returnVO.add(uploaderProfileImageUrl);
+            returnVO.add(uploaderProfileImageUrl);
             */
 
-//            return new ResponseEntity<>(returnVO, httpHeaders, HttpStatus.OK);
+            //return new ResponseEntity<>(returnVO, httpHeaders, HttpStatus.OK);
             return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
         } catch (Exception e) {
             //요청한 파일을 찾을 수 없는 경우
