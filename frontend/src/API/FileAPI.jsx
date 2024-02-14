@@ -3,7 +3,7 @@ import axios from 'axios'
 let ACCESS_TOKEN = localStorage.getItem('accessToken')
 
 export const FileAPI = axios.create({
-    baseURL: 'http://localhost:8080/api/v1/file',
+    baseURL: process.env.REACT_APP_API_URL + '/files',
     headers: {
         'Authorization': `Bearer ${ACCESS_TOKEN}`,
     },

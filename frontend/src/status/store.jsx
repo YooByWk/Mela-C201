@@ -16,7 +16,7 @@ const useStore = create(set => ({
       return
     }
     try {
-      const response = await axios.get(`http://localhost:8080/api/v1/users/myinfo`,{
+      const response = await axios.get(process.env.REACT_APP_API_URL+`/users/myinfo`,{
         headers : {
           'Authorization' :`Bearer ${localStorage.accessToken}`
         }
@@ -33,7 +33,7 @@ const useStore = create(set => ({
   
   logout : async () => {
     try {
-      await axios.get('http://localhost:8080/api/v1/auth/logout', {
+      await axios.get(process.env.REACT_APP_API_URL+'/auth/logout', {
         headers : {
           'Authorization' :`Bearer ${localStorage.accessToken}`
         }
