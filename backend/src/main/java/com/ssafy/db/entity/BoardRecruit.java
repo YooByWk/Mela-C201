@@ -30,17 +30,23 @@ public class BoardRecruit {
     Board boardIdx;
 
     @ManyToOne
-    @JoinColumn(name="genre_idx1", referencedColumnName="genreIdx")
+    //FIXME: 테스트 중!
+//    @JoinColumn(name="genre_idx1", referencedColumnName="genreIdx")
+    @JoinColumn(name="genre_idx1", referencedColumnName="genre_idx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     Genre genreIdx1;
 
     @ManyToOne
-    @JoinColumn(name="genre_idx2", referencedColumnName="genreIdx")
+    //FIXME: 테스트 중!
+//    @JoinColumn(name="genre_idx2", referencedColumnName="genreIdx")
+    @JoinColumn(name="genre_idx2", referencedColumnName="genre_idx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     Genre genreIdx2;
 
     @ManyToOne
-    @JoinColumn(name="genre_idx3", referencedColumnName="genreIdx")
+    //FIXME: 테스트 중!
+//    @JoinColumn(name="genre_idx3", referencedColumnName="genreIdx")
+    @JoinColumn(name="genre_idx3", referencedColumnName="genre_idx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     Genre genreIdx3;
 }
