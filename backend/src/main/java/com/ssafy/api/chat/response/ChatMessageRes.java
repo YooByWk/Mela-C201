@@ -17,5 +17,7 @@ public class ChatMessageRes {
     String message;
     @ApiModelProperty(name = "보낸 시간")
     String sendTime;
+    @ApiModelProperty(name = "닉네임")
+    String nickname;
 
 }
