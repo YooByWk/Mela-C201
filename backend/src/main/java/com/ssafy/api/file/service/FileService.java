@@ -38,4 +38,5 @@ public interface FileService {
     boolean deleteFilesByFileInstances(com.ssafy.db.entity.File[] files);
     //파일 이름과 경로로부터 file 인스턴스 리턴
     com.ssafy.db.entity.File getFileBySaveFilenameAndSavePath(String saveFilename, String savePath);
+    String getUploaderProfileImageURL(com.ssafy.db.entity.File file);
 }
