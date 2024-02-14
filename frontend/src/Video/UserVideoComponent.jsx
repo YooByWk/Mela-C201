@@ -8,9 +8,9 @@ export default class UserVideoComponent extends Component {
   }
   render() {
     return (
-      <div>
+      <div style={{width: '100%', height: '100%'}}>
         {this.props.streamManager !== undefined ? (
-          <div>
+          <div style={{width: '100%', height: '100%'}}>
             <OpenViduVideoComponent streamManager={this.props.streamManager} />
             <span>{this.getNicknameTag()}</span>
           </div>

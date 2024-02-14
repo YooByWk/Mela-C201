@@ -7,11 +7,8 @@ import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.exception.handler.NotValidExtensionException;
 import com.ssafy.common.model.response.BaseResponseBody;
-import com.ssafy.db.entity.Notification;
 import com.ssafy.db.entity.Shorts;
-import com.ssafy.db.entity.ShortsLike;
 import com.ssafy.db.entity.User;
-import com.ssafy.db.repository.NotificationRepository;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -31,7 +29,12 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/api/v1/shorts")
 public class ShortsController {
-    static List<Shorts> shortsList = null;
+//    static List<Shorts> shortsList = null;
+    static List<com.ssafy.api.board.response.Shorts> shortsList = new ArrayList<>();
+
+    static int[] usedShorts = null;
+
+    static int MAX_PICKED=0;
     @Autowired
     FileService fileService;
 
@@ -49,27 +52,32 @@ public class ShortsController {
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "삭제 실패"),
     })
-    public ResponseEntity<List<Shorts>> shortList (
+//    public ResponseEntity<List<Shorts>> shortList (
+    public ResponseEntity<List<com.ssafy.api.board.response.Shorts>> shortList (
             @ApiIgnore Authentication authentication)
     {
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
         String userEmail = userDetails.getUsername();
         User nowLoginUser = userService.getUserByEmail(userEmail);
-        if(shortsList == null){
+//        if(shortsList == null){
+        if(shortsList.isEmpty()) {
+            System.err.println("shortsList empty!!");
             shortsList = shortsService.getShortsList(nowLoginUser);
         }
 //        shortsList.get(0).getShortsPathFileIdx().getFileIdx()
+        System.err.println("shortsList: " + shortsList);
 
         return ResponseEntity.status(200).body(shortsList);
     }
 
+    //FIXME: 삭제해야할 듯 (여러 사용자 환경에서 static 사용 불가)
     @GetMapping("/getshort")
     @ApiOperation(value = "쇼츠 동영상 가져오기", notes = "자신이 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 한개를 가져온다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 500, message = "삭제 실패"),
     })
-    public ResponseEntity<Shorts> getOneShort (
+    public ResponseEntity<com.ssafy.api.board.response.Shorts> getOneShort (
             @ApiIgnore Authentication authentication)
     {
         SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
@@ -78,8 +86,24 @@ public class ShortsController {
         if(shortsList == null){
             shortsList = shortsService.getShortsList(nowLoginUser);
         }
+        if(usedShorts == null){
+            usedShorts = new int[shortsList.size()];
+        }
+
+        int shortsListUsedCountAver = 0;
+        for(int i=0; i<shortsList.size(); i++){
+            shortsListUsedCountAver += usedShorts[i];
+        }
+        shortsListUsedCountAver /= shortsList.size();
 
         int randNum = (int) (Math.random() * shortsList.size());
+        while(usedShorts[randNum] > shortsListUsedCountAver){
+            randNum = (int) (Math.random() * shortsList.size());
+        }
+
+        usedShorts[randNum] += 1;
+
+
 
         return ResponseEntity.status(200).body(shortsList.get(randNum));
     }

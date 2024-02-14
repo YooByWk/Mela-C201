@@ -176,7 +176,7 @@ export const GetSessionId = async (teamspaceidx) => {
     // alert(response.data);
     return response.data;
   } catch (error) {
-    alert("팀 스페이스 방이 없습니다. 방을 생성해주세요");
+    // alert("팀 스페이스 방이 없습니다. 방을 생성해주세요");
     return 500
   }
 };

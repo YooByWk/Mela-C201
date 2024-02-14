@@ -25,11 +25,12 @@ public class ChatController {
      */
     @MessageMapping("/chat/message")
     public void message(ChatMessage message) {
-        log.debug("/pub/chat/message {}", message);
+        log.info("/pub/chat/message: {}", message);
         message.setSendTime(LocalDateTime.now().toString());
 
         // Websocket에 발행된 메시지를 redis로 발행(publish)
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomIdx(), message);
+
         // redis에 채팅 내역 저장
         chatService.saveMessage(message);
     }

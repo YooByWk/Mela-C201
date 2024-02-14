@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ShortsService {
 
-    List<Shorts> getShortsList(User nowLoginUser);
+    List<com.ssafy.api.board.response.Shorts> getShortsList(User nowLoginUser);
 
     int uploadShorts(Shorts shorts, MultipartFile multipartFile, ShortsPostReq shortsPostReq, User user);
     com.ssafy.db.entity.File getFileInstanceByShortsIdx(Long shortsIdx);

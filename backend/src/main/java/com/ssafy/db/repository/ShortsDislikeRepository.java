@@ -13,7 +13,8 @@ import java.util.Optional;
 @Repository
 public interface ShortsDislikeRepository extends JpaRepository<ShortsDislike, Long> {
 //    Optional<List<Shorts>> findShortsIdxByUserIdx(User userIdx);
-    List<Shorts> findShortsIdxByUserIdx(User userIdx);
+//    List<Shorts> findShortsIdxByUserIdx(User userIdx);
+    List<ShortsDislike> findShortsIdxByUserIdx(User userIdx);
 
 
     Optional<ShortsDislike>  findByShortsIdxAndUserIdx(Shorts shortsIdx, User userIdx);

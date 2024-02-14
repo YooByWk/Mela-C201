@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Portfolio from "../pages/Portfolio"
 import SigninModal from '../components/Modals/SigninModal';
 import SignupModal from '../components/Modals/SignupModal';
@@ -17,8 +17,15 @@ import AlarmMain from '../pages/AlarmMain';
 import SequenceMain from './../sequence/SequenceMain';
 import Video from '../Video/Video';
 import Matching from '../pages/Matching'
+import { useNavigate } from 'react-router-dom';
 
 function AppRouter({ className }) {
+  const Navigate = useNavigate()
+
+  const goBack = () => {
+    console.log('뒤로가기')
+    Navigate(-1)
+}
   return (  
     <div className={className}>
   
@@ -53,7 +60,7 @@ function AppRouter({ className }) {
           />
           
           <Route
-          path='/teamspace/video/:teamspaceIdx' element={<Video/>} 
+          path='/teamspace/video/:teamspaceIdx' element={<Video teamspaceIdx={goBack}/>} 
           />
           {/* <Route
           path='/teamspace/video/:teamspaceIdx' element={<Video/>} 

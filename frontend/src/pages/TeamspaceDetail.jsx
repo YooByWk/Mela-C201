@@ -31,7 +31,11 @@ function TeamspaceDetail () {
         // console.log(sessionStorage.getItem('teamspaceIdx')+ '세션스토리지')
         Navigate(`../teamspace/video/${teamspaceIdx}`, { state : { teamspace : teamspaceIdx } })
     }
-    
+    const goBack = () => {
+        console.log()
+        Navigate(-1)
+    }
+
 
 
     return(

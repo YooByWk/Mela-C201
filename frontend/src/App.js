@@ -1,6 +1,6 @@
 import "./App.scss";
 import { Fragment } from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, HashRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import GlobalStyle from "./styles/GlobalStyle";
@@ -27,6 +27,7 @@ import Gather from "./pages/Gather";
 function App() {
   return (
     <Fragment>
+
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <BrowserRouter>
