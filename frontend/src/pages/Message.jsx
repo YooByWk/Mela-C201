@@ -1,3 +1,4 @@
+// Message.jsx
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { RiMessage2Line } from "react-icons/ri";
@@ -5,11 +6,7 @@ import { ChatList, EnterChat } from "../API/ChatAPI";
 import moment from "moment";
 import useStore from "../status/store";
 import { useParams } from "react-router-dom";
-import {Chatting} from "../components/Chatting";
-
-
-let sock;
-let ws;
+import { Chatting } from "../components/Chatting";
 
 function Message() {
   const { roomid } = useParams();
@@ -18,7 +15,7 @@ function Message() {
   const [userIdx, setUserIdx] = useState("");
   const [otheruserid, setOtheruserid] = useState();
   const [room, setRoom] = useState({});
-  const [otherNickname, setOtherNickname] = useState('')
+  const [otherNickname, setOtherNickname] = useState("");
 
   // const [userValue, setUserValue] = useState('')
   // const [myProfile, setMyProfile] = useState('')
@@ -39,25 +36,23 @@ function Message() {
     //     console.log(err)
     //   }
     // }
-
-  }, [])
+  }, []);
 
   const findAllRooms = async () => {
     try {
       const response = await ChatList();
       console.log("findAllRooms : ", response);
-      setChatRooms(response)
+      setChatRooms(response);
 
       // const otherInfos = response.map(async (room) => {
       //   const res = await othersInfo(room.user.emailId)
       //   setOtherValue(res)
       //   setOtherProfile(res[1])
       // })
-
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   // useEffect(() => {
   //   const imginfo = async () => {
@@ -69,7 +64,7 @@ function Message() {
   //   }
 
   // })
-  
+
   // if (res[1].portfolio_picture_file_idx) {
   //   const imginfo = await getImg(res[1].portfolio_picture_file_idx.fileIdx)
   //   setOtherProfile(imginfo)
@@ -80,39 +75,25 @@ function Message() {
   const enterRoom = (roomIdx, nickname) => {
     if (user) {
       setUserIdx(localStorage.getItem("userIdx"));
-      // localStorage.setItem("wschat.userIdx", userIdx);
-      // localStorage.setItem("wschat.roomIdx", roomIdx);
       setRoomIdx(roomIdx);
-      console.log("학인 ", nickname)
-      setOtherNickname(nickname)
+      console.log("학인 ", nickname);
+      setOtherNickname(nickname);
     }
   };
 
-  const params = useParams();
-
   useEffect(() => {
-    console.log("params.roomid: ", params.roomid);
-
-    setRoomIdx(params.roomid);
     setUserIdx(localStorage.getItem("wschat.userIdx"));
-
     console.log("roomidx : ", roomIdx);
   }, []);
-
 
   return (
     <Container>
       {roomIdx ? (
         <div className="chatting-wrapper">
-          <Chatting
-            roomIdx={roomIdx}
-            recvUser={otherNickname}
-          />
+          <Chatting roomIdx={roomIdx} recvUser={otherNickname} />
         </div>
       ) : (
-        <div className="chatting-wrapper">
-
-        </div>
+        <div className="chatting-wrapper"></div>
       )}
       <div className="room-list">
         <div className="header">
@@ -121,42 +102,44 @@ function Message() {
           </div>
           <h3>Inbox</h3>
         </div>
-        {roomIdx ? (
+        {chatRooms.length >= 1 ? (
           <Chat>
             <ul className="list-group">
               {chatRooms.map((room) => (
-                <li key={room.roomIdx} className="list-item" onClick={() => enterRoom(room.roomIdx, room.user.nickname)}>
-                  {room.lastSendMessage ? 
-                    (<>
+                <li
+                  key={room.roomIdx}
+                  className="list-item"
+                  onClick={() => enterRoom(room.roomIdx, room.user.nickname)}
+                >
+                  {room.lastSendMessage ? (
+                    <>
                       <div>
-                        <div className="user">
-                          {room.user.nickname}
-                        </div>
+                        <div className="user">{room.user.nickname}</div>
                         <div className="message">
                           <p>{room.lastSendMessage}</p>
-                          <p style={{ color: 'gray' }}>{moment(room.lastSendTime).format("YY-MM-DD HH:mm:ss")}</p>
+                          <p style={{ color: "gray" }}>
+                            {moment(room.lastSendTime).format(
+                              "YY-MM-DD HH:mm:ss"
+                            )}
+                          </p>
                         </div>
                       </div>
                     </>
-                    )
-                    : (
-                        <>
-                          <div>
-                            <div className="user">
-                              {room.user.nickname}
-                            </div>
-                            <div className="message-not">
-                              <p>아직 대화를 시작하지 않았습니다.</p>
-                            </div>
-                          </div>
-                        </>
-                    )
-                  }
+                  ) : (
+                    <>
+                      <div>
+                        <div className="user">{room.user.nickname}</div>
+                        <div className="message-not">
+                          <p>아직 대화를 시작하지 않았습니다.</p>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </li>
               ))}
             </ul>
           </Chat>
-        ):(
+        ) : (
           <p>현재 채팅 중인 방이 없습니다.</p>
         )}
       </div>
@@ -185,7 +168,7 @@ const Container = styled.div`
 
   .header {
     display: flex;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     align-items: center;
     font-weight: bold;
   }
@@ -193,22 +176,22 @@ const Container = styled.div`
   .icon {
     margin-right: 1rem;
   }
-`
+`;
 
 const Chat = styled.div`
   display: flex;
   flex-direction: column;
-  height: 3rem;
+  // height: 5rem;
   align-items: center;
   justify-content: center;
   margin-top: 10px;
-  
-  &:hover{
-    background-color: #151C2C;
-    color: white;
-    border-radius: 10px;
-    cursor: pointer;
-  }
+
+  // &:hover {
+  //   background-color: #151c2c;
+  //   color: white;
+  //   border-radius: 10px;
+  //   cursor: pointer;
+  // }
 
   .user {
     font-weight: bold;
@@ -223,4 +206,4 @@ const Chat = styled.div`
   .message {
     margin-top: 0.5rem;
   }
-`
+`;
