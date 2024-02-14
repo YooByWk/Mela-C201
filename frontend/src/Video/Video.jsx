@@ -12,6 +12,7 @@ import {
   DeleteViduSession,
 } from "../API/TeamspaceAPI";
 import { fetchUser } from "../API/UserAPI";
+import ScheduleAllModal from './../components/Modals/ScheduleAll';
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
@@ -86,20 +87,33 @@ class Video extends Component {
     console.log("유저이름 불러오기");
     this.getUserName();
     this.setState({
-      teamspaceIdx: window.location.pathname.split("/").pop(),
-    });
+     teamspaceIdx: window.location.pathname.split("/").pop(),
+    })
+    ;
     const tempSession = await GetSessionId(
       window.location.pathname.split("/").pop()
-    );
-    console.log(tempSession);
-    this.setState({
+    )
+    await this.setState({
       mySessionId: tempSession,
     });
+    console.log("tempSession: ", tempSession);
+    console.log(tempSession, "temp");
+    if (!this.state.session) {
+      await this.joinSession();
+    }
+    //프로미스로 setState 실행해서 tempSession올려놓기.
+
+    if (!tempSession === 500) {
+      this.setState({
+        mySessionId: tempSession,
+      });
+    }
   }
 
-  createHandler = () => {
+  createHandler = (e) => {
+    e.preventDefault();
     console.log(this.state);
-    createViduSession()
+    createViduSession(this.state.teamspaceIdx)
       .then((res) => {
         console.log(res);
       })
@@ -207,7 +221,7 @@ class Video extends Component {
                 videoSource: undefined, // The source of video. If undefined default webcam
                 publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                 publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                // resolution: "640x480", // The resolution of your video
+                resolution: "520x390", // The resolution of your video
                 frameRate: 30, // The frame rate of your video
                 insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                 mirror: false, // Whether to mirror your local video or not
@@ -252,6 +266,7 @@ class Video extends Component {
     const mySession = this.state.session;
     if (mySession) {
       mySession.disconnect();
+      
     }
 
     // 제거
@@ -350,10 +365,14 @@ class Video extends Component {
     console.log("myUserName: ", myUserName);
     console.log(this.state);
     const Location = window.location.pathname.split("/").pop();
-
+    
     return (
       <TOP>
         <div>
+        <button onClick={()=> console.log(this.props)}></button>
+          {/* <button type="button" onClick={this.createHandler}>
+            팀스페이스 생성
+          </button>
           <button type="button" onClick={() => console.log(this.state)}>
             제발
           </button>
@@ -378,8 +397,7 @@ class Video extends Component {
           </button>
           <button type="button" onClick={() => console.log(this.state)}>
             비디오체크
-          </button>
-          <h1> Team Video Conference</h1>
+          </button> */}
 
           <MainContainer>
             {this.state.session === undefined ? (
@@ -412,15 +430,12 @@ class Video extends Component {
                 </div>
               </div>
             ) : null}
-
-            {this.state.session !== undefined ? (
-              <div>
-                <div className="buttonHolder">
+            <div className="buttonHolder">
                   <h1>{mySessionId}</h1>
                   <input
                     type="button"
                     value="Leave"
-                    onClick={this.leaveSession}
+                    onClick={()=>this.leaveSession}
                   />
                   <input
                     type="button"
@@ -439,30 +454,31 @@ class Video extends Component {
                   />
                   {/* 212 */}
                 </div>
+            {this.state.session !== undefined ? (
+              <div>
 
-                <VideoContainer>
-                  {this.state.publisher !== undefined ? (
-                    <div
-                      className="main-video"
-                      onClick={() =>
-                        this.handleMainVideoStream(this.state.publisher)
-                      }
-                    >
-                      <UserVideoComponent
-                        streamManager={this.state.publisher}
-                        isMain={true}
-                      />
-                    </div>
-                  ) : null}
 
-                  {this.state.subscribers.map((sub, i) => (
-                    <div
-                      key={sub.id}
-                      className={`sub-video ${i === 0 ? "main-video" : ""}`}
-                    >
-                      <UserVideoComponent streamManager={sub} />
-                    </div>
-                  ))}
+                <VideoContainer className="VideoContainer">
+                  <StreamWrapper>
+                    {this.state.publisher !== undefined ? (
+                      <UserVideoContainer
+                        onClick={() =>
+                          this.handleMainVideoStream(this.state.publisher)
+                        }
+                      >
+                        <UserVideoComponent
+                          streamManager={this.state.publisher}
+                          isMain={true}
+                        />
+                      </UserVideoContainer>
+                    ) : null}
+
+                    {this.state.subscribers.map((sub, i) => (
+                      <UserVideoContainer key={sub.id}>
+                        <UserVideoComponent streamManager={sub} />
+                      </UserVideoContainer>
+                    ))}
+                  </StreamWrapper>
                 </VideoContainer>
               </div>
             ) : null}
@@ -481,24 +497,56 @@ const TOP = styled.div`
 `;
 
 const VideoContainer = styled.div`
-  margin-top: 30px;
-  width: 70vw;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  grid-gap: 10px;
-
-  .main-video {
+  /* margin-top: 30px; */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  overflow:hidden;
+  /* .main-video {
     grid-column: span 1;
   }
 
   .sub-video {
     grid-column: span 1;
-  }
-
+  } */
 `;
+
+const StreamWrapper = styled.div`
+  display: grid;
+  place-items: center;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  height: 50rem;
+  padding: 10px;
+  width: 100%;
+  div {
+    width: 100%;
+    height: 100%;
+  }
+  `
+
+const UserVideoContainer = styled.div`
+width: 100%;
+min-height: 15vh;
+position: relative;
+/* min-height: 15vh; */
+box-sizing: border-box;
+`
+
+
+
+
+
 
 const MainContainer = styled.div`
   display: flex;
   width: 100%;
   flex-wrap: wrap;
+  
+  .buttonHolder {
+    position: fixed;
+    bottom: 0;
+    left: 45%;
+  }
 `;
