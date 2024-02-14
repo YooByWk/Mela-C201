@@ -56,6 +56,26 @@ public class ShortsController {
         return ResponseEntity.status(200).body(shortsList);
     }
 
+    @GetMapping("/mylist")
+    @ApiOperation(value = "내가 업로드한 쇼츠 동영상 리스트", notes = "내가 업로드한 쇼츠 동영상 리스트를 가져온다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            //TODO: 로그인하지 않은 사용자 에러 코드 추가
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 500, message = "서버 오류"),
+    })
+    public ResponseEntity<List<com.ssafy.api.board.response.Shorts>> myShortList (
+            @ApiIgnore Authentication authentication)
+    {
+        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+        String userEmail = userDetails.getUsername();
+        User nowLoginUser = userService.getUserByEmail(userEmail);
+
+        List<com.ssafy.api.board.response.Shorts> shortsList = shortsService.getShortsList(nowLoginUser);
+
+        return ResponseEntity.status(200).body(shortsList);
+    }
+
     //FIXME: 삭제 (여러 (동시 접속) 사용자 환경에서 static 사용 불가, 이전 로그인 사용자의 Shorts 리스트가 남아 있어 잘못된 리스트 반환하게 됨)
     /*
     @GetMapping("/getshort")
