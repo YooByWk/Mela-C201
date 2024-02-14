@@ -79,14 +79,24 @@ function TeamspaceTeam () {
             <br/>
             <H2>Members</H2>
             <br/>
+            <MemberContainer>
             {Object.entries(members).map(([key, member]) => (
             <TeamspaceMemberCard key={member.userIdx}> 
-                <Profile src={member.profileImageURL} alt="프로필 이미지" />
+                {member.profileImageURL === null ? (
+                    <>
+                    <Profile src={defaultProfile} alt="프로필 이미지" />
+                    </>
+                ) : (
+                    <>
+                    <Profile src={member.profileImageURL} alt="프로필 이미지" />
+                    </>
+                )}
                 <Nickname>
                 {member.nickname}
                 </Nickname>
             </TeamspaceMemberCard>
             ))}
+            </MemberContainer>
         </Container>
         </>
     )
@@ -140,12 +150,24 @@ const TeamspaceImage = styled.img`
     transform: translate(-50%, -50%);
     `
 
+const MemberContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    overflow: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`
+
 const TeamspaceMemberCard = styled.div`
     width: 200px;
     height: 250px;
     border-radius: 15%;
     background-color: #151C2C;
     text-align: center;
+    margin-right: 7%;
 `
 
 const Profile = styled.img`
