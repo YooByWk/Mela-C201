@@ -27,6 +27,7 @@ import TotalSearch from './pages/TotalSearch'
 function App() {
   return (
     <Fragment>
+
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <BrowserRouter>

@@ -32,6 +32,7 @@ export const GatherPost = async (data) => {
   try {
     const response = await GatherAPI.post(URL, data, {
       headers: {
+        'Content-Type': 'application/json',
         'Authorization' : `Bearer ${localStorage.accessToken}`
       }
     })

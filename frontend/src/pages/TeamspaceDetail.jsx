@@ -31,7 +31,11 @@ function TeamspaceDetail () {
         // console.log(sessionStorage.getItem('teamspaceIdx')+ '세션스토리지')
         Navigate(`../teamspace/video/${teamspaceIdx}`, { state : { teamspace : teamspaceIdx } })
     }
-    
+    const goBack = () => {
+        console.log()
+        Navigate(-1)
+    }
+
 
 
     return(
@@ -39,7 +43,6 @@ function TeamspaceDetail () {
         <Container>
             <Header>
                 <TabMenu>
-                <button onClick={()=> console.log(teamspaceIdx)}>asd54as54d</button>
                     {menuArr.map((el, index) => (
                         <li className={index === currentTab ? "submenu focused" : "submenu" } key={index}>
                         <span onClick={() => clickMenuHandler(index)}>
