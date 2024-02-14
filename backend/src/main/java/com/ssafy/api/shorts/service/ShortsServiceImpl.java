@@ -1,5 +1,8 @@
 package com.ssafy.api.shorts.service;
 
+import com.ssafy.api.chat.request.ChatMessage;
+import com.ssafy.api.chat.service.ChatRoomService;
+import com.ssafy.api.chat.service.ChatService;
 import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.shorts.request.ShortsPostReq;
 import com.ssafy.db.entity.*;
@@ -22,10 +25,8 @@ public class ShortsServiceImpl implements  ShortsService {
 
     @Autowired
     ShortsRepository shortsRepository;
-
     @Autowired
     ShortsLikeRepository shortsLikeRepository;
-
     @Autowired
     ShortsDislikeRepository shortsDislikeRepository;
 
@@ -34,6 +35,11 @@ public class ShortsServiceImpl implements  ShortsService {
 
     @Autowired
     UserGenreRepository userGenreRepository;
+
+    @Autowired
+    ChatService chatService;
+    @Autowired
+    ChatRoomService chatRoomService;
 
 
     //지원하는 동영상 확장자 ArrayList
@@ -212,15 +218,35 @@ public class ShortsServiceImpl implements  ShortsService {
             Notification notification2 = new Notification();
             notification1.setUserIdx(getAlarmUser);    //알람을 받을 사용자; User 객체 타입
             notification2.setUserIdx(user);    //알람을 받을 사용자; User 객체 타입
-            notification1.setAlarmContent(user.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다.");
-            notification2.setAlarmContent(getAlarmUser.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다.");
+            notification1.setAlarmContent(user.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다. 채팅방으로 이동하여 대화를 시작해보세요.");
+            notification2.setAlarmContent(getAlarmUser.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다. 채팅방으로 이동하여 대화를 시작해보세요.");
             notification1.setChecked(false);
             notification2.setChecked(false);
             notification1.setAlarmDate(LocalDateTime.now());
             notification2.setAlarmDate(LocalDateTime.now());
             notificationRepository.save(notification1);
             notificationRepository.save(notification2);
+
+            // 채팅방 만들어주기
+            String roomIdx = chatRoomService.enterOneToOneRoom(user.getUserIdx(), getAlarmUser.getUserIdx());
+
+            String content = getAlarmUser.getNickname() + "님이 " + user.getNickname() +"님을 마음에 들어합니다.";
+            ChatMessage message = new ChatMessage();
+            message.setSendTime(LocalDateTime.now()+"");
+            message.setMessage(content);
+            message.setNickname(getAlarmUser.getNickname());
+            message.setUserIdx(getAlarmUser.getUserIdx()+"");
+            message.setRoomIdx(roomIdx);
+            chatService.saveMessage(message);
+
+            content = user.getNickname() + "님이 " + getAlarmUser.getNickname() +"님을 마음에 들어합니다.";
+            message.setSendTime(LocalDateTime.now()+"");
+            message.setNickname(user.getNickname());
+            message.setUserIdx(user.getUserIdx()+"");
+            chatService.saveMessage(message);
         }
+
+
     }
 
     @Override
