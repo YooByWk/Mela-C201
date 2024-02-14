@@ -73,8 +73,8 @@ public class UserServiceImpl implements UserService {
 
 //	@Value("${server.address}")
 	String serverAddress = "localhost";
-	@Value("${server.port}")
-	String serverPort;
+//	@Value("${server.port}")
+	String serverPort = "8080";
 
 	@Override
 	public User createUser(UserRegisterPostReq userRegisterInfo) {
