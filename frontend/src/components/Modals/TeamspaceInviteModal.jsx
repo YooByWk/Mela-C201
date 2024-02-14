@@ -14,9 +14,7 @@ const ModalBackdrop = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 70%;  // Adjust the width as needed
-  max-width: 600px;  // Set a maximum width if necessary
   height: 70%;  // Adjust the height as needed
-  max-height: 400px;  // Set a maximum height if necessary
   display: flex;
   justify-content: center;
   align-items: center;

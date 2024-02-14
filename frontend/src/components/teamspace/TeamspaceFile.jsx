@@ -86,22 +86,47 @@ function TeamspaceFile () {
     return(
     <>
         <CustomBackdrop open={open} onClick={handleModal}/>
-        <Container>
+        {/* <Container> */}
+        <DefaultButton 
+                text={'Upload'}
+                backgroundcolor={'#873FFA'}
+                fontcolor={'white'}
+                width={'80px'}
+                onClick={handleModal}
+                height={'30px'}
+            />
+            <br/>
             <div>
                 {values ?  (
                         <>
+                          <Table>
+                            <thead>
+                            <tr>
+                            <Th>upload User</Th>
+                            <Th>File Description</Th>
+                            <Th>file</Th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
                         {Object.entries(values).map(([key, value]) => (
-                        <Div key={value.fileIdx}>
-                            File Description={value.fileDescription}
-                            <br/>
-                            title={value.originalFilename}
-                            <br/>
+                        <tr key={value.fileIdx}>
+                            <Td>
                             <Profile src={value.uploaderProfileImageUrl} alt="프로필 이미지" />
                             {value.userIdx.nickname}
+                            </Td>
+                            <Td>
+                            {value.originalFilename}
                             <br/>
-                            ===================================================
-                        </Div>
-                    ))}
+                            {value.fileDescription}
+                            </Td>
+                            <Td>
+                                file
+                            </Td>
+                        </tr>
+                            ))}
+                            </tbody>
+                            </Table>
                         </>
                     ) : (
                         <Div>
@@ -110,15 +135,7 @@ function TeamspaceFile () {
                     )
                 }
             </div>
-            <DefaultButton 
-                text={'Upload'}
-                backgroundcolor={'#873FFA'}
-                fontcolor={'white'}
-                width={'80px'}
-                onClick={handleModal}
-                height={'30px'}
-            />
-        </Container>
+        {/* </Container> */}
 
         
         {/* 업로드 모달 */}
@@ -133,7 +150,6 @@ function TeamspaceFile () {
                     <div className='inputWrapper'>
                         <label className='label'>File Description</label>
                         <input type='text' className='input' placeholder='설명' onChange={handleDescription} />
-                        
                     </div>
                     <div className="body">
                         <div className='input-btn'>
@@ -312,4 +328,17 @@ const Profile = styled.img`
     width: 50px;
     height: 50px;
     border-radius:50%;
+`
+
+const Table = styled.table`
+    color: white;
+    width: 100%;
+`
+
+const Td = styled.td`
+    border: solid 1px white;
+`
+
+const Th = styled.th`
+    border: solid 1px white;
 `
