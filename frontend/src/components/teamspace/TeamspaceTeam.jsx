@@ -33,7 +33,7 @@ function TeamspaceTeam () {
         }
         info()
         
-    },[])
+    },[members])
 
     useEffect(() => {
         const backImgInfo = async() => {     
