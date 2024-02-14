@@ -39,7 +39,6 @@ function TeamspaceDetail () {
         <Container>
             <Header>
                 <TabMenu>
-                <button onClick={()=> console.log(teamspaceIdx)}>asd54as54d</button>
                     {menuArr.map((el, index) => (
                         <li className={index === currentTab ? "submenu focused" : "submenu" } key={index}>
                         <span onClick={() => clickMenuHandler(index)}>

@@ -16,7 +16,6 @@ import ForgotPassword from '../pages/ForgotPassword';
 import AlarmMain from '../pages/AlarmMain';
 import SequenceMain from './../sequence/SequenceMain';
 import Video from '../Video/Video';
-import TotalSearch from '../pages/TotalSearch';
 
 function AppRouter({ className }) {
   return (  

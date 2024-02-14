@@ -53,8 +53,8 @@ export const TeamspaceUpdate = async ({ formData, teamspaceId }) => {
       {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.accessToken}`,
-        },
+          Authorization: `Bearer ${ACCESS_TOKEN}`
+        }
       }
     );
     return response.data;
