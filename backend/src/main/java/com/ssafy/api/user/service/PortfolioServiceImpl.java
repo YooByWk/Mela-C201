@@ -68,7 +68,8 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Override
     public PortfolioAbstract getPortfolioAbstractByUserIdx(User user) {
-        return portfolioAbstractRepository.findByUserIdx(user).get();
+//        return portfolioAbstractRepository.findByUserIdx(user).get();
+        return portfolioAbstractRepository.findByUserIdx(user);
     }
 
     @Override

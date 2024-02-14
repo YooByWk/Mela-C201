@@ -111,7 +111,8 @@ public class UserController {
 			returnVO[0] = user;														//user 객체 반환 (user_idx, birth, email_domain, email_id, gender, jwt_token, name, nickname, password, search_allow, user_type)
 
 			//2. 유저 포트폴리오
-			returnVO[1] = portfolioAbstractRepository.findByUserIdx(user).get();	//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
+//			returnVO[1] = portfolioAbstractRepository.findByUserIdx(user).get();	//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
+			returnVO[1] = portfolioAbstractRepository.findByUserIdx(user);			//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
 
 			//3. 유저 포지션
 			try {
@@ -559,9 +560,16 @@ public class UserController {
 		List<User> userListByName = userService.getUserByNameOrNickname(word, word);
 
 		for(User userItem : userListByName){
-			Optional<PortfolioAbstract> userPortAbst = portfolioAbstractRepository.findByUserIdx(userItem);
-			if(userPortAbst.isPresent()){
-				userPortfolioAbstractList.add(userPortAbst.get());
+			PortfolioAbstract userPortAbst = null;
+//			Optional<PortfolioAbstract> userPortAbst = portfolioAbstractRepository.findByUserIdx(userItem);
+			try {
+				userPortAbst = portfolioAbstractRepository.findByUserIdx(userItem);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+//			if(userPortAbst.isPresent()){
+			if(userPortAbst != null){
+				userPortfolioAbstractList.add(userPortAbst);
 			}
 		}
 		return ResponseEntity.status(200).body(userPortfolioAbstractList);

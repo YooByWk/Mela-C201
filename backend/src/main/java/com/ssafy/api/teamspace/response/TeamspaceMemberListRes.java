@@ -31,4 +31,7 @@ public class TeamspaceMemberListRes {
 
     @ApiModelProperty(name="user nickname")
     String nickname;
+
+//    @ApiModelProperty(name="profile image URL")
+    String profileImageURL;
 }

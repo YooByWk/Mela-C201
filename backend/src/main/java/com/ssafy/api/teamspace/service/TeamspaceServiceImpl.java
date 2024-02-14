@@ -72,6 +72,9 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     @Autowired
     TeamspaceFileRepositorySupport teamspaceFileRepositorySupport;
 
+    @Autowired
+    PortfolioAbstractRepository portfolioAbstractRepository;
+
     //지원하는 동영상 확장자 배열
     private String[] supportedImageExtensions = {"png", "jpg", "jpeg"};
 
@@ -242,6 +245,22 @@ public class TeamspaceServiceImpl implements TeamspaceService{
     public List<TeamspaceMemberListRes> getTeamspaceMemberList(Long teamspaceIdx) {
         Teamspace teamspace = teamspaceRepository.getOne(teamspaceIdx);
         List<TeamspaceMemberListRes> users = teamspaceRepositorySupport.findTeamspaceMemberList(teamspace);
+
+        //PortfolioAbstractRepository에서 프로필 사진 가져와 users 리스트에 추가
+        for(TeamspaceMemberListRes tmlr : users) {
+            User user = userRepository.findById(tmlr.getUserIdx()).get();
+            PortfolioAbstract portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user);
+            File portfolioImageFile = portfolioAbstract.getPortfolio_picture_file_idx();
+            String portfolioImageFileURL = null;
+
+            try {
+                portfolioImageFileURL = fileService.getImageUrlBySaveFileIdx(portfolioImageFile.getFileIdx());
+            } catch (Exception e) {
+                //e.printStackTrace();
+            } finally {
+                tmlr.setProfileImageURL(portfolioImageFileURL);
+            }
+        }
         return users;
     }
 
