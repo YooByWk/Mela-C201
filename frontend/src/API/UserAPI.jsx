@@ -164,6 +164,17 @@ export const userSearch = async (word) => {
     return response.data
 }
 
+// 내가 작성한 공고
+export const myGatherList = async({page, size}) => {
+    const response = await UserApi2.get(`/recruit`, {
+    params: {
+        page,
+        size
+      }
+    })
+    return response.data
+}
+
 // // 팔로워 리스트
 // export const followerList = async (emailId) => {
 //     const response = await UserApi.get(`/${emailId}/followees`)

@@ -66,3 +66,16 @@ export const GatherUpdate = async ({gatherIdx, data}) => {
   })
   return response;
 }
+
+// 추천 공고
+export const recommendList = async ({page, size, sortKey, word}) => {
+  const response = await GatherAPIAuth.get(`${URL}/recommend`, {
+    params: {
+      page,
+      size,
+      sortKey,
+      word
+    }
+  })
+  return response.data
+}

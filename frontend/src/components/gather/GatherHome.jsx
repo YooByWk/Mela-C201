@@ -5,6 +5,7 @@ import styled from "styled-components";
 import moment from "moment";
 import DefaultButton from './../DefaultButton';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { shortsList } from "../../API/ShortsAPI";
 
 const PaginationButton = styled.button`
   background-color: ${(props) => (props.isActive ? "#254EF8" : "#13295b")};
@@ -22,7 +23,7 @@ const GatherHome = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
-
+  const [videoList, setVideoList] = useState([])
 
   const Navigate = useNavigate();
   const NowPage = useParams();
@@ -35,13 +36,15 @@ const GatherHome = () => {
   useEffect(() => {
     const fetchGathers = async () => {
       const res = await GatherList({ page: currentPage, size: 10 });
-      console.log(res.data.boardRecruitRes);
+      // console.log(res.data.boardRecruitRes);
       setGathers(res.data.boardRecruitRes);
       const totalPage = Math.ceil(res.data.totalPageCount / 10);
       setTotalPage(totalPage);
+      const list = await shortsList()
+      setVideoList(list)
     };
     fetchGathers();
-    console.log(totalPage, "총페이지");
+    // console.log(totalPage, "총페이지");
   }, [currentPage]);
 
   const getPageNumbers = () => {
@@ -70,7 +73,7 @@ const GatherHome = () => {
 
   const pages = [];
   for (let i = 1; i <= Math.ceil(totalPage / 10) + 1; i++) {
-    console.log(i, "페이지");
+    // console.log(i, "페이지");
     pages.push(
       <PaginationButton
         onClick={() => setCurrentPage(i)}
@@ -80,7 +83,7 @@ const GatherHome = () => {
   }
   return (
     <MainDiv>
-    <button onClick={()=>console.log(pages, Math.ceil(totalPage / 10)+1, currentPage)}>asdfasdf</button>
+    {/* <button onClick={()=>console.log(pages, Math.ceil(totalPage / 10)+1, currentPage)}>asdfasdf</button> */}
       <div className="Container">
         <h1>구인</h1>
         <div className="header">
@@ -155,9 +158,9 @@ const GatherHome = () => {
       }
       
       <button onClick={async () => await onPageChange(currentPage + 1)}>다음</button> */}
-      <p>내가 작성한 공고 : 어떻게 하지 ?</p>
-        <p>내가 선호할 만한 사람 : 나랑 동일한 장르 사람 보여주기 ? </p>
-        <p>나를 찾는 공고 : 게시글 - 내 포지션과 내 선호장르가 들어있는 글</p>
+      {/* <p>내가 작성한 공고 : 어떻게 하지 ?</p> */}
+        {/* <p>내가 선호할 만한 사람 : 나랑 동일한 장르 사람 보여주기 ? </p> */}
+        {/* <p>나를 찾는 공고 : 게시글 - 내 포지션과 내 선호장르가 들어있는 글</p> */}
     </MainDiv>
   );
 };
@@ -315,4 +318,4 @@ const MainDiv = styled.div`
       }
     }
   }
-`;
+`

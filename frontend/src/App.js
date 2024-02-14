@@ -22,7 +22,7 @@ import GatherEdit from "./components/gather/GatherEdit";
 import ChangePassword from "./pages/ChangePassword";
 import Video from "./Video/Video";
 import TotalSearch from './pages/TotalSearch'
-
+import Gather from "./pages/Gather";
 
 function App() {
   return (
@@ -41,6 +41,7 @@ function App() {
             <Route path="/teamspace" element={<TeamspaceMain />} />
             <Route path="/search/:word" element={<TotalSearch />} />
             <Route path="/signup/:emailId" element={<EmailVerify />} />
+            <Route path="/maingather" element={<Gather/>} />
             <Route path="/gather" element={<Boards />}>
               <Route index element={<GatherHome />} />
               <Route path="edit/:gatherIdx" element={<GatherEdit />} />
