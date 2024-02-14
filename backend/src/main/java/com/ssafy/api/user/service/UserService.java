@@ -59,4 +59,6 @@ public interface UserService {
 	PortfolioAbstract browsePortfolioAbstract(String userId);
 
 	int isAllowedToBrowsePortfolioAbstract(String userEmail, User targetUser);
+
+	String getUserProfileImage(User user);
 }

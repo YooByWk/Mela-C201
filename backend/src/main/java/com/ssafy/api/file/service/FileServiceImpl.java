@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import com.ssafy.api.user.service.PortfolioService;
 import com.ssafy.common.exception.handler.NotValidExtensionException;
+import com.ssafy.db.entity.PortfolioAbstract;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.FileRepository;
 import org.apache.commons.io.FilenameUtils;
@@ -363,5 +364,29 @@ public class FileServiceImpl implements FileService {
         com.ssafy.db.entity.File file = fileRepository.findBySaveFilenameAndSavePath(saveFilename, savePath).get();
 
         return file;
+    }
+
+    @Override
+    public String getUploaderProfileImageURL(com.ssafy.db.entity.File file) {
+        String uploaderProfileImageUrl = null;
+
+        try {
+            //1. File 테이블로부터 다운로드 할 파일로부터 업로더 정보 (User객체) 가져옴
+            User uploader = file.getUserIdx();
+
+            //2. PortfolioAbstract 테이블로부터 업로더의 PortfolioAbstract 객체 가져옴
+            PortfolioAbstract portfolioAbstract = portfolioService.getPortfolioAbstractByUserIdx(uploader);
+
+            //3. 업로더의 PortfolioAbstract 객체로부터 프로필 이미지 (File 객체) 가져옴
+            com.ssafy.db.entity.File userProfileImageFile = portfolioAbstract.getPortfolio_picture_file_idx();
+
+            //4. 업로더의 프로필 이미지 URL (Amazon S3) 가져옴
+            uploaderProfileImageUrl = getImageUrlBySaveFileIdx(userProfileImageFile.getFileIdx());
+        } catch (Exception e) {
+            System.err.println("프로필 이미지 없음!");
+            e.printStackTrace();
+        }
+
+        return uploaderProfileImageUrl;
     }
 }

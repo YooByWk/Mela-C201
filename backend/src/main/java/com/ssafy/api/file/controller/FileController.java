@@ -2,8 +2,12 @@ package com.ssafy.api.file.controller;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.ssafy.api.file.service.FileService;
+import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.exception.handler.NotValidExtensionException;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.db.entity.PortfolioAbstract;
+import com.ssafy.db.entity.User;
+import com.ssafy.db.repository.PortfolioAbstractRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -19,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -33,6 +38,12 @@ public class FileController {
 
     @Autowired
     AmazonS3 amazonS3Client;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    PortfolioAbstractRepository portfolioAbstractRepository;
 
     //FIXME: 테스트 코드이므로 file 테이블에 삽입 작업 없음 (코드 재사용 유의)
     @PostMapping(value = "/upload", consumes = MULTIPART_FORM_DATA_VALUE)
@@ -55,8 +66,13 @@ public class FileController {
     @GetMapping(value = "/download")
     @ApiOperation(value = "파일 다운로드", notes = "파일을 다운로드합니다.")
     public ResponseEntity<byte[]> downloadFile(String filePath) {
+//    public ResponseEntity<?> downloadFile(String filePath) {
         try {
+//            ArrayList<Object> returnVO = new ArrayList<>();
             byte[] bytes = fileService.getFile(filePath);
+            //1. 응답에 파일 저장
+//            returnVO.add(bytes);
+            String uploaderProfileImageUrl = null;
 
             String fileName = URLEncoder.encode(filePath, "UTF-8").replaceAll("\\+", "%20");
             HttpHeaders httpHeaders = new HttpHeaders();
@@ -64,6 +80,28 @@ public class FileController {
             httpHeaders.setContentLength(bytes.length);
             httpHeaders.setContentDispositionFormData("attachment", fileName);
 
+            //FIXME: 파일 업로더의 프로필 이미지 리턴하는 코드 (byte[]와 함께 보내는 방법 연구 필요 -> 폐기)
+            /*
+            //1-1. File 테이블로부터 다운로드 할 파일로부터 업로더 가져옴
+            int lastSlashIndex = filePath.lastIndexOf("/");
+            String filedir = filePath.substring(0, lastSlashIndex);
+            String filename = filePath.substring(lastSlashIndex + 1, filePath.length());
+            com.ssafy.db.entity.File file = fileService.getFileBySaveFilenameAndSavePath(filename, filedir);
+            User uploader = file.getUserIdx();
+
+            //1-2. PortfolioAbstract 테이블에서 사용자의 프로필 이미지 (com.ssafy.db.entity.File 객체) 가져옴
+            try {
+                PortfolioAbstract portfolioAbstract = portfolioAbstractRepository.findByUserIdx(uploader);
+                uploaderProfileImageUrl = fileService.getUploaderProfileImageURL(file);
+            } catch (Exception e) {
+                //System.err.println("파일 업로더의 프로필 이미지 없음");
+                e.printStackTrace();
+            }
+
+//            returnVO.add(uploaderProfileImageUrl);
+            */
+
+//            return new ResponseEntity<>(returnVO, httpHeaders, HttpStatus.OK);
             return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
         } catch (Exception e) {
             //요청한 파일을 찾을 수 없는 경우
@@ -111,6 +149,8 @@ public class FileController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<? extends BaseResponseBody> getImageURLByFileIdx(@PathVariable(name = "fileIdx") long fileIdx) {
+        Object[] returnVO = new Object[2];
+
         try {
             String imageUrl = fileService.getImageUrlBySaveFileIdx(fileIdx);
 
@@ -120,6 +160,7 @@ public class FileController {
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "파일을 찾을 수 없음"));
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 오류"));
         }
     }
