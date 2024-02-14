@@ -29,7 +29,7 @@ function App() {
     <Fragment>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
-        <HashRouter>
+        <BrowserRouter>
           <Routes>
           <Route path='video' element={<Video />} />
           {/* <Route
@@ -83,7 +83,7 @@ function App() {
           <Link to="/user">Signup</Link>||
           <Link to="/login">SignIn</Link>||
           <Link to="/community"> community </Link> */}
-        </HashRouter>
+        </BrowserRouter>
       </ThemeProvider>
     </Fragment>
   );
