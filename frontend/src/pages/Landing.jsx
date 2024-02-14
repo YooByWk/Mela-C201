@@ -82,7 +82,7 @@ function Landing() {
               </Titles>
             </InnerContainer>
           </ContentsContainer>
-          <ContentsContainer>
+          {/* <ContentsContainer>
             <InnerContainer>
               <img src={RightDouble} alt="" />
               <h1> Popular Musicians</h1>
@@ -90,7 +90,7 @@ function Landing() {
                 <img src={LeftDouble} alt="" />
               </Titles>
             </InnerContainer>
-          </ContentsContainer>
+          </ContentsContainer> */}
           <ContentsContainer>
             <InnerContainer>
               <img src={RightDouble} alt="" />

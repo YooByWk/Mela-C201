@@ -49,12 +49,24 @@ const Title = styled.span`
     /* top: 70px;
     left: 30px; */
     font-size: x-large;
+    display: -webkit-box;
+  -webkit-line-clamp: 1; /* Limit to two lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0; /* Add this line to remove default margin */
 `
 
 // 프로젝트 설명
 const Content = styled.span`
     color: white;
     /* top: 180px;/ */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to two lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0; /* Add this line to remove default margin */
 `
 
 // 프로젝트 디데이
@@ -82,7 +94,6 @@ const FolderNoImage = (props) => {
                 {props.title}
             </Title>
             <Day>
-            
                 {props.day? props.day : null}
             </Day>
             </div>

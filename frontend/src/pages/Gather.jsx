@@ -42,6 +42,33 @@ function Gather() {
     },[])
 
     // console.log(myGather)
+
+    const recommendLimitList = () => {
+      const result = []
+      for (let i = 0; i < 3; i++) {
+        result.push(recommend[i])
+      }
+      return result
+    }
+
+    const myGatherLimitList = () => {
+      const result = []
+      for (let i = 0; i < 3; i++) {
+        result.push(myGather[i])
+      }
+      return result
+    }
+
+    const shortsLimitList = () => {
+      const result = []
+      for (let i = 0; i < 3; i++) {
+        result.push(shorts[i])
+      }
+      return result
+    }
+
+    // console.log(myGatherLimitList())
+
   return ( 
     <GatherContainer>
       <SideDiv>
@@ -57,7 +84,7 @@ function Gather() {
               </>
             ) : (
               <>
-            {Object.entries(myGather).map(([key, value]) => (
+            {Object.entries(myGatherLimitList()).map(([key, value]) => (
               <ListDiv key={value.boardRecruitIdx}>
                 <Title>
                 {value.title}
@@ -70,6 +97,27 @@ function Gather() {
             </>
             )}
           </ListContainer>
+            내가 선호할 만한 사람
+          {/* <ListContainer>
+          {shorts.length === 0 ? (
+              <>
+              추천 없음
+              </>
+            ) : (
+              <>
+            {Object.entries(shortsLimitList()).map(([key, value]) => (
+              <ShortsDiv key={value.boardRecruitIdx}>
+                <Title>
+                {value.title}
+                </Title>
+                <Content>
+                {value.content}
+                </Content>
+              </ShortsDiv>
+            ))}
+            </>
+            )}
+          </ListContainer> */}
           나를 찾는 공고
           <ListContainer>
             {recommend.length === 0 ? (
@@ -78,17 +126,17 @@ function Gather() {
               </>
             ) : (
               <>
-            {Object.entries(recommend).map(([key, value]) => (
-              <ListDiv key={value.boardRecruitIdx}>
-                <Title>
-                {value.title}
-                </Title>
-                <Content>
-                {value.content}
-                </Content>
-              </ListDiv>
-            ))}
-              </>
+                  {Object.entries(recommendLimitList()).map(([key, value]) => (
+                  <ListDiv key={value.boardRecruitIdx}>
+                    <Title>
+                    {value.title}
+                    </Title>
+                    <Content>
+                    {value.content}
+                    </Content>
+                  </ListDiv>
+                ))}
+                </>
             )}
           </ListContainer>
       </MainDiv>

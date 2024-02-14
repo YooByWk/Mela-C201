@@ -154,7 +154,7 @@ function UserUpdateForm() {
             genre: selectedGenres,
             position: selectedPositions
         })
-        console.log(user)
+        // console.log(user)
         const portfolio = JSON.stringify({
             instagram: portfolioValues.instagram,
             selfIntro: portfolioValues.selfIntro,
