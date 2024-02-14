@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -317,7 +318,26 @@ public class TeamspaceController {
             return ResponseEntity.status(403).body(BaseResponseBody.of(403, "Invalid teamspace idx"));
         }
 
-        List<com.ssafy.db.entity.File> list = teamspaceService.getFileListByTeamspaceIdx(teamspace);
+        List<com.ssafy.db.entity.File> tempList = teamspaceService.getFileListByTeamspaceIdx(teamspace);
+        List<com.ssafy.api.user.response.File> list = new ArrayList<com.ssafy.api.user.response.File>();
+
+        for(com.ssafy.db.entity.File file : tempList) {
+            com.ssafy.api.user.response.File newFileDto = new com.ssafy.api.user.response.File();
+
+            newFileDto.setFileIdx(file.getFileIdx());
+            newFileDto.setFileIdx(file.getFileIdx());
+            newFileDto.setSavePath(file.getSavePath());
+            newFileDto.setOriginalFilename(file.getOriginalFilename());
+            newFileDto.setSaveFilename(file.getSaveFilename());
+            newFileDto.setFileDescription(file.getFileDescription());
+            newFileDto.setFileSize(file.getFileSize());
+            newFileDto.setUserIdx(file.getUserIdx());
+
+            //업로더 프로필 이미지
+            newFileDto.setUploaderProfileImageUrl(fileService.getUploaderProfileImageURL(file));
+
+            list.add(newFileDto);
+        }
 
         if(!list.isEmpty()) {
             return ResponseEntity.status(200).body(list);

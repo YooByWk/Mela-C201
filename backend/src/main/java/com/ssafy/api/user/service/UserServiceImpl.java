@@ -71,10 +71,10 @@ public class UserServiceImpl implements UserService {
 	CSVParser frontWords = new CSVParser("front_words");
 	CSVParser backWords = new CSVParser("back_words");
 
-	@Value("${server.address}")
-	String serverAddress;
-	@Value("${server.port}")
-	String serverPort;
+//	@Value("${server.address}")
+	String serverAddress = "localhost";
+//	@Value("${server.port}")
+	String serverPort = "8080";
 
 	@Override
 	public User createUser(UserRegisterPostReq userRegisterInfo) {
@@ -208,7 +208,8 @@ public class UserServiceImpl implements UserService {
 			//portfolio_abstract 테이블에 유저식별번호 (user_idx) 일치하는 레코드 검색
 			PortfolioAbstract portfolioAbstract = null;
 			try {
-				portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user).get();
+//				portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user).get();
+				portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user);
 			} catch(NoSuchElementException e) {													//portfolio_abstract 테이블에 유저식별번호 (user_idx) 일치하는 레코드 없음 -> 생성
 				e.printStackTrace();
 			} finally {
@@ -228,7 +229,8 @@ public class UserServiceImpl implements UserService {
 
 			try {
 				//2. portfolio_abstract 테이블에 유저식별번호 (user_idx) 일치하는 레코드 검색
-				portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user).get();
+//				portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user).get();
+				portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user);
 
 				//3-1. 일치하는 레코드가 있으면 프로필사진 파일 식별번호 업데이트 (portfolio_picture_file_idx)
 				portfolioAbstract.setPortfolio_picture_file_idx(file);							//프로필사진 파일 식별번호 업데이트 (portfolio_picture_file_idx)
@@ -517,7 +519,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public PortfolioAbstract browsePortfolioAbstract(String userId) {
-		return portfolioAbstractRepository.findByUserIdx(userRepository.findByEmailId(userId).get()).get();
+//		return portfolioAbstractRepository.findByUserIdx(userRepository.findByEmailId(userId).get()).get();
+		return portfolioAbstractRepository.findByUserIdx(userRepository.findByEmailId(userId).get());
 	}
 
 	@Override
@@ -539,5 +542,21 @@ public class UserServiceImpl implements UserService {
 
 		//나머지 경우: 조회할 수 없음 (searchAllow false)
 		return 403;
+	}
+
+	@Override
+	public String getUserProfileImage(User user) {
+		String userProfileImageURL = null;
+
+		//1. portfolio_abstract 테이블에서 user의 portfolio 가져옴
+		try {
+			PortfolioAbstract portfolioAbstract = portfolioAbstractRepository.findByUserIdx(user);
+			File userProfileImageFile = portfolioAbstract.getPortfolio_picture_file_idx();
+			userProfileImageURL = fileService.getImageUrlBySaveFileIdx(userProfileImageFile.getFileIdx());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			return userProfileImageURL;
+		}
 	}
 }
