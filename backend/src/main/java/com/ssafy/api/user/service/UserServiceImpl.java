@@ -71,8 +71,8 @@ public class UserServiceImpl implements UserService {
 	CSVParser frontWords = new CSVParser("front_words");
 	CSVParser backWords = new CSVParser("back_words");
 
-	@Value("${server.address}")
-	String serverAddress;
+//	@Value("${server.address}")
+	String serverAddress = "localhost";
 	@Value("${server.port}")
 	String serverPort;
 
