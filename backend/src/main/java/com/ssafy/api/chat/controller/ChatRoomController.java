@@ -101,6 +101,10 @@ public class ChatRoomController {
         String userEmail = userDetails.getUsername();
         User user = userService.getUserByEmail(userEmail);
 
+        if(user.getUserIdx() == otherUserIdx) {
+            return ResponseEntity.status(400).body(null);
+        }
+
         try {
             String roomIdx = chatRoomService.enterOneToOneRoom(user.getUserIdx(), otherUserIdx);
 

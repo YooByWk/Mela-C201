@@ -27,7 +27,7 @@ function CommunityDetail() {
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const Navigate = useNavigate();
-  const currentUserIdx = useStore((s) => (s.user ? s.user.userIdx : null));
+  const currentUserIdx = Number(localStorage.getItem("userIdx"));
   
   useEffect(() => {
     const fetchData = async () => {
@@ -257,9 +257,6 @@ function CommunityDetail() {
                   <br />
                   <li key={comment.commentIdx}>
                     <div>{comment.nickname}</div>
-                    <button onClick={()=> {
-        console.log(currentUserIdx, comment.userIdx, comment.commentIdx)
-      }}>체크</button>
                     <div className="comment-date">{comment.registDate}</div>
                     <div>
                       {comment.content}
