@@ -59,7 +59,7 @@ export const deleteShorts = async(shortsId) => {
 } 
 
 // 단일 쇼츠 조회
-export const oneShorts = async(shortsId) => {
+export const oneShort = async(shortsId) => {
     const response = await ShortsAPI.get(`/${shortsId}`)
     return response.data
 } 
