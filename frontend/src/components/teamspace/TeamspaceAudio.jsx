@@ -13,7 +13,7 @@ function TeamspaceAudio() {
     <>
     <H1>Teamspace - Audio</H1>
     {/* <Sequence teamspaceIdx={teamspaceIdx} /> */}
-    <CustomIframe src="https://signal.vercel.app/edit" frameborder="0"></CustomIframe>
+    <CustomIframe src="https://signal.vercel.app/edit" frameborder="0" allow="midi"></CustomIframe>
     </>
     )
 }
