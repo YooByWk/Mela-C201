@@ -125,47 +125,6 @@ public class ShortsController {
         return ResponseEntity.status(200).body(shortsListResponse);
     }
 
-    //FIXME: 삭제 (여러 (동시 접속) 사용자 환경에서 static 사용 불가, 이전 로그인 사용자의 Shorts 리스트가 남아 있어 잘못된 리스트 반환하게 됨)
-    /*
-    @GetMapping("/getshort")
-    @ApiOperation(value = "쇼츠 동영상 가져오기", notes = "자신이 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 한개를 가져온다.")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "성공"),
-            @ApiResponse(code = 500, message = "삭제 실패"),
-    })
-    public ResponseEntity<com.ssafy.api.board.response.Shorts> getOneShort (
-            @ApiIgnore Authentication authentication)
-    {
-        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
-        String userEmail = userDetails.getUsername();
-        User nowLoginUser = userService.getUserByEmail(userEmail);
-        if(shortsList == null){
-            shortsList = shortsService.getShortsList(nowLoginUser);
-        }
-        if(usedShorts == null){
-            usedShorts = new int[shortsList.size()];
-        }
-
-        int shortsListUsedCountAver = 0;
-        for(int i=0; i<shortsList.size(); i++){
-            shortsListUsedCountAver += usedShorts[i];
-        }
-        shortsListUsedCountAver /= shortsList.size();
-
-        int randNum = (int) (Math.random() * shortsList.size());
-        while(usedShorts[randNum] > shortsListUsedCountAver){
-            randNum = (int) (Math.random() * shortsList.size());
-        }
-
-        usedShorts[randNum] += 1;
-
-
-
-        return ResponseEntity.status(200).body(shortsList.get(randNum));
-    }
-     */
-
-    //TODO: 새로 작성 중
     @GetMapping("/getshort")
     @ApiOperation(value = "(매칭) 쇼츠 1개 가져오기", notes = "자신이 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 한 개를 가져온다.")
     @ApiResponses({
@@ -173,7 +132,6 @@ public class ShortsController {
             @ApiResponse(code = 401, message = "인증 실패"),
             @ApiResponse(code = 500, message = "삭제 실패"),
     })
-//    public ResponseEntity<com.ssafy.api.board.response.Shorts> getOneShort (
     public ResponseEntity<?> getOneShort (
             @ApiIgnore Authentication authentication) {
 

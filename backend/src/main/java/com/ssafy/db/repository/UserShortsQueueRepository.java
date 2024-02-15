@@ -20,12 +20,7 @@ public interface UserShortsQueueRepository extends JpaRepository<UserShortsQueue
     List<UserShortsQueue> findByUserIdx(User user);
 
     @Query("SELECT usq FROM UserShortsQueue usq " +
-            //JPQL LIMIT 사용 불가
-//            "WHERE usq.userIdx = :userIdx LIMIT 1 ")
             "WHERE usq.userIdx = :userIdx")
-//    UserShortsQueue getSingleRecord(@Param("userIdx") User userIdx);
-//    List<UserShortsQueue> getSingleRecord(@Param("userIdx") User userIdx, Pageable pagable);
-//    UserShortsQueue getSingleRecord(@Param("userIdx") User userIdx, Pageable pagable);
-//    Page<UserShortsQueue[]> getSingleRecord(@Param("userIdx") User userIdx, Pageable pagable);
+    //JPQL LIMIT 사용 불가 -> Pageable pagable 사용
     List<UserShortsQueue> getSingleRecord(@Param("userIdx") User userIdx, Pageable pagable);
 }

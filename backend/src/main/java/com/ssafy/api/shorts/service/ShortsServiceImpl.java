@@ -263,10 +263,6 @@ public class ShortsServiceImpl implements ShortsService {
             saveRecordIntoUserShortsQueueTable(shortsList, user);
         }
 
-//        UserShortsQueue userShortsQueue = userShortsQueueRepository.getSingleRecord(user);
-//        List<UserShortsQueue> userShortsQueue = userShortsQueueRepository.getSingleRecord(user, PageRequest.of(0, 1));
-//        UserShortsQueue userShortsQueue = userShortsQueueRepository.getSingleRecord(user, PageRequest.of(0, 1));
-//        Page<UserShortsQueue[]> userShortsQueuePageList = userShortsQueueRepository.getSingleRecord(user, PageRequest.of(0, 1));
         List<UserShortsQueue> userShortsQueuePageList = userShortsQueueRepository.getSingleRecord(user, PageRequest.of(0, 1));
 
         UserShortsQueue userShortsQueue = userShortsQueuePageList.get(0);
@@ -288,7 +284,6 @@ public class ShortsServiceImpl implements ShortsService {
             e.printStackTrace();
         }
 
-        //TODO: 검증 필요!!!
         //3. shorts 테이블에서 전송한 레코드 삭제
         userShortsQueueRepository.delete(userShortsQueue);
 
