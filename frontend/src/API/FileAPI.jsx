@@ -29,13 +29,21 @@ export const getVideo = async (fileIdx) => {
 }
 
 // 파일 다운로드
-export const downloadFile = async (fileIdx) => {
-    const response = await FileAPI.get(`/download`, fileIdx)
-    return response.data
-}
+// export const downloadFile = async (fileIdx) => {
+//     const response = await FileAPI.get({
+//         baseURL: process.env.REACT_APP_API_URL + `/file/download?fileIdx=${fileIdx}`,
+//         headers: {
+//             'Authorization': `Bearer ${ACCESS_TOKEN}`,
+//         },
+//         responseType: 'blob'
+//     }
+// )
+//     console.log(response)
+//     return response
+// }
 
 // 파일 삭제
 export const deleteFile = async(fileIdx) => {
-    const response = await FileAPI.delete(`/delete`, fileIdx)
+    const response = await FileAPI.delete(`/delete?fileIdx=${fileIdx}`)
     return response.data
 }
