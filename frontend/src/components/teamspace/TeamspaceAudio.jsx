@@ -27,5 +27,5 @@ const Sequence = styled(SequenceMain)`
 
 const CustomIframe = styled.iframe`
     width: 100%;
-    height: 100%;
+    height: 150%;
 `

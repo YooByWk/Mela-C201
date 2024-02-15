@@ -159,46 +159,47 @@ function UserEdit(props) {
                   onClick={goUpdate}
                 />
               </div>
+              <div className="genre">
+                <p>Like genre : </p>
+              </div>
               <div>
-                <div className="genre">
-                  <p>Like genre : </p>
-                </div>
-                    <p>Like genre : </p>
-                    <p>Position : </p>                       
-                    <p>SNS</p>
-                    <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
-                    <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
-                </div>
-                </>
-            ) : (
-                <>
-                    <p>{ currentUser.nickname }</p>
-                    <Img 
-                        src={
-                        currentUserPortfolio.portfolio_picture_file_idx ? 
-                        currentUserPortfolio.portfolio_picture_file_idx : 
-                        defaultprofile} 
-                        alt="프로필 이미지"
-                    />
-                    <p>Like genre : </p>
-                    <p>Position : </p>
-                    <p>SNS
-                    <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
-                    <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
-                    </p>
-                    <DefaultButton 
-                        text={isFollowed ? 'Unfollow' : 'Follow'}
-                        backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
-                        fontcolor={'white'}
-                        width={'4rem'}
-                        height={'2rem'}
-                        onClick={handleFollow}
-                    />
-                </>
-            )}
-        </Container>
-        </>
-    )
+                <p>Position : </p>
+                <p>SNS
+                <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
+                <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
+                </p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <p>{ currentUser.nickname }</p>
+            <Img 
+              src={
+                currentUserPortfolio.portfolio_picture_file_idx ? 
+                currentUserPortfolio.portfolio_picture_file_idx : 
+                defaultprofile
+              } 
+              alt="프로필 이미지"
+            />
+            <p>Like genre : </p>
+            <p>Position : </p>
+            <p>SNS</p>
+            <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
+            <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
+            <DefaultButton 
+              text={isFollowed ? 'Unfollow' : 'Follow'}
+              backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
+              fontcolor={'white'}
+              width={'4rem'}
+              height={'2rem'}
+              onClick={handleFollow}
+            />
+          </>
+        )}
+      </Container>
+    </>
+  );
 }
 
 export default UserEdit;
