@@ -6,7 +6,8 @@ import { IoMdClose } from "react-icons/io";
 import { Dialog, DialogHeader, DialogBody } from '@material-tailwind/react'
 import { Navigate } from "react-router-dom";
 import { uploadTeamspaceFile, TeamspaceFileList } from "../../API/TeamspaceAPI"
-
+import { downloadFile, deleteFile } from "../../API/FileAPI";
+import { FaFileArrowDown, FaTrash } from "react-icons/fa6";
 
 function TeamspaceFile () {
     const [open, setOpen] = useState(false)
@@ -14,7 +15,7 @@ function TeamspaceFile () {
     const [file, setFile] = useState('')
     const [fileDescription, setFileDescription] = useState('')
     const [values, setValues] = useState()
-
+    
     useEffect(() => {
         const teamspaceFileList = async() => {     
           try {
@@ -49,6 +50,15 @@ function TeamspaceFile () {
         if (e.target.files[0]) {
             setFile(e.target.files[0])
         }
+    }
+
+
+    const handleDownloadFile = (fileIdx) => {
+        downloadFile(fileIdx)
+    }
+
+    const handleDeleteFile = (fileIdx) => {
+        deleteFile(fileIdx)
     }
 
     const handleUpload = async (e) => {
@@ -121,7 +131,8 @@ function TeamspaceFile () {
                             {value.fileDescription}
                             </Td>
                             <Td>
-                                file
+                                <FaFileArrowDown onClick={handleDownloadFile(value.fileIdx)}/>
+                                <FaTrash onClick={handleDeleteFile(value.fileIdx)}/>
                             </Td>
                         </tr>
                             ))}
