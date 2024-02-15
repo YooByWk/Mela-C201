@@ -44,13 +44,37 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 
 ## :mag_right: 서비스 화면
 ### Sign up
-
-### Sign in
+  - 이메일, 닉네임 중복 확인
+  - 이메일 인증 후 로그인 가능
+  <img src=./Docs/.PNG>
 
 
 ### Main
 
-###
+### Teamspace
+  - 팀스페이스 생성, 멤버 초대
+  - 팀스페이스 정보 조회 및 수정
+  - 그룹 일정 등록 및 수정, 삭제
+  - 그룹 화상 채팅
+  - 파일 공유
+  - 온라인 실시간 음원 재생
+<img src=./Docs/teammain.PNG>
+<img src=./Docs/teamdetail.PNG>
+<img src=./Docs/teammanage.PNG>
+<img src=./Docs/teamscheduleadd.PNG>
+<img src=./Docs/fileupload.PNG>
+<img src=./Docs/seq.PNG>
+
+### Gather
+  - 구인글 작성
+  - 마음에 드는 사용자 1대 1 채팅하기
+
+
+### Community
+  - 자유게시판 글 작성
+  - 최신순/조회수/인기순(좋아요수) 정렬 기준
+<img src=./Docs/communitylist.PNG>
+<img src=./Docs/communitydetail.PNG>
 
 
 ## :key: 주요 기술
@@ -96,8 +120,12 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 |BE|이현호|API 설계|
 
 ## :hammer: 프로젝트 산출물
+- ### ERD
+<img src=./Docs/ERD.png>
+
+- ### 아키텍처 구성도
+<img src=./Docs/아키텍처구성도.PNG>
+
 - ### [화면 정의서](https://www.figma.com/file/IX4LHI9096wtPgbeMZF4tr/C201-team-library?type=design&node-id=0%3A1&mode=design&t=ZOYZB5RR2vzpZ1Hh-1)
 - ### [요구사항 명세서](https://valuable-flyingfish-5f5.notion.site/4e8269aba1c0414bb997d0a2554833af?pvs=74)
-- ### [ERD](https://lab.ssafy.com/-/ide/project/s10-webmobile1-sub2/S10P12C201/tree/master/-/Docs/ERD.png/)
-- ### [아키텍처 구성도](https://lab.ssafy.com/-/ide/project/s10-webmobile1-sub2/S10P12C201/tree/master/-/Docs/아키텍처구성도.PNG/)
 - ### [API 설계](https://valuable-flyingfish-5f5.notion.site/API-aff8baaa08d44954a433ef4645ba6dad)
