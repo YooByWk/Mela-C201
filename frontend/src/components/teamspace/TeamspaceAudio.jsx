@@ -12,7 +12,8 @@ function TeamspaceAudio() {
     return(
     <>
     <H1>Teamspace - Audio</H1>
-    <Sequence teamspaceIdx={teamspaceIdx} />
+    {/* <Sequence teamspaceIdx={teamspaceIdx} /> */}
+    <iframe src="https://signal.vercel.app/edit" frameborder="0"></iframe>
     </>
     )
 }

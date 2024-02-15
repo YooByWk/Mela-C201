@@ -423,7 +423,7 @@ public class UserServiceImpl implements UserService {
 //		String addr = "https://localhost:3000/changepassword?token=" + token;
 
 		String addr = "https://i10c201.p.ssafy.io:3000/changepassword?token=" + token;
-		
+
 
 		String htmlContent = "<html><body>";
 		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
