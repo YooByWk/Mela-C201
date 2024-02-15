@@ -8,6 +8,7 @@ import com.ssafy.api.shorts.request.ShortsPostReq;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import org.apache.commons.io.FilenameUtils;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -235,6 +236,7 @@ public class ShortsServiceImpl implements ShortsService {
             // 채팅방 만들어주기
             String roomIdx = chatRoomService.enterOneToOneRoom(user.getUserIdx(), getAlarmUser.getUserIdx());
 
+            // 메시지 보내기 1
             String content = getAlarmUser.getNickname() + "님이 " + user.getNickname() +"님을 마음에 들어합니다.";
             ChatMessage message = new ChatMessage();
             message.setSendTime(LocalDateTime.now()+"");
@@ -244,10 +246,14 @@ public class ShortsServiceImpl implements ShortsService {
             message.setRoomIdx(roomIdx);
             chatService.saveMessage(message);
 
+            // 메시지 보내기 2
             content = user.getNickname() + "님이 " + getAlarmUser.getNickname() +"님을 마음에 들어합니다.";
+            message = new ChatMessage();
             message.setSendTime(LocalDateTime.now()+"");
+            message.setMessage(content);
             message.setNickname(user.getNickname());
             message.setUserIdx(user.getUserIdx()+"");
+            message.setRoomIdx(roomIdx);
             chatService.saveMessage(message);
         }
 

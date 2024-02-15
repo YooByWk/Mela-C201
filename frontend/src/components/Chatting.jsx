@@ -26,7 +26,7 @@ export const Chatting = (props) => {
     setUserIdx(localStorage.getItem("userIdx"));
     loadMessages();
 
-    if (ws) {
+    if (ws && !ws.connect) {
       console.log("disconnect!!!!!");
       ws.disconnect();
       connect();
