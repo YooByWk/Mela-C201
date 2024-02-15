@@ -17,14 +17,12 @@ public class UserShortsQueue {
     @NotNull
     Long userShortsQueueIdx;
 
-    //FIXME: @ManyToOne 검증 필요
     @ManyToOne
     @JoinColumn(name = "user_idx", referencedColumnName = "userIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     User userIdx;
 
-    //FIXME: @ManyToOne 검증 필요
     @ManyToOne
     @JoinColumn(name = "shorts_idx", referencedColumnName = "shortsIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
