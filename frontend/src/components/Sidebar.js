@@ -81,7 +81,7 @@ function Sidebar({ className, paddingtop }) {
   const [followers, setFollowers] = useState([])
   const [followings, setFollowings] = useState([])
   const [imageURL, setImageURL] = useState()
-  const [shortsURL, setShortsURL] = useState('')
+  const [shortsIdx, setShortsIdx] = useState('')
 
   useEffect(() => {
     if (!localStorage.accessToken) {
@@ -93,7 +93,7 @@ function Sidebar({ className, paddingtop }) {
         setUserValues(res[0])
         setPortfolioValues(res[1])
         const shorts = await getShorts()
-        setShortsURL(shorts.fileURL)
+        setShortsIdx(shorts.shortsIdx)
       } catch (err) {
         console.log(err)
       } 
@@ -176,7 +176,7 @@ function Sidebar({ className, paddingtop }) {
                 <ListItemPrefix>
                   <MdOutlineLocalFireDepartment />
                 </ListItemPrefix>
-                <CustomLink to={`/matching/${shortsURL}`}>
+                <CustomLink to={`/matching/${shortsIdx}`}>
                 <span className="wd">Matching</span>
                 </CustomLink>
               </ListItem>
