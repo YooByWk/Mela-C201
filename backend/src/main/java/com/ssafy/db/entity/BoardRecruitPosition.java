@@ -24,7 +24,8 @@ public class BoardRecruitPosition {
     BoardRecruit boardRecruitIdx;
 
     @ManyToOne
-    @JoinColumn(name="position_idx", referencedColumnName="positionIdx")
+//    @JoinColumn(name="position_idx", referencedColumnName="positionIdx")
+    @JoinColumn(name="position_idx", referencedColumnName="position_idx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     Position positionIdx;

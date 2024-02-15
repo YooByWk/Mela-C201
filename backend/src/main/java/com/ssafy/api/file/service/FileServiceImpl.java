@@ -302,6 +302,20 @@ public class FileServiceImpl implements FileService {
         return bytes;
     }
 
+    public byte[] getFile(long fileIdx) throws IOException {
+        com.ssafy.db.entity.File targetFileRecord = getFileByFileIdx(fileIdx);
+        String filePath = targetFileRecord.getSavePath() + "/" + targetFileRecord.getSaveFilename();
+
+        S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, filePath));
+        S3ObjectInputStream objectInputStream = o.getObjectContent();
+        byte[] bytes = IOUtils.toByteArray(objectInputStream);
+
+        objectInputStream.close();
+        o.close();
+
+        return bytes;
+    }
+
     @Override
     public boolean deleteFileByFilePath(String filePath) throws IOException {
         try {

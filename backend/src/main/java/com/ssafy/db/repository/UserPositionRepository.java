@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserPositionRepository extends JpaRepository<UserPosition, Long> {
-    List<Position> findPositionIdxByUserIdx(User userIdx);
+    List<UserPosition> findPositionIdxByUserIdx(User userIdx);
 
     @Modifying
     @Query("DELETE FROM UserPosition up WHERE up.userIdx = :user")
