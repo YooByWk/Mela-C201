@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import DefaultButton from "../components/DefaultButton";
 import PortfolioAdd from "../components/PortfolioAdd";
-import { TiPin } from "react-icons/ti";
 import { RiHeadphoneFill } from "react-icons/ri";
 import { othersInfo } from "../API/UserAPI";
 import { useParams } from "react-router-dom";

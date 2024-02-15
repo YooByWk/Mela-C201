@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import defaultimage from '../assets/images/default-image.png'
 import { getImg, getMusic } from "../API/FileAPI";
+import { FaPlay, FaPause } from "react-icons/fa6";
 
 function DefaultPortfolio(props) {
     const [albumImageURL, setAlbumImageURL] = useState('')
@@ -36,13 +37,14 @@ function DefaultPortfolio(props) {
           albumImageInfo()
 
       },[])
+
       let audio = new Audio(musicURL)
       const handleMusic = () => {
         setPlaying(!playing)
         if (playing) {
-          audio.play()
-        } else {
           audio.pause()
+        } else {
+          audio.play()
         }
       }
 
@@ -68,8 +70,16 @@ function DefaultPortfolio(props) {
             <Album
               src={albumImageURL} 
               alt="앨범 이미지"
-              onClick={handleMusic}
               />
+              {playing ? (
+                <>
+                <FaPause onClick={handleMusic}/>
+                </>
+              ) : (
+                <>
+                <FaPlay onClick={handleMusic}/>
+                </>
+              )}
             <Open onClick={handleVisible}>Lyrics</Open>
         </PortfolioContainer>
             {visible ? (
@@ -121,3 +131,4 @@ const Open = styled.div`
   width: fit-content;
   cursor: pointer;
 `
+
