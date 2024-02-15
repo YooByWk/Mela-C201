@@ -1,28 +1,27 @@
 import React, { useState, Fragment, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Card, List, ListItem, ListItemPrefix } from "@material-tailwind/react";
 
-import { FaRegUser, FaRegHeart } from "react-icons/fa6";
+import { FaRegUser } from "react-icons/fa6";
 import { AiOutlineMessage } from "react-icons/ai";
 import { MdOutlineLocalFireDepartment, MdOutlineLogout } from "react-icons/md";
 import styled from "styled-components";
 import useStore from "../status/store";
-import {isLogined} from "../status/store";
-import { follower, followerList } from "../API/UserAPI";
-import { followee, followingList } from "../API/UserAPI";
+import { follower } from "../API/UserAPI";
+import { followee } from "../API/UserAPI";
 import { fetchUser } from "../API/UserAPI";
 import { getImg } from "../API/FileAPI";
 import defaultprofile from '../assets/images/default-profile.png'
 import { getShorts } from "../API/ShortsAPI";
+import SignupModal from "./Modals/SignupModal";
+import SigninModal from "./Modals/SigninModal";
 
 const SideContainer = styled.div`
   color: white;
   padding-top: ${props => props.$paddingtop || '0'};
   margin-left:30px;
-  /* text-align: center; */
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   width: 12vw;
   .items {
     margin-top: 30px;
@@ -58,7 +57,6 @@ const Img = styled.img`
     height: 60px;
     width: 60px;
     border-radius: 50%;
-    /* margin-left: 3rem; */
 `;
 
 const H3 = styled.h3`
@@ -76,8 +74,6 @@ function Sidebar({ className, paddingtop }) {
   const { logout } = useStore()
   const [userValues, setUserValues] = useState({})
   const [portfolioValues, setPortfolioValues] = useState({})
-  // const isLogined = useStore(state => state.isLogined)
-  // const [userData, setUserData] = useState({})
   const [followers, setFollowers] = useState([])
   const [followings, setFollowings] = useState([])
   const [imageURL, setImageURL] = useState()
@@ -130,18 +126,9 @@ function Sidebar({ className, paddingtop }) {
     follow()
   },[userValues, portfolioValues])
 
-  // const followList = async () => {
-  //   try {
-  //     await followerList(userValues.emailId)
-  //   }
-  // }
-  // console.log(followers)
-  // console.log(followings)
-
   return (
-    // <DIV>
       <SideContainer className="contents" $paddingtop={paddingtop}>
-        {userValues ? (
+        {userValues.length >= 1 ? (
           <>
           <div className="img-wrapper">
             <Img 
@@ -189,9 +176,23 @@ function Sidebar({ className, paddingtop }) {
             </List>
           </Card>
           </>
-        ) : <p>유저정보가 없습니다.</p>}
+        ) : (
+          <>
+          <div className="img-wrapper">
+          </div>
+          <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4">
+            <List>
+              <ListItem className="items">
+                <SignupModal />
+              </ListItem>
+              <ListItem className="items">
+                <SigninModal />
+              </ListItem>
+            </List>
+          </Card>
+          </>
+        )}
       </SideContainer>
-    //  </DIV>
   );
 }
 
