@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom"
 import { userSearch } from "../../API/UserAPI"
 import DefaultUserShape from "./DefaultUserShape"
 import styled from "styled-components"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
+
 
 function SearchUser() {
     const { word } = useParams()
@@ -34,12 +35,13 @@ function SearchUser() {
           ) : (
           <>
             {Object.entries(values).map(([key, value]) => (
+              <Link to={`/portfolio/${value.userIdx.emailId}`} key={value.portfolioAbstractIdx}>
                 <DefaultUserShape 
-                    key={value.portfolioAbstractIdx}
                     profileImage={value.portfolio_picture_file_idx}
                     nickname={value.userIdx.nickname}
-                    //   onClick={(event) => Navi(`/portfolio/${value.userIdx.emailId}`)}
+                    // onClick={(event) => Navi(`/portfolio/${value.userIdx.emailId}`)}
                 />
+                </Link>
             ))}
           </>
           )}
