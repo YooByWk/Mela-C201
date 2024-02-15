@@ -36,7 +36,7 @@ function SearchGather() {
           ) : (
           <>
             {Object.entries(values).map(([key, value]) => (
-              <Link to={`/gather/detail/${value.boardIdx}`} key={value.boardIdx}>
+              <Link to={`/gather/detail/${value.boardRecruitIdx}`} key={value.boardRecruitIdx}>
               <Div>
                 <Title>
                   {value.title}
