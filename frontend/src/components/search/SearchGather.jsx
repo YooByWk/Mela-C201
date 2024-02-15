@@ -15,7 +15,7 @@ function SearchGather() {
                   size: 10,
                   word: word,
                 })
-                setValues(searchInfo.data.boardResList)
+                setValues(searchInfo.data.boardRecruitRes)
 
             } catch (err) {
                 console.log(err)
@@ -36,7 +36,7 @@ function SearchGather() {
           ) : (
           <>
             {Object.entries(values).map(([key, value]) => (
-              <Link to={`/community/${value.boardIdx}`} key={value.boardIdx}>
+              <Link to={`/gather/detail/${value.boardIdx}`} key={value.boardIdx}>
               <Div>
                 <Title>
                   {value.title}
