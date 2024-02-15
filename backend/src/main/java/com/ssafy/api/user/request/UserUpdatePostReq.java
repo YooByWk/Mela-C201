@@ -35,10 +35,10 @@ public class UserUpdatePostReq {
     boolean searchAllow;
 
     @ApiModelProperty(name="유저 장르", example = "Pop")
-    List<Long> genre;
+    List<String> genre;
 
     @ApiModelProperty(name="유저 포지션", example = "보컬")
-    List<Long> position;
+    List<String> position;
 
     @Override
     public String toString() {
