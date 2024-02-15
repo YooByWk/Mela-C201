@@ -246,6 +246,7 @@ const GatherDetail = () => {
           )}
           {likeCount}
         </LikeContainer>
+        
         <div className="comment-title">
           <GoBell className="icon" />
           <span>댓글</span>
@@ -253,6 +254,18 @@ const GatherDetail = () => {
         </div>
         <div>
           <hr />
+          <form action="" onSubmit={handleSubmit} className="comment">
+          <input
+            type="text"
+            value={userInput}
+            onChange={hanleUserInput}
+            placeholder="댓글을 입력해주세요"
+            className="input"
+          />
+          <button type="submit" className="button">
+            등록
+          </button>
+        </form>
         </div>
         <div className="comment-list">
           <ul>
@@ -286,18 +299,7 @@ const GatherDetail = () => {
           </ul>
         </div>
 
-        <form action="" onSubmit={handleSubmit} className="comment">
-          <input
-            type="text"
-            value={userInput}
-            onChange={hanleUserInput}
-            placeholder="댓글을 입력해주세요"
-            className="input"
-          />
-          <button type="submit" className="button">
-            등록
-          </button>
-        </form>
+
       </DetailMain>
     );
   } else {

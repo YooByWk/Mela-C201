@@ -246,6 +246,18 @@ function CommunityDetail() {
           <hr key="" />
         </>
       )}
+      <form action="" onSubmit={handleSubmit} className="comment">
+        <input
+          type="text"
+          name=""
+          id=""
+          onChange={hanleUserInput}
+          value={userInput}
+          className="input"
+          placeholder="댓글을 입력해주세요"
+        />
+        <input type="submit" value="등 록" className="button" />
+      </form>
       <div className="comment-list">
         <ul>
           {comments && comments.length > 0 ? (
@@ -280,18 +292,7 @@ function CommunityDetail() {
         </ul>
       </div>
 
-      <form action="" onSubmit={handleSubmit} className="comment">
-        <input
-          type="text"
-          name=""
-          id=""
-          onChange={hanleUserInput}
-          value={userInput}
-          className="input"
-          placeholder="댓글을 입력해주세요"
-        />
-        <input type="submit" value="등 록" className="button" />
-      </form>
+
     </MainDiv>
   );
 }

@@ -26,89 +26,96 @@ import Gather from "./pages/Gather";
 
 function App() {
   return (
-    <Fragment>
+    <>
 
       <GlobalStyle />
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Routes>
-          <Route path='video' element={<Video />} />
-          {/* <Route
-          path='/teamspace/video/:teamspaceIdx' element={<Video/>} 
-          /> */}
-
-
-            <Route path="/" element={<Landing />} />
-            <Route path="/teamspace" element={<TeamspaceMain />} />
-            <Route path="/search/:word" element={<TotalSearch />} />
-            <Route path="/signup/:emailId" element={<EmailVerify />} />
-            <Route path="/maingather" element={<Gather/>} />
-            <Route path="/gather" element={<Boards />}>
-              <Route index element={<GatherHome />} />
-              <Route path="edit/:gatherIdx" element={<GatherEdit />} />
-              <Route path=":pageNumber" element={<GatherHome />} />
-              <Route path="create" element={<GatherCreate />} />
-              <Route path="detail/:gatherIdx" element={<GatherDetail />} />
-            </Route>
-            <Route path="/community" element={<Boards />}>
-              <Route path="/community" exact element={<CommunityHome />} />
-              <Route path="/community/create" element={<CommunityCreate />} />
+      <Scroll>
+        
+          <BrowserRouter>
+            <Routes>
+            <Route path='video' element={<Video />} />
+            {/* <Route
+            path='/teamspace/video/:teamspaceIdx' element={<Video/>}
+            /> */}
+              <Route path="/" element={<Landing />} />
+              <Route path="/teamspace" element={<TeamspaceMain />} />
+              <Route path="/search/:word" element={<TotalSearch />} />
+              <Route path="/signup/:emailId" element={<EmailVerify />} />
+              <Route path="/maingather" element={<Gather/>} />
+              <Route path="/gather" element={<Boards />}>
+                <Route index element={<GatherHome />} />
+                <Route path="edit/:gatherIdx" element={<GatherEdit />} />
+                <Route path=":pageNumber" element={<GatherHome />} />
+                <Route path="create" element={<GatherCreate />} />
+                <Route path="detail/:gatherIdx" element={<GatherDetail />} />
+              </Route>
+              <Route path="/community" element={<Boards />}>
+                <Route path="/community" exact element={<CommunityHome />} />
+                <Route path="/community/create" element={<CommunityCreate />} />
+                <Route
+                  path="/community/:boardIdx"
+                  element={<CommunityDetail />}
+                />
+                <Route
+                  path="/community/:boardIdx/edit"
+                  element={<CommunityEdit />}
+                />
+              </Route>
+              <Route path='/changepassword' element={<ChangePassword />}/>
               <Route
-                path="/community/:boardIdx"
-                element={<CommunityDetail />}
+                path="*"
+                element={
+                  <>
+                    <header>
+                      <Navbar />
+                    </header>
+                    <Body>
+                      <Sidebar className="Side" />
+                      <StyledAppRouter className="BodyRouter" />
+                    </Body>
+                  </>
+                }
               />
-              <Route
-                path="/community/:boardIdx/edit"
-                element={<CommunityEdit />}
-              />
-            </Route>
-            <Route path='/changepassword' element={<ChangePassword />}/>
-            <Route
-              path="*"
-              element={
-                <>
-                  <header>
-                    <Navbar />
-                  </header>
-                  <Body>
-                    <Sidebar className="Side" />
-                    <StyledAppRouter className="BodyRouter" />
-                  </Body>
-                </>
-              }
-            />
-          </Routes>
-          {/* <p>아래 링크는 지울 수 있습니다. - 개발용 -</p>
-          <Link to="/home">Homepage(실험중인곳)</Link>||
-          <Link to="/">기본 경로</Link>||
-          <Link to="/nav">Navbar</Link>||
-          <Link to="/user">Signup</Link>||
-          <Link to="/login">SignIn</Link>||
-          <Link to="/community"> community </Link> */}
-        </BrowserRouter>
+            </Routes>
+            {/* <p>아래 링크는 지울 수 있습니다. - 개발용 -</p>
+            <Link to="/home">Homepage(실험중인곳)</Link>||
+            <Link to="/">기본 경로</Link>||
+            <Link to="/nav">Navbar</Link>||
+            <Link to="/user">Signup</Link>||
+            <Link to="/login">SignIn</Link>||
+            <Link to="/community"> community </Link> */}
+          </BrowserRouter>
+      </Scroll>
       </ThemeProvider>
-    </Fragment>
+    </>
   );
 }
 
 export default App;
 
+
 const StyledAppRouter = styled(AppRouter)`
   /* background-color: blue; */
   /* color: blue; */
-  height: 100%;
+  min-height: 100%;
   width: 100%;
 `;
 
+const Scroll = styled.div`
+  
+`
 const Body = styled.div`
   padding-top: 2.5%;
   display: flex;
   flex-direction: row;
 
   background-color: #10141d;
-  /* height: 90rem; */
   height: 100%;
-  min-height: 90vh;
+  /* height: 90rem; */
+  /* min-height: 80vh; */
+
+
 
   .BodyRouter {
     // 컴포 이하
@@ -128,7 +135,7 @@ const Body = styled.div`
     text-align: center;
     padding-left:0.5%;
     margin-left: 1rem;
-    height: 67%;
+    height: 60%;
     /* background-color: #202c44; */
     border-radius: 10px;
   }
