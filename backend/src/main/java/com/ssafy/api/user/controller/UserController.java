@@ -496,7 +496,7 @@ public class UserController {
 		String targetUserId = userid;		//포트폴리오를 조회 대상 ID
 
 		//ArrayIndexOutOfBoundsException 원인 될 수 있음
-		Object[] returnVO = new Object[4];
+		Object[] returnVO = new Object[5];
 
 		//로그인 되어있는지 검사
 		try {
@@ -524,15 +524,16 @@ public class UserController {
 			List<PortfolioMusic> portfolioMusicList = portfolioMusicRepositorySupport.getPortfolioMusicListByUserIdx(targetUser);
 			targetUser.setPassword("");
 
-//			Object[] returnVO = {targetUser, portfolioAbstract, portfolioMusicList};
-
 			//2-1. 유저 기본 정보
 			returnVO[0] = targetUser;
 
 			//2-2. 유저 포트폴리오
-			returnVO[1] = portfolioAbstractRepository.findByUserIdx(targetUser);			//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
+			returnVO[1] = portfolioAbstract;
 
-			//2-3. 유저 포지션
+			//2-3. 유저 포트폴리오 뮤직
+			returnVO[2] = portfolioMusicList;
+
+			//2-4. 유저 포지션
 			ArrayList<Long> userPositionList = new ArrayList<>();
 			try {
 				List<UserPosition> positionList = userPositionRepository.findPositionIdxByUserIdx(targetUser);
@@ -543,9 +544,9 @@ public class UserController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			returnVO[2] = userPositionList;
+			returnVO[3] = userPositionList;
 
-			//2-4. 유저 장르
+			//2-5. 유저 장르
 			ArrayList<Long> userGenreList = new ArrayList<>();
 			try {
 				List<UserGenre> genreList = userGenreRepository.findGenreIdxByUserIdx(targetUser);
@@ -557,7 +558,7 @@ public class UserController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			returnVO[3] = userGenreList;
+			returnVO[4] = userGenreList;
 
 			return ResponseEntity.status(200).body(returnVO);
 		//3. 조회할 수 없는 사용자 (searchAllow false)
