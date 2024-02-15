@@ -14,15 +14,14 @@ import { fetchUser } from "../API/UserAPI";
 import { getImg } from "../API/FileAPI";
 import defaultprofile from '../assets/images/default-profile.png'
 
-
 const SideContainer = styled.div`
   color: white;
   padding-top: ${props => props.$paddingtop || '0'};
-  margin-left:10px;
+  margin-left:30px;
   /* text-align: center; */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   width: 12vw;
   .items {
     margin-top: 30px;
@@ -136,7 +135,7 @@ function Sidebar({ className, paddingtop }) {
   // console.log(followings)
 
   return (
-    <div className={className}>
+    // <DIV>
       <SideContainer className="contents" $paddingtop={paddingtop}>
         {userValues ? (
           <>
@@ -173,7 +172,9 @@ function Sidebar({ className, paddingtop }) {
                 <ListItemPrefix>
                   <MdOutlineLocalFireDepartment />
                 </ListItemPrefix>
+                <CustomLink to='/matching'>
                 <span className="wd">Matching</span>
+                </CustomLink>
               </ListItem>
               <ListItem className="items">
                 <ListItemPrefix>
@@ -186,7 +187,7 @@ function Sidebar({ className, paddingtop }) {
           </>
         ) : <p>유저정보가 없습니다.</p>}
       </SideContainer>
-    </div>
+    //  </DIV>
   );
 }
 

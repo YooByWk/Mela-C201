@@ -18,7 +18,6 @@ public class TeamspaceFileRepositorySupport {
 
     QTeamspaceFile qTeamspaceFile = teamspaceFile;
 
-    //FIXME: 테스트 필요!
     public List<TeamspaceFile> getFileListByTeamspaceIdx(Teamspace teamspace) {
         List<TeamspaceFile> teamspaceFileList = jpaQueryFactory.select(qTeamspaceFile).from(teamspaceFile).where(teamspaceFile.teamspaceIdx.eq(teamspace)).fetch();
 

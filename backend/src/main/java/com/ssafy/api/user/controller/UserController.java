@@ -16,10 +16,7 @@ import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.*;
-import com.ssafy.db.repository.PortfolioAbstractRepository;
-import com.ssafy.db.repository.PortfolioMusicRepositorySupport;
-import com.ssafy.db.repository.UserGenreRepository;
-import com.ssafy.db.repository.UserPositionRepository;
+import com.ssafy.db.repository.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +60,12 @@ public class UserController {
 	@Autowired
 	UserGenreRepository userGenreRepository;
 
+	@Autowired
+	PositionRepository positionRepository;
+
+	@Autowired
+	GenreRepository genreRepository;
+
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드 ...를</strong>를 통해 회원가입 한다.")
 	@ApiResponses({
@@ -80,7 +83,6 @@ public class UserController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
-	//TODO: 선호 장르, 포지션 추가
 	@GetMapping("/myinfo")
 	@ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
 	@ApiResponses({
@@ -89,7 +91,6 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-//	public ResponseEntity<UserRes> getUserInfo(@ApiIgnore Authentication authentication) {
 	public ResponseEntity<?> getUserInfo(@ApiIgnore Authentication authentication) {
 		/**
 		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
@@ -104,31 +105,41 @@ public class UserController {
 			userDetails = (SsafyUserDetails) authentication.getDetails();
 			User user = userDetails.getUser();
 
-			//FIXME: ArrayIndexOutOfBoundsException 원인 될 수 있음!
+			//ArrayIndexOutOfBoundsException 원인 될 수 있음
 			Object[] returnVO = new Object[4];
 
 			//1. 유저 기본 정보
 			returnVO[0] = user;														//user 객체 반환 (user_idx, birth, email_domain, email_id, gender, jwt_token, name, nickname, password, search_allow, user_type)
 
 			//2. 유저 포트폴리오
-//			returnVO[1] = portfolioAbstractRepository.findByUserIdx(user).get();	//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
 			returnVO[1] = portfolioAbstractRepository.findByUserIdx(user);			//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
 
 			//3. 유저 포지션
+			ArrayList<Long> userPositionList = new ArrayList<>();
 			try {
-				returnVO[2] = userPositionRepository.findPositionIdxByUserIdx(user);
+				List<UserPosition> positionList = userPositionRepository.findPositionIdxByUserIdx(user);
+
+				for(UserPosition userPosition : positionList) {
+					userPositionList.add(userPosition.getPositionIdx().getPositionIdx());
+				}
 			} catch (Exception e) {
-				//TODO: 주석하기
 				e.printStackTrace();
 			}
+			returnVO[2] = userPositionList;
 
 			//4. 유저 장르
+			ArrayList<Long> userGenreList = new ArrayList<>();
 			try {
-				returnVO[3] = userGenreRepository.findGenreIdxByUserIdx(user);
+				List<UserGenre> genreList = userGenreRepository.findGenreIdxByUserIdx(user);
+
+				for(UserGenre userGenre : genreList) {
+					long userPosition = genreRepository.findById(userGenre.getGenreIdx().getGenreIdx()).get().getGenreIdx();
+					userGenreList.add(userPosition);
+				}
 			} catch (Exception e) {
-				//TODO: 주석하기
 				e.printStackTrace();
 			}
+			returnVO[3] = userGenreList;
 
 			return ResponseEntity.status(200).body(returnVO);
 		} catch(NullPointerException e) {
@@ -142,7 +153,6 @@ public class UserController {
 		return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Server failed!"));
 	}
 
-	//TODO: 선호 장르, 포지션 추가
 	@PutMapping(value = "/myinfo", consumes = MULTIPART_FORM_DATA_VALUE)
 	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인한 회원 본인의 정보를 수정한다.")
 	@ApiResponses({
@@ -485,6 +495,9 @@ public class UserController {
 		User targetUser = null;
 		String targetUserId = userid;		//포트폴리오를 조회 대상 ID
 
+		//ArrayIndexOutOfBoundsException 원인 될 수 있음
+		Object[] returnVO = new Object[4];
+
 		//로그인 되어있는지 검사
 		try {
 			userDetails = (SsafyUserDetails) authentication.getDetails();
@@ -511,7 +524,40 @@ public class UserController {
 			List<PortfolioMusic> portfolioMusicList = portfolioMusicRepositorySupport.getPortfolioMusicListByUserIdx(targetUser);
 			targetUser.setPassword("");
 
-			Object[] returnVO = {targetUser, portfolioAbstract, portfolioMusicList};
+//			Object[] returnVO = {targetUser, portfolioAbstract, portfolioMusicList};
+
+			//2-1. 유저 기본 정보
+			returnVO[0] = targetUser;
+
+			//2-2. 유저 포트폴리오
+			returnVO[1] = portfolioAbstractRepository.findByUserIdx(targetUser);			//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
+
+			//2-3. 유저 포지션
+			ArrayList<Long> userPositionList = new ArrayList<>();
+			try {
+				List<UserPosition> positionList = userPositionRepository.findPositionIdxByUserIdx(targetUser);
+
+				for(UserPosition userPosition : positionList) {
+					userPositionList.add(userPosition.getPositionIdx().getPositionIdx());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			returnVO[2] = userPositionList;
+
+			//2-4. 유저 장르
+			ArrayList<Long> userGenreList = new ArrayList<>();
+			try {
+				List<UserGenre> genreList = userGenreRepository.findGenreIdxByUserIdx(targetUser);
+
+				for(UserGenre userGenre : genreList) {
+					long userPosition = genreRepository.findById(userGenre.getGenreIdx().getGenreIdx()).get().getGenreIdx();
+					userGenreList.add(userPosition);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			returnVO[3] = userGenreList;
 
 			return ResponseEntity.status(200).body(returnVO);
 		//3. 조회할 수 없는 사용자 (searchAllow false)

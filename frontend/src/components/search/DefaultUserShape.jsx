@@ -34,26 +34,21 @@ function DefaultUserShape(props) {
             <Content>
                 {props.nickname}
             </Content>
-
         </Container>
     )
-}
-
-DefaultUserShape.defaultProps={
-  onClick: () => {}
 }
 
 export default DefaultUserShape
 
 const Container = styled.div`
     width: 180px;
-    height: 40%;
+    height: 200px;
     padding-bottom: 5%;
 `
 
 const Profile = styled.img`
     width: 100%;
-    height: 70%;
+    height: 90%;
     border-radius: 50%;
 `
 

@@ -63,7 +63,7 @@ function PortfolioAll() {
     
     },[])
 
-    // console.log(values)
+    // console.log(musicValues)
     // console.log(typeof(values))
     return (
         <>
@@ -97,7 +97,6 @@ function PortfolioAll() {
                             key={value.portfolioMusicIdx}
                             albumImage={value.albumArtFileIdx}
                             content={value.lyricFileIdx}
-                            //   onClick={(event) => Navi(`/teamspace/${value.teamspaceIdx}`)}
                         />
                         ))}
                 </Container>

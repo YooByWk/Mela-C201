@@ -10,7 +10,7 @@ const Container = styled.div`
   clip-path: polygon(47% 0, 61% 15%, 100% 15%, 100% 75%, 0 75%, 0 0);
   
   width: ${props => props.width};
-  height: 80%;
+  height: 170px;
   max-width: ${props => props.maxwidth};
   display: flex;
   /* flex-wrap: wrap; */
@@ -86,7 +86,7 @@ const FolderNoImage = (props) => {
         <>
         <Container
             width={props.width}
-            maxWidth={props.maxwidth}
+            maxwidth={props.maxwidth}
             onClick={props.onClick}
         >
             <div className='titleday'>
@@ -111,7 +111,6 @@ FolderNoImage.defaultProps={
     day: null,
     width: '1rem',
     maxwidth: '350px',
-    height: '1rem',
     onClick: () => {}
 }
 

@@ -1,31 +1,40 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import DefaultButton from "../DefaultButton"
 import { FaSearch } from "react-icons/fa";
+import { TeamspaceMemberInvite } from "../../API/TeamspaceAPI";
+import { fetchUser, followingList } from "../../API/UserAPI";
+import { useParams } from "react-router-dom";
+import { userSearch } from "../../API/UserAPI";
+
 
 const ModalBackdrop = styled.div`
-  right: 10rem;
-  width: 60%;
-  height: 50%;
   position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;  // Adjust the width as needed
+  height: 70%;  // Adjust the height as needed
   display: flex;
-  flex-flow: row wrep;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.9);
-  border-radius: 20px;
+  background: #151C2C;
   z-index: 1000;
-`
+`;
 
 const ModalView = styled.div.attrs(props => ({
   role: 'dialog'
 }))`
   justify-content: center;
+  width: 80%;
+  height: 80%;
+  margin: 2% 2%;
   text-align: center;
-  padding: 30px 50px;
-  background-color: #151C2C;
+  margin-block-end: 30px 50px;
+  background-color: #2a3446;
   border-radius: 30px;
   color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
 const SearchBar = styled.form`
@@ -33,10 +42,12 @@ const SearchBar = styled.form`
   position: relative;
   width: 30%;
   text-align: center;
+  margin-left:1%;
+  margin-top: 20px;
   // search 문구 중앙 정렬
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   // 인풋
   & > input {
     background-color: #202C44;
@@ -56,22 +67,56 @@ const SearchBar = styled.form`
     background-color: #202C44;
     color: grey;
     position: absolute;
-    top: 10%;
+    top: 50%;
     left: 12%;
+    transform: translateY(-50%);
     height: 85%;
   };
+`;
+
+const InviteContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: center;
 `
-
-const submitHandler = (event) => {
-  event.preventDefault();
-  window.alert('제출버튼확인')
-}
-
 function TeamspaceInviteModal () {
   const [open, setOpen] = useState(false)
+  const [inviteList, setInviteList] = useState([])
+  const [userValues, setUserValues] = useState({})
+  const [members, setMembers] = useState([])
+  const [searchInput, setSearchInput] = useState('')
+
+  const teamspaceIdx = useParams()
+
+  useEffect(()=> {
+    const getUserInfo = async() => {
+        try {
+            const res = await fetchUser()
+            setUserValues(res[0])
+        } catch (err) {
+            console.error(err)
+        }
+    }; getUserInfo()
+
+}, [])
 
   const openModalHandler = () => {
     setOpen(!open)
+    const getList = async() => {
+      try {
+        // console.log(userValues)
+        const res = await followingList(userValues.emailId)
+        // console.log(res)
+        setInviteList(res)
+        // console.log(res)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getList()
+    
   }
 
   const closeModalHandler = (event) => {
@@ -86,28 +131,103 @@ function TeamspaceInviteModal () {
     
   }
 
+  const handleChange = async(e) => {
+    setSearchInput(e.target.value)
+  }
 
+  const handleMemberChange = (event) => {
+    const { checked, value } = event.target;
+      setMembers([...members, value])
+    // console.log(members);
+  };
+
+  const submitHandler = async(event) => {
+    event.preventDefault();
+    if (searchInput) {
+      const response = await userSearch(searchInput);
+      const follow = await followingList(userValues.emailId)
+      const result = []
+      for (let index = 0; index < response.length; index++) {
+        if (response[index].userIdx in follow) {
+          result.push(response[index])
+        }
+      }
+      console.log(response)
+      if (result.length > 1) {
+        setInviteList(result);
+      } else {
+        setInviteList('')
+      }
+    } else {
+      const res = await followingList(userValues.emailId)
+      setInviteList(res)
+    }
+  }
+
+
+  const handleSubmit = async(e) => {
+    e.preventDefault()
+
+    try {
+      for (let index = 0; index < members.length; index++) {
+        // console.log(members)
+        // console.log(teamspaceIdx)
+        await TeamspaceMemberInvite({teamspaceId: teamspaceIdx.teamspaceIdx, userId: members[index]})
+      }
+      alert('멤버 초대가 완료되었습니다.')
+      setOpen(false)
+  } catch (err) {
+      console.error(err)
+  }
+  }
+
+  
   return (
     <>
-      <DefaultButton
-        text={'+ Invite'}
-        backgroundcolor={'#254ef8'}
-        fontcolor={'white'}
-        width={'5rem'}
-        height={'2rem'}
-        onClick={openModalHandler}
-            />
-      {open ?
+    <DefaultButton
+    text={'+ Invite'}
+    backgroundcolor={'#254ef8'}
+    fontcolor={'white'}
+    width={'5rem'}
+    height={'2rem'}
+    onClick={openModalHandler}
+    />
+    {open ?
       <ModalBackdrop onClick={closeModalHandler}>
-          <SearchBar onSubmit={modalContentClickHandler}>
-          <FaSearch className='Icon'/>
-          <input type="search" spellCheck='false' placeholder='Search'  />
-          </SearchBar>
+      <InviteContainer>
+      <SearchBar onSubmit={submitHandler}>
+      <FaSearch className='Icon'/>
+      <input id="search" type="text" spellCheck='false' placeholder='Search' onChange={handleChange} />
+      </SearchBar>
         <ModalView>
-          <div>
-            초대하기
-          </div>
-        </ModalView>
+        {inviteList.length > 1 ? (
+          <>
+          {Object.entries(inviteList).map(([key, value]) => (
+            <div key={value.emailId}>
+            <input
+            type="checkbox"
+            value={value.emailId}
+            onChange={handleMemberChange}
+          />
+          <label htmlFor={value.emailId}>{value.nickname}</label>
+            </div>
+            // </Link>
+            ))}
+            </>
+            ) : (
+              <>
+              검색 결과가 없습니다.
+              </>
+            )}
+            </ModalView>
+            <DefaultButton 
+            text={'Save'}
+            backgroundcolor={'#254ef8'}
+            fontcolor={'white'}
+            width={'7rem'}
+            onClick={handleSubmit}
+        />
+        </InviteContainer>
       </ModalBackdrop>
       : null}
     </>

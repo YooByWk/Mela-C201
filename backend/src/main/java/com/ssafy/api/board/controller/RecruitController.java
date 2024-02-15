@@ -68,7 +68,6 @@ public class RecruitController {
         return ResponseEntity.status(200).body(BoardRecruitListRes.of(res, recruitService.getBoardTotalCount()));
     }
 
-    //FIXME: 여기서부터 시작
     @GetMapping("/recommend")
     @ApiOperation(value = "나를 찾는 (추천) 구인글 리스트 조회", notes = "<string>페이지번호(page), 페이지당 글 수(size), 검색어(word), 정렬조건(sortKey) </string>에 따라 게시글을 조회한다.")
     @ApiResponses({

@@ -11,31 +11,30 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class UserGenre {
+public class UserShortsQueue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
-    Long userGenreIdx;
+    Long userShortsQueueIdx;
 
     @ManyToOne
-    @JoinColumn(name="user_idx", referencedColumnName="userIdx")
+    @JoinColumn(name = "user_idx", referencedColumnName = "userIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     User userIdx;
 
     @ManyToOne
-//    @JoinColumn(name="genre_idx", referencedColumnName="genreIdx")
-    @JoinColumn(name="genre_idx", referencedColumnName="genre_idx")
+    @JoinColumn(name = "shorts_idx", referencedColumnName = "shortsIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    Genre genreIdx;
+    Shorts shortsIdx;
 
     @Override
     public String toString() {
-        return "UserGenre{" +
-                "userGenreIdx=" + userGenreIdx +
+        return "UserShortsQueue{" +
+                "userShortsQueueIdx=" + userShortsQueueIdx +
                 ", userIdx=" + userIdx +
-                ", genreIdx=" + genreIdx +
+                ", shortsIdx=" + shortsIdx +
                 '}';
     }
 }
