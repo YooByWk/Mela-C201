@@ -7,6 +7,8 @@ import moment from "moment";
 import useStore from "../status/store";
 import { useParams } from "react-router-dom";
 import { Chatting } from "../components/Chatting";
+import { getImg } from "../API/FileAPI";
+import defaultProfile from "../assets/images/default-profile.png"
 
 function Message() {
   const { roomid } = useParams();
@@ -21,7 +23,7 @@ function Message() {
   // const [myProfile, setMyProfile] = useState('')
   // const [otherValue, setOtherValue] = useState('')
   // const [otherProfile, setOtherProfile] = useState('')
-  // const [imgUrl, setImgUrl] = useState('')
+  const [imgUrl, setImgUrl] = useState([])
   const user = useStore((state) => state.user);
 
   useEffect(() => {
@@ -54,16 +56,25 @@ function Message() {
     }
   };
 
-  // useEffect(() => {
-  //   const imginfo = async () => {
-  //     try {
-  //       if (otherProfile.portfolio_picture_file_idx) {
-  //         const res = await getImg(otherProfile.portfolio_picture_file_idx)
-  //       }
-  //     }
-  //   }
-
-  // })
+  useEffect(() => {
+    const imgInfo = async () => {
+      const result = []
+      try {
+        for (let index = 0; index < chatRooms.length; index++) {
+          if (chatRooms[index].portfolio_picture_file_idx.fileIdx) {
+            const response = await getImg(chatRooms[index].portfolio_picture_file_idx.fileIdx)
+            result.push(response.message)
+          } else {
+            result.push(defaultProfile)
+          }
+        }
+        setImgUrl(result)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    imgInfo()
+  },[userIdx])
 
   // if (res[1].portfolio_picture_file_idx) {
   //   const imginfo = await getImg(res[1].portfolio_picture_file_idx.fileIdx)
@@ -72,11 +83,20 @@ function Message() {
   //   setImgUrl(defaultprofile)
   // }
 
+  // const imgURL = async (fileIdx) => {
+  //   try {
+  //     const response = await getImg(fileIdx)
+  //     setImgUrl(response.message)
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }
+
   const enterRoom = (roomIdx, nickname) => {
     if (user) {
       setUserIdx(localStorage.getItem("userIdx"));
       setRoomIdx(roomIdx);
-      console.log("학인 ", nickname);
+      // console.log("학인 ", nickname);
       setOtherNickname(nickname);
     }
   };
@@ -86,6 +106,7 @@ function Message() {
     console.log("roomidx : ", roomIdx);
   }, []);
 
+  // console.log(room.user)
   return (
     <Container>
       {roomIdx ? (
@@ -114,6 +135,9 @@ function Message() {
                   {room.lastSendMessage ? (
                     <>
                       <div>
+                        {imgUrl.map((img) => (
+                          <Img key={img} src={img} alt="프로필 이미지"/>
+                        ))}
                         <div className="user">{room.user.nickname}</div>
                         <div className="message">
                           <p>{room.lastSendMessage}</p>
@@ -207,3 +231,9 @@ const Chat = styled.div`
     margin-top: 0.5rem;
   }
 `;
+
+const Img = styled.img`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+`
