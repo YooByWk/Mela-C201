@@ -68,25 +68,11 @@ function PortfolioAll() {
     return (
         <>
             <Hedaer>
-                <h1>{userValues.nickname} 님의 Portfolio</h1>
+                <h1>{userValues.nickname}님의 Portfolio</h1>
                 <div className="btn-wrapper">
                     <PortfolioAdd />
                 </div>
             </Hedaer>
-            
-            {/* <PinList>
-                <div className="title">
-                    <TiPin />
-                    <h3>Pin</h3>
-                </div>
-                <DefaultButton 
-                    text={'Edit'}
-                    backgroundcolor={'#6C7383'}
-                    fontcolor={'white'}
-                    width={'100px'}
-                />
-            </PinList>
-            <hr /> */}
             <AllList>
                 <div className="title">
                     <RiHeadphoneFill />
@@ -97,6 +83,7 @@ function PortfolioAll() {
                             key={value.portfolioMusicIdx}
                             albumImage={value.albumArtFileIdx}
                             content={value.lyricFileIdx}
+                            file={value.musicFileIdx}
                         />
                         ))}
                 </Container>
