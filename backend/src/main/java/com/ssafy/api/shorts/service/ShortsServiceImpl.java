@@ -9,17 +9,21 @@ import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.ssafy.common.util.ExtensionUtil.isValidVideoExtension;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service("shortsService")
-public class ShortsServiceImpl implements  ShortsService {
+public class ShortsServiceImpl implements ShortsService {
     @Autowired
     FileService fileService;
 
@@ -41,13 +45,14 @@ public class ShortsServiceImpl implements  ShortsService {
     @Autowired
     ChatRoomService chatRoomService;
 
+    UserShortsQueueRepository userShortsQueueRepository;
 
     //지원하는 동영상 확장자 ArrayList
     String[] supportedVideoExtension = {"MKV", "MP4", "AVI"};
 
     boolean isValidVideoExtension(String extension) {
-        for(String s : supportedVideoExtension) {
-            if(extension.equals(s.toUpperCase()) || extension.equals(s.toLowerCase())) {
+        for (String s : supportedVideoExtension) {
+            if (extension.equals(s.toUpperCase()) || extension.equals(s.toLowerCase())) {
                 return true;
             }
         }
@@ -62,7 +67,7 @@ public class ShortsServiceImpl implements  ShortsService {
 
         //1.1 싫어요 표시한 쇼츠의 idx값을 가져오기
         List<Shorts> dislikedShortsIdx = new ArrayList<>();
-        for(ShortsDislike shortsDislike : shortsDislikeList){
+        for (ShortsDislike shortsDislike : shortsDislikeList) {
             dislikedShortsIdx.add(shortsDislike.getShortsIdx());
         }
 
@@ -78,19 +83,19 @@ public class ShortsServiceImpl implements  ShortsService {
         List<com.ssafy.api.board.response.Shorts> selectedShortsListResponse = new ArrayList<>();
 
         boolean isShortsAdd;
-        for(Shorts shorts : shortsList) {
+        for (Shorts shorts : shortsList) {
             //쇼츠업로더의 userIdx
             User shortsUploaderUserIdx = shorts.getUserIdx();
             List<UserGenre> uploaderPreferedGenre = userGenreRepository.findGenreIdxByUserIdx(shortsUploaderUserIdx);
             isShortsAdd = false;
             //사용자가 싫어요 표시한 쇼츠라면 반환리스트에서 제외
-            if(dislikedShortsIdx.contains(shorts)) {
+            if (dislikedShortsIdx.contains(shorts)) {
                 continue;
             }
 
             //1. 로그인 한 사용자의 선호 없다면
             //2. 업로드한 사용자의 선호 장르가 없다면 일단 반환리스트에 추가
-            if(preferedGenre == null || preferedGenre.isEmpty() || uploaderPreferedGenre.size() == 0) {
+            if (preferedGenre == null || preferedGenre.isEmpty() || uploaderPreferedGenre.size() == 0) {
                 com.ssafy.api.board.response.Shorts shortsResponse = new com.ssafy.api.board.response.Shorts();
                 //setter 호출
                 shortsResponse.setShortsIdx(shorts.getShortsIdx());
@@ -117,9 +122,9 @@ public class ShortsServiceImpl implements  ShortsService {
             }
 
             //3. 업로드한 사용자의 선호장르가 있다면, 로그인한 사용자의 선호장르와 비교하여 반환리스트에 추가
-            for(int i=0; i<preferedGenre.size(); i++){
-                for(int j=0; j<uploaderPreferedGenre.size(); j++){
-                    if(preferedGenre.get(i).getGenreIdx() == uploaderPreferedGenre.get(j).getGenreIdx()){
+            for (int i = 0; i < preferedGenre.size(); i++) {
+                for (int j = 0; j < uploaderPreferedGenre.size(); j++) {
+                    if (preferedGenre.get(i).getGenreIdx() == uploaderPreferedGenre.get(j).getGenreIdx()) {
                         com.ssafy.api.board.response.Shorts shortsResponse = new com.ssafy.api.board.response.Shorts();
                         //setter 호출
                         shortsResponse.setShortsIdx(shorts.getShortsIdx());
@@ -146,7 +151,7 @@ public class ShortsServiceImpl implements  ShortsService {
                         break;
                     }
                 }
-                if(isShortsAdd) break;
+                if (isShortsAdd) break;
             }
         }
 
@@ -158,7 +163,7 @@ public class ShortsServiceImpl implements  ShortsService {
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());                            //클라이언트가 업로드한 파일의 확장자 추출
 
         //1. 지원하는 비디오 확장자인지 검사
-        if(!isValidVideoExtension(extension)) {
+        if (!isValidVideoExtension(extension)) {
             return 415; //Not Supported Type
         }
 
@@ -189,11 +194,11 @@ public class ShortsServiceImpl implements  ShortsService {
     public void setShortsLike(User user, Long shortsId) {
         Shorts shorts = shortsRepository.getOne(shortsId);
 
-        Optional<ShortsLike> isShortsLiked = shortsLikeRepository.findByShortsIdxAndUserIdx(shorts,user);
-        if(isShortsLiked.isPresent()){
+        Optional<ShortsLike> isShortsLiked = shortsLikeRepository.findByShortsIdxAndUserIdx(shorts, user);
+        if (isShortsLiked.isPresent()) {
             shortsLikeRepository.delete(isShortsLiked.get());
             System.out.println("좋아요 취소됐습니다");
-            return ;
+            return;
         }
 
         ShortsLike shortsLike = new ShortsLike();
@@ -207,13 +212,13 @@ public class ShortsServiceImpl implements  ShortsService {
 
         Notification notification = new Notification();
         notification.setUserIdx(getAlarmUser);    //알람을 받을 사용자; User 객체 타입
-        notification.setAlarmContent(user.getNickname()+"님이 당신의 쇼츠 "+ shorts.getTitle() +" 에 좋아요를 눌렀습니다.");
+        notification.setAlarmContent(user.getNickname() + "님이 당신의 쇼츠 " + shorts.getTitle() + " 에 좋아요를 눌렀습니다.");
         notification.setChecked(false);
         notification.setAlarmDate(LocalDateTime.now());
         notificationRepository.save(notification);
 
 
-        if(shortsLikeRepository.findByUserIdxAndUploaderUserIdx(getAlarmUser,user).get().size() == 1){
+        if (shortsLikeRepository.findByUserIdxAndUploaderUserIdx(getAlarmUser, user).get().size() == 1) {
             Notification notification1 = new Notification();
             Notification notification2 = new Notification();
             notification1.setUserIdx(getAlarmUser);    //알람을 받을 사용자; User 객체 타입
@@ -253,11 +258,11 @@ public class ShortsServiceImpl implements  ShortsService {
     public void setShortsDislike(User user, Long shortsId) {
         Shorts shorts = shortsRepository.getOne(shortsId);
 
-        Optional<ShortsDislike> isShortsDisliked = shortsDislikeRepository.findByShortsIdxAndUserIdx(shorts,user);
-        if(isShortsDisliked.isPresent()){
+        Optional<ShortsDislike> isShortsDisliked = shortsDislikeRepository.findByShortsIdxAndUserIdx(shorts, user);
+        if (isShortsDisliked.isPresent()) {
             shortsDislikeRepository.delete(isShortsDisliked.get());
             System.out.println("싫어요 취소됐습니다");
-            return ;
+            return;
         }
 
         ShortsDislike shortsDislike = new ShortsDislike();
@@ -270,7 +275,68 @@ public class ShortsServiceImpl implements  ShortsService {
     public long getShortsIdxByFileIdx(long shortsIdx) {
         return shortsRepository.findByShortsIdx(shortsIdx).get().getShortsPathFileIdx().getFileIdx();
     }
+
+    @Override
+    public com.ssafy.api.board.response.Shorts getSingleShortsByUserIdx(User user) {
+        //1-1. 로그인한 사용자의 쇼츠 동영상 리스트 로드
+        List<UserShortsQueue> userShortsQueueList = userShortsQueueRepository.findByUserIdx(user);
+
+        //1-2. 로그인한 사용자의 쇼츠 동영상 리스트가 UserShortsQueue 테이블에 없다면 새로 로드 후 테이블에 추가
+        if (userShortsQueueList == null || userShortsQueueList.isEmpty()) {
+            List<Shorts> shortsList = getShortsListByUserIdx(user);
+            Collections.shuffle(shortsList);                        //순서 무작위로 변경
+            saveRecordIntoUserShortsQueueTable(shortsList, user);
+        }
+
+        List<UserShortsQueue> userShortsQueuePageList = userShortsQueueRepository.getSingleRecord(user, PageRequest.of(0, 1));
+
+        UserShortsQueue userShortsQueue = userShortsQueuePageList.get(0);
+        Shorts shorts = userShortsQueue.getShortsIdx();
+        com.ssafy.api.board.response.Shorts shortsResponse = new com.ssafy.api.board.response.Shorts();
+        String videoUrl = null;
+
+        //setter 호출
+        shortsResponse.setShortsIdx(shorts.getShortsIdx());
+        shortsResponse.setUserIdx(shorts.getUserIdx());
+        shortsResponse.setTitle(shorts.getTitle());
+        shortsResponse.setDescription(shorts.getDescription());
+        shortsResponse.setShortsPathFileIdx(shorts.getShortsPathFileIdx());
+
+        //fileservice를 이용해 Amazon S3 영상 링크 가져오기
+        try {
+            videoUrl = fileService.getVideoUrlBySaveFileIdx(shorts.getShortsPathFileIdx().getFileIdx());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //3. shorts 테이블에서 전송한 레코드 삭제
+        userShortsQueueRepository.delete(userShortsQueue);
+
+        shortsResponse.setFileURL(videoUrl);
+
+        return shortsResponse;
+    }
+
+    @Override
+    public List<Shorts> getShortsListByUserIdx(User user) {
+        List<Shorts> shortsList = shortsRepository.findByUserIdx(user);
+
+        return shortsList;
+    }
+
     public Long getShortsSize() {
         return shortsRepository.countBy();
+    }
+
+    @Override
+    public void saveRecordIntoUserShortsQueueTable(List<Shorts> shorts, User user) {
+        for (Shorts data : shorts) {
+            UserShortsQueue userShortsQueue = new UserShortsQueue();
+            userShortsQueue.setUserIdx(user);
+            userShortsQueue.setShortsIdx(data);
+
+            userShortsQueueRepository.save(userShortsQueue);
+        }
+
     }
 }

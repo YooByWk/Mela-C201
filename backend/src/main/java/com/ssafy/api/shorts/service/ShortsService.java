@@ -17,6 +17,8 @@ public interface ShortsService {
     void setShortsLike(User user, Long shortsId);
     void setShortsDislike(User user, Long shortsId);
     long getShortsIdxByFileIdx(long shortsIdx);
-
+    List<Shorts> getShortsListByUserIdx(User user);
     Long getShortsSize();
+    com.ssafy.api.board.response.Shorts getSingleShortsByUserIdx(User user);
+    void saveRecordIntoUserShortsQueueTable(List<Shorts> shorts, User user);
 }

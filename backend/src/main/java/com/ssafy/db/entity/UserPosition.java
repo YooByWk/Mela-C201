@@ -24,7 +24,8 @@ public class UserPosition {
     User userIdx;
 
     @ManyToOne
-    @JoinColumn(name="position_idx", referencedColumnName="positionIdx")
+//    @JoinColumn(name="position_idx", referencedColumnName="positionIdx")
+    @JoinColumn(name="position_idx", referencedColumnName="position_idx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     Position positionIdx;
