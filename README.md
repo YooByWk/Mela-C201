@@ -80,9 +80,8 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 |BE|이현호|API 설계|
 
 ## 프로젝트 산출물
-- ### [화면 구성도](https://www.figma.com/file/IX4LHI9096wtPgbeMZF4tr/C201-team-library?type=design&node-id=0%3A1&mode=design&t=ZOYZB5RR2vzpZ1Hh-1)
-- ### [요구사항 명세서]()
+- ### [화면 정의서](https://www.figma.com/file/IX4LHI9096wtPgbeMZF4tr/C201-team-library?type=design&node-id=0%3A1&mode=design&t=ZOYZB5RR2vzpZ1Hh-1)
+- ### [요구사항 명세서](https://valuable-flyingfish-5f5.notion.site/4e8269aba1c0414bb997d0a2554833af?pvs=74)
 - ### ERD
-- ### 아키텍처 구성도
-<img src='https://lab.ssafy.com/-/ide/project/s10-webmobile1-sub2/S10P12C201/tree/master/Docs/아키텍처구성도.PNG' width='50' height='50'/>
-- ### [API 설계]()
+- ### [아키텍처 구성도]()
+- ### [API 설계](https://valuable-flyingfish-5f5.notion.site/API-aff8baaa08d44954a433ef4645ba6dad)
