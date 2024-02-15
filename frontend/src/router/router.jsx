@@ -32,7 +32,7 @@ function AppRouter({ className }) {
         <Routes>
 
           <Route
-            path='/portfolio/:emailId' element={<Portfolio/>}
+            path='/portfolio/:emailId' element={<Portfolio/>} 
           />
 
           <Route
