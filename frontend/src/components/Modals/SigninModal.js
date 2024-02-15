@@ -1,64 +1,70 @@
-import * as React from 'react'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
-import { styled, css } from '@mui/system'
-import { Modal as BaseModal } from '@mui/base/Modal'
-import { signin } from '../../API/AuthAPI'
-import useStore from '../../status/store'
-import { useNavigate, Link } from 'react-router-dom'
+import * as React from "react";
+import PropTypes from "prop-types";
+import clsx from "clsx";
+import { styled, css } from "@mui/system";
+import { Modal as BaseModal } from "@mui/base/Modal";
+import { signin } from "../../API/AuthAPI";
+import useStore from "../../status/store";
+import { useNavigate, Link } from "react-router-dom";
 
-function SigninModal({className, fontSize, padding}) {
-  const setIsLogined = useStore(state => state.setIsLogined)
-  const IsLogined = useStore(state => state.islogined)
-  const fetchUser = useStore(state => state.fetchUser)
-  const userInfo = useStore(state => state.user)
-  const movePage = useNavigate()
+function SigninModal({ className, fontSize, padding }) {
+  const setIsLogined = useStore((state) => state.setIsLogined);
+  const IsLogined = useStore((state) => state.islogined);
+  const fetchUser = useStore((state) => state.fetchUser);
+  const userInfo = useStore((state) => state.user);
+  const movePage = useNavigate();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [values, setValues] = React.useState({
-    id: "", 
-    password: "", 
-  })
+    id: "",
+    password: "",
+  });
 
   const handleChange = (e) => {
-    setValues({...values,
-    [e.target.id]: e.target.value,
-    })
-  }
+    setValues({ ...values, [e.target.id]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      const res = await signin(values)
-      console.log(res)
+      const res = await signin(values);
+      console.log(res);
 
       if (res && res.accessToken) {
-        localStorage.clear()
-        localStorage.setItem('accessToken', res.accessToken);
+        localStorage.clear();
+        localStorage.setItem("accessToken", res.accessToken);
         setIsLogined(true);
-        await fetchUser()
+        await fetchUser();
         // movePage('/')
         window.location.reload();
 
-        setOpen(false)
+        setOpen(false);
       }
-
     } catch (err) {
-      console.log(err)
+      console.log(err);
 
       if (err.response && err.response.status === 401) {
-        alert('이메일 인증을 먼저 완료해주세요.')
+        const emailId = values.id.split("@");
+        console.log(emailId[0])
+        alert("이메일 인증을 먼저 완료해주세요.");
+        movePage(`/signup/${emailId[0]}`);
       } else {
-        alert('로그인 실패')
+        alert("로그인 실패");
       }
     }
-  }
+  };
 
   return (
     <div>
-      <TriggerButton type="button" onClick={handleOpen} className={className} fontSize={fontSize} padding={padding}>
+      <TriggerButton
+        type="button"
+        onClick={handleOpen}
+        className={className}
+        fontSize={fontSize}
+        padding={padding}
+      >
         Sign In
       </TriggerButton>
       <Modal
@@ -72,47 +78,61 @@ function SigninModal({className, fontSize, padding}) {
           <h2 id="modal-title" className="modal-title">
             SIGN IN
           </h2>
-          <form onSubmit={handleSubmit}> 
-          <div id="modal-description" className="modal-description">
-            <div className='inputWrapper'>
-              <label className='label'>Email</label>
-              <input type='email' className='input' placeholder='ssafy@gmail.com' id='id' required onChange={handleChange} />
-            </div>
-            <div className='inputWrapper'>
-              <label className='label'>Password</label>
-              <input type='password' className='input' required placeholder='8-20자 영어, 숫자, 특수문자 조합' id='password' onChange={handleChange} />
-            </div>
-            <button type='submit' className='button'>
-              Log in
-            </button>
-            <Link to='/forgotPassword'>
-              <div id='find-password' className='find-password'>
-                Forgot password
+          <form onSubmit={handleSubmit}>
+            <div id="modal-description" className="modal-description">
+              <div className="inputWrapper">
+                <label className="label">Email</label>
+                <input
+                  type="email"
+                  className="input"
+                  placeholder="ssafy@gmail.com"
+                  id="id"
+                  required
+                  onChange={handleChange}
+                />
               </div>
-            </Link>
-          </div>
+              <div className="inputWrapper">
+                <label className="label">Password</label>
+                <input
+                  type="password"
+                  className="input"
+                  required
+                  placeholder="8-20자 영어, 숫자, 특수문자 조합"
+                  id="password"
+                  onChange={handleChange}
+                />
+              </div>
+              <button type="submit" className="button">
+                Log in
+              </button>
+              <Link to="/forgotPassword">
+                <div id="find-password" className="find-password">
+                  Forgot password
+                </div>
+              </Link>
+            </div>
           </form>
         </ModalContent>
       </Modal>
     </div>
-  )
+  );
 }
 
 const Backdrop = React.forwardRef((props, ref) => {
   const { open, className, ...other } = props;
   return (
     <div
-      className={clsx({ 'base-Backdrop-open': open }, className)}
+      className={clsx({ "base-Backdrop-open": open }, className)}
       ref={ref}
       {...other}
     />
-  )
-})
+  );
+});
 
 Backdrop.propTypes = {
   className: PropTypes.string.isRequired,
   open: PropTypes.bool,
-}
+};
 
 const Modal = styled(BaseModal)`
   position: fixed;
@@ -121,7 +141,7 @@ const Modal = styled(BaseModal)`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
@@ -129,11 +149,11 @@ const StyledBackdrop = styled(Backdrop)`
   inset: 0;
   background-color: rgb(0 0 0 / 0.5);
   -webkit-tap-highlight-color: transparent;
-`
+`;
 
-const ModalContent = styled('div')(
+const ModalContent = styled("div")(
   ({ theme }) => css`
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: "IBM Plex Sans", sans-serif;
     font-weight: 500;
     text-align: start;
     position: relative;
@@ -144,14 +164,14 @@ const ModalContent = styled('div')(
     border-radius: 8px;
     padding: 4rem;
     color: white;
-    background: linear-gradient(180deg, #0C0A15 0%, #171930 100%);
+    background: linear-gradient(180deg, #0c0a15 0%, #171930 100%);
 
     & .modal-title {
       text-align: center;
       line-height: 1.5rem;
       margin-bottom: 2rem;
       text-decoration: underline;
-      text-decoration-color: #254EF8;
+      text-decoration-color: #254ef8;
     }
 
     & .modal-description {
@@ -169,7 +189,7 @@ const ModalContent = styled('div')(
     }
 
     & .button {
-      background-color: #254EF8;
+      background-color: #254ef8;
       border: none;
       border-radius: 5px;
       color: white;
@@ -188,7 +208,7 @@ const ModalContent = styled('div')(
     }
 
     & .label {
-      color: #254EF8;
+      color: #254ef8;
       font-weight: bold;
       padding: 10px;
     }
@@ -201,21 +221,21 @@ const ModalContent = styled('div')(
       align-items: center;
       justify-content: space-between;
     }
-  `,
-)
+  `
+);
 
-const dynamicStyle = ({ fontSize = '0.875rem', padding = '8px 16px' }) => css`
+const dynamicStyle = ({ fontSize = "0.875rem", padding = "8px 16px" }) => css`
   font-size: ${fontSize};
   padding: ${padding};
 `;
 // signin버튼
-const TriggerButton = styled('button')(
+const TriggerButton = styled("button")(
   // ({ theme, fontSize, padding }) => css`
   `${dynamicStyle}
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 600;
-    font-size: ${props => props.fontSize ||'0.875rem'};
-    padding: ${props => props.padding || '8px 16px'};
+    font-size: ${(props) => props.fontSize || "0.875rem"};
+    padding: ${(props) => props.padding || "8px 16px"};
     line-height: 1.5;
     border-radius: 28px;
     transition: all 150ms ease;
@@ -234,7 +254,7 @@ const TriggerButton = styled('button')(
       background:linear-gradient(90deg, #254EF8, #873FFA);
       border:4px solid #10141d;
     }
-  `,
-)
+  `
+);
 
-export default SigninModal
+export default SigninModal;
