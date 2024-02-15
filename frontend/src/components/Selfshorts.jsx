@@ -1,22 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import DefaultButton from "./DefaultButton";
 import ShortsUploadModal from "./Modals/ShortsUpload";
 
-function Selfshorts() {
+function Selfshorts(props) {
     return (
         <>
         <Container>
             <div className="header">
                 <Title>Self-shorts</Title>
+                {props.loginUser.emailId === props.currentUser.emailId ? (
                 <ShortsUploadModal />
-                {/* <DefaultButton 
-                    text={'Add'}
-                    backgroundcolor={'#254ef8'}
-                    fontcolor={'white'}
-                    width={'4rem'}
-                    height={'2rem'}
-                /> */}
+                ) : (
+                    <>
+                    </>
+                )}
             </div>
         </Container>
         </>

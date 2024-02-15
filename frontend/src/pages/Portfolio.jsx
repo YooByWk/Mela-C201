@@ -62,7 +62,7 @@ function Portfolio() {
           <Container>
             <div className="main">
               <UserEdit {...userProps} />
-              <Selfshorts />
+              <Selfshorts {...userProps}/>
               <PortfolioPin />
             </div>
             <div className="side">

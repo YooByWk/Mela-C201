@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import defaultimage from '../assets/images/default-image.png'
-import { getImg } from "../API/FileAPI";
+import { getImg, getMusic } from "../API/FileAPI";
+import { FaPlay, FaPause } from "react-icons/fa6";
 
 function DefaultPortfolio(props) {
-    const [albumImageURL, setAlbumImageURL] = useState()
+    const [albumImageURL, setAlbumImageURL] = useState('')
+    const [musicURL, setMusicURL] = useState('')
     const [lyrics, setLyrics] = useState('')
     const [visible, setVisible] = useState(false)
+    const [playing, setPlaying] = useState(false)
 
     useEffect(() => {
 
@@ -24,6 +27,8 @@ function DefaultPortfolio(props) {
             } else {
               setLyrics('등록된 가사가 없습니다.')
             }
+            const musicRes = await getMusic(props.file.fileIdx)
+            setMusicURL(musicRes.message)
             } catch (err) {
               console.error(err)  
             }
@@ -32,6 +37,16 @@ function DefaultPortfolio(props) {
           albumImageInfo()
 
       },[])
+
+      let audio = new Audio(musicURL)
+      const handleMusic = () => {
+        setPlaying(!playing)
+        if (playing) {
+          audio.pause()
+        } else {
+          audio.play()
+        }
+      }
 
       const handleVisible = () => {
         setVisible(!visible)
@@ -56,6 +71,15 @@ function DefaultPortfolio(props) {
               src={albumImageURL} 
               alt="앨범 이미지"
               />
+              {playing ? (
+                <>
+                <FaPause onClick={handleMusic}/>
+                </>
+              ) : (
+                <>
+                <FaPlay onClick={handleMusic}/>
+                </>
+              )}
             <Open onClick={handleVisible}>Lyrics</Open>
         </PortfolioContainer>
             {visible ? (
@@ -107,3 +131,4 @@ const Open = styled.div`
   width: fit-content;
   cursor: pointer;
 `
+

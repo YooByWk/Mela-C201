@@ -8,6 +8,7 @@ import { Navigate } from "react-router-dom";
 import { uploadTeamspaceFile, TeamspaceFileList } from "../../API/TeamspaceAPI"
 import { downloadFile, deleteFile } from "../../API/FileAPI";
 import { FaFileArrowDown, FaTrash } from "react-icons/fa6";
+import defaultProfile from "../../assets/images/default-profile.png"
 
 function TeamspaceFile () {
     const [open, setOpen] = useState(false)
@@ -133,7 +134,11 @@ function TeamspaceFile () {
                         {Object.entries(values).map(([key, value]) => (
                         <tr key={value.fileIdx}>
                             <Td>
-                            <Profile src={value.uploaderProfileImageUrl} alt="프로필 이미지" />
+                                {value.uploaderProfileImageUrl ? (
+                                    <Profile src={value.uploaderProfileImageUrl} alt="프로필 이미지" />
+                                ) : (
+                                    <Profile src={defaultProfile} alt="프로필 이미지" />
+                                )}
                             {value.userIdx.nickname}
                             </Td>
                             <Td>

@@ -28,6 +28,7 @@ const Container = styled.div`
   padding-bottom: 5%;
   padding-left: 3vw;
   padding-right: 3vw;
+  cursor: pointer;
 
 .titleday{
     display: flex;
