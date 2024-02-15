@@ -384,10 +384,10 @@ function UserUpdateForm() {
                     />
                 </div>
             </ButtonWrapper>
-            <Span>
+            {/* <Span>
                 <MdLockOutline />
                 <span>Change password</span>
-            </Span>
+            </Span> */}
             <Span onClick={handleDelete}>
                 <CgDanger />
                 <span>회원 탈퇴</span>

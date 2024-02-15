@@ -214,13 +214,12 @@ const TriggerButton = styled('button')(
   width: 4rem;
   height: 2rem;
 
-
   margin-top: 1rem;
   font-size: medium;
   background-color: #254EF8;
   color: white;
 
-  border-radius: 10px;
+  border-radius: 30px;
 
     `,
 )
