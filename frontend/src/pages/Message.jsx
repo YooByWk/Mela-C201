@@ -43,7 +43,7 @@ function Message() {
   const findAllRooms = async () => {
     try {
       const response = await ChatList();
-      console.log("findAllRooms : ", response);
+      // console.log("findAllRooms : ", response);
       setChatRooms(response);
 
       // const otherInfos = response.map(async (room) => {
@@ -61,13 +61,14 @@ function Message() {
       const result = []
       try {
         for (let index = 0; index < chatRooms.length; index++) {
-          if (chatRooms[index].portfolio_picture_file_idx.fileIdx) {
-            const response = await getImg(chatRooms[index].portfolio_picture_file_idx.fileIdx)
+          if (chatRooms[index].portfolioAbstract.portfolio_picture_file_idx) {
+            const response = await getImg(chatRooms[index].portfolioAbstract.portfolio_picture_file_idx)
             result.push(response.message)
           } else {
             result.push(defaultProfile)
           }
         }
+        // console.log(result)
         setImgUrl(result)
       } catch (err) {
         console.log(err)
@@ -103,7 +104,7 @@ function Message() {
 
   useEffect(() => {
     setUserIdx(localStorage.getItem("wschat.userIdx"));
-    console.log("roomidx : ", roomIdx);
+    // console.log("roomidx : ", roomIdx);
   }, []);
 
   // console.log(room.user)

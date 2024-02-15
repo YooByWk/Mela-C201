@@ -198,7 +198,7 @@ function UserEdit(props) {
                       <li key={position}>{position}</li>
                     ) : null
                   )}
-                </ul> */}
+                </ul>
               </div>
               <div className="sns">
                 <p>SNS</p>
