@@ -104,7 +104,7 @@ function TeamspaceFile () {
             console.error(err)
         }
     }
-    console.log(values)
+    // console.log(values)
     return(
     <>
         <CustomBackdrop open={open} onClick={handleModal}/>
@@ -145,7 +145,7 @@ function TeamspaceFile () {
                             <Td>
                                 <a href={process.env.REACT_APP_API_URL + '/file/download?fileIdx=' + value.fileIdx}
                                     download
-                                    target='_blank'
+                                    // target='_blank'
                                     rel='noreferrer'
                                     >
                                         <FaFileArrowDown />

@@ -18,6 +18,9 @@ function Portfolio() {
     const { emailId } = useParams()
     const [ currentUser, setCurrentUser ] = useState('')
     const [ currentUserPortfolio, setCurrentUserPortfolio ] = useState('')
+    const [ currentUserPosition, setCurrentUserPosition] = useState([])
+    const [ currentUserGenre, setCurrentUserGenre] = useState([])
+    const [currentUserMusics, setCurrentUserMusics] = useState([])
     // 현재 로그인 한 사람
     const { fetchUser, user, userPortfolio } = useStore()
     
@@ -28,7 +31,10 @@ function Portfolio() {
                 const otherInfo = await othersInfo(emailId)
                 setCurrentUser(otherInfo[0])
                 setCurrentUserPortfolio(otherInfo[1])
-                console.log(otherInfo)
+                setCurrentUserMusics(otherInfo[2])
+                setCurrentUserPosition(otherInfo[3])
+                setCurrentUserGenre(otherInfo[4])
+                // console.log(otherInfo)
             } catch (err) {
                 console.log(err)
             }

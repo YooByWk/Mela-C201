@@ -13,6 +13,8 @@ function UserEdit(props) {
     const [isFollowed, setIsFollowed] = useState('')
     const [currentUser, setCurrentUser] = useState('');
     const [currentUserPortfolio, setCurrentUserPortfolio] = useState('');
+    const [currentUserPosition, setCurrentUserPosition] = useState([])
+    const [currentUserGenre, setCurrentUserGenre] = useState([])
     const [loginUser, setLoginUser] = useState('');
     const [loginUserPortfolio, setLoginUserPortfolio] = useState('');
     const [imgURL, setImgURL] = useState('')
@@ -48,6 +50,8 @@ function UserEdit(props) {
     useEffect(() => {
         setCurrentUser(props.currentUser);
         setCurrentUserPortfolio(props.currentUserPortfolio)
+        setCurrentUserPosition(props.CurrentUserPosition)
+        setCurrentUserGenre(props.currentUserGenre)
         setLoginUser(props.loginUser);
         setLoginUserPortfolio(props.loginPortfolio)
     }, [props.currentUser, props.loginUser]);
@@ -82,6 +86,8 @@ function UserEdit(props) {
     },[currentUser, currentUserPortfolio])
     // console.log(currentUser)
     // console.log(currentUserPortfolio)
+    console.log(currentUserPosition)
+    console.log(currentUserGenre)
     // console.log(loginUser)
     // console.log(loginUserPortfolio)
 
@@ -135,9 +141,9 @@ function UserEdit(props) {
                             />
                         </div>
                         <div className="name">
-                            <Title>{loginUser.nickname}</Title>
-                            <p>{ loginUser.name }</p>
-                            <p>{ loginUserPortfolio.selfIntro }</p>
+                            <Title>{currentUser.nickname}</Title>
+                            <p>{ currentUser.name }</p>
+                            <p>{ currentUserPortfolio.selfIntro }</p>
                         </div>
                     </div>
                     <DefaultButton 
@@ -149,8 +155,8 @@ function UserEdit(props) {
                         onClick={goUpdate}
                     />
                 </div>
-                    <p>Like genre : </p>
-                    <p>Position : </p>                       
+                    <p>Like genre : {currentUserGenre}</p>
+                    <p>Position : {currentUserPosition}</p>                       
                     <p>SNS</p>
                     <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
                     <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
