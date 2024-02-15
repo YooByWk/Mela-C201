@@ -66,7 +66,8 @@ export const Chatting = (props) => {
   };
 
   const connect = () => {
-    sock = new SockJS(process.env.REACT_APP_API_URL2 + "/ws-stomp");
+    // sock = new SockJS(process.env.REACT_APP_API_URL2 + "/ws-stomp");
+    sock = new SockJS("/ws-stomp");
     ws = Stomp.over(sock);
 
     ws.connect(
