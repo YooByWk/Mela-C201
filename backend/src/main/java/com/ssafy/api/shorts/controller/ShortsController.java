@@ -167,7 +167,7 @@ public class ShortsController {
 
     //TODO: 새로 작성 중
     @GetMapping("/getshort")
-    @ApiOperation(value = "쇼츠 동영상 가져오기", notes = "자신이 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 한개를 가져온다.")
+    @ApiOperation(value = "(매칭) 쇼츠 1개 가져오기", notes = "자신이 설정한 장르, 포지션, 싫어요 표시 여부를 반영한 쇼츠 동영상 한 개를 가져온다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 401, message = "인증 실패"),
@@ -294,7 +294,7 @@ public class ShortsController {
     }
 
     @GetMapping("/{shortsid}")
-    @ApiOperation(value = "쇼츠 1개 조회", notes = "html <video> 태그에 넣을 수 있는 쇼츠의 주소를 반환한다.")
+    @ApiOperation(value = "쇼츠 1개 URL 조회", notes = "html <video> 태그에 넣을 수 있는 쇼츠의 주소를 반환한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "동영상 주소 리턴"),
             @ApiResponse(code = 400, message = "동영상 파일이 아님"),
