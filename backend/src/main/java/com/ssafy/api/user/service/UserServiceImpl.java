@@ -71,9 +71,11 @@ public class UserServiceImpl implements UserService {
 	CSVParser backWords = new CSVParser("back_words");
 
 //	@Value("${server.address}")
-	String serverAddress = "localhost";
+//	String serverAddress = "localhost";
+	String serverAddress = "i10c201.p.ssafy.io";
+
 //	@Value("${server.port}")
-	String serverPort = "8080";
+//	String serverPort = "8080";
 
 	@Override
 	public User createUser(UserRegisterPostReq userRegisterInfo) {
@@ -357,7 +359,8 @@ public class UserServiceImpl implements UserService {
 		helper.setFrom("Mela!");
 		helper.setSubject("[Mela!] 이메일 계정을 인증해주세요");
 
-		String addr = serverAddress + ":" + serverPort;
+//		String addr = serverAddress + ":" + serverPort;
+		String addr = serverAddress;
 
 		String htmlContent = "<html><body>";
 		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
