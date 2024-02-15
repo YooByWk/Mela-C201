@@ -1,52 +1,88 @@
-# 웹/모바일(웹 기술) 스켈레톤 프로젝트
+# :notes: Mela! - 음악 작업을 위한 구인, 공동 작업 플랫폼
+![로고](./frontend/src/assets/images/logo.png)
 
-<!-- 필수 항목 -->
+## Mela! 링크 : https://i10c201.p.ssafy.io/
+- 테스트 ID : mela@ssafy.com <br>
+- 테스트 PW : mela!1234
 
-## 카테고리
+## 소개 영상 보기 : 
 
-| Application | Domain | Language | Framework |
-| ---- | ---- | ---- | ---- |
-| :white_check_mark: Desktop Web | :black_square_button: AI | :white_check_mark: JavaScript | :black_square_button: Vue.js |
-| :black_square_button: Mobile Web | :black_square_button: Big Data | :black_square_button: TypeScript | :white_check_mark: React |
-| :white_check_mark: Responsive Web | :black_square_button: Blockchain | :black_square_button: C/C++ | :black_square_button: Angular |
-| :black_square_button: Android App | :black_square_button: IoT | :black_square_button: C# | :white_check_mark: Node.js |
-| :black_square_button: iOS App | :black_square_button: AR/VR/Metaverse | :black_square_button: Python | :black_square_button: Flask/Django |
-| :black_square_button: Desktop App | :black_square_button: Game | :white_check_mark: Java | :white_check_mark: Spring/Springboot |
-| | | :black_square_button: Kotlin | |
+## 프로젝트 진행 기간
+2024.01.08(월) ~ 2024.02.16(금)
 
-<!-- 필수 항목 -->
+## :fire: 기획 배경
+음악을 이제 막 시작한 아마추어, 신인 뮤지션들을 위해 준비했습니다.<br>
+나와 취향이 맞는, 나의 작업에 필요한 포지션의 멤버를 찾을 수 있습니다.<br>
+팀 스페이스를 통해 멤버들과 소통과 공동 작업을 지금 바로 시작해보세요.
 
-## 프로젝트 소개
+## :hatching_chick: 개요
+Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어입니다.<br>
+포트폴리오와 홍보 숏폼 업로드를 통해 다른 사용자들에게 본인을 알리고<br>
+마음에 드는 사용자에게 1대 1 채팅을 보내 팀 스페이스에 초대할 수 있습니다.<br>
+<br>
+기존의 음악 커뮤니티가 구인 위주 / 포트폴리오 위주인 점에 주목하여<br>
+멤버 구인과 공동 작업, 포트폴리오 업로드까지 통합 관리 플랫폼을 개발했습니다.
 
-* 프로젝트명: Mela!
-* 서비스 특징: 음악 지망생을 위한 포트폴리오 및 협업 관리 서비스
-* 주요 기능
-  - 유저 정보 기반 협업 파트너 추천
-  - 음악 협업을 위한 팀 스페이스
-  - 포트폴리오 통합 관리
-* 주요 기술
+## :blue_heart: 주요 기능
+- ### 멤버 구인
+  - 사용자가 입력한 선호 장르, 본인 포지션을 기반으로 구인 공고를 추천 받을 수 있습니다.
+  - 공고 작성자와 1대 1 채팅을 통해 대화를 나누고 팀 작업을 함께 할 지 생각할 수 있습니다.
+
+<br>
+
+- ### 팀 스페이스
+  - 그룹 멤버들이 각자 일정을 공유하거나 수정, 삭제할 수 있습니다.
+  - 실시간 화상 채팅으로 소통할 수 있습니다.
+  - 작업한 파일을 업로드하고 다운로드 할 수 있습니다.
+
+<br>
+
+- ### 포트폴리오/숏폼 업로드 및 조회
+  - 본인의 포트폴리오(음원) 및 홍보 숏폼을 업로드 하여 본인을 알릴 수 있습니다.
+  - 다른 사용자의 포트폴리오를 보고 마음에 드는 경우 1대1 채팅을 시작할 수 있습니다.
+  - 서로의 숏폼에 좋아요를 누른 경우 채팅방이 생성되고 대화를 시작할 수 있습니다.
+
+
+## :key: 주요 기술
+### Backend
+  - Springboot
   - WebRTC
   - WebSocket
   - JWT Authentication
-  - REST API
-* 참조 리소스
-  * Animation.css: CSS 애니메이션 지원 라이브러리. 메인 페이지 진입 애니메이션에 활용
-* 배포 환경
-  - URL: // 웹 서비스, 랜딩 페이지, 프로젝트 소개 등의 배포 URL 기입
-  - 테스트 계정: // 로그인이 필요한 경우, 사용 가능한 테스트 계정(ID/PW) 기입
+  - Redis
+  - Swagger
+  - MySQL
+  - Node.js
+  - Openvidu
+  - Docker
 
-<!-- 자유 양식 -->
+### Frontend
+  - React
+  - Axios
+  - Sock.js-Client
+  - Webstomp-Client
+  - Node.js
+
+### Infra
+  - AWS EC2
+  - AWS S3
 
 ## 팀 소개
-* 강민지: 팀장, 프론트엔드 개발, UCC 제작, UI/UX 디자인
-* 유병욱: 프론트엔드 개발 팀장, 프론트엔드 개발
-* 최시원: 백엔드 개발 팀장, 백엔드개발, 배포
-* 이현호: 백엔드 개발, 발표
-* 이현비: 프론트엔드 개발, PPT 제작
-* 김신영: 백엔드 개발
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><img src="width="100px;" alt=""/><br /><sub><b>팀장 : 강민지</b></sub></a><br /></td>
+      <td align="center"><img src="" width="100px;" alt=""/><br /><sub><b>FE 팀장 : 유병욱</b></sub></a><br /></td>
+      <td align="center"><img src="" width="100px;" alt=""/><br /><sub><b>FE : 이현비</b></sub></a><br /></td>
+     <tr/>
+      <td align="center"><img src="" width="100px;" alt=""/><br /><sub><b>BE 팀장 : 최시원</b></sub></a><br /></td>
+      <td align="center"><img src="" width="100px;" alt=""/><br /><sub><b>BE : 김신영</b></sub></a><br /></td>
+      <td align="center"><img src="" width="100px;" alt=""/><br /><sub><b>BE : 이현호</b></sub></a><br /></td>
+    </tr>
+  </tbody>
+</table>
 
-<!-- 자유 양식 -->
+## 프로젝트 산출물
 
-## 프로젝트 상세 설명
 
 // 개발 환경, 기술 스택, 시스템 구성도, ERD, 기능 상세 설명 등
