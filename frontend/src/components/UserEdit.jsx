@@ -202,13 +202,13 @@ function UserEdit(props) {
               </div>
               <div className="position">
                 <span>Position : </span>
-                <ul>
+                {/* <ul>
                   {currentUserPosition.map((positionId) =>
                     positions[positionId] ? (
                       <li key={positionId}>{positions[positionId]}</li>
                     ) : null
                   )}
-                </ul>
+                </ul> */}
               </div>
               <div className="sns">
                 <p>SNS</p>
