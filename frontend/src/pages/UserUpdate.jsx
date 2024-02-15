@@ -41,7 +41,7 @@ function UserUpdateForm() {
         if (checked && selectedGenres.length < 3) {
           setSelectedGenres([...selectedGenres, genres.indexOf(value)+1]);
         } else if (!checked) {
-          setSelectedGenres(selectedGenres.filter((genre) => genre !== value));
+          setSelectedGenres(selectedGenres.filter((genre) => genre !== genres.indexOf(value)+1));
         } 
         console.log(selectedGenres);
       };
@@ -52,7 +52,7 @@ function UserUpdateForm() {
           setSelectedPositions([...selectedPositions, positions.indexOf(value)+1]);
         } else if (!checked) {
           setSelectedPositions(
-            selectedPositions.filter((position) => position !== value)
+            selectedPositions.filter((position) => position !== positions.indexOf(value)+1)
           );
         }
         console.log(selectedPositions);
@@ -194,6 +194,7 @@ function UserUpdateForm() {
         navigate(-1)
     }
 
+    
     return(
         <Container>
             <Title>

@@ -104,7 +104,7 @@ function TeamspaceFile () {
             console.error(err)
         }
     }
-    // console.log(values)
+    console.log(values)
     return(
     <>
         <CustomBackdrop open={open} onClick={handleModal}/>
