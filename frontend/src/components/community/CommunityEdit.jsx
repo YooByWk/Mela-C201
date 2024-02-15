@@ -6,7 +6,8 @@ import styled from "styled-components";
 
 function CommunityEdit() {
   const { boardIdx } = useParams();
-  const currentUserIdx = useStore(s => s.user ? s.user.userIdx : null)
+  // const currentUserIdx = useStore(s => s.user ? s.user.userIdx : null)
+  const currentUserIdx = Number(localStorage.getItem('userIdx'));
   const [alertShown, setAlertShown] = useState(false);
   const [isAuthor, setIsAuthor] = useState(null)
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가

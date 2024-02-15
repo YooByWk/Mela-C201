@@ -152,7 +152,6 @@ function TeamspaceCreateModal({className, fontSize, padding}) {
 
     try {
       const res = await TeamspaceGenerate(formData)
-      // console.log(res)
       alert('팀스페이스 생성이 완료되었습니다.')
       Navi(`../teamspace/${res.message}`)
       setOpen(!open)

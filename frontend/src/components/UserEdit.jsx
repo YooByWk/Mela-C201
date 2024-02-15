@@ -29,32 +29,25 @@ function UserEdit(props) {
     navigate("/users");
   };
 
-  // 장르 //
-  const genres = {
-    1: "Pop",
-    2: "Rock",
-    3: "Hiphop",
-    4: "Classic",
-    5: "Jazz",
-    6: "R&B",
-    7: "Disco",
-    8: "Electrionic",
-    9: "Balad",
-    10: "Country",
-    11: "Reggae",
-    12: "Folk",
-    13: "Etc",
-  };
+    // 장르 // 
+    const genres = [
+      "Pop",
+      "Rock",
+      "Hiphop",
+      "Classic",
+      "Jazz",
+      "R&B",
+      "Disco",
+      "Electrionic",
+      "Balad",
+      "Country",
+      "Reggae",
+      "Folk",
+      "Etc",
+    ];
 
   // 포지션 //
-  const positions = {
-    1: "보컬",
-    2: "작곡",
-    3: "작사",
-    4: "세션",
-    5: "믹싱",
-    6: "기타",
-  };
+  const positions = ["보컬", "작곡", "작사", "세션", "믹싱", "기타"];
 
   useEffect(() => {
     setCurrentUser(props.currentUser);
@@ -66,8 +59,8 @@ function UserEdit(props) {
     setLoginUserPortfolio(props.loginPortfolio);
   }, [props.currentUser, props.loginUser]);
 
-  console.log("genre", currentUserGenre);
-  console.log("position", currentUserPosition);
+  // console.log("genre", currentUserGenre);
+  // console.log("position", currentUserPosition);
 
   useEffect(() => {
     const imgInfo = async () => {
@@ -99,10 +92,7 @@ function UserEdit(props) {
 
     followInfo();
   }, [currentUser, currentUserPortfolio]);
-  // console.log(currentUser)
-  // console.log(currentUserPortfolio)
-  // console.log(loginUser)
-  // console.log(loginUserPortfolio)
+
 
   const handleFollow = async () => {
     if (loginUser && currentUser && loginUser.emailId !== currentUser.emailId) {
@@ -193,19 +183,19 @@ function UserEdit(props) {
               <div className="genre">
                 <span>Like genre : </span>
                 <ul>
-                  {currentUserGenre.map((genreId) =>
-                    genres[genreId] ? (
-                      <li key={genreId}>{genres[genreId]}</li>
+                  {currentUserGenre.map((genre) =>
+                    genre ? (
+                      <li key={genre}>{genre}</li>
                     ) : null
                   )}
                 </ul>
               </div>
               <div className="position">
                 <span>Position : </span>
-                {/* <ul>
-                  {currentUserPosition.map((positionId) =>
-                    positions[positionId] ? (
-                      <li key={positionId}>{positions[positionId]}</li>
+                <ul>
+                  {currentUserPosition.map((position) =>
+                    position ? (
+                      <li key={position}>{position}</li>
                     ) : null
                   )}
                 </ul> */}

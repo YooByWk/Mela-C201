@@ -246,38 +246,6 @@ function CommunityDetail() {
           <hr key="" />
         </>
       )}
-      <div className="comment-list">
-        <ul>
-          {comments && comments.length > 0 ? (
-            comments.reverse().map((comment) => {
-              return (
-                <>
-                  <br />
-                  <li key={comment.commentIdx}>
-                    <div>{comment.nickname}</div>
-                    <div className="comment-date">{comment.registDate}</div>
-                    <div>
-                      {comment.content}
-                      {comment.userIdx === currentUserIdx && (
-                        <FaTrashAlt
-                          onClick={() =>
-                            CommentDeleteHandler(comment.commentIdx)
-                          }
-                        ></FaTrashAlt>
-                      )}
-                    </div>
-                    <br />
-                    <hr />
-                  </li>
-                </>
-              );
-            })
-          ) : (
-            <p>댓글없음</p>
-          )}
-        </ul>
-      </div>
-
       <form action="" onSubmit={handleSubmit} className="comment">
         <input
           type="text"
@@ -290,11 +258,51 @@ function CommunityDetail() {
         />
         <input type="submit" value="등 록" className="button" />
       </form>
+      <div className="comment-list">
+        <ul>
+          {comments && comments.length > 0 ? (
+            comments.reverse().map((comment) => {
+              return (
+                <>
+                  <br />
+                  <li key={comment.commentIdx}>
+                    <div>{comment.nickname}</div>
+                    <div className="comment-date">{comment.registDate}</div>
+                    <CommentContainer>
+                      <div>{comment.content}</div>
+                      {comment.userIdx === currentUserIdx && (
+                        <div>
+                          <FaTrashAlt
+                            onClick={() =>
+                              CommentDeleteHandler(comment.commentIdx)
+                            }
+                          />
+                        </div>
+                      )}
+                    </CommentContainer>
+                    <br />
+                    <hr />
+                  </li>
+                </>
+              );
+            })
+          ) : (
+            <p>댓글없음</p>
+          )}
+        </ul>
+      </div>
+
+
     </MainDiv>
   );
 }
 
 export default CommunityDetail;
+
+const CommentContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const MainDiv = styled.div`
   margin-top: 5%;
