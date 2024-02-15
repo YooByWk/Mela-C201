@@ -175,14 +175,14 @@ export const myGatherList = async({page, size}) => {
     return response.data
 }
 
-// // 팔로워 리스트
-// export const followerList = async (emailId) => {
-//     const response = await UserApi.get(`/${emailId}/followees`)
-//     return response.data
-// }
+// 팔로워 리스트
+export const followerList = async (emailId) => {
+    const response = await UserApi.get(`/${emailId}/followees`)
+    return response.data
+}
 
-// // 팔로잉 리스트
-// export const followingList = async (emailId) => {
-//     const response = await UserApi.get(`/${emailId}/followers`)
-//     return response.data
-// }
+// 팔로잉 리스트
+export const followingList = async (emailId) => {
+    const response = await UserApi.get(`/${emailId}/followers`)
+    return response.data
+}

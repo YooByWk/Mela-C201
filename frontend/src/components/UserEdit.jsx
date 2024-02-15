@@ -119,6 +119,7 @@ function UserEdit(props) {
                         <div className="name">
                             <Title>{loginUser.nickname}</Title>
                             <p>{ loginUser.name }</p>
+                            <p>{ loginUserPortfolio.selfIntro }</p>
                         </div>
                     </div>
                     <DefaultButton 
@@ -133,10 +134,8 @@ function UserEdit(props) {
                     <p>Like genre : </p>
                     <p>Position : </p>                       
                     <p>SNS</p>
-                    <URL onClick={() => {window.open(instagramURL)}} src="instagram" alt="인스타그램">
-                    </URL>
-                    <URL onClick={() => {window.open(youtubeURL)}} src="youtube" alt="유튜브">
-                    </URL>
+                    <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
+                    <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
                 </div>
                 </>
             ) : (
@@ -151,9 +150,10 @@ function UserEdit(props) {
                     />
                     <p>Like genre : </p>
                     <p>Position : </p>
-                    <p>SNS</p>
-                    <URL onClick={() => {window.open(instagramURL)}}>인스타그램</URL>
-                    <URL onClick={() => {window.open(youtubeURL)}}>유튜브</URL>
+                    <p>SNS
+                    <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
+                    <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
+                    </p>
                     <DefaultButton 
                         text={isFollowed ? 'Unfollow' : 'Follow'}
                         backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
@@ -212,6 +212,8 @@ const Img = styled.img`
     border-radius: 50%;
 `
 
-const URL = styled.div`
-    width: fit-content;
+const URL = styled.img`
+    width: 23px;
+    height: 23px;
+    padding-right: 2%;
 `

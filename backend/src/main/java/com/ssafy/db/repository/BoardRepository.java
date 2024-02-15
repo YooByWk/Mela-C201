@@ -17,6 +17,4 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "WHERE NOT EXISTS (SELECT 1 FROM BoardRecruit br WHERE br.boardIdx = b.boardIdx) " +
             "AND (:keyword IS NULL OR b.title LIKE %:keyword% OR b.content LIKE %:keyword%)")
     Page<Board> findByTitleContainingOrContentContaining(@Param("keyword") String keyword, Pageable pageable);
-
-
 }

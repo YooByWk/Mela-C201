@@ -3,7 +3,7 @@ import axios from 'axios'
 let ACCESS_TOKEN = localStorage.getItem('accessToken')
 
 export const FileAPI = axios.create({
-    baseURL: process.env.REACT_APP_API_URL + '/files',
+    baseURL: process.env.REACT_APP_API_URL + '/file',
     headers: {
         'Authorization': `Bearer ${ACCESS_TOKEN}`,
     },
@@ -25,5 +25,17 @@ export const uploadFile = async (formData) => {
 // 단일 동영상 조회
 export const getVideo = async (fileIdx) => {
     const response = await FileAPI.get(`/videos/${fileIdx}`)
+    return response.data
+}
+
+// 파일 다운로드
+export const downloadFile = async (fileIdx) => {
+    const response = await FileAPI.get(`/download`, fileIdx)
+    return response.data
+}
+
+// 파일 삭제
+export const deleteFile = async(fileIdx) => {
+    const response = await FileAPI.delete(`/delete`, fileIdx)
     return response.data
 }
