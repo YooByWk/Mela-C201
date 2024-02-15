@@ -64,6 +64,12 @@ const Img = styled.img`
 const H3 = styled.h3`
 font-weight:bold;
 margin-bottom:5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Limit to two lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0; /* Add this line to remove default margin */
 `
 
 const P = styled.p`
