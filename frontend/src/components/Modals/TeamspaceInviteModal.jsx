@@ -148,21 +148,15 @@ function TeamspaceInviteModal () {
     event.preventDefault();
     if (searchInput) {
       const response = await userSearch(searchInput);
-      const follow = await followingList(userValues.emailId)
-      const result = []
-      for (let index = 0; index < response.length; index++) {
-        if (response[index].userIdx in follow) {
-          result.push(response[index])
-        }
-      }
-      console.log(response)
-      if (result.length > 1) {
-        setInviteList(result);
+      if (response.length >= 1) {
+        setInviteList(response);
+        console.log(response)
       } else {
         setInviteList('')
       }
     } else {
       const res = await followingList(userValues.emailId)
+      console.log(res)
       setInviteList(res)
     }
   }
@@ -202,27 +196,28 @@ function TeamspaceInviteModal () {
       <FaSearch className='Icon'/>
       <input id="search" type="text" spellCheck='false' placeholder='Search' onChange={handleChange} />
       </SearchBar>
-        <ModalView>
-        {inviteList.length > 1 ? (
-          <>
+      <ModalView>
+      {inviteList.length >= 1 ? (
+        <>
           {Object.entries(inviteList).map(([key, value]) => (
-            <div key={value.emailId}>
-            <input
-            type="checkbox"
-            value={value.emailId}
-            onChange={handleMemberChange}
-          />
-          <label htmlFor={value.emailId}>{value.nickname}</label>
+            <div key={value.userIdx ? value.userIdx.emailId : value.emailId}>
+              <input
+                type="checkbox"
+                value={value.userIdx ? value.userIdx.emailId : value.emailId}
+                onChange={handleMemberChange}
+              />
+              <label htmlFor={value.userIdx ? value.userIdx.emailId : value.emailId}>
+                {value.userIdx ? value.userIdx.nickname : value.nickname}
+              </label>
             </div>
-            // </Link>
-            ))}
-            </>
-            ) : (
-              <>
-              검색 결과가 없습니다.
-              </>
-            )}
-            </ModalView>
+          ))}
+        </>
+      ) : (
+        <>
+          검색 결과가 없습니다.
+        </>
+      )}
+    </ModalView>
             <DefaultButton 
             text={'Save'}
             backgroundcolor={'#254ef8'}
