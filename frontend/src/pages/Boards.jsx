@@ -35,7 +35,7 @@ const CommunityContainer = styled.div`
   background-color: ${(props) => props.theme.colours.primary};
   display: flex;
   /* flex-direction: column; */
-  height: 70rem;
+  height: 100% ;
   color: white;
   padding-top: 3%;
   justify-content: space-evenly;
@@ -50,7 +50,9 @@ const SideDiv = styled.div`
 
 const MainDiv = styled.div`
   width: 64%;
-  height: 600px;
+  /* height: 600px; */
+  height: 100%;
+  min-height: 90vh;
   background-color: ${(props) => props.theme.colours.point};
   border-radius: 50px;
   overflow-x: hidden;

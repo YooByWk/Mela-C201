@@ -11,3 +11,6 @@
             <div>
 
             teamspace 어딘가 
+
+package.json 그 위에 
+  "proxy": "http://localhost:8080",

@@ -10,7 +10,7 @@ const Container = styled.div`
   clip-path: polygon(47% 0, 61% 15%, 100% 15%, 100% 75%, 0 75%, 0 0);
   
   width: ${props => props.width};
-  height: 170px;
+  height: 180px;
   max-width: ${props => props.maxwidth};
   display: flex;
   /* flex-wrap: wrap; */

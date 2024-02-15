@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { GatherPost, GatherList, GatherUpdate } from "../../API/GatherAPI";
 import { RecruitDetail } from './../../API/GatherAPI';
 import GatherCal from "./GatherCal";
+import { local } from "d3-selection";
 
 // 1. GatherEdit 컴포넌트 정의
 function GatherEdit() {
@@ -26,14 +27,15 @@ function GatherEdit() {
 
  const {gatherIdx} = useParams();
 
- console.log('gatherIdx: ', gatherIdx);
+//  console.log('gatherIdx: ', gatherIdx);
   const positions = ["보컬", "작곡", "작사", "세션", "믹싱", "기타"];
   
   // 2. 필요한 state 변수들 정의
   const Navigate = useNavigate();
   const isLogined = useStore((state) => state.islogined);
   const [showLoginModal, setshowLoginModal] = useState(false);
-  const currentUserIdx = useStore(s => s.user ? s.user.userIdx : null)
+  // const currentUserIdx = useStore(s => s.user ? s.user.userIdx : null)
+  const currentUserIdx = Number(localStorage.getItem('userIdx'));
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedPositions, setSelectedPositions] = useState([]);
   const [isAuthor, setIsAuthor] = useState(null);
@@ -54,15 +56,17 @@ useEffect(() => {
         content: res.data.content,
         endDate: res.data.endDate,
       });
+      // console.log(res.data, 'res.data')
       setSelectedGenres([res.data.genreName1, res.data.genreName2, res.data.genreName3].filter(Boolean));
       setSelectedPositions(res.data.positions);
       setIsAuthor(res.data.userIdx === currentUserIdx)
+      // console.log()
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   }
   detailData();
-}, [gatherIdx]);
+}, [gatherIdx, isAuthor ]);
 
   // 4. 입력 핸들러 
   const InputHandler = (event) => {
@@ -130,12 +134,6 @@ window.alert('수정되었습니다.')
   if (isLogined && isAuthor)
   { return (
     <CreateDiv>
-    <button onClick={()=>{  console.log(selectedGenres)
-  console.log(userInput)
-  console.log()
-  console.log(isAuthor)
-  }
-  }>아 제발</button>
       <form action="" onSubmit={submitHandler} >
       <h2>제목</h2>
       <input type="text" onChange={InputHandler} value={userInput.title}id='title'/>
