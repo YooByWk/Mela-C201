@@ -214,7 +214,7 @@ public class ShortsServiceImpl implements ShortsService {
 
         Notification notification = new Notification();
         notification.setUserIdx(getAlarmUser);    //알람을 받을 사용자; User 객체 타입
-        notification.setAlarmContent(user.getNickname() + "님이 당신의 쇼츠 " + shorts.getTitle() + " 에 좋아요를 눌렀습니다.");
+        notification.setAlarmContent(user.getNickname() + "님이 당신의 쇼츠에 좋아요를 눌렀습니다.");
         notification.setChecked(false);
         notification.setAlarmDate(LocalDateTime.now());
         notificationRepository.save(notification);
