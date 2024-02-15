@@ -43,8 +43,8 @@ function Gather() {
   
     },[])
 
-    console.log(myGather)
-    console.log(recommend)
+    // console.log(myGather)
+    // console.log(recommend)
 
     const recommendLimitList = () => {
       const result = []
@@ -93,7 +93,7 @@ function Gather() {
       navigate('/gather/create')
     }
 
-    console.log(myGatherLimitList())
+    // console.log(myGatherLimitList())
   return ( 
     <GatherContainer>
       <SideDiv>

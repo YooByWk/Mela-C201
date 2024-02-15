@@ -13,6 +13,7 @@ import { followee, followingList } from "../API/UserAPI";
 import { fetchUser } from "../API/UserAPI";
 import { getImg } from "../API/FileAPI";
 import defaultprofile from '../assets/images/default-profile.png'
+import { getShorts } from "../API/ShortsAPI";
 
 const SideContainer = styled.div`
   color: white;
@@ -80,6 +81,7 @@ function Sidebar({ className, paddingtop }) {
   const [followers, setFollowers] = useState([])
   const [followings, setFollowings] = useState([])
   const [imageURL, setImageURL] = useState()
+  const [shortsURL, setShortsURL] = useState('')
 
   useEffect(() => {
     if (!localStorage.accessToken) {
@@ -90,6 +92,8 @@ function Sidebar({ className, paddingtop }) {
         const res = await fetchUser()
         setUserValues(res[0])
         setPortfolioValues(res[1])
+        const shorts = await getShorts()
+        setShortsURL(shorts.fileURL)
       } catch (err) {
         console.log(err)
       } 
@@ -172,7 +176,7 @@ function Sidebar({ className, paddingtop }) {
                 <ListItemPrefix>
                   <MdOutlineLocalFireDepartment />
                 </ListItemPrefix>
-                <CustomLink to='/matching'>
+                <CustomLink to={`/matching/${shortsURL}`}>
                 <span className="wd">Matching</span>
                 </CustomLink>
               </ListItem>

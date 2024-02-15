@@ -46,7 +46,7 @@ export const hateShorts = async(shortsId) => {
     return response.data
 } 
 
-// 단일 쇼츠 가져오기
+// 단일 매칭 쇼츠 가져오기
 export const getShorts = async() => {
     const response = await ShortsAPI.get(`/getshort`)
     return response.data
