@@ -13,34 +13,36 @@ const ModalBackdrop = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 70%;  // Adjust the width as needed
+  width: 30%;  // Adjust the width as needed
   height: 70%;  // Adjust the height as needed
   display: flex;
   justify-content: center;
   align-items: center;
   background: #151C2C;
   z-index: 1000;
+  border-radius: 30px;
 `;
 
 const ModalView = styled.div.attrs(props => ({
   role: 'dialog'
 }))`
   justify-content: center;
-  width: 80%;
-  height: 80%;
+  width: 70%;
+  height: 70%;
   margin: 2% 2%;
   text-align: center;
   margin-block-end: 30px 50px;
   background-color: #2a3446;
   border-radius: 30px;
   color: white;
+  padding-top: 3%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
 const SearchBar = styled.form`
   // 최상위
   position: relative;
-  width: 30%;
+  width: 70%;
   text-align: center;
   margin-left:1%;
   margin-top: 20px;
@@ -81,6 +83,7 @@ const InviteContainer = styled.div`
   height: 100%;
   align-items: center;
 `
+
 function TeamspaceInviteModal () {
   const [open, setOpen] = useState(false)
   const [inviteList, setInviteList] = useState([])
