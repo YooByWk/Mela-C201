@@ -8,6 +8,7 @@ import com.ssafy.api.shorts.request.ShortsPostReq;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import org.apache.commons.io.FilenameUtils;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +46,7 @@ public class ShortsServiceImpl implements ShortsService {
     @Autowired
     ChatRoomService chatRoomService;
 
+    @Autowired
     UserShortsQueueRepository userShortsQueueRepository;
 
     //지원하는 동영상 확장자 ArrayList
@@ -235,6 +237,7 @@ public class ShortsServiceImpl implements ShortsService {
             // 채팅방 만들어주기
             String roomIdx = chatRoomService.enterOneToOneRoom(user.getUserIdx(), getAlarmUser.getUserIdx());
 
+            // 메시지 보내기 1
             String content = getAlarmUser.getNickname() + "님이 " + user.getNickname() +"님을 마음에 들어합니다.";
             ChatMessage message = new ChatMessage();
             message.setSendTime(LocalDateTime.now()+"");
@@ -244,10 +247,14 @@ public class ShortsServiceImpl implements ShortsService {
             message.setRoomIdx(roomIdx);
             chatService.saveMessage(message);
 
+            // 메시지 보내기 2
             content = user.getNickname() + "님이 " + getAlarmUser.getNickname() +"님을 마음에 들어합니다.";
+            message = new ChatMessage();
             message.setSendTime(LocalDateTime.now()+"");
+            message.setMessage(content);
             message.setNickname(user.getNickname());
             message.setUserIdx(user.getUserIdx()+"");
+            message.setRoomIdx(roomIdx);
             chatService.saveMessage(message);
         }
 
@@ -278,13 +285,35 @@ public class ShortsServiceImpl implements ShortsService {
 
     @Override
     public com.ssafy.api.board.response.Shorts getSingleShortsByUserIdx(User user) {
-        //1-1. 로그인한 사용자의 쇼츠 동영상 리스트 로드
-        List<UserShortsQueue> userShortsQueueList = userShortsQueueRepository.findByUserIdx(user);
+        //1-1. 로그인한 사용자의 쇼츠 동영상 큐 로드
+        List<UserShortsQueue> userShortsQueueList = null;
+        try {
+            userShortsQueueList = userShortsQueueRepository.findByUserIdx(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //1-2. 로그인한 사용자의 쇼츠 동영상 리스트가 UserShortsQueue 테이블에 없다면 새로 로드 후 테이블에 추가
         if (userShortsQueueList == null || userShortsQueueList.isEmpty()) {
-            List<Shorts> shortsList = getShortsListByUserIdx(user);
-            Collections.shuffle(shortsList);                        //순서 무작위로 변경
+            List<com.ssafy.api.board.response.Shorts> shortsResponseList = getShortsList(user);
+            List<Shorts> shortsList = new ArrayList<>();
+
+            Collections.shuffle(shortsResponseList);                        //순서 무작위로 변경
+
+            for(com.ssafy.api.board.response.Shorts shortsResponse : shortsResponseList) {
+                System.err.println("shortsResponse: " + shortsResponse);
+
+                Shorts shorts = new Shorts();
+
+                shorts.setShortsIdx(shortsResponse.getShortsIdx());
+                shorts.setUserIdx(shortsResponse.getUserIdx());
+                shorts.setTitle(shortsResponse.getTitle());
+                shorts.setDescription(shortsResponse.getDescription());
+                shorts.setShortsPathFileIdx(shortsResponse.getShortsPathFileIdx());
+
+                shortsList.add(shorts);
+            }
+
             saveRecordIntoUserShortsQueueTable(shortsList, user);
         }
 
@@ -333,6 +362,7 @@ public class ShortsServiceImpl implements ShortsService {
         for (Shorts data : shorts) {
             UserShortsQueue userShortsQueue = new UserShortsQueue();
             userShortsQueue.setUserIdx(user);
+            System.err.println("saveRecordIntoUserShortsQueueTable data: " + data);
             userShortsQueue.setShortsIdx(data);
 
             userShortsQueueRepository.save(userShortsQueue);
