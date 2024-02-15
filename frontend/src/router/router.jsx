@@ -60,7 +60,7 @@ function AppRouter({ className }) {
           />
           
           <Route
-          path='/teamspace/video/:teamspaceIdx' element={<Video teamspaceIdx={goBack}/>} 
+          path='/teamspace/video/:teamspaceIdx' element={<Video goBack={goBack}/>} 
           />
           {/* <Route
           path='/teamspace/video/:teamspaceIdx' element={<Video/>} 

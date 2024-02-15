@@ -6,13 +6,21 @@ import styled from "styled-components";
 import axios from "axios";
 import icon from "../assets/icons/logo.png";
 import UserVideoComponent from "./UserVideoComponent";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MicRoundedIcon  from '@mui/icons-material/MicRounded' ;
+import MicOffRoundedIcon from '@mui/icons-material/MicOffRounded';
+import VideocamOffRoundedIcon from '@mui/icons-material/VideocamOffRounded';
+import VideocamRoundedIcon from '@mui/icons-material/VideocamRounded';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+
+
 import {
   createViduSession,
   GetSessionId,
   DeleteViduSession,
 } from "../API/TeamspaceAPI";
 import { fetchUser } from "../API/UserAPI";
-import ScheduleAllModal from './../components/Modals/ScheduleAll';
+import ScheduleAllModal from "./../components/Modals/ScheduleAll";
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
@@ -85,29 +93,55 @@ class Video extends Component {
   async componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
     console.log("유저이름 불러오기");
-    this.getUserName();
+    await this.getUserName();
+    /// 프론트 단독
     this.setState({
-     teamspaceIdx: window.location.pathname.split("/").pop(),
-    })
-    ;
-    const tempSession = await GetSessionId(
-      window.location.pathname.split("/").pop()
-    )
-    await this.setState({
-      mySessionId: tempSession,
+      teamspaceIdx: window.location.pathname.split("/").pop(),
     });
-    console.log("tempSession: ", tempSession);
-    console.log(tempSession, "temp");
-    if (!this.state.session) {
-      await this.joinSession();
-    }
-    //프로미스로 setState 실행해서 tempSession올려놓기.
+    let temp = "MelaTeamSpace" + window.location.pathname.split("/").pop();
+    console.log(temp, "temp");
+    this.setState(
+      {
+        mySessionId: temp,
+      },
+      () => {
+        console.log(temp, "callback");
+        if (!this.state.session) {
+          this.joinSession();
+        }
+      }
+    );
 
-    if (!tempSession === 500) {
-      this.setState({
-        mySessionId: tempSession,
-      });
-    }
+    /// 백엔드랑 같이 쓸 때
+    // this.setState({
+    //  teamspaceIdx: window.location.pathname.split("/").pop(),
+    // })
+    // ;
+    // let tempSession = await GetSessionId(
+    //   window.location.pathname.split("/").pop()
+    // )
+    // console.log(tempSession, "tempSession")
+    // if (tempSession === 500) {
+    //   console.log(500)
+    //   tempSession  = await createViduSession(
+    //     window.location.pathname.split("/").pop()
+    //   );
+    //     console.log(tempSession, "tempSession at if")
+    // }
+    //  this.setState({
+    //   mySessionId: tempSession,
+    // });
+    // console.log("tempSession: ", tempSession);
+    // console.log(tempSession, "temp");
+    // if (!this.state.session) {
+    //   await this.joinSession();
+    // }
+    // if (!tempSession === 500) {
+    //   this.setState({
+    //     mySessionId: tempSession,
+    //   });
+    // }
+    //프로미스로 setState 실행해서 tempSession올려놓기.
   }
 
   createHandler = (e) => {
@@ -266,7 +300,6 @@ class Video extends Component {
     const mySession = this.state.session;
     if (mySession) {
       mySession.disconnect();
-      
     }
 
     // 제거
@@ -354,22 +387,29 @@ class Video extends Component {
       mySessionId: res,
     });
   }
+  
   render() {
     // const { params } = this.props.match;
     const Check = () => console.log(this.props);
+  console.log(this.state.subscribers.length)
 
     const mySessionId = this.state.mySessionId;
     const myUserName = this.state.myUserName;
     const teamspaceIdx = sessionStorage.getItem("teamspaceIdx");
-    console.log("mySessionId: ", mySessionId);
-    console.log("myUserName: ", myUserName);
+    // console.log("mySessionId: ", mySessionId);
+    // console.log("myUserName: ", myUserName);
     console.log(this.state);
     const Location = window.location.pathname.split("/").pop();
-    
+    const goBack = this.props.goBack;
+    const leaveButtonHandler = async () => {
+      console.log("leave");
+      await this.leaveSession();
+      goBack();
+    }
     return (
       <TOP>
         <div>
-        <button onClick={()=> console.log(this.props)}></button>
+          <button onClick={() => console.log(this.props)}></button>
           {/* <button type="button" onClick={this.createHandler}>
             팀스페이스 생성
           </button>
@@ -399,7 +439,9 @@ class Video extends Component {
             비디오체크
           </button> */}
 
+
           <MainContainer>
+          <button onClick={()=>console.log(this.state)}> State </button>
             {this.state.session === undefined ? (
               <div>
                 <img src={icon} alt="으악" />
@@ -431,33 +473,20 @@ class Video extends Component {
               </div>
             ) : null}
             <div className="buttonHolder">
-                  <h1>{mySessionId}</h1>
-                  <input
-                    type="button"
-                    value="Leave"
-                    onClick={()=>this.leaveSession}
-                  />
-                  <input
-                    type="button"
-                    value="Switch"
-                    onClick={this.switchCamera}
-                  />
-                  <input
-                    type="button"
-                    value="camera"
-                    onClick={() => this.handleToggle("camera")}
-                  />
-                  <input
-                    type="button"
-                    value="mic"
-                    onClick={() => this.handleToggle("mic")}
-                  />
-                  {/* 212 */}
-                </div>
+              <h1>{mySessionId}</h1>
+              <div onClick={leaveButtonHandler}> 
+                <ExitToAppIcon/>
+              </div>
+              <div onClick={() => this.handleToggle('mic')}>
+                {this.state.isMic ? <MicRoundedIcon/> : <MicOffRoundedIcon/>}
+              </div>
+              <div onClick={() => this.handleToggle('camera')}>
+                {this.state.isCamera ? <VideocamRoundedIcon/> : <VideocamOffRoundedIcon/>}
+              </div>
+              {/* 212 */}
+            </div>
             {this.state.session !== undefined ? (
               <div>
-
-
                 <VideoContainer className="VideoContainer">
                   <StreamWrapper>
                     {this.state.publisher !== undefined ? (
@@ -502,7 +531,7 @@ const VideoContainer = styled.div`
   display: flex;
   justify-content: center;
   height: 100%;
-  overflow:hidden;
+  overflow: hidden;
   /* .main-video {
     grid-column: span 1;
   }
@@ -516,7 +545,7 @@ const StreamWrapper = styled.div`
   display: grid;
   place-items: center;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 10px;
+  grid-gap: 25px;
   height: 50rem;
   padding: 10px;
   width: 100%;
@@ -524,28 +553,28 @@ const StreamWrapper = styled.div`
     width: 100%;
     height: 100%;
   }
-  `
+`;
 
 const UserVideoContainer = styled.div`
-width: 100%;
-min-height: 15vh;
-position: relative;
-/* min-height: 15vh; */
-box-sizing: border-box;
-`
-
-
-
-
-
+  width: 100%;
+  min-height: 15vh;
+  position: relative;
+  /* min-height: 15vh; */
+  box-sizing: border-box;
+`;
 
 const MainContainer = styled.div`
   display: flex;
   width: 100%;
   flex-wrap: wrap;
-  
+
   .buttonHolder {
     position: fixed;
+    display: flex;
+    flex-direction: row;
+    background-color: #202c44;
+    font-weight: bold;
+    font-size: large;
     bottom: 0;
     left: 45%;
   }
