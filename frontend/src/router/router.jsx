@@ -17,13 +17,17 @@ import AlarmMain from '../pages/AlarmMain';
 import SequenceMain from './../sequence/SequenceMain';
 import Video from '../Video/Video';
 import Matching from '../pages/Matching'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,  } from 'react-router-dom';
 
 function AppRouter({ className }) {
   const Navigate = useNavigate()
+  const lgd = localStorage.getItem('accessToken')? true : false;
+  const ng = () => {
+    Navigate('/home')
+  }
 
   const goBack = () => {
-    console.log('뒤로가기')
+    // console.log('뒤로가기')
     Navigate(-1)
 }
   return (  
@@ -39,29 +43,29 @@ function AppRouter({ className }) {
             path='/gather' exact element={<Gather/>}
           /> 
 
-          <Route 
+          {lgd?<Route 
             path='/teamspace/:teamspaceIdx' element={<TeamspaceDetail/>}
-          />
+          />: ng()}
 
-          <Route 
+          {lgd? <Route 
             path='/teamspace/:teamspaceIdx/team' element={<TeamspaceTeam/>}
-          />
+          /> : ng()}
           
-          <Route 
+          {lgd?<Route 
           path='/teamspace/:teamspaceIdx/audio' element={<TeamspaceAudio/>} 
-          />
+          />: ng()}
 
-          <Route 
+          {lgd?<Route 
           path='/teamspace/:teamspaceIdx/file' element={<TeamspaceFile/>} 
-          />
+          />:ng()}
 
-          <Route 
+          {lgd?<Route 
           path='/teamspace/:teamspaceIdx/management' element={<TeamspaceManage/>} 
-          />
+          />:ng()}
           
-          <Route
+          {lgd?<Route
           path='/teamspace/video/:teamspaceIdx' element={<Video goBack={goBack}/>} 
-          />
+          />:ng()}
           {/* <Route
           path='/teamspace/video/:teamspaceIdx' element={<Video/>} 
           /> */}
@@ -74,35 +78,34 @@ function AppRouter({ className }) {
             path='/login' element={<SigninModal />}
           />
 
-          <Route
+          {lgd?<Route
             path='/users' element={<UserUpdate />}
-          />
+          />:ng()}
 
           <Route
             path='/:emailId/musics' element={<PortfolioAll />}
             />
 
-          <Route
+          {lgd?<Route
             path='/message/:roomid' element={<Message />}
-            />
+            />:ng()}
 
-          <Route
+          {lgd?<Route
             path='/message' element={<Message />}
-            />
+            />:ng()}
 
           <Route
             path='/forgotPassword' element={<ForgotPassword />}
             />
 
-          <Route
+          {lgd?<Route
             path='/alarm' element={<AlarmMain />}
-            />
-          <Route
-          path='/seq' element={<SequenceMain />} /> 
+            />:ng()}
 
-          <Route
+          {lgd?<Route
             path='/matching' element={<Matching />}
-          />
+          />:ng()}
+          
         </Routes>
     </div>
   );
