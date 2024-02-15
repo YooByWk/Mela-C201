@@ -5,11 +5,8 @@ import { BiDislike, BiLike } from "react-icons/bi";
 
 function setWindowHeight(){
   var windowHeight = window.innerHeight;
-  console.log('windowHeight1: ' + windowHeight);
   windowHeight += 100;
-  console.log('windowHeight2: ' + windowHeight);
   document.body.style.height = windowHeight + "px";
-  console.log(document.body.style.height);
 }
 window.addEventListener("resize",setWindowHeight,false);
 
@@ -37,6 +34,9 @@ function MatchingContent() {
     };
 
     getShort();
+
+    setLikeActive(false)
+    setHateActive(false)
     window.scrollTo(0, 0);
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -44,8 +44,7 @@ function MatchingContent() {
     };
   }, [scroll]);
   const handleScroll = () => {
-    console.log(document.documentElement.scrollTop)
-    // 스크롤이 Top에서 30px 이상 내려오면 true값을 useState에 넣어줌
+    // 스크롤이 Top에서 100px 이상 내려오면 true값을 useState에 넣어줌
     if (window.scrollY >= 100) {
       setScroll(true);
     } else {
@@ -57,9 +56,8 @@ function MatchingContent() {
   const handleLike = async () => {
     try {
       await likeShorts(values.shortsIdx);
-      console.log("성공");
       setLikeActive(!likeActive)
-      if (hateActive) setHateActive(false)
+      if (hateActive) {setHateActive(false)}
     } catch (err) {
       console.log(err);
     }
@@ -69,7 +67,7 @@ function MatchingContent() {
     try {
       await hateShorts(values.shortsIdx);
       setHateActive(!hateActive)
-      if (likeActive) setLikeActive(false)
+      if (likeActive) {setLikeActive(false)}
     } catch (err) {
       console.log(err)
     }
@@ -95,24 +93,54 @@ function MatchingContent() {
       </VideoInfo>
       <div className="likeInfo-container">
         <LikeInfo>
-          <div className="button" onClick={handleLike}>
+          {likeActive ? (
+            <>
+          <div className="button2" onClick={handleLike}>
             <div className="icon">
               <BiLike size={40} />
             </div>
           </div>
           <div className="letter">
-            <p>좋아요</p>
+          <p>좋아요 취소</p>
+        </div>
+        </>
+          ) : (
+            <>
+            <div className="button" onClick={handleLike}>
+            <div className="icon">
+              <BiLike size={40} />
+            </div>
           </div>
+                    <div className="letter">
+                    <p>좋아요 </p>
+                  </div>
+                  </>
+          )}
         </LikeInfo>
         <LikeInfo>
-          <div className="button" onClick={handleHate}>
+          {hateActive ? (
+            <>
+          <div className="button2" onClick={handleHate}>
             <div className="icon">
               <BiDislike size={40} />
             </div>
           </div>
           <div className="letter">
-            <p>싫어요</p>
+          <p>싫어요 취소</p>
+        </div>
+        </>
+          ) : (
+            <>
+            <div className="button" onClick={handleHate}>
+            <div className="icon">
+              <BiDislike size={40} />
+            </div>
           </div>
+                    <div className="letter">
+                    <p>싫어요 </p>
+                  </div>
+                  </>
+          )}
         </LikeInfo>
       </div>
     </ShortsContainer>
@@ -160,12 +188,20 @@ const LikeInfo = styled.div`
     height: 5rem;
     width: 5rem;
     margin-bottom: 1rem;
+    cursor: pointer;
+  }
 
-    &:hover {
+  .button2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       background-color: #873ffa;
+      border-radius: 50%;
+      height: 5rem;
+      width: 5rem;
+      margin-bottom: 1rem;  
       cursor: pointer;
     }
-  }
 
   .letter {
     display: flex;
