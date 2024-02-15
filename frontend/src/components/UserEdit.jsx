@@ -10,27 +10,51 @@ import instagram from "../assets/images/instagram.png";
 import youtube from "../assets/images/youtube.png";
 
 function UserEdit(props) {
-  const [isFollowed, setIsFollowed] = useState("");
-  const [currentUser, setCurrentUser] = useState("");
-  const [currentUserPortfolio, setCurrentUserPortfolio] = useState("");
-  const [loginUser, setLoginUser] = useState("");
-  const [loginUserPortfolio, setLoginUserPortfolio] = useState("");
-  const [imgURL, setImgURL] = useState("");
-  // const currentUser = props.currentUser
-  // const loginUser = props.loginUser
+    const [isFollowed, setIsFollowed] = useState('')
+    const [currentUser, setCurrentUser] = useState('');
+    const [currentUserPortfolio, setCurrentUserPortfolio] = useState('');
+    const [currentUserPosition, setCurrentUserPosition] = useState([])
+    const [currentUserGenre, setCurrentUserGenre] = useState([])
+    const [loginUser, setLoginUser] = useState('');
+    const [loginUserPortfolio, setLoginUserPortfolio] = useState('');
+    const [imgURL, setImgURL] = useState('')
+    // const currentUser = props.currentUser
+    // const loginUser = props.loginUser
 
   const navigate = useNavigate();
 
-  const goUpdate = () => {
-    navigate("/users");
-  };
+    const goUpdate = () => {
+        navigate('/users')
+    }
 
-  useEffect(() => {
-    setCurrentUser(props.currentUser);
-    setCurrentUserPortfolio(props.currentUserPortfolio);
-    setLoginUser(props.loginUser);
-    setLoginUserPortfolio(props.loginPortfolio);
-  }, [props.currentUser, props.loginUser]);
+        // 장르 // 
+        const genres = [
+            "Pop",
+            "Rock",
+            "Hiphop",
+            "Classic",
+            "Jazz",
+            "R&B",
+            "Disco",
+            "Electrionic",
+            "Balad",
+            "Country",
+            "Reggae",
+            "Folk",
+            "Etc",
+          ];
+    
+        // 포지션 //
+        const positions = ["보컬", "작곡", "작사", "세션", "믹싱", "기타"];
+
+    useEffect(() => {
+        setCurrentUser(props.currentUser);
+        setCurrentUserPortfolio(props.currentUserPortfolio)
+        setCurrentUserPosition(props.CurrentUserPosition)
+        setCurrentUserGenre(props.currentUserGenre)
+        setLoginUser(props.loginUser);
+        setLoginUserPortfolio(props.loginPortfolio)
+    }, [props.currentUser, props.loginUser]);
 
   useEffect(() => {
     const imgInfo = async () => {
@@ -60,12 +84,12 @@ function UserEdit(props) {
       }
     };
 
-    followInfo();
-  }, [currentUser, currentUserPortfolio]);
-  // console.log(currentUser)
-  // console.log(currentUserPortfolio)
-  console.log('loginuser', loginUser)
-  console.log('loginport', loginUserPortfolio)
+        followInfo()
+    },[currentUser, currentUserPortfolio])
+    // console.log(currentUser)
+    // console.log(currentUserPortfolio)
+    // console.log(loginUser)
+    // console.log(loginUserPortfolio)
 
   const handleFollow = async () => {
     if (loginUser && currentUser && loginUser.emailId !== currentUser.emailId) {
@@ -139,72 +163,42 @@ function UserEdit(props) {
                 <div className="genre">
                   <p>Like genre : </p>
                 </div>
-                <div className="position">
-                  <p>Position : </p>
+                    <p>Like genre : </p>
+                    <p>Position : </p>                       
+                    <p>SNS</p>
+                    <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
+                    <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
                 </div>
-                <div className="sns">
-                  <p>SNS</p>
-                    <URL
-                    onClick={() => {
-                        window.open(instagramURL);
-                    }}
-                    src={instagram}
-                    alt="인스타그램"
+                </>
+            ) : (
+                <>
+                    <p>{ currentUser.nickname }</p>
+                    <Img 
+                        src={
+                        currentUserPortfolio.portfolio_picture_file_idx ? 
+                        currentUserPortfolio.portfolio_picture_file_idx : 
+                        defaultprofile} 
+                        alt="프로필 이미지"
                     />
-                    <URL
-                    onClick={() => {
-                        window.open(youtubeURL);
-                    }}
-                    src={youtube}
-                    alt="유튜브"
+                    <p>Like genre : </p>
+                    <p>Position : </p>
+                    <p>SNS
+                    <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
+                    <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
+                    </p>
+                    <DefaultButton 
+                        text={isFollowed ? 'Unfollow' : 'Follow'}
+                        backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
+                        fontcolor={'white'}
+                        width={'4rem'}
+                        height={'2rem'}
+                        onClick={handleFollow}
                     />
-                </div>
-              </div>
-            </div>
-          </>
-        ) : (
-          <>
-            <p>{currentUser.nickname}</p>
-            <Img
-              src={
-                currentUserPortfolio.portfolio_picture_file_idx
-                  ? currentUserPortfolio.portfolio_picture_file_idx
-                  : defaultprofile
-              }
-              alt="프로필 이미지"
-            />
-            <p>Like genre : </p>
-            <p>Position : </p>
-            <p>
-              SNS
-              <URL
-                onClick={() => {
-                  window.open(instagramURL);
-                }}
-                src={instagram}
-                alt="인스타그램"
-              />
-              <URL
-                onClick={() => {
-                  window.open(youtubeURL);
-                }}
-                src={youtube}
-                alt="유튜브"
-              />
-            </p>
-            <DefaultButton
-              text={isFollowed ? "Unfollow" : "Follow"}
-              backgroundcolor={isFollowed ? "#6C7383" : "#254ef8"}
-              fontcolor={"white"}
-              width={"4rem"}
-              height={"2rem"}
-              onClick={handleFollow}
-            />
-          </>
-        )}
-      </Container>
-    </>
-  );
+                </>
+            )}
+        </Container>
+        </>
+    )
 }
 
 export default UserEdit;

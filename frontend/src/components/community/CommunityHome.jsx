@@ -81,11 +81,11 @@ function CommunityHome() {
     }
   };
   const islogined = useStore((state) => state.islogined);
-  console.log(islogined, "로그인여부");
+  // console.log(islogined, "로그인여부");
 
   const Create = (e) => {
     e.preventDefault();
-    console.log(islogined, "로그인여부");
+    // console.log(islogined, "로그인여부");
     if (islogined) {
       movePage("/community/create");
     } else {
