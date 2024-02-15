@@ -64,9 +64,7 @@ function UserUpdateForm() {
         nickname: '',
         gender: '',
         birth: '',
-        searchAllow: '',
-        genre: [],
-        position: []
+        searchAllow: ''
     })
 
     const [portfolioValues, setPortfolioValues] = useState({

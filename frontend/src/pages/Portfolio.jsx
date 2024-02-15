@@ -28,6 +28,7 @@ function Portfolio() {
                 const otherInfo = await othersInfo(emailId)
                 setCurrentUser(otherInfo[0])
                 setCurrentUserPortfolio(otherInfo[1])
+                console.log(otherInfo)
             } catch (err) {
                 console.log(err)
             }

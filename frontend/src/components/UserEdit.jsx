@@ -25,6 +25,26 @@ function UserEdit(props) {
         navigate('/users')
     }
 
+        // 장르 // 
+        const genres = [
+            "Pop",
+            "Rock",
+            "Hiphop",
+            "Classic",
+            "Jazz",
+            "R&B",
+            "Disco",
+            "Electrionic",
+            "Balad",
+            "Country",
+            "Reggae",
+            "Folk",
+            "Etc",
+          ];
+    
+        // 포지션 //
+        const positions = ["보컬", "작곡", "작사", "세션", "믹싱", "기타"];
+
     useEffect(() => {
         setCurrentUser(props.currentUser);
         setCurrentUserPortfolio(props.currentUserPortfolio)
@@ -103,8 +123,6 @@ function UserEdit(props) {
             {currentUser.emailId === loginUser.emailId ? (
                 <>
                 <div className="main">
-
-                
                 <div className="header">
                     <div className="userInfo">
                         <div className="image">

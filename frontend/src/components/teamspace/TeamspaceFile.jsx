@@ -53,12 +53,24 @@ function TeamspaceFile () {
     }
 
 
-    const handleDownloadFile = (fileIdx) => {
-        downloadFile(fileIdx)
+    const handleDownloadFile = async(fileIdx) => {
+        // // console.log(fileIdx)
+        // try {
+        // // console.log(fileIdx)
+        // const response = await downloadFile(fileIdx)
+        // console.log(response)
+        // } catch (err) {
+        //     console.log(err)
+        // }
     }
 
-    const handleDeleteFile = (fileIdx) => {
-        deleteFile(fileIdx)
+    const handleDeleteFile = async(fileIdx) => {
+        try {
+        const response = await deleteFile(fileIdx)
+        console.log(response)
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     const handleUpload = async (e) => {
@@ -92,7 +104,7 @@ function TeamspaceFile () {
             console.error(err)
         }
     }
-
+    console.log(values)
     return(
     <>
         <CustomBackdrop open={open} onClick={handleModal}/>
@@ -131,8 +143,14 @@ function TeamspaceFile () {
                             {value.fileDescription}
                             </Td>
                             <Td>
-                                <FaFileArrowDown onClick={handleDownloadFile(value.fileIdx)}/>
-                                <FaTrash onClick={handleDeleteFile(value.fileIdx)}/>
+                                <a href={process.env.REACT_APP_API_URL + '/file/download?fileIdx=' + value.fileIdx}
+                                    download
+                                    target='_blank'
+                                    rel='noreferrer'
+                                    >
+                                        <FaFileArrowDown />
+                                </a>
+                                <FaTrash onClick={() => handleDeleteFile(value.fileIdx)}/>
                             </Td>
                         </tr>
                             ))}
@@ -348,8 +366,10 @@ const Table = styled.table`
 
 const Td = styled.td`
     border: solid 1px white;
+    vertical-align: middle;
 `
 
 const Th = styled.th`
     border: solid 1px white;
+    vertical-align: middle;
 `
