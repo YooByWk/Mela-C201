@@ -13,6 +13,7 @@ import com.ssafy.api.user.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.JoinChatRoom;
+import com.ssafy.db.entity.PortfolioAbstract;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -70,8 +71,10 @@ public class ChatRoomController {
                 continue;
             }
 
+            PortfolioAbstract portfolioAbstract = userService.browsePortfolioAbstract(otherUser.getEmailId());
+
             log.info("chatMessage {}, otherUser {}", chatMessage, otherUser);
-            res.add(ChatRoomRes.of(chatRoom, otherUser, chatMessage));
+            res.add(ChatRoomRes.of(chatRoom, otherUser, chatMessage, portfolioAbstract));
         }
 
         // 최근 대화 순으로 정렬
