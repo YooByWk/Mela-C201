@@ -225,9 +225,9 @@ const GatherDetail = () => {
             </span>
           )}
           {isAuthor && (
-            <span>
+            <span onClick={() => Navigate(`../edit/${gatherIdx}`)}>
               <MdEdit
-                onClick={() => Navigate(`../edit/${gatherIdx}`)}
+                
                 className="icon"
               />
               수정
@@ -246,6 +246,7 @@ const GatherDetail = () => {
           )}
           {likeCount}
         </LikeContainer>
+        
         <div className="comment-title">
           <GoBell className="icon" />
           <span>댓글</span>
@@ -253,6 +254,18 @@ const GatherDetail = () => {
         </div>
         <div>
           <hr />
+          <form action="" onSubmit={handleSubmit} className="comment">
+          <input
+            type="text"
+            value={userInput}
+            onChange={hanleUserInput}
+            placeholder="댓글을 입력해주세요"
+            className="input"
+          />
+          <button type="submit" className="button">
+            등록
+          </button>
+        </form>
         </div>
         <div className="comment-list">
           <ul>
@@ -264,14 +277,16 @@ const GatherDetail = () => {
                     <li key={comment.commentIdx}>
                       <div>{comment.nickname}</div>
                       <div className="comment-date">{comment.registDate}</div>
-                      <div>
-                        {comment.content}
+                      <CommentContainer>
+                        <div>{comment.content}</div>
+                        {comment.userIdx === currentUserIdx && (
                         <FaTrashAlt
                           onClick={() =>
                             commentDeleteHandler(comment.commentIdx)
                           }
                         />
-                      </div>
+                        )}
+                      </CommentContainer>
                       <br />
                       <hr />
                     </li>
@@ -284,31 +299,46 @@ const GatherDetail = () => {
           </ul>
         </div>
 
-        <form action="" onSubmit={handleSubmit} className="comment">
-          <input
-            type="text"
-            value={userInput}
-            onChange={hanleUserInput}
-            placeholder="댓글을 입력해주세요"
-            className="input"
-          />
-          <button type="submit" className="button">
-            등록
-          </button>
-        </form>
+
       </DetailMain>
     );
   } else {
     return (
       <div>
-        <p>로딩중</p>
+        {comments &&
+          comments.map((comment) => {
+            return (
+              <div key={comment.commentIdx}>
+                <h3>{comment.nickname}</h3>
+                <p>{comment.content}</p>
+                <p>{comment.registDate}</p>
+                <button
+                  onClick={() => {
+                    console.log("comment", comment);
+                  }}
+                >
+                  fdas
+                </button>
+                {
+                  <button
+                    onClick={() => commentDeleteHandler(comment.commentIdx)}
+                  >
+                    삭제
+                  </button>
+                }
+              </div>
+            );
+          })}
       </div>
     );
   }
 };
 
 export default GatherDetail;
-
+const CommentContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 const DetailMain = styled.div`
   padding: 1rem;
   margin-top: 5%;

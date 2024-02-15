@@ -75,6 +75,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     height: 30%;
+    max-height: 30vh;
     border-radius: 20px;
     padding: 15px;
     overflow: hidden;

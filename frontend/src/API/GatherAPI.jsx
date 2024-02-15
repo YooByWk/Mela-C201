@@ -8,10 +8,12 @@ export const GatherAPI = axios.create({
   baseURL: process.env.REACT_APP_API_URL+'/recruit'
 }) 
 
+
 export const GatherAPIAuth = axios.create({
   baseURL: process.env.REACT_APP_API_URL+'/recruit',
   headers: { 'Authorization': `Bearer ${localStorage.accessToken}` }
  })
+
 
 export const GatherList = async({page, size, sortKey, word}) => {
   const response = await GatherAPI.get(GatherAPI.baseURL, {
@@ -24,7 +26,6 @@ export const GatherList = async({page, size, sortKey, word}) => {
   })
   return response
 }
-
 
 
 export const GatherPost = async (data) => {
@@ -50,7 +51,6 @@ export const RecruitDetail = async({gatherIdx}) => {
   const response = await GatherAPI.get(`/${gatherIdx}`)
   return response
 }
-
 
 
 
