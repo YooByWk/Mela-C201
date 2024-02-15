@@ -114,59 +114,58 @@ function Gather() {
           <ListContainer>
             {myGather.length === 0 ? (
               <>
-              작성한 공고 없음
+              작성한 공고가 없습니다.
               </>
             ) : (
               <>
-            {/* {Object.entries(myGatherLimitList()).map(([key, value]) => ( */}
-              {/* <ListDiv key={value.boardRecruitIdx}> */}
-                {/* <Title> */}
-                {/* {value.title} */}
-                {/* </Title> */}
-                {/* <Content> */}
-                {/* {value.content} */}
-                {/* </Content> */}
-              {/* </ListDiv> */}
-            {/* ))} */}
+            {Object.entries(myGatherLimitList()).map(([key, value]) => (
+              <ListDiv key={value.boardRecruitIdx}>
+                <Title> 
+                {value.title} 
+                </Title> 
+                <Content> 
+                {value.content} 
+                </Content> 
+              </ListDiv> 
+            ))} 
             </>
             )}
           </ListContainer>
-            내가 선호할 만한 사람
-          {/* <ListContainer>
+            <h3>내가 선호할 만한 사람</h3>
+          <ListContainer>
           {shorts.length === 0 ? (
               <>
-              추천 없음
+              선호할 만한 사람이 없습니다.
               </>
             ) : (
               <>
             {Object.entries(shortsLimitList()).map(([key, value]) => (
-              <ShortsDiv key={value.boardRecruitIdx}>
-                <Title>
-                {value.title}
-                </Title>
-                <Content>
-                {value.content}
-                </Content>
+              <ShortsDiv 
+              key={value.shortsIdx} 
+              src={value.fileURL} 
+              alt="영상"
+              muted
+              controls>
               </ShortsDiv>
             ))}
             </>
             )}
-          </ListContainer> */}
-          나를 찾는 공고
+          </ListContainer>
+            <h3>나를 찾는 공고</h3>
           <ListContainer>
             {recommend.length === 0 ? (
               <>
-              적합한 공고 없음
+              적합한 공고가 없습니다.
               </>
             ) : (
               <>
                   {Object.entries(recommendLimitList()).map(([key, value]) => (
                   <ListDiv key={value.boardRecruitIdx}>
                     <Title>
-                    {/* {value.title} */}
+                    {value.title}
                     </Title>
                     <Content>
-                    {/* {value.content} */}
+                    {value.content}
                     </Content>
                   </ListDiv>
                 ))}
@@ -193,12 +192,6 @@ const ListContainer = styled.div`
   gap: 2px 5%;
   padding-top: 3%;
   padding-left: 3%;
-  overflow: scroll;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `
 const GatherContainer = styled.div`
   background-color: ${(props) => props.theme.colours.primary};
@@ -225,6 +218,12 @@ const MainDiv = styled.div`
   padding-left: 2%;
   display: flex;
   flex-direction: column;
+  overflow: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   .main-box {
     padding: 30px;
@@ -248,6 +247,34 @@ const ListDiv = styled.div`
   background-color: #202C44;
   border-radius: 15%;
   margin-bottom: 5%;
+`
+
+const ShortsDiv = styled.video`
+  width: 250px;
+  height: 280px;
+  background-color: #202C44;
+  border-radius: 15%;
+  margin-bottom: 5%;
+  /* 전체화면 버튼 */
+  &::-webkit-media-controls-fullscreen-button {display: none !important}
+
+/* 일시정지, 재생 버튼 */
+&::-webkit-media-controls-play-button {display: none !important}
+
+/* 재생 슬라이드..? */
+&::-webkit-media-controls-timeline {display: none !important}
+
+/* 현재 진행 시간 */
+&::-webkit-media-controls-current-time-display{display: none !important}
+
+/* 전체 시간 */
+&::-webkit-media-controls-time-remaining-display {display: none !important}
+
+/* 음소거 버튼 */
+&::-webkit-media-controls-mute-button {display: none !important}
+
+/* 볼륨 조절 슬라이드 */
+&::-webkit-media-controls-volume-slider {display: none !important}
 `
 
 const Title = styled.div`
