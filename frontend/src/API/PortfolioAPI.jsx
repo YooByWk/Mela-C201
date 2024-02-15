@@ -18,7 +18,7 @@ export const musicUpload = async (formData) => {
     //     console.log(key, ":", formData.get(key));
     // }
     const response = await PortfolioAPI.post(`/musics`, formData)
-    // console.log(response.data)
+
     return response.data
 }
 

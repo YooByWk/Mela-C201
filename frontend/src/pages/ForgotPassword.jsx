@@ -7,14 +7,14 @@ function ForgotPassword() {
     const [ emailId, setEmailId ] = useState('')
 
     const sendEmail = () => {
-        console.log(emailId)
+        // console.log(emailId)
         changePassword({emailId: emailId})
         .then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             alert('이메일을 확인해주세요')
         })
         .catch(err => {
-            console.log(err)
+            // console.log(err)
         })
     }
 

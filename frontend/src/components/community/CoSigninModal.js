@@ -34,12 +34,8 @@ function CoSigninModal({className, fontSize, padding, open, setOpen}) {
     .then((res) => {
       localStorage.clear()
       localStorage.setItem('accessToken', res.accessToken)
-      console.log('로그인 성공')
-      console.log(res)
       setIsLogined(true)
-      console.log(IsLogined)
       fetchUser().then(() => {
-        console.log(userInfo, '유저 정보')
       })
       movePage('/community/create')
     })
@@ -47,7 +43,6 @@ function CoSigninModal({className, fontSize, padding, open, setOpen}) {
 
     })
     .catch((err) => {
-      console.log(err)
     })
   }
 

@@ -47,7 +47,7 @@ function ScheduleEditModal({
 
     const formatDateTime = (date, time) => {
         const info = time ? `${time}:00` : '00:00:00'
-        console.log(`${info}`)
+        // console.log(`${info}`)
         return `${date} ${info}`
     }
 
@@ -75,7 +75,7 @@ function ScheduleEditModal({
             handleClose()
 
         } catch(err) {
-            console.log(err)
+            // console.log(err)
         }
     }
 

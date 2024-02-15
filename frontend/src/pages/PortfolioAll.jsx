@@ -54,8 +54,8 @@ function PortfolioAll() {
                 setUserValues(response[0])
                 setMusicValues(response[2])
             } catch (err){
-                console.log(emailIdInfo.emailId)
-                console.log(err)
+                // console.log(emailIdInfo.emailId)
+                // console.log(err)
             }
             }
         

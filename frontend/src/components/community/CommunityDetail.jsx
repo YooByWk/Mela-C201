@@ -45,13 +45,10 @@ function CommunityDetail() {
 
   const CommentDeleteHandler = async (commentIdx) => {
     try {
-      console.log(commentIdx);
       await CommentDelete({ boardIdx, commentIdx });
-      console.log("삭제중");
       const response = await GetComment({ boardIdx });
       setComments(response.data);
     } catch (error) {
-      console.error("댓글 삭제 중 오류 발생:", error);
     }
   };
 
@@ -129,7 +126,7 @@ function CommunityDetail() {
     }
     const check = async () => {
       const response = await checkBoardLike({ boardIdx, currentUserIdx });
-      console.log("response: ", response);
+      // console.log("response: ", response);
     };
     check();
   }, [boardIdx, currentUserIdx]);
@@ -139,10 +136,10 @@ function CommunityDetail() {
     if (currentUserIdx === null) {
       return;
     }
-    console.log("asd", currentUserIdx);
+    // console.log("asd", currentUserIdx);
     // 유저가 좋아요를 했는가 확인하고
     const check = async () => {
-      console.log(isLiked);
+      // console.log(isLiked);
       const res = await checkBoardLike({ boardIdx, currentUserIdx });
       // console.log(response.data.message==='true')
       if (res.data.message === "true") {

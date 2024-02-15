@@ -81,7 +81,7 @@ function Navbar({backcolour, radius}) {
   const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState('')
   function LogoClick(event) {
-    console.log(event, '홈으로 이동합니다.')
+    // console.log(event, '홈으로 이동합니다.')
     navigate('/')
   }
   

@@ -97,7 +97,7 @@ export const TeamspaceMemberInvite = async ({ teamspaceId, userId }) => {
 // 팀스페이스 파일 업로드
 export const uploadTeamspaceFile = async ({ formData, teamspaceid }) => {
   for (let key of formData.keys()) {
-    console.log(key, ":", formData.get(key));
+    // console.log(key, ":", formData.get(key));
   }
 
   try {
@@ -145,11 +145,11 @@ export const createViduSession = async (teamspaceIdx) => {
         },
       }
     );
-    console.log(response);
+    // console.log(response);
     return response.data;
   } catch (error) {
-    console.error("Error at creating Vidu session:", error);
-    throw error; // 에러를 다시 throw
+    // console.error("Error at creating Vidu session:", error);
+    // throw error; // 에러를 다시 throw
   }
 };
 
@@ -157,7 +157,7 @@ export const getsessions = async () => {
   const response = await axios.get(
     process.env.REACT_APP_API_URL+"/openvidu/getsessions"
   );
-  console.log(response);
+  // console.log(response);
   return response.data;
 };
 
@@ -172,7 +172,7 @@ export const GetSessionId = async (teamspaceidx) => {
         },
       }
     );
-    console.log(response, 'teamspaceIdx');
+    // console.log(response, 'teamspaceIdx');
     // alert(response.data);
     return response.data;
   } catch (error) {
@@ -187,7 +187,7 @@ export const DeleteViduSession = async (sessionId) => {
   const response = await axios.delete(
     process.env.REACT_APP_API_URL+`/openvidu/deletesession/${sessionId}`
   );
-  console.log(response);
+  // console.log(response);
   alert('성공?')
   return response;
 }

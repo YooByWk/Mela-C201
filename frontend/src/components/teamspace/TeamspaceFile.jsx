@@ -67,9 +67,9 @@ function TeamspaceFile () {
     const handleDeleteFile = async(fileIdx) => {
         try {
         const response = await deleteFile(fileIdx)
-        console.log(response)
+        // console.log(response)
         } catch (err) {
-            console.log(err)
+            // console.log(err)
         }
     }
 
@@ -104,7 +104,6 @@ function TeamspaceFile () {
             console.error(err)
         }
     }
-    console.log(values)
     return(
     <>
         <CustomBackdrop open={open} onClick={handleModal}/>

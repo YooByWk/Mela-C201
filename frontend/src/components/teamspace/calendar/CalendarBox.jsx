@@ -22,9 +22,8 @@ function CalendarBox () {
           const dateInfo = await ScheduleList(teamspaceIdx)
           const eventDates = dateInfo.map(e => moment(e.startTime).format('MM/DD'))
           setMarks(eventDates)
-          console.log(eventDates)
+          // console.log(eventDates)
         } catch (err) {
-          console.log(err)
         }
       }
         fetchEvents()

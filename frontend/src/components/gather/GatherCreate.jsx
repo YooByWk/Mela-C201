@@ -40,7 +40,6 @@ function GatherCreate() {
       ...userInput,
       [event.target.id]: event.target.value,
     });
-    console.log(userInput);
   };
 
   const handleGenreChange = (event) => {
@@ -52,9 +51,9 @@ function GatherCreate() {
     } else if (checked && selectedGenres.length >= 3) {
       window.alert("장르는 최대 3개까지만 선택 가능합니다.");
       event.preventDefault();
-      console.log(selectedGenres);
+      // console.log(selectedGenres);
     }
-    console.log(selectedGenres);
+    // console.log(selectedGenres);
   };
 
   const handlePositionChange = (event) => {
@@ -74,8 +73,8 @@ function GatherCreate() {
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    console.log(userInput.endDate, "마감일");
-    console.log(userInput.title.length, "제목길이");
+    // console.log(userInput.endDate, "마감일");
+    // console.log(userInput.title.length, "제목길이");
     if (selectedGenres.length < 1) {
       window.alert("장르를 선택해주세요.");
       return;
@@ -95,11 +94,11 @@ function GatherCreate() {
     if (event.key === "Enter") {
       event.preventDefault();
     }
-    console.log("제출");
-    console.log(userInput);
-    console.log(selectedGenres);
-    console.log(selectedPositions);
-    console.log();
+    // console.log("제출");
+    // console.log(userInput);
+    // console.log(selectedGenres);
+    // console.log(selectedPositions);
+    // console.log();
     const genreName1 = selectedGenres[0];
     const genreName2 = selectedGenres[1];
     const genreName3 = selectedGenres[2];
@@ -111,13 +110,13 @@ function GatherCreate() {
       genreName3,
       positions,
     };
-    console.log(data);
+    // console.log(data);
     try {
       const response = await GatherPost(data);
-      console.log(response, "res");
+      // console.log(response, "res");
       Navigate(`../detail/${response.data.message}`);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 

@@ -11,14 +11,14 @@ function EmailVerify() {
     const { emailId } = useParams()
     
     const sendEmail = () => {
-        console.log(emailId)
+        // console.log(emailId)
         email({emailId: emailId})
         .then(res => {
-            console.log(res)
+            // console.log(res)
             alert('메일이 전송되었습니다.')
         })
         .catch(err => {
-            console.log(err)
+            // console.log(err)
         })
     }
 

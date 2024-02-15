@@ -21,7 +21,7 @@ function MatchingContent() {
         setNickname(response.userIdx.nickname);
         setDescription(response.description);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     };
 
@@ -46,11 +46,11 @@ function MatchingContent() {
   const handleLike = async () => {
     try {
       await likeShorts(values.shortsIdx);
-      console.log("성공");
+      // console.log("성공");
       setLikeActive(!likeActive)
       if (hateActive) setHateActive(false)
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -60,7 +60,7 @@ function MatchingContent() {
       setHateActive(!hateActive)
       if (likeActive) setLikeActive(false)
     } catch (err) {
-      console.log(err)
+      // console.log(err)
     }
   };
 
