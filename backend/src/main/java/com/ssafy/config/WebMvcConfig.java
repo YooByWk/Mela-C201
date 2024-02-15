@@ -21,6 +21,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         // configuration.addAllowedOrigin("*");
+        configuration.addAllowedOrigin("https://i10c201.p.ssafy.io");
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
@@ -73,7 +74,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     public FilterRegistrationBean loggingFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean(requestLoggingFilter());
-        registration.addUrlPatterns("/api/*");
+        registration.addUrlPatterns("/api/**");
+        registration.addUrlPatterns("/ws/**");
         return registration;
     }
+
 }

@@ -137,7 +137,7 @@ function ShortsUploadModal({className, fontSize, padding}) {
 
   return (
     <div>
-        <TriggerButton type="button" onClick={handleOpen} >
+        <TriggerButton type="button" onClick={handleOpen} style={{ border: 'none'}}>
           <span>Add</span>
         </TriggerButton>
       

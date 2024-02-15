@@ -28,7 +28,7 @@ public class ChatController {
         log.info("/pub/chat/message: {}", message);
         message.setSendTime(LocalDateTime.now().toString());
 
-        // Websocket에 발행된 메시지를 redis로 발행(publish)
+        // Websocket에 발행된 메시지를 발행(publish)
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomIdx(), message);
 
         // redis에 채팅 내역 저장
