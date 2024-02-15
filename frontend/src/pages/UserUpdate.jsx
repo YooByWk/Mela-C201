@@ -39,25 +39,26 @@ function UserUpdateForm() {
     const handleGenreChange = (event) => {
         const { checked, value } = event.target;
         if (checked && selectedGenres.length < 3) {
-          setSelectedGenres([...selectedGenres, genres.indexOf(value)+1]);
+          setSelectedGenres([...selectedGenres, value]);
         } else if (!checked) {
-          setSelectedGenres(selectedGenres.filter((genre) => genre !== genres.indexOf(value)+1));
-        } 
-        console.log(selectedGenres);
+          setSelectedGenres(
+            selectedGenres.filter((genre) => genre !== value));
+        } else if (checked && selectedGenres.length >= 3) {
+            window.alert("장르는 최대 3개까지만 선택 가능합니다.");
+            event.preventDefault();
       };
-    
+    }
+
       const handlePositionChange = (event) => {
         const { checked, value } = event.target;
         if (checked) {
-          setSelectedPositions([...selectedPositions, positions.indexOf(value)+1]);
+          setSelectedPositions([...selectedPositions, value]);
         } else if (!checked) {
           setSelectedPositions(
-            selectedPositions.filter((position) => position !== positions.indexOf(value)+1)
+            selectedPositions.filter((position) => position !== value)
           );
         }
-        console.log(selectedPositions);
       };
-    // 나머지 해야함  //
 
     const [userValues, setUserValues] = useState({
         name: '',
@@ -80,7 +81,7 @@ function UserUpdateForm() {
                 const res = await fetchUser()
                 setUserValues(res[0])
                 setPortfolioValues(res[1])
-                setSelectedPositions(res[2])
+                setSelectedPositions(res[2]);
                 setSelectedGenres(res[3])
             } catch (err) {
                 console.error(err)
@@ -194,7 +195,6 @@ function UserUpdateForm() {
         navigate(-1)
     }
 
-    
     return(
         <Container>
             <Title>
@@ -297,6 +297,7 @@ function UserUpdateForm() {
                 id={genre}
                 value={genre}
                 onChange={handleGenreChange}
+                checked={selectedGenres.includes(genre)}  
               />
               <label htmlFor={genre}>{genre}</label>
             </div>
@@ -317,6 +318,7 @@ function UserUpdateForm() {
                 id={position}
                 value={position}
                 onChange={handlePositionChange}
+                checked={selectedPositions.includes(position)}  
               />
               <label htmlFor={position}>{position}</label>
             </div>

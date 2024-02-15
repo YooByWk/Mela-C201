@@ -135,6 +135,11 @@ function ShortsUploadModal({className, fontSize, padding}) {
   }
   }
 
+  //디버깅용(나중에 삭제)
+  const handleClick = async () => {
+    console.log('click')
+  }
+
   return (
     <div>
         <TriggerButton type="button" onClick={handleOpen} style={{ border: 'none'}}>
@@ -162,7 +167,7 @@ function ShortsUploadModal({className, fontSize, padding}) {
             <div className='inputWrapper'>
               <input type='text' id='fileDescription' className='input' onChange={handleChange} placeholder='설명을 입력해주세요.'/>
             </div>
-            <button className='button' type='submit'>
+            <button className='button' type='submit' onClick={handleClick}>
               Upload
             </button>
             <br />

@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { OpenVidu } from "openvidu-browser";
 import { useState, useEffect, useRef } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom"; 
 import styled from "styled-components";
 import axios from "axios";
 import icon from "../assets/icons/logo.png";
@@ -22,8 +22,9 @@ import {
 import { fetchUser } from "../API/UserAPI";
 import ScheduleAllModal from "./../components/Modals/ScheduleAll";
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
+// const APPLICATION_SERVER_URL =
+//   process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
+  const APPLICATION_SERVER_URL = "https://demos.openvidu.io/";
 
 const OPENVIDU_SERVER_URL = "https://localhost:4443";
 const OPENVIDU_SERVER_SECRET = "mela";
@@ -255,7 +256,7 @@ class Video extends Component {
                 videoSource: undefined, // The source of video. If undefined default webcam
                 publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
                 publishVideo: true, // Whether you want to start publishing with your video enabled or not
-                resolution: "520x390", // The resolution of your video
+                resolution: "440x330", // The resolution of your video
                 frameRate: 30, // The frame rate of your video
                 insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
                 mirror: false, // Whether to mirror your local video or not
@@ -389,16 +390,12 @@ class Video extends Component {
   }
   
   render() {
-    // const { params } = this.props.match;
     const Check = () => console.log(this.props);
   console.log(this.state.subscribers.length)
 
     const mySessionId = this.state.mySessionId;
     const myUserName = this.state.myUserName;
     const teamspaceIdx = sessionStorage.getItem("teamspaceIdx");
-    // console.log("mySessionId: ", mySessionId);
-    // console.log("myUserName: ", myUserName);
-    console.log(this.state);
     const Location = window.location.pathname.split("/").pop();
     const goBack = this.props.goBack;
     const leaveButtonHandler = async () => {
@@ -409,44 +406,11 @@ class Video extends Component {
     return (
       <TOP>
         <div>
-          <button onClick={() => console.log(this.props)}></button>
-          {/* <button type="button" onClick={this.createHandler}>
-            팀스페이스 생성
-          </button>
-          <button type="button" onClick={() => console.log(this.state)}>
-            제발
-          </button>
-          <button type="button" onClick={() => this.getSessionId()}>
-            GetSession
-          </button>
-          <button type="button" onClick={() => DeleteViduSession()}>
-            세션 제거
-          </button>
-          <button type="button" onClick={this.getUserName}>
-            유저이리온
-          </button>
-          <button
-            type="button"
-            onClick={() => console.log(this.state.myUserName)}
-          >
-            제발 유저이름{" "}
-          </button>
-
-          <button type="button" onClick={() => console.log(Location)}>
-            windowLocat{" "}
-          </button>
-          <button type="button" onClick={() => console.log(this.state)}>
-            비디오체크
-          </button> */}
-
-
           <MainContainer>
-          <button onClick={()=>console.log(this.state)}> State </button>
+          {/* <button onClick={()=>console.log(this.state)}> State </button> */}
             {this.state.session === undefined ? (
               <div>
-                <img src={icon} alt="으악" />
                 <div>
-                  <h1>아무튼 들어가보기 </h1>
                   <form action="" onSubmit={this.joinSession}>
                     <label>Nombre : </label>
                     <input
@@ -465,7 +429,7 @@ class Video extends Component {
                     />
                     <input
                       type="submit"
-                      value="DIDNT I DO IT FOR U"
+                      value="Enter"
                       name="commit"
                     />
                   </form>
@@ -473,7 +437,7 @@ class Video extends Component {
               </div>
             ) : null}
             <div className="buttonHolder">
-              <h1>{mySessionId}</h1>
+              {/* <h1>{mySessionId}</h1> */}
               <div onClick={leaveButtonHandler}> 
                 <ExitToAppIcon/>
               </div>
@@ -523,31 +487,27 @@ export default Video;
 const TOP = styled.div`
   color: white;
   width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const VideoContainer = styled.div`
-  /* margin-top: 30px; */
   width: 100%;
   display: flex;
   justify-content: center;
   height: 100%;
   overflow: hidden;
-  /* .main-video {
-    grid-column: span 1;
-  }
-
-  .sub-video {
-    grid-column: span 1;
-  } */
 `;
 
 const StreamWrapper = styled.div`
   display: grid;
   place-items: center;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 25px;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 5px;
   height: 50rem;
-  padding: 10px;
+  padding:1px;
   width: 100%;
   div {
     width: 100%;
@@ -557,7 +517,8 @@ const StreamWrapper = styled.div`
 
 const UserVideoContainer = styled.div`
   width: 100%;
-  min-height: 15vh;
+  min-height: 8vh;
+  height: 350px;
   position: relative;
   /* min-height: 15vh; */
   box-sizing: border-box;
@@ -575,7 +536,8 @@ const MainContainer = styled.div`
     background-color: #202c44;
     font-weight: bold;
     font-size: large;
-    bottom: 0;
-    left: 45%;
+    bottom: 5%;
+    left: 50%;
+    z-index: 9999;
   }
 `;

@@ -79,21 +79,22 @@ const FileContainer = styled.div`
   gap: 2px 10%;
   padding-top: 3%;
   padding-left: 7%;
-  overflow: scroll;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`
+  `
+  // overflow: scroll;
+  // -ms-overflow-style: none; /* IE and Edge */
+  // scrollbar-width: none; /* Firefox */
+  // &::-webkit-scrollbar {
+  //   display: none;
+  // }
 const TeamspaceContainer = styled.div`
   background-color: ${(props) => props.theme.colours.primary};
   display: flex;
   /* height: 60rem; */
   color: white;
   padding-top: 3%;
-  height: 70rem;
+  height: 100%;
   justify-content: space-evenly;
+
 `;
 
 const SideDiv = styled.div`
@@ -105,7 +106,8 @@ const SideDiv = styled.div`
 
 const MainDiv = styled.div`
   width: 64%;
-  height: 600px;
+  height: 100%;
+  min-height: 90vh;
   background-color: ${(props) => props.theme.colours.point};
   border-radius: 50px;
   overflow: hidden;
