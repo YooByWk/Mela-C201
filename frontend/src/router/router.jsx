@@ -101,7 +101,7 @@ function AppRouter({ className }) {
           path='/seq' element={<SequenceMain />} /> 
 
           <Route
-            path='/matching/:shortsIdx' element={<Matching />}
+            path='/matching' element={<Matching />}
           />
         </Routes>
     </div>
