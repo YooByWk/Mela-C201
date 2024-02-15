@@ -107,7 +107,7 @@ export const isFollow = async (userId) => {
 
 // 이메일 중복 확인
 export const emailCheck = async ({emailId}) => {
-    console.log(emailId,'유저API 이메일')
+    // console.log(emailId,'유저API 이메일')
     const response = await axios.get(process.env.REACT_APP_API_URL+`/users/emailid/${emailId}`)
     // console.log(response)
     
@@ -117,14 +117,14 @@ export const emailCheck = async ({emailId}) => {
 // 새로운 비밀번호 설정(잃어버렸을 때)
 export const newPassword = async (data) => {
     const response = await UserApi.put('/newpassword', data)
-    console.log(response)
+    // console.log(response)
     return response.data
 }
 
 // 알람 조회
 export const notification = async () => {
     if (!localStorage.accessToken) {
-        console.log('토큰이 없습니다')
+        // console.log('토큰이 없습니다')
         return
     }
     const response = await axios.get(process.env.REACT_APP_API_URL+`/users/notifications`, {
@@ -139,14 +139,14 @@ export const notification = async () => {
 // 알람 확인
 export const checkNotification = async ({notificationid}) => {
     const response = await UserApi.get(`/notifications/${notificationid}`)
-    console.log(response)
+    // console.log(response)
     return response.data
 }
 
 // 알람 삭제
 export const delNotification = async ({notificationid}) => {
     const response = await UserApi.delete(`/notifications/${notificationid}`)
-    console.log(response)
+    // console.log(response)
     return response.data
 }
 

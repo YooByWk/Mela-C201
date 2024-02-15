@@ -30,7 +30,6 @@ function ScheduleCreateModal({ className, fontSize, padding, teamspaceId, onSche
 
     const formatDateTime = (date, time) => {
         const info = time ? `${time}:00` : '00:00:00'
-        console.log(`${info}`)
         return `${date} ${info}`
     }
 
@@ -60,7 +59,6 @@ function ScheduleCreateModal({ className, fontSize, padding, teamspaceId, onSche
             setOpen(false)
 
         } catch(err) {
-            console.log(err)
         }
     }
 

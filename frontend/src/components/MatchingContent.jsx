@@ -29,7 +29,7 @@ function MatchingContent() {
         setNickname(response.userIdx.nickname);
         setDescription(response.description);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     };
 
@@ -59,7 +59,7 @@ function MatchingContent() {
       setLikeActive(!likeActive)
       if (hateActive) {setHateActive(false)}
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -69,7 +69,7 @@ function MatchingContent() {
       setHateActive(!hateActive)
       if (likeActive) {setLikeActive(false)}
     } catch (err) {
-      console.log(err)
+      // console.log(err)
     }
   };
 

@@ -115,7 +115,7 @@ function TeamspaceInviteModal () {
         setInviteList(res)
         // console.log(res)
       } catch (err) {
-        console.log(err)
+        // console.log(err)
       }
     }
     getList()
@@ -150,13 +150,13 @@ function TeamspaceInviteModal () {
       const response = await userSearch(searchInput);
       if (response.length >= 1) {
         setInviteList(response);
-        console.log(response)
+        // console.log(response)
       } else {
         setInviteList('')
       }
     } else {
       const res = await followingList(userValues.emailId)
-      console.log(res)
+      // console.log(res)
       setInviteList(res)
     }
   }

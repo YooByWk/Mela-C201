@@ -37,12 +37,10 @@ function SignupModal({className, fontSize, padding}) {
   // 이메일 아이디 중복 확인
   const checkEmailId = (e) => {
     e.preventDefault()
-    console.log(values.emailId)
+    // console.log(values.emailId)
     emailCheck({emailId: values.emailId})
 
     .then((res) => {
-      console.log(res)
-      console.log(values.emailId)
       if (res.statusCode === 200) {
         alert('사용 가능한 아이디입니다.')
       }
@@ -59,8 +57,8 @@ function SignupModal({className, fontSize, padding}) {
   const checkNickname = () => {
     checkDupNickname({nickname: values.nickname})
     .then((res) => {
-      console.log(values.nickname)
-      console.log(res)
+      // console.log(values.nickname)
+      // console.log(res)
       if (res.statusCode === 200) {
         alert('사용 가능한 닉네임입니다.')
       }
@@ -94,32 +92,30 @@ function SignupModal({className, fontSize, padding}) {
     const formmatedDate = moment(date).format('YYYY-MM-DD')
     setBirthDate(formmatedDate)
     setValues({...values, birth: formmatedDate})
-    console.log(formmatedDate)
   }
 
     
   const handleGenderChange = async (e) => {
     setValues({...values,
       [e.target.name]: e.target.value,})
-      console.log(e.target)
+      // console.log(e.target)
     }
 
   const handleSearchAllowChange = async (e) => {
     setValues({...values,
       [e.target.id]: e.target.checked,})
-      console.log(e.target.checked)
+      // console.log(e.target.checked)
     }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(values)
     signup(values)
     .then((res) => {
       alert('이메일 인증을 진행해주세요.')
       navigate(`/signup/${values.emailId}`)
     })
     .catch ((err) => {
-      console.log(err)
+      // console.log(err)
     })
   }
 

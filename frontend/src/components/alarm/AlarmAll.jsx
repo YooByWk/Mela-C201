@@ -15,9 +15,9 @@ function AlarmAll () {
             try {
                 const res = await notification()
                 setData(res)
-                console.log(res)
+                // console.log(res)
             } catch (err) {
-                console.log(err)
+                // console.log(err)
             }
         }
         fetchData()
@@ -50,11 +50,11 @@ function AlarmAll () {
         checkAlarm.forEach(notificationIdx => {
             checkNotification({ notificationid: notificationIdx })
             .then(() => {
-                console.log(notificationIdx)
+                // console.log(notificationIdx)
                 refreshNotification()
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
             })
         })
     }
@@ -65,11 +65,11 @@ function AlarmAll () {
             window.confirm('삭제하시겠습니까?')
             delNotification({ notificationid: notificationIdx })
             .then(() => {
-                console.log(notificationIdx)
+                // console.log(notificationIdx)
                 refreshNotification()
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
             })
         })
     }
@@ -81,7 +81,7 @@ function AlarmAll () {
             setData(res)
             setCheckAlarm([])
         } catch (err) {
-            console.log(err)
+            // console.log(err)
         }
     }
   

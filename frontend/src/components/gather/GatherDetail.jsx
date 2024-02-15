@@ -39,7 +39,6 @@ const GatherDetail = () => {
       setData(response.data);
       setBoardIndex(response.data.boardIdx);
       setLikeCount(response.data.likeNum);
-      console.log(response.data, currentUserIdx, "온갖체크");
       setIsAuthor(response.data.userIdx === currentUserIdx);
     };
     detailData();
@@ -58,18 +57,17 @@ const GatherDetail = () => {
 
   const hanleUserInput = async (event) => {
     setUserInput(event.target.value);
-    console.log(userInput);
   };
 
   const commentDeleteHandler = async (commentIdx) => {
     try {
-      console.log(commentIdx);
+      // console.log(commentIdx);
       await CommentDelete({ boardIdx: boardIndex, commentIdx });
-      console.log("삭제중");
+      // console.log("삭제중");
       const response = await GetComment({ boardIdx: boardIndex });
       setComments(response.data);
     } catch (error) {
-      console.error("댓글 삭제 중 오류 발생:", error);
+      // console.error("댓글 삭제 중 오류 발생:", error);
     }
   };
 
@@ -118,7 +116,7 @@ const GatherDetail = () => {
       }
     };
     Likecheck();
-    console.log(isLiked, "좋아요 확인");
+    // console.log(isLiked, "좋아요 확인");
   }, [boardIndex, currentUserIdx]);
 
   const BoardLikeHandler = async () => {
@@ -136,12 +134,10 @@ const GatherDetail = () => {
 
     try {
       const response = await CreateChat({ otheruserid: otheruserid });
-      console.log(response);
       setRoomIdx(response);
       Navigate(`/message/${response}`);
       setOtheruserid("");
     } catch (err) {
-      console.log(err);
     }
   };
 
@@ -312,13 +308,6 @@ const GatherDetail = () => {
                 <h3>{comment.nickname}</h3>
                 <p>{comment.content}</p>
                 <p>{comment.registDate}</p>
-                <button
-                  onClick={() => {
-                    console.log("comment", comment);
-                  }}
-                >
-                  fdas
-                </button>
                 {
                   <button
                     onClick={() => commentDeleteHandler(comment.commentIdx)}

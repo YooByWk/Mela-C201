@@ -32,7 +32,7 @@ function TeamspaceDetail () {
         Navigate(`../teamspace/video/${teamspaceIdx}`, { state : { teamspace : teamspaceIdx } })
     }
     const goBack = () => {
-        console.log()
+        // console.log()
         Navigate(-1)
     }
 

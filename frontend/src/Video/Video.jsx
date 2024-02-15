@@ -61,7 +61,6 @@ class Video extends Component {
   }
   async getUserName() {
     const tempName = await fetchUser();
-    console.log(tempName);
     this.setState({
       myUserName: tempName[0].nickname,
     });
@@ -72,14 +71,14 @@ class Video extends Component {
     switch (target) {
       case "camera":
         this.setState({ isCamera: !this.state.isCamera }, () => {
-          console.log(this.state.isCamera);
+          // console.log(this.state.isCamera);
           this.state.publisher.publishVideo(this.state.isCamera);
         });
 
         break;
       case "mic":
         this.setState({ isMic: !this.state.isMic }, () => {
-          console.log(this.state.isMic);
+          // console.log(this.state.isMic);
           this.state.publisher.publishAudio(this.state.isMic);
         });
         break;
@@ -93,20 +92,19 @@ class Video extends Component {
   }
   async componentDidMount() {
     window.addEventListener("beforeunload", this.onbeforeunload);
-    console.log("유저이름 불러오기");
+    // console.log("유저이름 불러오기");
     await this.getUserName();
     /// 프론트 단독
     this.setState({
       teamspaceIdx: window.location.pathname.split("/").pop(),
     });
     let temp = "MelaTeamSpace" + window.location.pathname.split("/").pop();
-    console.log(temp, "temp");
     this.setState(
       {
         mySessionId: temp,
       },
       () => {
-        console.log(temp, "callback");
+        // console.log(temp, "callback");
         if (!this.state.session) {
           this.joinSession();
         }
@@ -147,13 +145,13 @@ class Video extends Component {
 
   createHandler = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    // console.log(this.state);
     createViduSession(this.state.teamspaceIdx)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -383,15 +381,15 @@ class Video extends Component {
 
   async getSessionId() {
     const res = await GetSessionId(this.state.teamspaceIdx);
-    console.log(res);
+    // console.log(res);
     this.setState({
       mySessionId: res,
     });
   }
   
   render() {
-    const Check = () => console.log(this.props);
-  console.log(this.state.subscribers.length)
+    // const Check = () => console.log(this.props);
+  // console.log(this.state.subscribers.length)
 
     const mySessionId = this.state.mySessionId;
     const myUserName = this.state.myUserName;
@@ -399,7 +397,6 @@ class Video extends Component {
     const Location = window.location.pathname.split("/").pop();
     const goBack = this.props.goBack;
     const leaveButtonHandler = async () => {
-      console.log("leave");
       await this.leaveSession();
       goBack();
     }

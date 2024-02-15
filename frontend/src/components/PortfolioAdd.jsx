@@ -192,7 +192,7 @@ function PortfolioAdd() {
         formData.append('file', lyricFile)
 
         for (let key of formData.keys()) {
-            console.log(key, ":", formData.get(key));
+            // console.log(key, ":", formData.get(key));
         }
 
         try {

@@ -27,14 +27,14 @@ export const Chatting = (props) => {
     loadMessages();
 
     if (ws && ws.connect) {
-      console.log("disconnect!!!!!");
+      // console.log("disconnect!!!!!");
       ws.disconnect();
       connect();
     }
   }, [props.roomIdx]);
 
   useEffect(() => {
-    console.log("chatting useeffect");
+    // console.log("chatting useeffect");
     setRoomIdx(props.roomIdx);
     setUserIdx(localStorage.getItem("userIdx"));
     loadMessages();
@@ -46,7 +46,7 @@ export const Chatting = (props) => {
         const res = await fetchUser();
         setNickname(res[0].nickname);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     };
     userInfo();
@@ -55,13 +55,13 @@ export const Chatting = (props) => {
   const loadMessages = async () => {
     try {
       const response = await EnterChat({ roomid: props.roomIdx });
-      console.log("loadMessages : ", response);
+      // console.log("loadMessages : ", response);
 
       setMessages(response);
 
-      console.log("response chatRooms: ", messages);
+      // console.log("response chatRooms: ", messages);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -70,15 +70,15 @@ export const Chatting = (props) => {
     sock = new SockJS("/ws-stomp");
     ws = Stomp.over(sock);
 
-    console.log("ws:: ", ws);
+    // console.log("ws:: ", ws);
 
     ws.connect(
       {},
       (frame) => {
-        console.log("ws.connect!!");
+        // console.log("ws.connect!!");
         setTimeout(() => {
           ws.subscribe(`/sub/chat/room/${props.roomIdx}`, (message) => {
-            console.log("subscribe!!!!");
+            // console.log("subscribe!!!!");
             const recv = JSON.parse(message.body);
             recvMessage(recv);
           });
@@ -94,8 +94,8 @@ export const Chatting = (props) => {
   };
 
   const sendMessage = () => {
-    console.log("ws.connected: ", ws.connected);
-    console.log("roomIDx : ", props.roomIdx);
+    // console.log("ws.connected: ", ws.connected);
+    // console.log("roomIDx : ", props.roomIdx);
 
     if (ws && ws.connected && message.trim() !== "") {
       ws.send(
@@ -112,7 +112,7 @@ export const Chatting = (props) => {
   };
 
   const recvMessage = (recv) => {
-    console.log("recvMesage!!!!!", recv);
+    // console.log("recvMesage!!!!!", recv);
     setMessages((prevMessages) => [
       ...prevMessages,
       {

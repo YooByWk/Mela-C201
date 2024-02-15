@@ -3,7 +3,7 @@ import { select, scaleLinear, axisLeft } from "d3";
 import { Midi } from "@tonejs/midi";
 import * as Tone from "tone";
 import "./MidiVisualizer.css"; // CSS 파일 import
-
+import styled from "styled-components";
 function MidiVisualizer({ Cwidth, onNoteAdd, onNoteRemove }) {
   const ref = useRef();
   const [midiData, setMidiData] = useState(null);
@@ -30,7 +30,7 @@ function MidiVisualizer({ Cwidth, onNoteAdd, onNoteRemove }) {
           const midi = new Midi(arrayBuffer);
           setMidiData(midi);
         } catch (error) {
-          console.error("미디 파일을 읽는 중 오류가 발생했습니다:", error);
+          // console.error("미디 파일을 읽는 중 오류가 발생했습니다:", error);
           setMidiData(null);
         }
       };
@@ -104,7 +104,7 @@ function MidiVisualizer({ Cwidth, onNoteAdd, onNoteRemove }) {
       const tracks = midiData.tracks;
   
       const width = Cwidth > 0 ? Cwidth * 2.3 : 1600;
-      const height = 900;
+      const height = 650;
       const innerWidth = width - margin.left - margin.right;
       const innerHeight = height - margin.top - margin.bottom; // 내부 높이 할당
   
@@ -126,8 +126,8 @@ function MidiVisualizer({ Cwidth, onNoteAdd, onNoteRemove }) {
       const colors = ['#FF5733', '#FFC300', '#DAF7A6', '#C70039', '#900C3F', '#581845'];
   
       const yAxis = axisLeft(yScale)
-      .tickValues([]) // y축의 음 표시를 비웁니다.
-      .tickFormat(""); // y축의 텍스트 표시를 비웁니다.
+      .tickValues([]) // y축의 음 표시를 비움
+      .tickFormat(""); // y축의 텍스트 표시를 비움
     
     const yAxisGroup = svg.append('g')
       .attr('transform', `translate(${margin.left}, ${margin.top})`)
@@ -173,13 +173,13 @@ function MidiVisualizer({ Cwidth, onNoteAdd, onNoteRemove }) {
   return (
     <div className="container">
       <input type="file" onChange={handleFileChange} />
-      <button onClick={playAllTracks} disabled={isPlaying}>
+      <Midibutton onClick={playAllTracks} disabled={isPlaying}>
         전체 재생
-      </button>
+      </Midibutton>
       <svg
         ref={ref}
         width={Cwidth}
-        height="712"
+        height="650"
         style={{ backgroundColor: "gray" }}
       />
     </div>
@@ -187,3 +187,13 @@ function MidiVisualizer({ Cwidth, onNoteAdd, onNoteRemove }) {
 }
 
 export default MidiVisualizer;
+const Midibutton = styled.button`
+  margin-right: 10px;
+  padding: 8px 16px;
+  background-color: #4c6faf;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+`
+

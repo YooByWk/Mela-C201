@@ -37,7 +37,7 @@ export const GatherPost = async (data) => {
         'Authorization' : `Bearer ${localStorage.accessToken}`
       }
     })
-    console.log(response)
+    (response)
     return response;
   }
   catch (error) {

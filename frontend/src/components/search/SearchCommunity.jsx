@@ -18,7 +18,7 @@ function SearchCommunity() {
                 setValues(searchInfo.data.boardResList)
 
             } catch (err) {
-                console.log(err)
+                // console.log(err)
             }
         }
         info()

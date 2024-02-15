@@ -20,7 +20,7 @@ function CalendarBar () {
             const dateInfo = await ScheduleList(teamspaceIdx);
             setDates(dateInfo);
         } catch (err) {
-            console.log(err);
+            // console.log(err);
         }
     }
     

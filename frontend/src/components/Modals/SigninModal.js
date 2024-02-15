@@ -30,7 +30,7 @@ function SigninModal({ className, fontSize, padding }) {
 
     try {
       const res = await signin(values);
-      console.log(res);
+      // console.log(res);
 
       if (res && res.accessToken) {
         localStorage.clear();
@@ -43,11 +43,11 @@ function SigninModal({ className, fontSize, padding }) {
         setOpen(false);
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
 
       if (err.response && err.response.status === 401) {
         const emailId = values.id.split("@");
-        console.log(emailId[0])
+        // console.log(emailId[0])
         alert("이메일 인증을 먼저 완료해주세요.");
         movePage(`/signup/${emailId[0]}`);
       } else {

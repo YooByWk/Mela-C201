@@ -17,11 +17,9 @@ function ScheduleAllModal({ className, fontSize, padding, teamspaceId, dates, on
 
     const ScheduleDeleteHandler = async (scheduleId) => {
         try {
-            console.log(scheduleId)
             await ScheduleDelete({ teamspaceId, scheduleId })
             onRefresh()
         } catch (err) {
-            console.log(err)
         }
     }
 
