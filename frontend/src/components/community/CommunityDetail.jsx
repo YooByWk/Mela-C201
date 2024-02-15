@@ -256,16 +256,18 @@ function CommunityDetail() {
                   <li key={comment.commentIdx}>
                     <div>{comment.nickname}</div>
                     <div className="comment-date">{comment.registDate}</div>
-                    <div>
-                      {comment.content}
+                    <CommentContainer>
+                      <div>{comment.content}</div>
                       {comment.userIdx === currentUserIdx && (
-                        <FaTrashAlt
-                          onClick={() =>
-                            CommentDeleteHandler(comment.commentIdx)
-                          }
-                        ></FaTrashAlt>
+                        <div>
+                          <FaTrashAlt
+                            onClick={() =>
+                              CommentDeleteHandler(comment.commentIdx)
+                            }
+                          />
+                        </div>
                       )}
-                    </div>
+                    </CommentContainer>
                     <br />
                     <hr />
                   </li>
@@ -295,6 +297,11 @@ function CommunityDetail() {
 }
 
 export default CommunityDetail;
+
+const CommentContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const MainDiv = styled.div`
   margin-top: 5%;

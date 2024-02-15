@@ -223,9 +223,9 @@ const GatherDetail = () => {
             </span>
           )}
           {isAuthor && (
-            <span>
+            <span onClick={() => Navigate(`../edit/${gatherIdx}`)}>
               <MdEdit
-                onClick={() => Navigate(`../edit/${gatherIdx}`)}
+                
                 className="icon"
               />
               수정
@@ -262,14 +262,16 @@ const GatherDetail = () => {
                     <li key={comment.commentIdx}>
                       <div>{comment.nickname}</div>
                       <div className="comment-date">{comment.registDate}</div>
-                      <div>
-                        {comment.content}
+                      <CommentContainer>
+                        <div>{comment.content}</div>
+                        {comment.userIdx === currentUserIdx && (
                         <FaTrashAlt
                           onClick={() =>
                             commentDeleteHandler(comment.commentIdx)
                           }
                         />
-                      </div>
+                        )}
+                      </CommentContainer>
                       <br />
                       <hr />
                     </li>
@@ -299,14 +301,40 @@ const GatherDetail = () => {
   } else {
     return (
       <div>
-        <p>로딩중</p>
+        {comments &&
+          comments.map((comment) => {
+            return (
+              <div key={comment.commentIdx}>
+                <h3>{comment.nickname}</h3>
+                <p>{comment.content}</p>
+                <p>{comment.registDate}</p>
+                <button
+                  onClick={() => {
+                    console.log("comment", comment);
+                  }}
+                >
+                  fdas
+                </button>
+                {
+                  <button
+                    onClick={() => commentDeleteHandler(comment.commentIdx)}
+                  >
+                    삭제
+                  </button>
+                }
+              </div>
+            );
+          })}
       </div>
     );
   }
 };
 
 export default GatherDetail;
-
+const CommentContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 const DetailMain = styled.div`
   padding: 1rem;
   margin-top: 5%;
