@@ -133,7 +133,14 @@ function TeamspaceManage () {
               <div className="thum">
                 <label className="label">썸네일 변경</label>
                 <div className="input">
-                  <input type="file" onChange={handleImgFile}/>
+                    <label className='label-file' for="input-file-thum">파일 선택</label>
+                    <input 
+                    type='file' 
+                    className='input' 
+                    onChange={handleImgFile} 
+                    accept=".jpg,.jpeg,.png" 
+                    style={{display: "none"}} 
+                    id="input-file-thum"/>
                 </div>
               </div>
               <div className="thumnail">
@@ -145,7 +152,14 @@ function TeamspaceManage () {
               <div className="thum">
                 <label className="label">배경 이미지 변경</label>
                 <div className="input">
-                  <input type="file" onChange={handleBackFile}/>
+                    <label className='label-file' for="input-file-back">파일 선택</label>
+                    <input 
+                    type='file' 
+                    className='input' 
+                    onChange={handleBackFile} 
+                    accept=".jpg,.jpeg,.png" 
+                    style={{display: "none"}} 
+                    id="input-file-back"/>
                 </div>
               </div>
               <div className="back-thumnail">
@@ -209,6 +223,20 @@ const Container = styled.form`
 
   .input {
     margin-top: 1rem;
+    background-color: #151c2c;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
+
+  .label-file {
+    padding: 6px 25px;
+        background-color:#254EF8;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
   }
 
   .button {

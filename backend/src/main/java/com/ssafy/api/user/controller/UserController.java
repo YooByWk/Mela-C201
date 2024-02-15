@@ -8,6 +8,8 @@ import com.ssafy.api.board.response.BoardRecruitListRes;
 import com.ssafy.api.board.response.BoardRecruitRes;
 import com.ssafy.api.board.service.BoardService;
 import com.ssafy.api.board.service.RecruitService;
+import com.ssafy.api.file.service.FileService;
+import com.ssafy.api.shorts.service.ShortsService;
 import com.ssafy.api.user.request.*;
 import com.ssafy.api.user.response.FeedRes;
 import com.ssafy.api.user.response.UserLoginPostRes;
@@ -65,6 +67,12 @@ public class UserController {
 
 	@Autowired
 	GenreRepository genreRepository;
+
+	@Autowired
+	ShortsService shortsService;
+
+	@Autowired
+	FileService fileService;
 
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드 ...를</strong>를 통해 회원가입 한다.")
@@ -496,7 +504,7 @@ public class UserController {
 		String targetUserId = userid;		//포트폴리오를 조회 대상 ID
 
 		//ArrayIndexOutOfBoundsException 원인 될 수 있음
-		Object[] returnVO = new Object[4];
+		Object[] returnVO = new Object[6];
 
 		//로그인 되어있는지 검사
 		try {
@@ -524,15 +532,49 @@ public class UserController {
 			List<PortfolioMusic> portfolioMusicList = portfolioMusicRepositorySupport.getPortfolioMusicListByUserIdx(targetUser);
 			targetUser.setPassword("");
 
-//			Object[] returnVO = {targetUser, portfolioAbstract, portfolioMusicList};
-
 			//2-1. 유저 기본 정보
 			returnVO[0] = targetUser;
 
 			//2-2. 유저 포트폴리오
-			returnVO[1] = portfolioAbstractRepository.findByUserIdx(targetUser);			//portfolio_abstract 객체 반환 (portfolio_abstract_idx, instagram, self_intro, youtube, portfolio_picture_file_idx, user_idx)
+			returnVO[1] = portfolioAbstract;
 
-			//2-3. 유저 포지션
+			//2-3. 유저 포트폴리오 뮤직
+			returnVO[2] = portfolioMusicList;
+
+			//2-4. 유저 업로드 쇼츠
+			//2-4-1. 조회할 사용자의 쇼츠 리스트 가져옴
+			List<Shorts> shortsList = shortsService.getShortsListByUserIdx(targetUser);
+			List<com.ssafy.api.board.response.Shorts> shortsListResponse = new ArrayList<>();
+
+			for(Shorts shorts : shortsList) {
+				com.ssafy.api.board.response.Shorts shortsResponse = new com.ssafy.api.board.response.Shorts();
+
+				//setter 호출
+				shortsResponse.setShortsIdx(shorts.getShortsIdx());
+				shortsResponse.setUserIdx(shorts.getUserIdx());
+				shortsResponse.setTitle(shorts.getTitle());
+				shortsResponse.setDescription(shorts.getDescription());
+				shortsResponse.setShortsPathFileIdx(shorts.getShortsPathFileIdx());
+
+				String videoUrl = null;
+
+				//fileservice를 이용해 Amazon S3 영상 링크 가져오기
+				try {
+					videoUrl = fileService.getVideoUrlBySaveFileIdx(shorts.getShortsPathFileIdx().getFileIdx());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+
+				//com.ssafy.api.board.response.Shorts DTO에 영상 링크 설정
+				shortsResponse.setFileURL(videoUrl);
+				//리스트 추가
+				shortsListResponse.add(shortsResponse);
+			}
+
+			returnVO[3] = shortsListResponse;
+
+			//2-5. 유저 포지션
 			ArrayList<Long> userPositionList = new ArrayList<>();
 			try {
 				List<UserPosition> positionList = userPositionRepository.findPositionIdxByUserIdx(targetUser);
@@ -543,9 +585,9 @@ public class UserController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			returnVO[2] = userPositionList;
+			returnVO[4] = userPositionList;
 
-			//2-4. 유저 장르
+			//2-6. 유저 장르
 			ArrayList<Long> userGenreList = new ArrayList<>();
 			try {
 				List<UserGenre> genreList = userGenreRepository.findGenreIdxByUserIdx(targetUser);
@@ -557,7 +599,7 @@ public class UserController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			returnVO[3] = userGenreList;
+			returnVO[5] = userGenreList;
 
 			return ResponseEntity.status(200).body(returnVO);
 		//3. 조회할 수 없는 사용자 (searchAllow false)

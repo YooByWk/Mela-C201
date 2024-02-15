@@ -14,7 +14,7 @@ function EmailVerify() {
         console.log(emailId)
         email({emailId: emailId})
         .then(res => {
-            console.log(res.data)
+            console.log(res)
             alert('메일이 전송되었습니다.')
         })
         .catch(err => {

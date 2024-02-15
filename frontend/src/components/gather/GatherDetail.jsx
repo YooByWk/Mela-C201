@@ -157,11 +157,13 @@ const GatherDetail = () => {
           <div className="title-btn">
             <h1>{data.title}</h1>
             <div className="chat-btn">
-              <DefaultButton
-                text={"채팅연결"}
-                width={"6rem"}
-                onClick={handleChat}
-              />
+              {!isAuthor && (
+                <DefaultButton
+                  text={"채팅연결"}
+                  width={"6rem"}
+                  onClick={handleChat}
+                />
+              )}
             </div>
           </div>
           <IoMdArrowRoundBack size="30" className="back-btn" onClick={goHome} />

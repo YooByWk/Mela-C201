@@ -26,7 +26,7 @@ export const Chatting = (props) => {
     setUserIdx(localStorage.getItem("userIdx"));
     loadMessages();
 
-    if (ws) {
+    if (ws && !ws.connect) {
       console.log("disconnect!!!!!");
       ws.disconnect();
       connect();
@@ -66,7 +66,8 @@ export const Chatting = (props) => {
   };
 
   const connect = () => {
-    sock = new SockJS("//localhost:8080/ws-stomp");
+    // sock = new SockJS(process.env.REACT_APP_API_URL2 + "/ws-stomp");
+    sock = new SockJS("/ws-stomp");
     ws = Stomp.over(sock);
 
     ws.connect(
@@ -266,6 +267,7 @@ const Container = styled.div`
     margin-right: 10px;
     width: 90%;
     background-color: transparent;
+    color: white;
   }
 
   button {

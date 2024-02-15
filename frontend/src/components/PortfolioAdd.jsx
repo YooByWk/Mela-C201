@@ -83,7 +83,7 @@ const CustomBody = styled(DialogBody)`
 
     & .label-file-album {
         padding: 6px 25px;
-        background-color:#FF6600;
+        background-color:#254EF8;
         border-radius: 4px;
         color: white;
         cursor: pointer;
@@ -91,7 +91,7 @@ const CustomBody = styled(DialogBody)`
 
     & .label-file {
         padding: 6px 25px;
-        background-color:#FF6600;
+        background-color:#254EF8;
         border-radius: 4px;
         color: white;
         cursor: pointer;
@@ -99,11 +99,15 @@ const CustomBody = styled(DialogBody)`
 `
 
 const Img = styled.img`
-    height: 30px;
-    width: 30px;
-    border-radius: 10;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
 `
-
+const Button = styled.button`
+    background-color: #254EF8;
+    color: white;
+    border-radius: 20px;
+`
 function PortfolioAdd() {
     const [open, setOpen] = useState(false)
     const [pinFixed, setPinFixed] = useState(false)
@@ -236,36 +240,36 @@ function PortfolioAdd() {
                 alt="프로필 이미지"
                 />
                 <div className='inputWrapper'>
-                    <label className='label-file-album' for="input-file">앨범 커버 (jpg, jpeg, png)</label>
+                    <label className='label-file-album' for="input-file-album">앨범 커버 (jpg, jpeg, png)</label>
                     <input 
                     type='file' 
                     className='input' 
                     onChange={handleImgFile} 
                     accept=".jpg,.jpeg,.png" 
-                    // style={{display: "none"}} 
+                    style={{display: "none"}} 
                     ref={imgRef}
-                    id="input-file"/>
+                    id="input-file-album"/>
                 </div>
                 <div className='inputWrapper'>
-                    <label className='label-file' for="input-file">음원 (mp3, flac)</label>
+                    <label className='label-file' for="input-file-music">음원 (mp3, flac)</label>
                     <input 
                     type='file' 
                     className='input' 
                     onChange={handleMusicFile} 
                     accept=".mp3,.flac" 
-                    // style={{display: "none"}}
-                    id="input-file"
+                    style={{display: "none"}}
+                    id="input-file-music"
                     />
                 </div>
                 <div className='inputWrapper'>
-                    <label className='label-file' for="input-file">가사 (txt, xml)</label>
+                    <label className='label-file' for="input-file-lyric">가사 (txt, xml)</label>
                     <input 
                     type='file' 
                     className='input' 
                     onChange={handleLyricFile} 
                     accept=".txt,.xml" 
-                    // style={{display: "none"}}
-                    id="input-file"/>
+                    style={{display: "none"}}
+                    id="input-file-lyric"/>
                 </div>
                 {/* <div className='inputWrapper'>
                     <label className='label'>pin고정</label>
@@ -275,9 +279,9 @@ function PortfolioAdd() {
                 </CustomBody>
                 <br/>
                 <Link to='/musics'>
-                <button onClick={handleUpload}>
+                <Button onClick={handleUpload}>
                     업로드
-                </button>
+                </Button>
             </Link>
             </CustomDialog>
         </>
