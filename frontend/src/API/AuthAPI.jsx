@@ -2,8 +2,8 @@ import axios from "axios";
 
 /** CREATE CUSTOM AXIOS INSTANCE */
 export const AuthApi = axios.create({
-    baseURL: 'http://localhost:8080/api/v1',
-})
+    baseURL: process.env.REACT_APP_API_URL,
+});
 
 /** SIGNIN API */
 export const signin = async ({ 

@@ -3,7 +3,7 @@ import axios from 'axios';
 let ACCESS_TOKEN = localStorage.getItem('accessToken')
 
 export const ScheduleAPI = axios.create({
-  baseURL: `http://localhost:8080/api/v1/teamspaces`,
+  baseURL: process.env.REACT_APP_API_URL + '/teamspaces',
   headers: {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${ACCESS_TOKEN}`,

@@ -1,5 +1,8 @@
 package com.ssafy.api.shorts.service;
 
+import com.ssafy.api.chat.request.ChatMessage;
+import com.ssafy.api.chat.service.ChatRoomService;
+import com.ssafy.api.chat.service.ChatService;
 import com.ssafy.api.file.service.FileService;
 import com.ssafy.api.shorts.request.ShortsPostReq;
 import com.ssafy.db.entity.*;
@@ -22,10 +25,8 @@ public class ShortsServiceImpl implements  ShortsService {
 
     @Autowired
     ShortsRepository shortsRepository;
-
     @Autowired
     ShortsLikeRepository shortsLikeRepository;
-
     @Autowired
     ShortsDislikeRepository shortsDislikeRepository;
 
@@ -34,6 +35,11 @@ public class ShortsServiceImpl implements  ShortsService {
 
     @Autowired
     UserGenreRepository userGenreRepository;
+
+    @Autowired
+    ChatService chatService;
+    @Autowired
+    ChatRoomService chatRoomService;
 
 
     //지원하는 동영상 확장자 ArrayList
@@ -51,14 +57,8 @@ public class ShortsServiceImpl implements  ShortsService {
     @Override
     public List<com.ssafy.api.board.response.Shorts> getShortsList(User nowLoginUser) {
         //1. 현재 사용자의 선호장르, 싫어요 표시한 쇼츠의 리스트를 가져오기
-        List<UserGenre> preferedGenre = userGenreRepository.findGenreIdxByUserIdx(nowLoginUser);        //사용자의 선호장르
-//        List<Shorts> dislikedShorts = shortsDislikeRepository.findShortsIdxByUserIdx(nowLoginUser);     //사용자가 싫어요 표시한 쇼츠 리스트
-        List<ShortsDislike> shortsDislikeList = shortsDislikeRepository.findShortsIdxByUserIdx(nowLoginUser);     //사용자가 싫어요 표시한 쇼츠 리스트
-        System.err.println("shortsDislikeList.size(): " + shortsDislikeList.size());
-        for(ShortsDislike shortsDislike : shortsDislikeList) {
-            System.err.println("shortsDislike: " + shortsDislike);
-        }
-        System.err.println("shortsDislike 끝");
+        List<UserGenre> preferedGenre = userGenreRepository.findGenreIdxByUserIdx(nowLoginUser);                    //사용자의 선호장르
+        List<ShortsDislike> shortsDislikeList = shortsDislikeRepository.findShortsIdxByUserIdx(nowLoginUser);       //사용자가 싫어요 표시한 쇼츠 리스트
 
         //1.1 싫어요 표시한 쇼츠의 idx값을 가져오기
         List<Shorts> dislikedShortsIdx = new ArrayList<>();
@@ -73,13 +73,8 @@ public class ShortsServiceImpl implements  ShortsService {
 //        System.out.println(shortsList.size());
 //        System.out.println("++++++++++++++++++++++++++++++++");
         List<Shorts> shortsList = shortsRepository.findAll();
-        System.err.println("shortsList");
-        for(Shorts shorts : shortsList) {
-            System.err.println("shorts: " + shorts);
-        }
 
         //3. 가져온 쇼츠 리스트에서 쇼츠를 올린 사람의 장르를, 현재 사용자의 선호장르와 비교하여 쇼츠 리스트를 추출함
-        List<Shorts> selectedShortsList = new ArrayList<>();
         List<com.ssafy.api.board.response.Shorts> selectedShortsListResponse = new ArrayList<>();
 
         boolean isShortsAdd;
@@ -88,19 +83,14 @@ public class ShortsServiceImpl implements  ShortsService {
             User shortsUploaderUserIdx = shorts.getUserIdx();
             List<UserGenre> uploaderPreferedGenre = userGenreRepository.findGenreIdxByUserIdx(shortsUploaderUserIdx);
             isShortsAdd = false;
-            System.err.println("for문");
             //사용자가 싫어요 표시한 쇼츠라면 반환리스트에서 제외
-            System.err.println("shorts.getShortsIdx(): " + shorts.getShortsIdx());
-//            if(dislikedShortsIdx.contains(shorts.getShortsIdx())){
-            if(dislikedShortsIdx.contains(shorts)){
-                System.err.println("조건문 1");
+            if(dislikedShortsIdx.contains(shorts)) {
                 continue;
             }
 
-            //업로드한 사용자의 선호 장르가 없다면 일단 반환리스트에 추가
-            if(uploaderPreferedGenre.size() == 0){
-                System.err.println("조건문 2");
-//                selectedShortsList.add(shorts);
+            //1. 로그인 한 사용자의 선호 없다면
+            //2. 업로드한 사용자의 선호 장르가 없다면 일단 반환리스트에 추가
+            if(preferedGenre == null || preferedGenre.isEmpty() || uploaderPreferedGenre.size() == 0) {
                 com.ssafy.api.board.response.Shorts shortsResponse = new com.ssafy.api.board.response.Shorts();
                 //setter 호출
                 shortsResponse.setShortsIdx(shorts.getShortsIdx());
@@ -119,7 +109,6 @@ public class ShortsServiceImpl implements  ShortsService {
                 }
 
                 //com.ssafy.api.board.response.Shorts DTO에 영상 링크 설정
-                System.err.println("videoUrl: " + videoUrl);
                 shortsResponse.setFileURL(videoUrl);
                 //리스트 추가
                 selectedShortsListResponse.add(shortsResponse);
@@ -127,15 +116,10 @@ public class ShortsServiceImpl implements  ShortsService {
                 continue;
             }
 
-            //업로드한 사용자의 선호장르가 있다면, 로그인한 사용자의 선호장르와 비교하여 반환리스트에 추가
+            //3. 업로드한 사용자의 선호장르가 있다면, 로그인한 사용자의 선호장르와 비교하여 반환리스트에 추가
             for(int i=0; i<preferedGenre.size(); i++){
-                System.err.println("for문 i: " + i);
                 for(int j=0; j<uploaderPreferedGenre.size(); j++){
-                    System.err.println("for문 j: " + j);
                     if(preferedGenre.get(i).getGenreIdx() == uploaderPreferedGenre.get(j).getGenreIdx()){
-                        System.err.println("for문 안 if문");
-//                        selectedShortsList.add(shorts);
-
                         com.ssafy.api.board.response.Shorts shortsResponse = new com.ssafy.api.board.response.Shorts();
                         //setter 호출
                         shortsResponse.setShortsIdx(shorts.getShortsIdx());
@@ -149,6 +133,7 @@ public class ShortsServiceImpl implements  ShortsService {
                         //fileservice를 이용해 Amazon S3 영상 링크 가져오기
                         try {
                             videoUrl = fileService.getVideoUrlBySaveFileIdx(shorts.getShortsPathFileIdx().getFileIdx());
+                            System.err.println("videoUrl2: " + videoUrl);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -165,9 +150,7 @@ public class ShortsServiceImpl implements  ShortsService {
             }
         }
 
-//        return selectedShortsList;
         return selectedShortsListResponse;
-//        return shortsList;
     }
 
     @Override
@@ -235,15 +218,35 @@ public class ShortsServiceImpl implements  ShortsService {
             Notification notification2 = new Notification();
             notification1.setUserIdx(getAlarmUser);    //알람을 받을 사용자; User 객체 타입
             notification2.setUserIdx(user);    //알람을 받을 사용자; User 객체 타입
-            notification1.setAlarmContent(user.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다.");
-            notification2.setAlarmContent(getAlarmUser.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다.");
+            notification1.setAlarmContent(user.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다. 채팅방으로 이동하여 대화를 시작해보세요.");
+            notification2.setAlarmContent(getAlarmUser.getNickname()+"님과 서로의 쇼츠에 좋아요를 눌렀습니다. 채팅방으로 이동하여 대화를 시작해보세요.");
             notification1.setChecked(false);
             notification2.setChecked(false);
             notification1.setAlarmDate(LocalDateTime.now());
             notification2.setAlarmDate(LocalDateTime.now());
             notificationRepository.save(notification1);
             notificationRepository.save(notification2);
+
+            // 채팅방 만들어주기
+            String roomIdx = chatRoomService.enterOneToOneRoom(user.getUserIdx(), getAlarmUser.getUserIdx());
+
+            String content = getAlarmUser.getNickname() + "님이 " + user.getNickname() +"님을 마음에 들어합니다.";
+            ChatMessage message = new ChatMessage();
+            message.setSendTime(LocalDateTime.now()+"");
+            message.setMessage(content);
+            message.setNickname(getAlarmUser.getNickname());
+            message.setUserIdx(getAlarmUser.getUserIdx()+"");
+            message.setRoomIdx(roomIdx);
+            chatService.saveMessage(message);
+
+            content = user.getNickname() + "님이 " + getAlarmUser.getNickname() +"님을 마음에 들어합니다.";
+            message.setSendTime(LocalDateTime.now()+"");
+            message.setNickname(user.getNickname());
+            message.setUserIdx(user.getUserIdx()+"");
+            chatService.saveMessage(message);
         }
+
+
     }
 
     @Override

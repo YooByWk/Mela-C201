@@ -2,10 +2,10 @@ import axios from 'axios';
 
 
 
-const URL = 'http://localhost:8080/api/v1/board'
+const URL = process.env.REACT_APP_API_URL + '/board'
 
 export const BoardAPI = axios.create({
-  baseURL: 'http://localhost:8080/api/v1/board'
+  baseURL: URL,
 })
 
 export const BoardList = async({page, size, sortKey, word}) => {
@@ -85,7 +85,7 @@ export const BoardDelete = async ({boardIdx}) => {
 export const CommentDelete = async ({boardIdx, commentIdx}) => {
   const res = await BoardAPI.delete(`/${boardIdx}/comments/${commentIdx}`, {
     headers : {
-      'Authorization' : `Barer ${localStorage.accessToken}`
+      'Authorization' : `Bearer ${localStorage.accessToken}`
     }
   })
   console.log(commentIdx)

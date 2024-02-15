@@ -8,11 +8,13 @@ import Alarmbar from "../components/alarm/Alarmbar";
 import { shortsList } from "../API/ShortsAPI";
 import { recommendList } from "../API/GatherAPI";
 import { myGatherList } from "../API/UserAPI";
+import DefaultButton from "../components/DefaultButton";
 
 function Gather() {
   const [recommend, setRecommend] = useState([])
   const [myGather, setMyGather] = useState([])
   const [shorts, setShorts] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     const gatherInfo = async() => {     
@@ -41,7 +43,8 @@ function Gather() {
   
     },[])
 
-    // console.log(myGather)
+    console.log(myGather)
+    console.log(recommend)
 
     const recommendLimitList = () => {
       const result = []
@@ -86,8 +89,11 @@ function Gather() {
       return result
     }
 
-    // console.log(myGatherLimitList())
+    const handleCreate = () => {
+      navigate('/gather/create')
+    }
 
+    console.log(myGatherLimitList())
   return ( 
     <GatherContainer>
       <SideDiv>
@@ -95,24 +101,33 @@ function Gather() {
       </SideDiv>
       <MainDiv>
         <Navbar backcolour="10" />
-          내가 작성한 공고
+        <div className="main-box">
+          <div className="header">
+            <h3>내가 작성한 공고</h3>
+            <DefaultButton
+              text='글쓰기'
+              width='4rem'
+              height='2rem'
+              onClick={handleCreate}
+            />
+          </div>
           <ListContainer>
-          {myGather.length === 0 ? (
+            {myGather.length === 0 ? (
               <>
               작성한 공고 없음
               </>
             ) : (
               <>
-            {Object.entries(myGatherLimitList()).map(([key, value]) => (
-              <ListDiv key={value.boardRecruitIdx}>
-                <Title>
-                {value.title}
-                </Title>
-                <Content>
-                {value.content}
-                </Content>
-              </ListDiv>
-            ))}
+            {/* {Object.entries(myGatherLimitList()).map(([key, value]) => ( */}
+              {/* <ListDiv key={value.boardRecruitIdx}> */}
+                {/* <Title> */}
+                {/* {value.title} */}
+                {/* </Title> */}
+                {/* <Content> */}
+                {/* {value.content} */}
+                {/* </Content> */}
+              {/* </ListDiv> */}
+            {/* ))} */}
             </>
             )}
           </ListContainer>
@@ -148,16 +163,18 @@ function Gather() {
                   {Object.entries(recommendLimitList()).map(([key, value]) => (
                   <ListDiv key={value.boardRecruitIdx}>
                     <Title>
-                    {value.title}
+                    {/* {value.title} */}
                     </Title>
                     <Content>
-                    {value.content}
+                    {/* {value.content} */}
                     </Content>
                   </ListDiv>
                 ))}
                 </>
             )}
           </ListContainer>
+
+        </div>
       </MainDiv>
       <RSideDiv>
           <Alarmbar />
@@ -208,6 +225,17 @@ const MainDiv = styled.div`
   padding-left: 2%;
   display: flex;
   flex-direction: column;
+
+  .main-box {
+    padding: 30px;
+    margin-top: 20px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 `;
 
 const RSideDiv = styled.div`
