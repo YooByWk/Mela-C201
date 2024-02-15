@@ -13,7 +13,7 @@ function TeamspaceAudio() {
     <>
     <H1>Teamspace - Audio</H1>
     {/* <Sequence teamspaceIdx={teamspaceIdx} /> */}
-    <iframe src="https://signal.vercel.app/edit" frameborder="0"></iframe>
+    <CustomIframe src="https://signal.vercel.app/edit" frameborder="0"></CustomIframe>
     </>
     )
 }
@@ -23,4 +23,9 @@ export default TeamspaceAudio
 const Sequence = styled(SequenceMain)`
     width: 100%;
     overflow-x:scroll;
+`
+
+const CustomIframe = styled.iframe`
+    width: 100%;
+    height: 100%;
 `
