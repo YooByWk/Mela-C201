@@ -146,7 +146,7 @@ const GatherDetail = () => {
   };
 
   const goHome = async () => {
-    Navigate(-1);
+    Navigate('../');
   };
 
   ////////////

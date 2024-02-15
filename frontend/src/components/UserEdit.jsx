@@ -8,53 +8,66 @@ import { getImg } from "../API/FileAPI";
 import { isFollow } from "../API/UserAPI";
 import instagram from "../assets/images/instagram.png";
 import youtube from "../assets/images/youtube.png";
+import { CreateChat } from "../API/ChatAPI";
 
 function UserEdit(props) {
-    const [isFollowed, setIsFollowed] = useState('')
-    const [currentUser, setCurrentUser] = useState('');
-    const [currentUserPortfolio, setCurrentUserPortfolio] = useState('');
-    const [currentUserPosition, setCurrentUserPosition] = useState([])
-    const [currentUserGenre, setCurrentUserGenre] = useState([])
-    const [loginUser, setLoginUser] = useState('');
-    const [loginUserPortfolio, setLoginUserPortfolio] = useState('');
-    const [imgURL, setImgURL] = useState('')
-    // const currentUser = props.currentUser
-    // const loginUser = props.loginUser
+  const [isFollowed, setIsFollowed] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
+  const [currentUserPortfolio, setCurrentUserPortfolio] = useState("");
+  const [currentUserPosition, setCurrentUserPosition] = useState([]);
+  const [currentUserGenre, setCurrentUserGenre] = useState([]);
+  const [currentUserShorts, setCurrentUserShorts] = useState([]);
+  const [loginUser, setLoginUser] = useState("");
+  const [loginUserPortfolio, setLoginUserPortfolio] = useState("");
+  const [imgURL, setImgURL] = useState("");
+  // const currentUser = props.currentUser
+  // const loginUser = props.loginUser
 
   const navigate = useNavigate();
 
-    const goUpdate = () => {
-        navigate('/users')
-    }
+  const goUpdate = () => {
+    navigate("/users");
+  };
 
-        // 장르 // 
-        const genres = [
-            "Pop",
-            "Rock",
-            "Hiphop",
-            "Classic",
-            "Jazz",
-            "R&B",
-            "Disco",
-            "Electrionic",
-            "Balad",
-            "Country",
-            "Reggae",
-            "Folk",
-            "Etc",
-          ];
-    
-        // 포지션 //
-        const positions = ["보컬", "작곡", "작사", "세션", "믹싱", "기타"];
+  // 장르 //
+  const genres = {
+    1: "Pop",
+    2: "Rock",
+    3: "Hiphop",
+    4: "Classic",
+    5: "Jazz",
+    6: "R&B",
+    7: "Disco",
+    8: "Electrionic",
+    9: "Balad",
+    10: "Country",
+    11: "Reggae",
+    12: "Folk",
+    13: "Etc",
+  };
 
-    useEffect(() => {
-        setCurrentUser(props.currentUser);
-        setCurrentUserPortfolio(props.currentUserPortfolio)
-        setCurrentUserPosition(props.CurrentUserPosition)
-        setCurrentUserGenre(props.currentUserGenre)
-        setLoginUser(props.loginUser);
-        setLoginUserPortfolio(props.loginPortfolio)
-    }, [props.currentUser, props.loginUser]);
+  // 포지션 //
+  const positions = {
+    1: "보컬",
+    2: "작곡",
+    3: "작사",
+    4: "세션",
+    5: "믹싱",
+    6: "기타",
+  };
+
+  useEffect(() => {
+    setCurrentUser(props.currentUser);
+    setCurrentUserPortfolio(props.currentUserPortfolio);
+    setCurrentUserPosition(props.currentUserPosition);
+    setCurrentUserGenre(props.currentUserGenre);
+    setCurrentUserShorts(props.currentUserShorts);
+    setLoginUser(props.loginUser);
+    setLoginUserPortfolio(props.loginPortfolio);
+  }, [props.currentUser, props.loginUser]);
+
+  console.log("genre", currentUserGenre);
+  console.log("position", currentUserPosition);
 
   useEffect(() => {
     const imgInfo = async () => {
@@ -84,12 +97,12 @@ function UserEdit(props) {
       }
     };
 
-        followInfo()
-    },[currentUser, currentUserPortfolio])
-    // console.log(currentUser)
-    // console.log(currentUserPortfolio)
-    // console.log(loginUser)
-    // console.log(loginUserPortfolio)
+    followInfo();
+  }, [currentUser, currentUserPortfolio]);
+  // console.log(currentUser)
+  // console.log(currentUserPortfolio)
+  // console.log(loginUser)
+  // console.log(loginUserPortfolio)
 
   const handleFollow = async () => {
     if (loginUser && currentUser && loginUser.emailId !== currentUser.emailId) {
@@ -99,6 +112,24 @@ function UserEdit(props) {
       } catch (err) {
         console.error(err);
       }
+    }
+  };
+
+  // 채팅 연결
+  const [roomIdx, setRoomIdx] = useState("");
+  const [otheruserid, setOtheruserid] = useState();
+
+  const handleChat = async () => {
+    const otheruserid = currentUser.userIdx;
+
+    try {
+      const response = await CreateChat({ otheruserid: otheruserid });
+      console.log(response);
+      setRoomIdx(response);
+      navigate(`/message/${response}`);
+      setOtheruserid("");
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -160,41 +191,120 @@ function UserEdit(props) {
                 />
               </div>
               <div className="genre">
-                <p>Like genre : </p>
+                <span>Like genre : </span>
+                <ul>
+                  {currentUserGenre.map((genreId) =>
+                    genres[genreId] ? (
+                      <li key={genreId}>{genres[genreId]}</li>
+                    ) : null
+                  )}
+                </ul>
               </div>
-              <div>
-                <p>Position : </p>
-                <p>SNS
-                <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
-                <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
-                </p>
+              <div className="position">
+                <span>Position : </span>
+                <ul>
+                  {currentUserPosition.map((positionId) =>
+                    positions[positionId] ? (
+                      <li key={positionId}>{positions[positionId]}</li>
+                    ) : null
+                  )}
+                </ul>
+              </div>
+              <div className="sns">
+                <p>SNS</p>
+                <URL
+                  onClick={() => {
+                    window.open(instagramURL);
+                  }}
+                  src={instagram}
+                  alt="인스타그램"
+                />
+                <URL
+                  onClick={() => {
+                    window.open(youtubeURL);
+                  }}
+                  src={youtube}
+                  alt="유튜브"
+                />
               </div>
             </div>
           </>
         ) : (
           <>
-            <p>{ currentUser.nickname }</p>
-            <Img 
-              src={
-                currentUserPortfolio.portfolio_picture_file_idx ? 
-                currentUserPortfolio.portfolio_picture_file_idx : 
-                defaultprofile
-              } 
-              alt="프로필 이미지"
-            />
-            <p>Like genre : </p>
-            <p>Position : </p>
-            <p>SNS</p>
-            <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
-            <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
-            <DefaultButton 
-              text={isFollowed ? 'Unfollow' : 'Follow'}
-              backgroundcolor={isFollowed ? '#6C7383' : '#254ef8'}
-              fontcolor={'white'}
-              width={'4rem'}
-              height={'2rem'}
-              onClick={handleFollow}
-            />
+            <div className="header">
+              <div className="userInfo">
+                <div className="image">
+                  <Img
+                    src={
+                      currentUserPortfolio.portfolio_picture_file_idx
+                        ? currentUserPortfolio.portfolio_picture_file_idx
+                        : defaultprofile
+                    }
+                    alt="프로필 이미지"
+                  />
+                </div>
+                <div className="name">
+                  <Title>{currentUser.nickname}</Title>
+                  <p style={{ marginBottom: "10px" }}>{currentUser.name}</p>
+                  <p>{currentUser.selfIntro}</p>
+                </div>
+              </div>
+              <div className="buttons">
+                <DefaultButton
+                  text={"채팅하기"}
+                  backgroundcolor={"#873ffa"}
+                  width={"5rem"}
+                  height={"2rem"}
+                  onClick={handleChat}
+                />
+                <br />
+                <DefaultButton
+                  fontcolor={"white"}
+                  text={isFollowed ? "Unfollow" : "Follow"}
+                  backgroundcolor={isFollowed ? "#6C7383" : "#254ef8"}
+                  width={"5rem"}
+                  height={"2rem"}
+                  onClick={handleFollow}
+                />
+              </div>
+            </div>
+            <div className="genre">
+              <span>Like genre : </span>
+              <ul>
+                {currentUserGenre.map((genreId) =>
+                  genres[genreId] ? (
+                    <li key={genreId}>{genres[genreId]}</li>
+                  ) : null
+                )}
+              </ul>
+            </div>
+            <div className="position">
+              <span>Position : </span>
+              <ul>
+                {currentUserPosition.map((positionId) =>
+                  positions[positionId] ? (
+                    <li key={positionId}>{positions[positionId]}</li>
+                  ) : null
+                )}
+              </ul>
+            </div>
+            <div className="sns">
+              <p>SNS</p>
+              <URL
+                onClick={() => {
+                  window.open(instagramURL);
+                }}
+                src={instagram}
+                alt="인스타그램"
+              />
+              <URL
+                onClick={() => {
+                  window.open(youtubeURL);
+                }}
+                src={youtube}
+                alt="유튜브"
+              />
+            </div>
           </>
         )}
       </Container>
@@ -243,6 +353,10 @@ const Container = styled.div`
     margin-top: 10px;
     margin-bottom: 10px;
     display: flex;
+  }
+
+  .btn-wrapper {
+    align-self: flex-end;
   }
 `;
 
