@@ -114,7 +114,7 @@ function Gather() {
           <ListContainer>
             {myGather.length === 0 ? (
               <>
-              작성한 공고가 없습니다.
+              <p>작성한 공고가 없습니다.</p>
               </>
             ) : (
               <>
@@ -135,7 +135,7 @@ function Gather() {
           <ListContainer>
           {shorts.length === 0 ? (
               <>
-              선호할 만한 사람이 없습니다.
+              <p>선호할 만한 사람이 없습니다.</p>
               </>
             ) : (
               <>
@@ -155,7 +155,7 @@ function Gather() {
           <ListContainer>
             {recommend.length === 0 ? (
               <>
-              적합한 공고가 없습니다.
+              <p>적합한 공고가 없습니다.</p>
               </>
             ) : (
               <>
