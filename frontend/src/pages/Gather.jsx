@@ -119,7 +119,7 @@ function Gather() {
             ) : (
               <>
             {Object.entries(myGatherLimitList()).map(([key, value]) => (
-              <ListDiv key={value.boardRecruitIdx}>
+              <ListDiv key={value.boardRecruitIdx} onClick={() => navigate(`/gather/detail/${value.boardRecruitIdx}`)}>
                 <Title> 
                 {value.title} 
                 </Title> 
@@ -160,7 +160,7 @@ function Gather() {
             ) : (
               <>
                   {Object.entries(recommendLimitList()).map(([key, value]) => (
-                  <ListDiv key={value.boardRecruitIdx}>
+                  <ListDiv key={value.boardRecruitIdx} onClick={() => navigate(`/gather/detail/${value.boardRecruitIdx}`)}>
                     <Title>
                     {value.title}
                     </Title>
@@ -247,6 +247,7 @@ const ListDiv = styled.div`
   background-color: #202C44;
   border-radius: 15%;
   margin-bottom: 5%;
+  cursor: pointer;
 `
 
 const ShortsDiv = styled.video`
