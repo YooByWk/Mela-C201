@@ -63,15 +63,65 @@ public class FileController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
+    //DEPRECATED!!
+    //FIXME: 아래에 새로 작성 중
+//    @GetMapping(value = "/download")
+//    @ApiOperation(value = "파일 다운로드", notes = "파일을 다운로드합니다.")
+//    public ResponseEntity<byte[]> downloadFile(String filePath) {
+//        try {
+//            //ArrayList<Object> returnVO = new ArrayList<>();
+//            byte[] bytes = fileService.getFile(filePath);
+//            //1. 응답에 파일 저장
+//            //returnVO.add(bytes);
+//            String uploaderProfileImageUrl = null;
+//
+//            String fileName = URLEncoder.encode(filePath, "UTF-8").replaceAll("\\+", "%20");
+//            HttpHeaders httpHeaders = new HttpHeaders();
+//            httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//            httpHeaders.setContentLength(bytes.length);
+//            httpHeaders.setContentDispositionFormData("attachment", fileName);
+//
+//            //FIXME: 파일 업로더의 프로필 이미지 리턴하는 코드 (byte[]와 함께 보내는 방법 연구 필요 -> 폐기)
+//            /*
+//            //1-1. File 테이블로부터 다운로드 할 파일로부터 업로더 가져옴
+//            int lastSlashIndex = filePath.lastIndexOf("/");
+//            String filedir = filePath.substring(0, lastSlashIndex);
+//            String filename = filePath.substring(lastSlashIndex + 1, filePath.length());
+//            com.ssafy.db.entity.File file = fileService.getFileBySaveFilenameAndSavePath(filename, filedir);
+//            User uploader = file.getUserIdx();
+//
+//            //1-2. PortfolioAbstract 테이블에서 사용자의 프로필 이미지 (com.ssafy.db.entity.File 객체) 가져옴
+//            try {
+//                PortfolioAbstract portfolioAbstract = portfolioAbstractRepository.findByUserIdx(uploader);
+//                uploaderProfileImageUrl = fileService.getUploaderProfileImageURL(file);
+//            } catch (Exception e) {
+//                //System.err.println("파일 업로더의 프로필 이미지 없음");
+//                e.printStackTrace();
+//            }
+//
+//            returnVO.add(uploaderProfileImageUrl);
+//            */
+//
+//            //return new ResponseEntity<>(returnVO, httpHeaders, HttpStatus.OK);
+//            return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+//        } catch (Exception e) {
+//            //요청한 파일을 찾을 수 없는 경우
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
     @GetMapping(value = "/download")
     @ApiOperation(value = "파일 다운로드", notes = "파일을 다운로드합니다.")
-    public ResponseEntity<byte[]> downloadFile(String filePath) {
+    public ResponseEntity<byte[]> downloadFile(long fileIdx) {
         try {
             //ArrayList<Object> returnVO = new ArrayList<>();
-            byte[] bytes = fileService.getFile(filePath);
+            byte[] bytes = fileService.getFile(fileIdx);
+            com.ssafy.db.entity.File file = fileService.getFileByFileIdx(fileIdx);
             //1. 응답에 파일 저장
             //returnVO.add(bytes);
             String uploaderProfileImageUrl = null;
+//            String filePath = file.getSavePath() + "/" + file.getOriginalFilename();
+            String filePath = file.getOriginalFilename();
 
             String fileName = URLEncoder.encode(filePath, "UTF-8").replaceAll("\\+", "%20");
             HttpHeaders httpHeaders = new HttpHeaders();
