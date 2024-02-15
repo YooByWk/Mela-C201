@@ -124,30 +124,43 @@ public class UserController {
 
 			//3. 유저 포지션
 			ArrayList<Long> userPositionList = new ArrayList<>();
+			ArrayList<String> userPositionListString = new ArrayList<>();
 			try {
 				List<UserPosition> positionList = userPositionRepository.findPositionIdxByUserIdx(user);
 
 				for(UserPosition userPosition : positionList) {
 					userPositionList.add(userPosition.getPositionIdx().getPositionIdx());
+
+					// String으로 변경
+					String userPositionString = positionRepository.getOne(userPosition.getPositionIdx().getPositionIdx()).getPositionName();
+					userPositionListString.add(userPositionString);
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			returnVO[2] = userPositionList;
+//            returnVO[2] = userPositionList;
+			returnVO[2] = userPositionListString;
 
 			//4. 유저 장르
 			ArrayList<Long> userGenreList = new ArrayList<>();
+			ArrayList<String> userGenreListString = new ArrayList<>();
 			try {
 				List<UserGenre> genreList = userGenreRepository.findGenreIdxByUserIdx(user);
 
 				for(UserGenre userGenre : genreList) {
 					long userPosition = genreRepository.findById(userGenre.getGenreIdx().getGenreIdx()).get().getGenreIdx();
 					userGenreList.add(userPosition);
+
+					// String으로 변경
+					String userGenreString = genreRepository.getOne(userPosition).getGenreName();
+					userGenreListString.add(userGenreString);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			returnVO[3] = userGenreList;
+//            returnVO[3] = userGenreList;
+			returnVO[3] = userGenreListString;
 
 			return ResponseEntity.status(200).body(returnVO);
 		} catch(NullPointerException e) {
@@ -576,30 +589,42 @@ public class UserController {
 
 			//2-5. 유저 포지션
 			ArrayList<Long> userPositionList = new ArrayList<>();
+			ArrayList<String> userPositionListString = new ArrayList<>();
 			try {
 				List<UserPosition> positionList = userPositionRepository.findPositionIdxByUserIdx(targetUser);
 
 				for(UserPosition userPosition : positionList) {
 					userPositionList.add(userPosition.getPositionIdx().getPositionIdx());
+
+					// String으로 변경
+					String userPositionString = positionRepository.getOne(userPosition.getPositionIdx().getPositionIdx()).getPositionName();
+					userPositionListString.add(userPositionString);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			returnVO[4] = userPositionList;
+//            returnVO[4] = userPositionList;
+			returnVO[4] = userPositionListString;
 
 			//2-6. 유저 장르
 			ArrayList<Long> userGenreList = new ArrayList<>();
+			ArrayList<String> userGenreListString = new ArrayList<>();
 			try {
 				List<UserGenre> genreList = userGenreRepository.findGenreIdxByUserIdx(targetUser);
 
 				for(UserGenre userGenre : genreList) {
 					long userPosition = genreRepository.findById(userGenre.getGenreIdx().getGenreIdx()).get().getGenreIdx();
 					userGenreList.add(userPosition);
+
+					// String으로 변경
+					String userGenreString = genreRepository.getOne(userPosition).getGenreName();
+					userGenreListString.add(userGenreString);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			returnVO[5] = userGenreList;
+//            returnVO[5] = userGenreList;
+			returnVO[5] = userGenreListString;
 
 			return ResponseEntity.status(200).body(returnVO);
 		//3. 조회할 수 없는 사용자 (searchAllow false)

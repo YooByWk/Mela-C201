@@ -176,7 +176,7 @@ function Sidebar({ className, paddingtop }) {
                 <ListItemPrefix>
                   <MdOutlineLocalFireDepartment />
                 </ListItemPrefix>
-                <CustomLink to={`/matching/${shortsIdx}`}>
+                <CustomLink to={`/matching`}>
                 <span className="wd">Matching</span>
                 </CustomLink>
               </ListItem>
