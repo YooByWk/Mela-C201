@@ -420,7 +420,10 @@ public class UserServiceImpl implements UserService {
 		helper.setSubject("[Mela!] 비밀번호 재설정");
 
 		// TODO: 비밀번호 재설정 프론트 주소 입력
-		String addr = "http://localhost:3000/changepassword?token=" + token;
+//		String addr = "https://localhost:3000/changepassword?token=" + token;
+
+		String addr = "https://i10c201.p.ssafy.io:3000/changepassword?token=" + token;
+		
 
 		String htmlContent = "<html><body>";
 		htmlContent += "<p>"+user.getEmailId()+"님 안녕하세요.</p>";
