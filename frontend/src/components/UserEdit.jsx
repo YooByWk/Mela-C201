@@ -162,12 +162,32 @@ function UserEdit(props) {
               <div className="genre">
                 <p>Like genre : </p>
               </div>
-              <div>
-                <p>Position : </p>
-                <p>SNS
-                <URL onClick={() => {window.open(instagramURL)}} src={instagram} alt="인스타그램" />
-                <URL onClick={() => {window.open(youtubeURL)}} src={youtube} alt="유튜브" />
-                </p>
+              <div className="position">
+                <span>Position : </span>
+                <ul>
+                  {currentUserPosition.map((position) =>
+                    position ? (
+                      <li key={position}>{position}</li>
+                    ) : null
+                  )}
+                </ul>
+              </div>
+              <div className="sns">
+                <p>SNS</p>
+                <URL
+                  onClick={() => {
+                    window.open(instagramURL);
+                  }}
+                  src={instagram}
+                  alt="인스타그램"
+                />
+                <URL
+                  onClick={() => {
+                    window.open(youtubeURL);
+                  }}
+                  src={youtube}
+                  alt="유튜브"
+                />
               </div>
             </div>
           </>
