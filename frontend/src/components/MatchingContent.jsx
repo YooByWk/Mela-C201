@@ -3,6 +3,16 @@ import { getShorts, likeShorts, hateShorts } from "../API/ShortsAPI";
 import styled from "styled-components";
 import { BiDislike, BiLike } from "react-icons/bi";
 
+function setWindowHeight(){
+  var windowHeight = window.innerHeight;
+  console.log('windowHeight1: ' + windowHeight);
+  windowHeight += 100;
+  console.log('windowHeight2: ' + windowHeight);
+  document.body.style.height = windowHeight + "px";
+  console.log(document.body.style.height);
+}
+window.addEventListener("resize",setWindowHeight,false);
+
 function MatchingContent() {
   const [scroll, setScroll] = useState(false);
   const [nickname, setNickname] = useState("");
@@ -13,6 +23,7 @@ function MatchingContent() {
   const [hateActive, setHateActive] = useState(false)
 
   useEffect(() => {
+    setWindowHeight()
     const getShort = async () => {
       try {
         const response = await getShorts();
@@ -32,10 +43,10 @@ function MatchingContent() {
       window.removeEventListener("scroll", handleScroll); //clean up
     };
   }, [scroll]);
-
-  const handleScroll = async () => {
+  const handleScroll = () => {
+    console.log(document.documentElement.scrollTop)
     // 스크롤이 Top에서 30px 이상 내려오면 true값을 useState에 넣어줌
-    if (window.scrollY >= 30) {
+    if (window.scrollY >= 100) {
       setScroll(true);
     } else {
       // 스크롤이 50px 미만일경우 false를 넣어줌
