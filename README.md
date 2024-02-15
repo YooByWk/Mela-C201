@@ -42,6 +42,16 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
   - 다른 사용자의 포트폴리오를 보고 마음에 드는 경우 1대1 채팅을 시작할 수 있습니다.
   - 서로의 숏폼에 좋아요를 누른 경우 채팅방이 생성되고 대화를 시작할 수 있습니다.
 
+## :mag_right: 서비스 화면
+### Sign up
+
+### Sign in
+
+
+### Main
+
+###
+
 
 ## :key: 주요 기술
 ### Backend
@@ -61,7 +71,7 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
   - Webstomp-Client
   - Node.js
 
-## Web RTC
+### Web RTC
   - Openvidu
   - Docker
 
@@ -69,7 +79,13 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
   - AWS EC2
   - AWS S3
 
-## 팀 소개 및 역할
+### Collaboration
+  - Git
+  - Notion
+  - Jira
+  - Mattermost
+
+## :sunglasses: 팀 소개 및 역할
 |담당|이름|역할|소감|
 |---|---|---|---|
 |팀장|강민지|UI/UX 구현, PPT/UCC 제작, UX 디자인|
@@ -79,9 +95,9 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 |BE|김신영|API 설계|
 |BE|이현호|API 설계|
 
-## 프로젝트 산출물
+## :hammer: 프로젝트 산출물
 - ### [화면 정의서](https://www.figma.com/file/IX4LHI9096wtPgbeMZF4tr/C201-team-library?type=design&node-id=0%3A1&mode=design&t=ZOYZB5RR2vzpZ1Hh-1)
 - ### [요구사항 명세서](https://valuable-flyingfish-5f5.notion.site/4e8269aba1c0414bb997d0a2554833af?pvs=74)
-- ### ERD
-- ### [아키텍처 구성도]('/Docs/아키텍처구성도.PNG')
+- ### [ERD](https://lab.ssafy.com/-/ide/project/s10-webmobile1-sub2/S10P12C201/tree/master/-/Docs/ERD.png/)
+- ### [아키텍처 구성도](https://lab.ssafy.com/-/ide/project/s10-webmobile1-sub2/S10P12C201/tree/master/-/Docs/아키텍처구성도.PNG/)
 - ### [API 설계](https://valuable-flyingfish-5f5.notion.site/API-aff8baaa08d44954a433ef4645ba6dad)
