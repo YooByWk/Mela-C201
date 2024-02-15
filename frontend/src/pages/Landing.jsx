@@ -13,7 +13,7 @@ import { GatherList } from "./../API/GatherAPI";
 import { useNavigate } from "react-router-dom";
 import DefaultButton from "./../components/DefaultButton";
 import { createViduSession, getsessions } from "../API/TeamspaceAPI";
-
+import { shortsList } from "../API/ShortsAPI";
 // background-color: ${props => props.theme.colours.primary};
 
 const LandingPageContainer = styled.div`
@@ -31,6 +31,7 @@ function Landing() {
   const [logined, setLogined] = useState(false);
   const [boardList, setBoardList] = useState([]);
   const [gatherList, setGatherList] = useState([]);
+  const [shortList, setShortList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +44,9 @@ function Landing() {
       // 모집글 가져오기
       const response2 = await GatherList({ page: 1, size: 4 });
       setGatherList(response2.data.boardRecruitRes);
+      // 매칭글 가져오기
+      const response3 = await shortsList();
+      setShortList(response3);
     };
     fetchData();
   }, []);
@@ -52,6 +56,21 @@ function Landing() {
       setLogined(true);
     }
   }, []);
+
+  const shortsLimitList = () => {
+    const result = [];
+    if (shortList.length > 4) {
+      for (let i = 0; i < 4; i++) {
+        result.push(shortList[i]);
+      }
+    } else {
+      for (let i = 0; i < shortList.length; i++) {
+        result.push(shortList[i]);
+      }
+    }
+
+    return result;
+  };
 
   return (
     <>
@@ -71,8 +90,7 @@ function Landing() {
             </div>
           </LandingImageDiv>
         )}
-
-        <div className="contents">
+        {logined && (
           <ContentsContainer>
             <InnerContainer>
               <img src={RightDouble} alt="" />
@@ -81,16 +99,20 @@ function Landing() {
                 <img src={LeftDouble} alt="" />
               </Titles>
             </InnerContainer>
+            <FolderContainer>
+              {Object.entries(shortsLimitList()).map(([key, value]) => (
+                <ShortsDiv
+                  key={value.shortsIdx}
+                  src={value.fileURL}
+                  alt="영상"
+                  muted
+                  controls
+                ></ShortsDiv>
+              ))}
+            </FolderContainer>
           </ContentsContainer>
-          {/* <ContentsContainer>
-            <InnerContainer>
-              <img src={RightDouble} alt="" />
-              <h1> Popular Musicians</h1>
-              <Titles>
-                <img src={LeftDouble} alt="" />
-              </Titles>
-            </InnerContainer>
-          </ContentsContainer> */}
+        )}
+        <div className="contents">
           <ContentsContainer>
             <InnerContainer>
               <img src={RightDouble} alt="" />
@@ -193,7 +215,7 @@ const ContentsContainer = styled.div`
     display: flex;
     width: 100%;
     justify-content: end;
-    padding-right:5%;
+    padding-right: 5%;
     align-items: baseline;
   }
 `;
@@ -243,4 +265,42 @@ const SignUp = styled2(SignupModal)`
 const SignIn = styled(SigninModal)`
   font-size: 1.5rem;
   padding: 12px 24px;
+`;
+
+const ShortsDiv = styled.video`
+  width: 250px;
+  height: 280px;
+  background-color: #202c44;
+  border-radius: 15%;
+  margin-bottom: 5%;
+  /* 전체화면 버튼 */
+  &::-webkit-media-controls-fullscreen-button {
+    display: none !important;
+  }
+
+  /* 일시정지, 재생 버튼 */
+  &::-webkit-media-controls-play-button {
+    display: none !important;
+  }
+
+  /* 재생 슬라이드..? */
+  &::-webkit-media-controls-timeline {
+    display: none !important;
+  }
+
+  /* 현재 진행 시간 */
+  &::-webkit-media-controls-current-time-display {
+    display: none !important;
+  }
+
+  /* 전체 시간 */
+  &::-webkit-media-controls-time-remaining-display {
+    display: none !important;
+  }
+
+
+  /* 볼륨 조절 슬라이드 */
+  &::-webkit-media-controls-volume-slider {
+    display: none !important;
+  }
 `;
