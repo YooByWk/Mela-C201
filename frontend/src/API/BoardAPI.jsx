@@ -88,8 +88,7 @@ export const CommentDelete = async ({boardIdx, commentIdx}) => {
       'Authorization' : `Bearer ${localStorage.accessToken}`
     }
   })
-  console.log(commentIdx)
-  console.log(res, '삭제 스토어')
+
   return res
 }
 
@@ -97,7 +96,7 @@ export const CommentDelete = async ({boardIdx, commentIdx}) => {
 export const checkBoardLike = async({boardIdx, currentUserIdx}) => {
   // if (!currentUserIdx){return}
   const response = await BoardAPI.get(`/${boardIdx}/like/${currentUserIdx}`)
-  console.log(response)
+
   return response
 }
 
@@ -107,7 +106,7 @@ export const BoardLike = async({boardIdx, currentUserIdx}) => {
   }, {
     headers : {'Authorization' : `Bearer ${localStorage.accessToken}`}
   })
-  console.log(response)
+
   
   return response
 }

@@ -185,7 +185,7 @@ function UserUpdateForm() {
             alert('그동안 이용해주셔서 감사합니다.')
             window.location.href = '/'
         }).catch((err) => {
-            console.log(err)
+            // console.log(err)
         })
     }
 

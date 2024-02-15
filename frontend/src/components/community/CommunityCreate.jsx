@@ -25,7 +25,7 @@ function CommunityCreate() {
 
   const SubmitHandler = async (event)=> {
     event.preventDefault();
-    console.log(userinput.title.length, '제목길이')
+    // console.log(userinput.title.length, '제목길이')
     if (userinput.title.length < 1 ) { 
       window.alert('제목을 입력해주세요')
       return;
@@ -33,12 +33,11 @@ function CommunityCreate() {
     if (event.key === 'Enter') {
       event.preventDefault();
     }
-    console.log('제출');
-    console.log(userinput);
+    // console.log('제출');
+    // console.log(userinput);
     
     try {
       const response = await BoardCreate({content: userinput.content, title: userinput.title});
-      console.log(response,'res');
       Navigate(`../${response.data.message}`)
     } catch (error) {
       console.error(error);

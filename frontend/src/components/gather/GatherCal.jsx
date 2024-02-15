@@ -19,7 +19,6 @@ function GatherCal({ onDateChange }) {
     const dateString = `${year}-${formattedMonth}-${formattedDay}`;
 
     onDateChange(dateString);
-    console.log(date);
   };
 
   return (

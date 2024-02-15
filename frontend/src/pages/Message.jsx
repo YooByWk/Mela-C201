@@ -52,7 +52,6 @@ function Message() {
       //   setOtherProfile(res[1])
       // })
     } catch (err) {
-      console.log(err);
     }
   };
 
@@ -71,7 +70,6 @@ function Message() {
         // console.log(result)
         setImgUrl(result)
       } catch (err) {
-        console.log(err)
       }
     }
     imgInfo()

@@ -14,9 +14,9 @@ function AlarmUnread () {
             try {
                 const res = await notification()
                 setData(res)
-                console.log(res)
+                // console.log(res)
             } catch (err) {
-                console.log(err)
+                // console.log(err)
             }
         }
         fetchData()
@@ -49,11 +49,11 @@ function AlarmUnread () {
         checkAlarm.forEach(notificationIdx => {
             checkNotification({ notificationid: notificationIdx })
             .then(() => {
-                console.log(notificationIdx)
+                // console.log(notificationIdx)
                 refreshNotification()
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
             })
         })
     }
@@ -63,11 +63,11 @@ function AlarmUnread () {
         checkAlarm.forEach(notificationIdx => {
             delNotification({ notificationid: notificationIdx })
             .then(() => {
-                console.log(notificationIdx)
+                // console.log(notificationIdx)
                 refreshNotification()
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
             })
         })
     }
@@ -79,7 +79,7 @@ function AlarmUnread () {
             setData(res)
             setCheckAlarm([])
         } catch (err) {
-            console.log(err)
+            // console.log(err)
         }
     }
 

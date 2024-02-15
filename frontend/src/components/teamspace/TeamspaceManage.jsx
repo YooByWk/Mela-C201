@@ -29,14 +29,12 @@ function TeamspaceManage () {
             try {
                 const res = await TeamspaceInfo(teamspaceIdx)
                 setValues(res)
-                console.log(res)
                 setImgFile(res.teamspacePictureFile)
                 setImgPreview(res.teamspacePictureFileURL)
                 setBackImgFile(res.teamspaceBackgroundPictureFile)
                 setBackImgPreview(res.teamspaceBackgroundPictureFileURL)
                 setChangeDate(res.endDate)
               } catch (err) {
-                console.error(err)
             }
         } 
         getTeamspaceInfo()
@@ -70,9 +68,9 @@ function TeamspaceManage () {
             setBackImgPreview(URL.createObjectURL(e.target.files[0]))
         }
       }
-      console.log(values)
-      console.log(backImgFile)
-      console.log(imgFile)
+      // console.log(values)
+      // console.log(backImgFile)
+      // console.log(imgFile)
       const handleSubmit = async (e) => {
         e.preventDefault()
         const formData = new FormData()
@@ -88,11 +86,11 @@ function TeamspaceManage () {
     
         try {
           const res = await TeamspaceUpdate({formData: formData, teamspaceId: teamspaceIdx})
-          console.log(teamspaceIdx)
-          console.log(res)
+          // console.log(teamspaceIdx)
+          // console.log(res)
           alert('정보가 업데이트 되었습니다.')
       } catch (err) {
-          console.error(err)  
+          // console.error(err)  
       }
       }
 

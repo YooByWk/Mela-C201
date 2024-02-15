@@ -18,7 +18,7 @@ function SearchUser() {
                 const searchInfo = await userSearch(word)
                 setValues(searchInfo)
             } catch (err) {
-                console.log(err)
+                // console.log(err)
             }
         }
         info()

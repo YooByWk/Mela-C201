@@ -64,7 +64,6 @@ function CommunityHome() {
       (a, b) => b.likeNum - a.likeNum
     );
     setData(sortedData);
-    console.log("sortedData: ", sortedData);
   };
 
   const LastedSorted = async () => {
@@ -74,9 +73,7 @@ function CommunityHome() {
       size: 10,
       word: boardInput ? boardInput : "",
     });
-    console.log(response.data.boardResList, "boardresData");
     if (response.data.boardResList.length > 1) {
-      console.log(response.data.length);
       setData(response.data.boardResList);
     }
   };
@@ -96,13 +93,11 @@ function CommunityHome() {
 
   const SearchKeyword = async (event) => {
     setBoardInput(event.target.value);
-    console.log(event.target.value);
   };
 
   const SortByKey = async (event) => {
     event.preventDefault();
     const response = await BoardList({ page: 1, size: 10, word: boardInput });
-    console.log(response.data.boardResList.length, "sortbykey");
     if (response.data.boardResList.length > 1) {
       setData(response.data.boardResList);
     } else {
