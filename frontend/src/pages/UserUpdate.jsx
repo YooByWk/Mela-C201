@@ -164,9 +164,15 @@ function UserUpdateForm() {
         formData.append('portfolioAbstractPostReq', portfolio)
         formData.append('portfolioPicture', imgFile)
 
+        console.log(user);
+        console.log(portfolio)
+        console.log(imgFile)
+
         // for (let key of formData.keys()) {
         //     console.log(key, ":", formData.get(key));
         // }
+
+        console.log("formdata : ", formData);
 
         try {
             await updateUser(formData)

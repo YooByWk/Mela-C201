@@ -189,6 +189,10 @@ public class UserController {
 			@RequestPart(required = false) MultipartFile portfolioPicture) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 
+		log.info("회원수정정보 {}", userUpdateInfo);
+		log.info("회원포트폴리오수정정보 {}", portfolioAbstractPostReq);
+		log.info("프로필사진 {}", portfolioPicture);
+
 		userService.updateUser(userDetails.getUser(), userUpdateInfo, portfolioAbstractPostReq, portfolioPicture);
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
