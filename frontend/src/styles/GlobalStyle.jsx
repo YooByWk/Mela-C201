@@ -3,7 +3,13 @@ import reset from "styled-reset"
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
-  
+  body {
+    overflow: scroll;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  }
   h1 {
     font-size: 2em;
   }

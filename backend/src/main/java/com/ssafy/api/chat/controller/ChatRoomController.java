@@ -81,7 +81,14 @@ public class ChatRoomController {
         res.sort(new Comparator<ChatRoomRes>() {
             @Override
             public int compare(ChatRoomRes o1, ChatRoomRes o2) {
-                return  o2.getLastSendTime().compareTo(o1.getLastSendTime());
+                if (o1.getLastSendTime() != null && o2.getLastSendTime() != null) {
+                    return  o2.getLastSendTime().compareTo(o1.getLastSendTime());
+                } else if(o1.getLastSendTime() != null) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+
             }
         });
 
