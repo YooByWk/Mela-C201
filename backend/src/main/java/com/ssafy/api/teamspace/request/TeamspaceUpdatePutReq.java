@@ -13,8 +13,6 @@ import java.time.LocalDate;
 @Setter
 @ApiModel("TeamspaceUpdatePutRequest")
 public class TeamspaceUpdatePutReq {
-//    @ApiModelProperty(name = "팀 스페이스 idx", example = "1")
-//    Long teamspaceIdx;
 
     @ApiModelProperty(name = "팀 스페이스 team_name", example="team_name")
     String teamName;
@@ -28,9 +26,9 @@ public class TeamspaceUpdatePutReq {
     @ApiModelProperty(name = "팀 스페이스 description", example = "팀스페이스입니다.")
     String teamDescription;
 
-    @ApiModelProperty(name = "팀 스페이스 썸네일 file idx", example = "1134")
-    File teamspace_picture_file_idx;
+//    @ApiModelProperty(name = "팀 스페이스 썸네일 file idx", example = "1134")
+//    File teamspace_picture_file_idx;
 
-    @ApiModelProperty(name = "팀 스페이스 배경 사진 file idx", example = "1134")
-    File teamspace_background_picture_file_idx;
+//    @ApiModelProperty(name = "팀 스페이스 배경 사진 file idx", example = "1134")
+//    File teamspace_background_picture_file_idx;
 }

@@ -22,11 +22,13 @@ public class QShorts extends EntityPathBase<Shorts> {
 
     public static final QShorts shorts = new QShorts("shorts");
 
-    public final StringPath comment = createString("comment");
+    public final StringPath description = createString("description");
 
     public final NumberPath<Long> shortsIdx = createNumber("shortsIdx", Long.class);
 
     public final QFile shortsPathFileIdx;
+
+    public final StringPath title = createString("title");
 
     public final QUser userIdx;
 
@@ -48,7 +50,7 @@ public class QShorts extends EntityPathBase<Shorts> {
 
     public QShorts(Class<? extends Shorts> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.shortsPathFileIdx = inits.isInitialized("shortsPathFileIdx") ? new QFile(forProperty("shortsPathFileIdx")) : null;
+        this.shortsPathFileIdx = inits.isInitialized("shortsPathFileIdx") ? new QFile(forProperty("shortsPathFileIdx"), inits.get("shortsPathFileIdx")) : null;
         this.userIdx = inits.isInitialized("userIdx") ? new QUser(forProperty("userIdx")) : null;
     }
 

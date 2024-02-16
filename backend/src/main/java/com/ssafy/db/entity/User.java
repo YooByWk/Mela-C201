@@ -49,6 +49,7 @@ public class User {
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate birth;
 
     @NotNull
@@ -61,5 +62,22 @@ public class User {
     Boolean searchAllow;
 
     String jwtToken;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userIdx=" + userIdx +
+                ", emailId='" + emailId + '\'' +
+                ", emailDomain='" + emailDomain + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birth=" + birth +
+                ", userType='" + userType + '\'' +
+                ", searchAllow=" + searchAllow +
+                ", jwtToken='" + jwtToken + '\'' +
+                '}';
+    }
 
 }

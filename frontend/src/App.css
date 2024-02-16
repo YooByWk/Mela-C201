@@ -1,0 +1,14 @@
+@font-face {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  src: url("./styles/fonts/NotoSansKR-ExtraBold.ttf");
+}
+@font-face {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  src: url("./styles/fonts/No.ttf");
+}/*# sourceMappingURL=App.css.map */

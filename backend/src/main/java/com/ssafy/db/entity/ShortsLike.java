@@ -30,4 +30,10 @@ public class ShortsLike {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     Shorts shortsIdx;
+
+
+    @ManyToOne
+    @JoinColumn(name="uploader_user_idx", referencedColumnName = "userIdx")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    User uploaderUserIdx;
 }

@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import logo from "../assets/images/logo.png"
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment  } from 'react';
 import { FaSearch } from "react-icons/fa";
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { blue } from '@mui/material/colors';
 
 const Container = styled.div`
@@ -14,9 +14,9 @@ const Container = styled.div`
   font-size: larger;
   justify-content: space-between;
   align-items: center;
-  background-color: ${props => props.theme.colours.primary};
+  background-color: ${props => props.$backcolour==='10' ? props.theme.colours.point : props.theme.colours.primary};
   span {
-    font-size: medium;
+    font-size: large;
     /* margin-left: 5% ; */
   }
   img {
@@ -56,7 +56,7 @@ const SearchBar = styled.form`
     background-color: #202C44;
     min-height: 20px;
     width: 80%;
-    height: 3vh;
+    height: 4vh;
     border:0;
     border-radius: 15rem;
     padding-left: 8%;
@@ -76,24 +76,35 @@ const SearchBar = styled.form`
   };
 `
 
-const submitHandler = (event) => {
-  event.preventDefault();
-  window.alert('제출버튼확인')
-  // state 
-}
 
-function Navbar() {
+function Navbar({backcolour, radius}) {
+  const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState('')
+  function LogoClick(event) {
+    // console.log(event, '홈으로 이동합니다.')
+    navigate('/')
+  }
+  
+  const handleChange = async(e) => {
+    setSearchInput(e.target.value)
+  }
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+    navigate(`/search/${searchInput}`)
+  }
+
   return (
-    <>
-      <Container>
-        <img  src={logo} alt="" />
+    < >
+      <Container $backcolour={backcolour}>
+        <img  src={logo} alt="" onClick={LogoClick} />
           <SearchBar onSubmit={submitHandler}>
           <FaSearch className='Icon'/>
-          <input type="search" spellCheck='false' placeholder='Search'  />
+          <input id="search" type="text" spellCheck='false' placeholder='Search' onChange={handleChange} />
           </SearchBar>
       <div className='MenuContainer'>
         <span><NavLink
-        style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/gather'>Gather</NavLink></span>
+        style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/maingather'>Gather</NavLink></span>
         <span><NavLink
         style={({ isActive}) => (isActive? activeStyle : deActiveStyle)} to='/teamspace'>Team Space</NavLink></span>
         <span><NavLink
