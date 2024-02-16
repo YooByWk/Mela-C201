@@ -89,9 +89,9 @@ public class TeamspaceController {
         User user = userDetails.getUser();
 
         try{
-            Teamspace teamspace = teamspaceService.getTeamspaceById(teamspaceId);
-
-            teamspaceService.updateTeamspace(teamspace, updateInfo, teamspacePicture, teamspaceBackgroundPicture, user);
+            // 여기서 teamspace 조회 안되면 어떻게되는지?
+            Teamspace teamspace = teamspaceService.getTeamspaceById(Long.valueOf(teamspaceId));
+            teamspaceService.updateTeamspace(teamspace, updateInfo);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(401).body(BaseResponseBody.of(404, "not found"));
