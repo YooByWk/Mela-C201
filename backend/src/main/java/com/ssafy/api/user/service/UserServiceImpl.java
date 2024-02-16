@@ -8,6 +8,7 @@ import com.ssafy.common.util.CSVParser;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -27,6 +28,7 @@ import java.util.Random;
 /**
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
  */
+@Slf4j
 @Transactional
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -172,27 +174,23 @@ public class UserServiceImpl implements UserService {
 				e.printStackTrace();
 			}
 
-			//2-1. 새로 입력받은 회원의 선호 장르 추가
-			List<Long> genreLong = userUpdateInfo.getGenre();
+			log.info("getGenre: {}", userUpdateInfo.getGenre());
 
-			//장르 추가
-			for(long l : genreLong) {
-				Genre genre = genreRepository.findById(l).get();
+			List<String> genreString = userUpdateInfo.getGenre();
+
+			for(String s : genreString) {
+				Genre genre = genreRepository.findByGenreName(s).get();
 
 				UserGenre userGenre = new UserGenre();
 				userGenre.setUserIdx(user);
 				userGenre.setGenreIdx(genre);
 
-				//DB 저장
 				userGenreRepository.save(userGenre);
 			}
 
-			//2-2. 새로 입력받은 회원의 희망 포지션 추가
-			List<Long> positionLong = userUpdateInfo.getPosition();
-
-			//포지션 추가
-			for(long l : positionLong) {
-				Position position = positionRepository.findById(l).get();
+			List<String> positionLong = userUpdateInfo.getPosition();
+			for(String s : positionLong) {
+				Position position = positionRepository.findByPositionName(s).get();
 
 				UserPosition userPosition = new UserPosition();
 				userPosition.setUserIdx(user);
@@ -202,7 +200,38 @@ public class UserServiceImpl implements UserService {
 				userPositionRepository.saveAndFlush(userPosition);
 			}
 
-			userRepository.saveAndFlush(user);
+			//2-1. 새로 입력받은 회원의 선호 장르 추가
+//			List<Long> genreLong = userUpdateInfo.getGenre();
+//
+//
+//			//장르 추가
+//			for(long l : genreLong) {
+//				Genre genre = genreRepository.findById(l).get();
+//
+//				UserGenre userGenre = new UserGenre();
+//				userGenre.setUserIdx(user);
+//				userGenre.setGenreIdx(genre);
+//
+//				//DB 저장
+//				userGenreRepository.save(userGenre);
+//			}
+//
+//			//2-2. 새로 입력받은 회원의 희망 포지션 추가
+//			List<Long> positionLong = userUpdateInfo.getPosition();
+//
+//			//포지션 추가
+//			for(long l : positionLong) {
+//				Position position = positionRepository.findById(l).get();
+//
+//				UserPosition userPosition = new UserPosition();
+//				userPosition.setUserIdx(user);
+//				userPosition.setPositionIdx(position);
+//
+//				//DB 저장
+//				userPositionRepository.saveAndFlush(userPosition);
+//			}
+//
+//			userRepository.saveAndFlush(user);
 		}
 
 		if(portfolioAbstractPostReq != null) {

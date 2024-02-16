@@ -8,6 +8,7 @@ import { getImg } from "../API/FileAPI";
 import { isFollow } from "../API/UserAPI";
 import instagram from "../assets/images/instagram.png";
 import youtube from "../assets/images/youtube.png";
+import { CreateChat } from "../API/ChatAPI";
 
 function UserEdit(props) {
   const [isFollowed, setIsFollowed] = useState("");
@@ -50,7 +51,7 @@ function UserEdit(props) {
   useEffect(() => {
     setCurrentUser(props.currentUser);
     setCurrentUserPortfolio(props.currentUserPortfolio);
-    setCurrentUserPosition(props.CurrentUserPosition);
+    setCurrentUserPosition(props.currentUserPosition);
     setCurrentUserGenre(props.currentUserGenre);
     setLoginUser(props.loginUser);
     setLoginUserPortfolio(props.loginPortfolio);
@@ -102,19 +103,30 @@ function UserEdit(props) {
     }
   };
 
+
+  // 채팅 연결
+  const [roomIdx, setRoomIdx] = useState("");
+  const [otheruserid, setOtheruserid] = useState();
+
+  const handleChat = async () => {
+    const otheruserid = currentUser.userIdx;
+
+    try {
+      const response = await CreateChat({ otheruserid: otheruserid });
+      console.log(response);
+      setRoomIdx(response);
+      navigate(`/message/${response}`);
+      setOtheruserid("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
   if (!loginUser || !currentUser || !currentUser.userIdx) {
     return (
       <div>
         <p>로딩 중...</p>
-        {/* <button
-          onClick={() => console.log(currentUser.emailId === loginUser.emailId)}
-        >
-          51243
-        </button>
-        <button onClick={() => console.log(currentUser)}>1243</button>
-        <button onClick={() => console.log(loginUser)}>lgue</button>
-        <button onClick={() => console.log(loginUser.emailId)}>lgue</button>
-        <button onClick={() => console.log(currentUser.emailId)}>123</button> */}
       </div>
     );
   }
@@ -160,15 +172,23 @@ function UserEdit(props) {
                 />
               </div>
               <div className="genre">
-                <p>Like genre : </p>
+              <span>Genre : </span>
+                <ul>
+                {Object.values(currentUserGenre).map((genre) =>
+                  genre ? (
+                    <li key={genre}>{genre}</li>
+                  ) : null
+                )}
+                </ul>
               </div>
               <div className="position">
                 <span>Position : </span>
                 <ul>
-                  {!currentUserPosition ??
-                    currentUserPosition.map((position) =>
-                      position ? <li key={position}>{position}</li> : null
-                    )}
+                {Object.values(currentUserPosition).map((position) =>
+                  position ? (
+                    <li key={position}>{position}</li>
+                  ) : null
+                )}
                 </ul>
               </div>
               <div className="sns">
@@ -192,40 +212,81 @@ function UserEdit(props) {
           </>
         ) : (
           <>
-            <p>{currentUser.nickname}</p>
-            <Img
-              src={
-                currentUserPortfolio.portfolio_picture_file_idx
-                  ? currentUserPortfolio.portfolio_picture_file_idx
-                  : defaultprofile
-              }
-              alt="프로필 이미지"
-            />
-            <p>Like genre : </p>
-            <p>Position : </p>
-            <p>SNS</p>
-            <URL
-              onClick={() => {
-                window.open(instagramURL);
-              }}
-              src={instagram}
-              alt="인스타그램"
-            />
-            <URL
-              onClick={() => {
-                window.open(youtubeURL);
-              }}
-              src={youtube}
-              alt="유튜브"
-            />
-            <DefaultButton
-              text={isFollowed ? "Unfollow" : "Follow"}
-              backgroundcolor={isFollowed ? "#6C7383" : "#254ef8"}
-              fontcolor={"white"}
-              width={"4rem"}
-              height={"2rem"}
-              onClick={handleFollow}
-            />
+            <div className="header">
+              <div className="userInfo">
+                <div className="image">
+                  <Img
+                    src={
+                      currentUserPortfolio.portfolio_picture_file_idx
+                        ? currentUserPortfolio.portfolio_picture_file_idx
+                        : defaultprofile
+                    }
+                    alt="프로필 이미지"
+                  />
+                </div>
+                <div className="name">
+                  <Title>{currentUser.nickname}</Title>
+                  <p style={{ marginBottom: "10px" }}>{currentUser.name}</p>
+                  <p>{currentUser.selfIntro}</p>
+                </div>
+              </div>
+              <div className="buttons">
+                <DefaultButton
+                  text={"채팅하기"}
+                  backgroundcolor={"#873ffa"}
+                  width={"5rem"}
+                  height={"2rem"}
+                  onClick={handleChat}
+                />
+                <br />
+                <DefaultButton
+                  fontcolor={"white"}
+                  text={isFollowed ? "Unfollow" : "Follow"}
+                  backgroundcolor={isFollowed ? "#6C7383" : "#254ef8"}
+                  width={"5rem"}
+                  height={"2rem"}
+                  onClick={handleFollow}
+                />
+              </div>
+            </div>
+            <div className="genre">
+              <span>Genre : </span>
+                <ul>
+                {Object.values(currentUserGenre).map((genre) =>
+                  genre ? (
+                    <li key={genre}>{genre}</li>
+                  ) : null
+                )}
+                </ul>
+              </div>
+              <div className="position">
+                <span>Position : </span>
+                <ul>
+                {Object.values(currentUserPosition).map((position) =>
+                  position ? (
+                    <li key={position}>{position}</li>
+                  ) : null
+                )}
+                </ul>
+              </div>
+            <div className="sns">
+              <p>SNS</p>
+              <URL
+                onClick={() => {
+                  window.open(instagramURL);
+                }}
+                src={instagram}
+                alt="인스타그램"
+              />
+              <URL
+                onClick={() => {
+                  window.open(youtubeURL);
+                }}
+                src={youtube}
+                alt="유튜브"
+              />
+            </div>
+
           </>
         )}
       </Container>
