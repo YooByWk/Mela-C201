@@ -19,29 +19,17 @@ public class Shorts {
 
 
     @ManyToOne
-    @JoinColumn(name = "user_idx", referencedColumnName = "userIdx")
+    @JoinColumn(name="user_idx", referencedColumnName="userIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     User userIdx;
 
-    String title;
+    String comment;
 
-    String description;
 
     @ManyToOne
     @JoinColumn(name="shorts_path_file_idx", referencedColumnName="fileIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     File shortsPathFileIdx;
-
-    @Override
-    public String toString() {
-        return "Shorts{" +
-                "shortsIdx=" + shortsIdx +
-                ", userIdx=" + userIdx +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", shortsPathFileIdx=" + shortsPathFileIdx +
-                '}';
-    }
 }

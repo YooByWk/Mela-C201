@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import logo from "../assets/images/logo.png"
 import styled from 'styled-components';
+import openSignupModal from '../components/Modals/Signupmodal'
 
 const H1 = styled.h1`
   font-family: InterBold;
@@ -45,4 +46,35 @@ export function Homepage(props) {
   )
 }
 
-export default Homepage
+
+export function Modal() {
+  
+  const [modalOpen, setModalOpen] = useState(false)
+  
+  // 모달창 오픈
+  const openSignupModal = () => {
+    setModalOpen(true)
+  }
+
+  const openSigninModal = () => {
+    setModalOpen(true)
+  }
+
+  const closeSignupModal = () => {
+    setModalOpen(false)
+  }
+  return (
+    <React>
+      <Fragment>
+        <button onClick={openSignupModal}>
+          signup
+        </button>
+        <openSignupModal open={ modalOpen } close={ closeSignupModal } header='Modal heading'>
+          아오 힘드네 벌써
+        </openSignupModal>
+      </Fragment>
+    </React>
+  )
+}
+
+// export { Homepage, Modal}

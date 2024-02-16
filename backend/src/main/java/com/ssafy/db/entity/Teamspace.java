@@ -42,32 +42,11 @@ public class Teamspace {
 
     @ManyToOne
     @JoinColumn(name="TEAMSPACE_PICTURE_FILE_IDX", referencedColumnName="fileIdx")
-    File teamspacePictureFileIdx;
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    File teamspace_picture_file_idx;
 
     @ManyToOne
     @JoinColumn(name="TEAMSPACE_BACKGROUND_PICTURE_FILE_IDX", referencedColumnName="fileIdx")
-    File teamspaceBackgroundPictureFileIdx;
-
-    String chatRoomIdx;
-
-
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
-    @JoinColumn(name = "session_id", referencedColumnName = "sessionId")
-    Meeting sessionId;
-
-    @Override
-    public String toString() {
-        return "Teamspace{" +
-                "teamspaceIdx=" + teamspaceIdx +
-                ", teamName='" + teamName + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", teamDescription='" + teamDescription + '\'' +
-                ", host=" + host +
-                ", teamspacePictureFileIdx=" + teamspacePictureFileIdx +
-                ", teamspaceBackgroundPictureFileIdx=" + teamspaceBackgroundPictureFileIdx +
-                ", chatRoomIdx=" + chatRoomIdx +
-                ", sessionId=" + sessionId +
-                '}';
-    }
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    File teamspace_background_picture_file_idx;
 }

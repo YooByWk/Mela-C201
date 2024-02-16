@@ -22,7 +22,7 @@ public class QJoinChatRoom extends EntityPathBase<JoinChatRoom> {
 
     public static final QJoinChatRoom joinChatRoom = new QJoinChatRoom("joinChatRoom");
 
-    public final StringPath chatRoomIdx = createString("chatRoomIdx");
+    public final QChatRoom chatRoomIdx;
 
     public final NumberPath<Long> joinChatRoomIdx = createNumber("joinChatRoomIdx", Long.class);
 
@@ -46,6 +46,7 @@ public class QJoinChatRoom extends EntityPathBase<JoinChatRoom> {
 
     public QJoinChatRoom(Class<? extends JoinChatRoom> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.chatRoomIdx = inits.isInitialized("chatRoomIdx") ? new QChatRoom(forProperty("chatRoomIdx"), inits.get("chatRoomIdx")) : null;
         this.userIdx = inits.isInitialized("userIdx") ? new QUser(forProperty("userIdx")) : null;
     }
 

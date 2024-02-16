@@ -54,9 +54,9 @@ public class QPortfolioMusic extends EntityPathBase<PortfolioMusic> {
 
     public QPortfolioMusic(Class<? extends PortfolioMusic> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.albumArtFileIdx = inits.isInitialized("albumArtFileIdx") ? new QFile(forProperty("albumArtFileIdx"), inits.get("albumArtFileIdx")) : null;
-        this.lyricFileIdx = inits.isInitialized("lyricFileIdx") ? new QFile(forProperty("lyricFileIdx"), inits.get("lyricFileIdx")) : null;
-        this.musicFileIdx = inits.isInitialized("musicFileIdx") ? new QFile(forProperty("musicFileIdx"), inits.get("musicFileIdx")) : null;
+        this.albumArtFileIdx = inits.isInitialized("albumArtFileIdx") ? new QFile(forProperty("albumArtFileIdx")) : null;
+        this.lyricFileIdx = inits.isInitialized("lyricFileIdx") ? new QFile(forProperty("lyricFileIdx")) : null;
+        this.musicFileIdx = inits.isInitialized("musicFileIdx") ? new QFile(forProperty("musicFileIdx")) : null;
         this.userIdx = inits.isInitialized("userIdx") ? new QUser(forProperty("userIdx")) : null;
     }
 

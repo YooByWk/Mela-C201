@@ -1,6 +1,5 @@
 package com.ssafy.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +7,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -19,9 +18,10 @@ public class BoardRecruit {
     @NotNull
     Long boardRecruitIdx;
 
+    String position;
+
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    LocalDate endDate;
+    LocalDateTime endDate;
 
     @ManyToOne
     @JoinColumn(name="board_idx", referencedColumnName="boardIdx")
@@ -30,20 +30,20 @@ public class BoardRecruit {
     Board boardIdx;
 
     @ManyToOne
-//    @JoinColumn(name="genre_idx1", referencedColumnName="genreIdx")
-    @JoinColumn(name="genre_idx1", referencedColumnName="genre_idx")
+    @JoinColumn(name="genre_idx1", referencedColumnName="genreIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
     Genre genreIdx1;
 
     @ManyToOne
-//    @JoinColumn(name="genre_idx2", referencedColumnName="genreIdx")
-    @JoinColumn(name="genre_idx2", referencedColumnName="genre_idx")
+    @JoinColumn(name="genre_idx2", referencedColumnName="genreIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
     Genre genreIdx2;
 
     @ManyToOne
-//    @JoinColumn(name="genre_idx3", referencedColumnName="genreIdx")
-    @JoinColumn(name="genre_idx3", referencedColumnName="genre_idx")
+    @JoinColumn(name="genre_idx3", referencedColumnName="genreIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
     Genre genreIdx3;
 }

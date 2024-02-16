@@ -1,136 +1,83 @@
 import "./App.scss";
 import { Fragment } from "react";
-import { BrowserRouter, Routes, Route, Link, HashRouter, useNavigate, Navigate  } from "react-router-dom";
+
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+// import { Homepage } from "./pages/Homepage";
 import Navbar from "./components/Navbar";
-import Landing from "./pages/Landing";
+import SignupModal from "./components/SignupModal";
+import SigninModal from "./components/SigninModal";
+
 import GlobalStyle from "./styles/GlobalStyle";
 import styled, { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
-import AppRouter from "./router/router";
+
+import AppRouter from "./router/Router";
 import Sidebar from "./components/Sidebar";
-import Boards from "./pages/Boards";
-import CommunityCreate from "./components/community/CommunityCreate";
-import CommunityDetail from "./components/community/CommunityDetail";
-import CommunityHome from "./components/community/CommunityHome";
-import CommunityEdit from "./components/community/CommunityEdit";
-import TeamspaceMain from "./pages/TeamspaceMain";
-import EmailVerify from "./pages/EmailVerify";
-import GatherHome from "./components/gather/GatherHome";
-import GatherCreate from "./components/gather/GatherCreate";
-import GatherDetail from "./components/gather/GatherDetail";
-import GatherEdit from "./components/gather/GatherEdit";
-import ChangePassword from "./pages/ChangePassword";
-import Video from "./Video/Video";
-import TotalSearch from './pages/TotalSearch'
-import Gather from "./pages/Gather";
+
+const StyledAppRouter = styled(AppRouter)`
+      background-color: blue;
+      color: blue;
+      height: 21987347px;
+      width: 100%;
+`
+
+const Body = styled.div `
+  padding-top: 2%;
+  display: flex;
+  flex-direction: row;
+  color :white;
+  background-color: #10141d;
+  height: 60rem;
+
+  .BodyRouter { // 컴포 이하 
+    width: 90%;
+    background-color: #10141d;
+    padding-left: 2% ;
+    /* padding-top: 2%; */
+    height:100%;
+  }
+  .Side { // 사이드 L 바
+    margin-left: 15px;
+    width: 10%;
+    min-width: 80px;
+    padding-top: 2%;
+    max-width: 120px;
+    text-align: center;
+    height: 80%;
+    background-color: #202C44;
+    border-radius: 10px;
+  }
+
+`
+
+
 
 function App() {
-
-  const lgd = localStorage.getItem('accessToken')? true : false;
-
   return (
-    <>
-
+    <Fragment>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
-      <Scroll>
-        
-          <BrowserRouter>
-            <Routes>
-            <Route path='/Home' element={<Landing />} />
-              <Route path="/" element={<Landing />} />
-              <Route path="/teamspace" element={<TeamspaceMain />} />
-              <Route path="/search/:word" element={<TotalSearch />} />
-              <Route path="/signup/:emailId" element={<EmailVerify />} />
-              <Route path="/maingather" element={<Gather/>} />
-              <Route path="/gather" element={<Boards />}>
-                <Route index element={<GatherHome />} />
-                {lgd?<Route path="edit/:gatherIdx" element={<GatherEdit />} /> : null}
-                {lgd?<Route path=":pageNumber" element={<GatherHome />} />: null}
-                {lgd?<Route path="create" element={<GatherCreate />} />: null}
-                {lgd?<Route path="detail/:gatherIdx" element={<GatherDetail />} />: null}
-              </Route>
-              <Route path="/community" element={<Boards />}>
-                <Route path="/community" exact element={<CommunityHome />} />
-                {lgd?<Route path="/community/create" element={<CommunityCreate />} />: null}
-                <Route
-                  path="/community/:boardIdx"
-                  element={<CommunityDetail />}
-                />
-                <Route
-                  path="/community/:boardIdx/edit"
-                  element={<CommunityEdit />}
-                />
-              </Route>
-              {lgd?<Route path='/changepassword' element={<ChangePassword />}/>:null}
-              <Route
-                path="*"
-                element={
-                  <>
-                    <header>
-                      <Navbar />
-                    </header>
-                    <Body>
-                      <Sidebar className="Side" />
-                      <StyledAppRouter className="BodyRouter" />
-                    </Body>
-                  </>
-                }
-              />
-            </Routes>
+        <BrowserRouter>
+          <header>
+            <Navbar />
+          </header>
 
-          </BrowserRouter>
-      </Scroll>
+          <Body >
+            <Sidebar className='Side'/>
+            <StyledAppRouter className='BodyRouter'/>
+          </Body>
+
+          <p>아래 링크는 지울 수 있습니다. - 개발용 -</p>
+          <Link to="/home">Homepage(실험중인곳)</Link>||
+          <Link to="/">기본 경로</Link>||
+          <Link to="/nav">Navbar</Link>||
+          <Link to="/user">Signup</Link>||
+          <Link to="/login">SignIn</Link>||
+          <Link to="/community"> community </Link>
+        </BrowserRouter>
       </ThemeProvider>
-    </>
+    </Fragment>
   );
 }
 
 export default App;
-
-
-const StyledAppRouter = styled(AppRouter)`
-  /* background-color: blue; */
-  /* color: blue; */
-  min-height: 100%;
-  width: 100%;
-`;
-
-const Scroll = styled.div`
-  
-`
-const Body = styled.div`
-  padding-top: 2.5%;
-  display: flex;
-  flex-direction: row;
-
-  background-color: #10141d;
-  height: 100%;
-  /* height: 90rem; */
-  /* min-height: 80vh; */
-
-
-
-  .BodyRouter {
-    // 컴포 이하
-    /* width: 90%; */
-    background-color: #10141d;
-    padding-left: 10px;
-    /* padding-top: 2%; */
-    height: 100%;
-    min-height: 90vh;
-  }
-  .Side {
-    // 사이드 L 바
-    width: 12.5vw;
-    /* min-width: 80px; */
-    padding-top: 1.5%;
-    /* max-width: 300px; */
-    text-align: center;
-    padding-left:0.5%;
-    margin-left: 1rem;
-    height: 60%;
-    /* background-color: #202c44; */
-    border-radius: 10px;
-  }
-`;

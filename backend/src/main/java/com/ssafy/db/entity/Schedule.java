@@ -1,6 +1,5 @@
 package com.ssafy.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +18,7 @@ public class Schedule {
     @NotNull
     Long scheduleIdx;
 
+
     @ManyToOne
     @JoinColumn(name="teamspace_idx", referencedColumnName="teamspaceIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -26,11 +26,9 @@ public class Schedule {
     Teamspace teamspaceIdx;
 
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     LocalDateTime startTime;
 
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     LocalDateTime endTime;
 
     @NotNull

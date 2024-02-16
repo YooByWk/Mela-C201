@@ -35,7 +35,7 @@ public class PortfolioMusic {
     File musicFileIdx;
 
     @ManyToOne
-    @JoinColumn(name="lyric_file_idx", referencedColumnName="fileIdx")
+    @JoinColumn(name="lylic_file_idx", referencedColumnName="fileIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     File lyricFileIdx;
 
@@ -43,17 +43,4 @@ public class PortfolioMusic {
     @JoinColumn(name="album_art_file_idx", referencedColumnName="fileIdx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     File albumArtFileIdx;
-
-    @Override
-    public String toString() {
-        return "PortfolioMusic{" +
-                "portfolioMusicIdx=" + portfolioMusicIdx +
-                ", title='" + title + '\'' +
-                ", pinFixed=" + pinFixed +
-                ", userIdx=" + userIdx +
-                ", musicFileIdx=" + musicFileIdx +
-                ", lyricFileIdx=" + lyricFileIdx +
-                ", albumArtFileIdx=" + albumArtFileIdx +
-                '}';
-    }
 }

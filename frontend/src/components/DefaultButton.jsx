@@ -2,15 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    height : ${(props) => props.height};
+    height : 50px;
     width: ${(props) => props.width};
     display: flex;
     justify-content: center;
     align-items: center;
-    color: ${(props) => props.fontcolor};
-    background: ${(props) => props.backgroundcolor};
+    color: ${(props) => props.fontColor};
+    background: ${(props) => props.backgroundColor};
     border-radius: 30px;
-    cursor: pointer;
 
     &:hover{
         filter: brightness(90%);
@@ -21,31 +20,25 @@ const Text = styled.span`
     
 `
 
-const DefaultButton = (props) => {
+const defaultButton = (props) => {
     return (
-        <>
         <Container
-            backgroundcolor={props.backgroundcolor}
-            fontcolor={props.fontcolor}
+            backgroundColor={props.backgroundColor}
+            fontColor={props.fontColor}
             width={props.width}
-            height={props.height}
-            onClick={props.onClick}
         >
             <Text>
                 {props.text}
             </Text>
         </Container>
-        </>
     )
 }
 
-DefaultButton.defaultProps={
+defaultButton.props={
     text: 'default',
-    backgroundcolor: '#254ef8',
-    fontcolor: 'white',
+    backgroundColor: '#254ef8',
+    fontColor: 'white',
     width: '1rem',
-    height: '50px',
-    onClick: () => {}
 }
 
-export default DefaultButton
+export default defaultButton

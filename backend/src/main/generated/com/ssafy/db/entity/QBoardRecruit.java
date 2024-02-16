@@ -26,13 +26,15 @@ public class QBoardRecruit extends EntityPathBase<BoardRecruit> {
 
     public final NumberPath<Long> boardRecruitIdx = createNumber("boardRecruitIdx", Long.class);
 
-    public final DatePath<java.time.LocalDate> endDate = createDate("endDate", java.time.LocalDate.class);
+    public final DateTimePath<java.time.LocalDateTime> endDate = createDateTime("endDate", java.time.LocalDateTime.class);
 
     public final QGenre genreIdx1;
 
     public final QGenre genreIdx2;
 
     public final QGenre genreIdx3;
+
+    public final StringPath position = createString("position");
 
     public QBoardRecruit(String variable) {
         this(BoardRecruit.class, forVariable(variable), INITS);
