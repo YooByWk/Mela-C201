@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -106,6 +107,16 @@ public class ChatRoomService {
             createJoinChatRoom(chatRoom.getRoomIdx(), user2);
 
             roomIdx = chatRoom.getRoomIdx();
+
+
+            String content = "채팅을 시작합니다.";
+            ChatMessage message = new ChatMessage();
+            message.setSendTime(LocalDateTime.now()+"");
+            message.setMessage(content);
+            message.setNickname(user1.getNickname());
+            message.setUserIdx(user1.getUserIdx()+"");
+            message.setRoomIdx(roomIdx);
+            chatService.saveMessage(message);
         }
 
         // 채팅 입장
