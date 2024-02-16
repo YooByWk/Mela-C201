@@ -1,0 +1,3 @@
+tmp: 
+{"ws":
+{"_listeners":{},"readyState":1,"extensions":"","protocol":"","_transportOptions":{},"_timeout":0,"_server":"657","_origin":"http://localhost:3000","url":"http://localhost:8080/ws-stomp","_urlInfo":{"nullOrigin":false,"sameOrigin":false,"sameScheme":true},"_ir":null,"binaryType":"arraybuffer","_rto":303,"_transUrl":"http://localhost:8080/ws-stomp","_transports":[null,null,null,null,null,null,null],"_transportTimeoutId":null,"_transport":{"_listeners":{"message":[null],"close":[null]},"url":"ws://localhost:8080/ws-stomp/657/hz1oppbv/websocket","ws":{},"unloadRef":"sxcdro0e","transportName":"websocket"},"transport":"websocket"},"counter":0,"connected":false,"heartbeat":{"outgoing":10000,"incoming":10000},"maxWebSocketFrameSize":16384,"subscriptions":{}}
