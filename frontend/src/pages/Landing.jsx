@@ -42,11 +42,14 @@ function Landing() {
       );
       setBoardList(sortedData);
       // 모집글 가져오기
+      if (logined) {
+        const response3 = await shortsList();
+        setShortList(response3);
+        
+      }
       const response2 = await GatherList({ page: 1, size: 4 });
       setGatherList(response2.data.boardRecruitRes);
       // 매칭글 가져오기
-      const response3 = await shortsList();
-      setShortList(response3);
     };
     fetchData();
   }, []);
