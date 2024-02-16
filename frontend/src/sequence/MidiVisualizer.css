@@ -1,0 +1,29 @@
+.container {
+  width: 100%;
+  overflow-x: auto; /* 가로 스크롤 추가 */
+  padding: 20px;
+  background-color: gray; /* 스크롤 컨테이너 배경색 추가 */
+}
+
+/* button {
+  margin-right: 10px;
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+} */
+
+/* button:hover {
+  background-color: #45a049;
+} */
+
+svg {
+  overflow: visible; /* SVG 내용이 잘려나가지 않도록 설정 */
+}

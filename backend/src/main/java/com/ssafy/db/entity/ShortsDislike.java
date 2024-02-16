@@ -28,4 +28,13 @@ public class ShortsDislike {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     Shorts shortsIdx;
+
+    @Override
+    public String toString() {
+        return "ShortsDislike{" +
+                "shortsDislikeIdx=" + shortsDislikeIdx +
+                ", userIdx=" + userIdx +
+                ", shortsIdx=" + shortsIdx +
+                '}';
+    }
 }

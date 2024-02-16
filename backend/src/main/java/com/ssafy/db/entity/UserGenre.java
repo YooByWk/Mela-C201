@@ -24,8 +24,18 @@ public class UserGenre {
     User userIdx;
 
     @ManyToOne
-    @JoinColumn(name="genre_idx", referencedColumnName="genreIdx")
+//    @JoinColumn(name="genre_idx", referencedColumnName="genreIdx")
+    @JoinColumn(name="genre_idx", referencedColumnName="genre_idx")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     Genre genreIdx;
+
+    @Override
+    public String toString() {
+        return "UserGenre{" +
+                "userGenreIdx=" + userGenreIdx +
+                ", userIdx=" + userIdx +
+                ", genreIdx=" + genreIdx +
+                '}';
+    }
 }
