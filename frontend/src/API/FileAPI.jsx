@@ -28,6 +28,12 @@ export const getVideo = async (fileIdx) => {
     return response.data
 }
 
+// 단일 음악 조회
+export const getMusic = async (fileIdx) => {
+    const response = await FileAPI.get(`/musics/${fileIdx}`)
+    return response.data
+}
+
 // 파일 다운로드
 // export const downloadFile = async (fileIdx) => {
 //     const response = await FileAPI.get({

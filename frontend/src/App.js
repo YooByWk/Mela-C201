@@ -1,6 +1,6 @@
 import "./App.scss";
 import { Fragment } from "react";
-import { BrowserRouter, Routes, Route, Link, HashRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, HashRouter, useNavigate, Navigate  } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import GlobalStyle from "./styles/GlobalStyle";
@@ -25,6 +25,9 @@ import TotalSearch from './pages/TotalSearch'
 import Gather from "./pages/Gather";
 
 function App() {
+
+  const lgd = localStorage.getItem('accessToken')? true : false;
+
   return (
     <>
 
@@ -34,10 +37,7 @@ function App() {
         
           <BrowserRouter>
             <Routes>
-            <Route path='video' element={<Video />} />
-            {/* <Route
-            path='/teamspace/video/:teamspaceIdx' element={<Video/>}
-            /> */}
+            <Route path='/Home' element={<Landing />} />
               <Route path="/" element={<Landing />} />
               <Route path="/teamspace" element={<TeamspaceMain />} />
               <Route path="/search/:word" element={<TotalSearch />} />
@@ -45,14 +45,14 @@ function App() {
               <Route path="/maingather" element={<Gather/>} />
               <Route path="/gather" element={<Boards />}>
                 <Route index element={<GatherHome />} />
-                <Route path="edit/:gatherIdx" element={<GatherEdit />} />
-                <Route path=":pageNumber" element={<GatherHome />} />
-                <Route path="create" element={<GatherCreate />} />
-                <Route path="detail/:gatherIdx" element={<GatherDetail />} />
+                {lgd?<Route path="edit/:gatherIdx" element={<GatherEdit />} /> : null}
+                {lgd?<Route path=":pageNumber" element={<GatherHome />} />: null}
+                {lgd?<Route path="create" element={<GatherCreate />} />: null}
+                {lgd?<Route path="detail/:gatherIdx" element={<GatherDetail />} />: null}
               </Route>
               <Route path="/community" element={<Boards />}>
                 <Route path="/community" exact element={<CommunityHome />} />
-                <Route path="/community/create" element={<CommunityCreate />} />
+                {lgd?<Route path="/community/create" element={<CommunityCreate />} />: null}
                 <Route
                   path="/community/:boardIdx"
                   element={<CommunityDetail />}
@@ -62,7 +62,7 @@ function App() {
                   element={<CommunityEdit />}
                 />
               </Route>
-              <Route path='/changepassword' element={<ChangePassword />}/>
+              {lgd?<Route path='/changepassword' element={<ChangePassword />}/>:null}
               <Route
                 path="*"
                 element={
@@ -78,13 +78,7 @@ function App() {
                 }
               />
             </Routes>
-            {/* <p>아래 링크는 지울 수 있습니다. - 개발용 -</p>
-            <Link to="/home">Homepage(실험중인곳)</Link>||
-            <Link to="/">기본 경로</Link>||
-            <Link to="/nav">Navbar</Link>||
-            <Link to="/user">Signup</Link>||
-            <Link to="/login">SignIn</Link>||
-            <Link to="/community"> community </Link> */}
+
           </BrowserRouter>
       </Scroll>
       </ThemeProvider>

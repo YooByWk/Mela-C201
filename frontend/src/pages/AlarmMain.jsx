@@ -28,9 +28,9 @@ function AlarmMain () {
             try {
                 const res = await notification()
                 setData(res)
-                console.log(res)
+                // console.log(res)
             } catch (err) {
-                console.log(err)
+                // console.log(err)
             }
         }
         fetchData()
@@ -39,12 +39,12 @@ function AlarmMain () {
     const handleDelete = async (notificationIdx) => {
         try {
             await delNotification({ notificationid : notificationIdx})
-            console.log(notificationIdx)
+            // console.log(notificationIdx)
             
             const response = await notification()
             setData(response)
         } catch (err) {
-            console.log(err)
+            // console.log(err)
         }
     }
 

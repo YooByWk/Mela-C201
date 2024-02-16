@@ -106,7 +106,7 @@ function UserEdit(props) {
     return (
       <div>
         <p>로딩 중...</p>
-        <button
+        {/* <button
           onClick={() => console.log(currentUser.emailId === loginUser.emailId)}
         >
           51243
@@ -114,7 +114,7 @@ function UserEdit(props) {
         <button onClick={() => console.log(currentUser)}>1243</button>
         <button onClick={() => console.log(loginUser)}>lgue</button>
         <button onClick={() => console.log(loginUser.emailId)}>lgue</button>
-        <button onClick={() => console.log(currentUser.emailId)}>123</button>
+        <button onClick={() => console.log(currentUser.emailId)}>123</button> */}
       </div>
     );
   }

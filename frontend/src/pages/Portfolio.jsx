@@ -37,7 +37,7 @@ function Portfolio() {
         setCurrentUserGenre(otherInfo[5]);
         // console.log(otherInfo)
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     };
     info();
@@ -62,7 +62,7 @@ function Portfolio() {
           <Container>
             <div className="main">
               <UserEdit {...userProps} />
-              <Selfshorts />
+              <Selfshorts {...userProps}/>
               <PortfolioPin />
             </div>
             <div className="side">

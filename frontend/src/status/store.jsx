@@ -10,9 +10,7 @@ const useStore = create(set => ({
   setUser : (user) => set({user: user}),
 
   fetchUser: async () => {
-    console.log('유저정보최신화')
     if (!localStorage.accessToken) {
-      console.log('로그인되지 않음')
       return
     }
     try {

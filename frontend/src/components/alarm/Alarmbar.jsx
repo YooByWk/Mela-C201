@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { GoBell } from "react-icons/go"
 import DefaultButton from "../DefaultButton"
 import { notification } from '../../API/UserAPI'
+import { button } from '@material-tailwind/react';
 
 
 function Alarmbar () {
@@ -26,6 +27,7 @@ function Alarmbar () {
 
     return (
         <>
+        {localStorage.getItem('accessToken') ?
         <Container>
             <div className="header">
                 <div>
@@ -61,8 +63,9 @@ function Alarmbar () {
                             <p style={{marginTop : '10px'}}>알람이 없습니다.</p>
                         )}
                 </ul>
-            </div>
+            </div> 
         </Container>
+        : null }
         </>
     )
 }

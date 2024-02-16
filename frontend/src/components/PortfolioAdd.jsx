@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import DefaultButton from "./DefaultButton";
 import { IoMdClose } from "react-icons/io";
-import { FaFileUpload } from "react-icons/fa";
 import { Dialog, DialogHeader, DialogBody } from '@material-tailwind/react'
 import { musicUpload } from '../API/PortfolioAPI'
 import defaultimage from '../assets/images/default-profile.png'
@@ -193,7 +192,7 @@ function PortfolioAdd() {
         formData.append('file', lyricFile)
 
         for (let key of formData.keys()) {
-            console.log(key, ":", formData.get(key));
+            // console.log(key, ":", formData.get(key));
         }
 
         try {

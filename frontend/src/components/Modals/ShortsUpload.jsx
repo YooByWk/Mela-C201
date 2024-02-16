@@ -127,17 +127,17 @@ function ShortsUploadModal({className, fontSize, padding}) {
 
     try {
       const res = await shortsUpload(formData)
-      console.log(res)
+      // console.log(res)
       alert('쇼츠가 업로드 되었습니다.')
       setOpen(!open)
   } catch (err) {
-      console.error(err)
+      // console.error(err)
   }
   }
 
   //디버깅용(나중에 삭제)
   const handleClick = async () => {
-    console.log('click')
+    // console.log('click')
   }
 
   return (

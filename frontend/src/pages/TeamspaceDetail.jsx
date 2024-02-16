@@ -32,13 +32,17 @@ function TeamspaceDetail () {
         Navigate(`../teamspace/video/${teamspaceIdx}`, { state : { teamspace : teamspaceIdx } })
     }
     const goBack = () => {
-        console.log()
+        // console.log()
         Navigate(-1)
     }
 
+    let au = null
+    if (localStorage.getItem('accessToken')) {au = true} else {au = false}
+    console.log(au)
 
 
-    return(
+    if (au)
+    {return(
         <>
         <Container>
             <Header>
@@ -73,9 +77,14 @@ function TeamspaceDetail () {
             </div>
         </Container>
         </>
-    )
-}
+    )}
+    else {
+        return (
+            <div>로그인이 필요합니다.</div>
+        )
 
+}
+}
 export default TeamspaceDetail
 
 

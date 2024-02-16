@@ -114,7 +114,7 @@ const SideDiv = styled.div`
 `;
 
 const MainContainer = styled.div`
-  width: 60%;
+  width: 67.5vw;
   height: 700px;
 `
 const MainDiv = styled.div`
@@ -143,5 +143,5 @@ const MainDiv = styled.div`
 `;
 
 const RSideDiv = styled.div`
-  width: 15%;
+  width: 15vw;
 `;

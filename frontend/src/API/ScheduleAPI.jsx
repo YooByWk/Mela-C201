@@ -31,7 +31,6 @@ export const ScheduleGenerate = async(teamspaceId, {
         startTime
     }
     const response = await ScheduleAPI.post(`/${teamspaceId}/schedules`, data)
-    console.log(response.data)
     return response.data
 }
 
@@ -49,7 +48,6 @@ export const ScheduleUpdate = async(teamspaceId, scheduleId, {
         startTime
     }
     const response = await ScheduleAPI.put(`/${teamspaceId}/schedules/${scheduleId}`, data)
-    console.log(response.data)
     return response.data
 }
 
@@ -57,6 +55,5 @@ export const ScheduleUpdate = async(teamspaceId, scheduleId, {
 export const ScheduleDelete = async({teamspaceId, scheduleId}) => {
     const response = await ScheduleAPI.delete(`/${teamspaceId}/schedules/${scheduleId}`)
 
-    console.log(response.data)
     return response.data
 }

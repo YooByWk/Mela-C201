@@ -28,7 +28,7 @@ function TeamspaceTeam () {
                 setMembers(memberInfo)
                 
             } catch (err) {
-                console.log(err)
+                // console.log(err)
             }
         }
         info()

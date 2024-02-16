@@ -114,12 +114,12 @@ function Gather() {
           <ListContainer>
             {myGather.length === 0 ? (
               <>
-              작성한 공고가 없습니다.
+              <p>작성한 공고가 없습니다.</p>
               </>
             ) : (
               <>
             {Object.entries(myGatherLimitList()).map(([key, value]) => (
-              <ListDiv key={value.boardRecruitIdx}>
+              <ListDiv key={value.boardRecruitIdx} onClick={() => navigate(`/gather/detail/${value.boardRecruitIdx}`)}>
                 <Title> 
                 {value.title} 
                 </Title> 
@@ -135,7 +135,7 @@ function Gather() {
           <ListContainer>
           {shorts.length === 0 ? (
               <>
-              선호할 만한 사람이 없습니다.
+              <p>선호할 만한 사람이 없습니다.</p>
               </>
             ) : (
               <>
@@ -155,12 +155,12 @@ function Gather() {
           <ListContainer>
             {recommend.length === 0 ? (
               <>
-              적합한 공고가 없습니다.
+              <p>적합한 공고가 없습니다.</p>
               </>
             ) : (
               <>
                   {Object.entries(recommendLimitList()).map(([key, value]) => (
-                  <ListDiv key={value.boardRecruitIdx}>
+                  <ListDiv key={value.boardRecruitIdx} onClick={() => navigate(`/gather/detail/${value.boardRecruitIdx}`)}>
                     <Title>
                     {value.title}
                     </Title>
@@ -247,6 +247,7 @@ const ListDiv = styled.div`
   background-color: #202C44;
   border-radius: 15%;
   margin-bottom: 5%;
+  cursor: pointer;
 `
 
 const ShortsDiv = styled.video`
