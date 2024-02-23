@@ -285,17 +285,15 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 
 - 화상 회의
 
-  ![](./Docs/Screenshots/3_TeamSpace/2_Team/3_VideoConferencing/1.mp4)
-  
-  <video src="./Docs/Screenshots/3_TeamSpace/2_Team/3_VideoConferencing/1.mp4" loop="" controls />
+  ![1](./Docs/Screenshots/3_TeamSpace/2_Team/3_VideoConferencing/1.mp4)
 
 - 건반 (비행기(동요) 연주)
 
-  <video src="./Docs/Screenshots/3_TeamSpace/3_AudioFile/1_Keyboard/1.mp4" loop="" controls />
+  ![1](./Docs/Screenshots/3_TeamSpace/3_AudioFile/1_Keyboard/1.mp4)
 
 - 온라인 음원 재생 (개똥벌레(노래) MIDI 재생)
 
-  <video src="./Docs/Screenshots/3_TeamSpace/3_AudioFile/2_MIDIPlayback/1.mp4" loop="" controls />
+  ![1](./Docs/Screenshots/3_TeamSpace/3_AudioFile/2_MIDIPlayback/1.mp4)
 
 - 파일 업로드
   | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/1.png> | 
