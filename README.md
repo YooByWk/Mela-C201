@@ -169,6 +169,7 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/2.png>
 <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/3.png>
 <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/4.png>
+
   | <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/5.png> | 
   |:--:| 
   | 멜라멜라 사용자 메시지 전송 |
@@ -283,13 +284,13 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
   | 초대된 멤버 확인 |
 
 - 화상 회의
-<video src="./Docs/Screenshots/3_TeamSpace/2_Team/3_VideoConferencing/1.mp4" loop="" controls />
+  <video src="./Docs/Screenshots/3_TeamSpace/2_Team/3_VideoConferencing/1.mp4" loop="" controls />
 
 - 건반 (비행기(동요) 연주)
-<video src="./Docs/Screenshots/3_TeamSpace/3_AudioFile/1_Keyboard/1.mp4" loop="" controls />
+  <video src="./Docs/Screenshots/3_TeamSpace/3_AudioFile/1_Keyboard/1.mp4" loop="" controls />
 
 - 온라인 음원 재생 (개똥벌레(노래) MIDI 재생)
-<video src="./Docs/Screenshots/3_TeamSpace/3_AudioFile/2_MIDIPlayback/1.mp4" loop="" controls />
+  <video src="./Docs/Screenshots/3_TeamSpace/3_AudioFile/2_MIDIPlayback/1.mp4" loop="" controls />
 
 - 파일 업로드
   | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/1.png> | 
@@ -300,11 +301,11 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
   |:--:| 
   | 파일 업로드 및 설명 작성 |
 
-  | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/3.png>) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/3.png> | 
   |:--:| 
   | 업로드 버튼 클릭 |
 
-  | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/4.png>) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/4.png> | 
   |:--:| 
   | 업로드 완료 대화상자 |
 
@@ -376,7 +377,7 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
   | Unread 탭 (읽지 않은 상태인 알림 출력) |
 
 - 다른 사용자가 내가 업로드 한 쇼츠에 좋아요를 클릭하면 알림 수신
-<img src=./Docs/Screenshots/4_Common/2_ShortsLikeNotification/1.png>
+  <img src=./Docs/Screenshots/4_Common/2_ShortsLikeNotification/1.png>
 
 - 쇼츠 업로더 두 명이 서로의 쇼츠에 좋아요를 누른 경우 (채팅방 개설) #매칭 기능
 
@@ -411,7 +412,7 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
   | 작성된 글 확인 |
 
 - 글 보기
-<img src=./Docs/Screenshots/5_Community/2_ReadArticle/1.png>
+  <img src=./Docs/Screenshots/5_Community/2_ReadArticle/1.png>
 
 - 글 수정
   | <img src=./Docs/Screenshots/5_Community/3_ModifyArticle/1.png> | 
@@ -453,7 +454,7 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
   | 작성된 댓글 확인 |
 
 - 댓글 삭제
-<img src=./Docs/Screenshots/5_Community/6_DeleteComment/1.gif>
+  <img src=./Docs/Screenshots/5_Community/6_DeleteComment/1.gif>
 
 - 글 정렬 (최신 순, 조회수 순, 인기 순)
   | <img src=./Docs/Screenshots/5_Community/7_SortArticle/1.png> | 
@@ -473,7 +474,7 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
   | 인기순 정렬 |
 
 - 글 좋아요
-<img src=./Docs/Screenshots/5_Community/8_LikeArticle/1.png>
+  <img src=./Docs/Screenshots/5_Community/8_LikeArticle/1.png>
 
 - 게시글 검색
   | <img src=./Docs/Screenshots/5_Community/9_SearchArticle/1.png> | 
