@@ -140,7 +140,7 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 <img src=./Docs/Screenshots/2_Gather/1_Main/1.png>
 <img src=./Docs/Screenshots/2_Gather/1_Main/2.png>
 <img src=./Docs/Screenshots/2_Gather/1_Main/3.png>
-  ```
+  ```plaintext
   "내가 작성한 공고", "내가 선호할 만한 사람", "나를 찾는 공고" 로 구성
   ```
 
@@ -153,9 +153,11 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 변경 대화상자<br/><br/>
 <img src=./Docs/Screenshots/2_Gather/2_EditProfile/4.png>
 수정된 정보
-  ```
+
+  ```plaintext
   이름, 닉네임, 자기소개, 성별, 생년월일, 좋아하는 장르, 희망하는 포지션, SNS 주소 (인스타그램, 유튜브) 수정 가능
   ```
+
   > 💡 좋아하는 장르와 희망하는 포지션으로 Gather 메뉴에서 나를 찾는 공고와 쇼츠가 출력됨
 
 - 내가 작성한 공고
@@ -166,18 +168,18 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/2.png>
 <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/3.png>
 <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/4.png>
-  | ![](./Docs/Screenshots/2_Gather/4_GatherLookingForMe/5.png) | 
+  | <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/5.png>) | 
   |:--:| 
   | 멜라멜라 사용자 메시지 전송 |
 
-  | ![](./Docs/Screenshots/2_Gather/4_GatherLookingForMe/6.png) | 
+  | <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/6.png> | 
   |:--:| 
   | 나는짱이요 사용자 메시지 수신 |
 
 - 채팅
 <img src=./Docs/Screenshots/2_Gather/5_Message/1.png>
 
-  ```
+  ```plaintext
   [다른 사람과 채팅 방법]
   1. 다른 사람이 작성한 구인 글에서 "채팅 연결" 버튼 클릭
   2. 통합 검색에서 사용자 검색 후 "채팅하기" 버튼 클릭
@@ -186,7 +188,7 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 
 - Matching
 <video src="./Docs/Screenshots/2_Gather/6_Matching/1.mp4" loop="" controls />
-  ```
+  ```plaintext
   다른 사용자가 업로드한 쇼츠
   1) 선호하는 장르와 희망하는 포지션에 맞는 쇼츠 리스트 재생
   2) 좋아요를 누르면 업로더에게 알림 전송
