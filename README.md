@@ -284,12 +284,15 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
   | 초대된 멤버 확인 |
 
 - 화상 회의
+
   <video src="./Docs/Screenshots/3_TeamSpace/2_Team/3_VideoConferencing/1.mp4" loop="" controls />
 
 - 건반 (비행기(동요) 연주)
+
   <video src="./Docs/Screenshots/3_TeamSpace/3_AudioFile/1_Keyboard/1.mp4" loop="" controls />
 
 - 온라인 음원 재생 (개똥벌레(노래) MIDI 재생)
+
   <video src="./Docs/Screenshots/3_TeamSpace/3_AudioFile/2_MIDIPlayback/1.mp4" loop="" controls />
 
 - 파일 업로드
