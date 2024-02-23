@@ -140,6 +140,7 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 <img src=./Docs/Screenshots/2_Gather/1_Main/1.png>
 <img src=./Docs/Screenshots/2_Gather/1_Main/2.png>
 <img src=./Docs/Screenshots/2_Gather/1_Main/3.png>
+
   ```plaintext
   "내가 작성한 공고", "내가 선호할 만한 사람", "나를 찾는 공고" 로 구성
   ```
@@ -168,7 +169,7 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/2.png>
 <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/3.png>
 <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/4.png>
-  | <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/5.png>) | 
+  | <img src=./Docs/Screenshots/2_Gather/4_GatherLookingForMe/5.png> | 
   |:--:| 
   | 멜라멜라 사용자 메시지 전송 |
 
@@ -188,6 +189,7 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 
 - Matching
 <video src="./Docs/Screenshots/2_Gather/6_Matching/1.mp4" loop="" controls />
+
   ```plaintext
   다른 사용자가 업로드한 쇼츠
   1) 선호하는 장르와 희망하는 포지션에 맞는 쇼츠 리스트 재생
@@ -197,86 +199,86 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 
 ### 3. Team Space
 - Team Space 생성
-  | ![](./Docs/Screenshots/3_TeamSpace/1_CreateTeamSpace/1.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/1_CreateTeamSpace/1.png> | 
   |:--:| 
   | Create 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/1_CreateTeamSpace/2.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/1_CreateTeamSpace/2.png> | 
   |:--:| 
   | 배경 이미지, 프로필 이미지, 프로젝트 (팀 스페이스)의 종료일, 팀 스페이스 이름과 설명 입력 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/1_CreateTeamSpace/3.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/1_CreateTeamSpace/3.png> | 
   |:--:| 
   | Create 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/1_CreateTeamSpace/4.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/1_CreateTeamSpace/4.png> | 
   |:--:| 
   | 생성 완료 대화상자 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/1_CreateTeamSpace/5.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/1_CreateTeamSpace/5.png> | 
   |:--:| 
   | 팀 스페이스 메인 화면 |
 
 - 일정 추가
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/1.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/1.png> | 
   |:--:| 
   | + 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/2.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/2.png> | 
   |:--:| 
   | 내용, 장소, 시작일, 종료일 입력 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/3.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/3.png> | 
   |:--:| 
   | Create 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/4.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/4.png> | 
   |:--:| 
   | 더보기 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/5.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/5.png> | 
   |:--:| 
   | 일정 세부 내용 확인 |
 
 - 일정 수정
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/4.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/4.png> | 
   |:--:| 
   | 더보기 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/6.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/6.png> | 
   |:--:| 
   | 수정 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/7.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/7.png> | 
   |:--:| 
   | 수정 후 Save 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/8.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/1_Schedule/8.png> | 
   |:--:| 
   | 수정된 일정 확인 |
 
 - 멤버 추가
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/1.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/1.png> | 
   |:--:| 
   | Invite 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/2.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/2.png> | 
   |:--:| 
   | 초대할 사용자의 닉네임 검색 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/3.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/3.png> | 
   |:--:| 
   | 닉네임 검색 후 체크박스 선택 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/4.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/4.png> | 
   |:--:| 
   | 닉네임 검색 후 체크박스 선택 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/5.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/5.png> | 
   |:--:| 
   | Save 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/6.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/2_Team/2_InviteMember/6.png> | 
   |:--:| 
   | 초대된 멤버 확인 |
 
@@ -290,88 +292,86 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 <video src="./Docs/Screenshots/3_TeamSpace/3_AudioFile/2_MIDIPlayback/1.mp4" loop="" controls />
 
 - 파일 업로드
-  | ![](./Docs/Screenshots/3_TeamSpace/4_Files/1.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/1.png> | 
   |:--:| 
   | Upload 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/4_Files/2.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/2.png> | 
   |:--:| 
   | 파일 업로드 및 설명 작성 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/4_Files/3.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/3.png>) | 
   |:--:| 
   | 업로드 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/4_Files/4.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/4.png>) | 
   |:--:| 
   | 업로드 완료 대화상자 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/4_Files/5.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/5.png> | 
   |:--:| 
   | 업로드된 파일 확인 |
 
 - 파일 다운로드
-  | ![](./Docs/Screenshots/3_TeamSpace/4_Files/6.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/6.png> | 
   |:--:| 
   | 다운로드 아이콘 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/4_Files/7.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/4_Files/7.png> | 
   |:--:| 
   | 다운로드 대화상자 |
 
 - 팀 스페이스 관리
-  | ![](./Docs/Screenshots/3_TeamSpace/5_Management/1.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/5_Management/1.png> | 
   |:--:| 
   | Management 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/5_Management/2.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/5_Management/2.png> | 
   |:--:| 
   | 팀 스페이스 기본 정보 수정 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/5_Management/3.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/5_Management/3.png> | 
   |:--:| 
   | Save 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/3_TeamSpace/5_Management/4.png) | 
+  | <img src=./Docs/Screenshots/3_TeamSpace/5_Management/4.png> | 
   |:--:| 
   | 수정 완료 대화상자 |
 
 ### 4. 공통 (알림)
 - 알림 화면
-  | ![](./Docs/Screenshots/4_Common/1_Sidebar/1_MarkAllAsRead/1.png) | 
+  | <img src=./Docs/Screenshots/4_Common/1_Sidebar/1_MarkAllAsRead/1.png> | 
   |:--:| 
   | + 버튼 클릭 |
 
 - 알림 읽음으로 표시
-  | ![](./Docs/Screenshots/4_Common/1_Sidebar/1_MarkAllAsRead/2.png) | 
+  | <img src=./Docs/Screenshots/4_Common/1_Sidebar/1_MarkAllAsRead/2.png> | 
   |:--:| 
   | 체크박스 선택 후 Mark all as read 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/4_Common/1_Sidebar/1_MarkAllAsRead/3.png) | 
+  | <img src=./Docs/Screenshots/4_Common/1_Sidebar/1_MarkAllAsRead/3.png> | 
   |:--:| 
   | "읽지 않음"에서 "읽음" 으로 상태 변경 |
 
 - 알림 삭제
-  | ![](./Docs/Screenshots/4_Common/1_Sidebar/2_Delete/1.png) | 
+  | <img src=./Docs/Screenshots/4_Common/1_Sidebar/2_Delete/1.png> | 
   |:--:| 
   | 체크박스 선택 후 Delete 버튼 클릭 |
 
-
-  | ![](./Docs/Screenshots/4_Common/1_Sidebar/2_Delete/2.png) | 
+  | <img src=./Docs/Screenshots/4_Common/1_Sidebar/2_Delete/2.png> | 
   |:--:| 
   | 알림 삭제 확인 대화상자 |
 
-
-  | ![](./Docs/Screenshots/4_Common/1_Sidebar/2_Delete/3.png) | 
+  | <img src=./Docs/Screenshots/4_Common/1_Sidebar/2_Delete/3.png> | 
   |:--:| 
   | 알림 삭제 확인 |
 
 - All 탭, Unread 탭
-  | ![](./Docs/Screenshots/4_Common/1_Sidebar/3_AllUnreadTab/1.png) | 
+  | <img src=./Docs/Screenshots/4_Common/1_Sidebar/3_AllUnreadTab/1.png> | 
   |:--:|
   | All 탭 (모든 (읽지 않음, 읽음 상태인) 알림 출력) |
 
-  | ![](./Docs/Screenshots/4_Common/1_Sidebar/3_AllUnreadTab/2.png) | 
+  | <img src=./Docs/Screenshots/4_Common/1_Sidebar/3_AllUnreadTab/2.png> | 
   |:--:| 
   | Unread 탭 (읽지 않은 상태인 알림 출력) |
 
@@ -380,33 +380,33 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 
 - 쇼츠 업로더 두 명이 서로의 쇼츠에 좋아요를 누른 경우 (채팅방 개설) #매칭 기능
 
-  | ![](./Docs/Screenshots/4_Common/3_ShortsMutualLike/1.png) | 
+  | <img src=./Docs/Screenshots/4_Common/3_ShortsMutualLike/1.png> | 
   |:--:| 
   | Message 탭 클릭 |
 
-  | ![](./Docs/Screenshots/4_Common/3_ShortsMutualLike/2.png) | 
+  | <img src=./Docs/Screenshots/4_Common/3_ShortsMutualLike/2.png> | 
   |:--:| 
   | 채팅하고 싶은 (서로의 쇼츠에 좋아요를 누른) 상대의 닉네임 클릭 |
 
-  | ![](./Docs/Screenshots/4_Common/3_ShortsMutualLike/3.png) | 
+  | <img src=./Docs/Screenshots/4_Common/3_ShortsMutualLike/3.png> | 
   |:--:| 
   | 채팅 시작 |
 
 ### 5. 커뮤니티
 - 글 작성
-  | ![](./Docs/Screenshots/5_Community/1_WriteArticle/1.png) | 
+  | <img src=./Docs/Screenshots/5_Community/1_WriteArticle/1.png> | 
   |:--:| 
   | 글쓰기 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/5_Community/1_WriteArticle/2.png) | 
+  | <img src=./Docs/Screenshots/5_Community/1_WriteArticle/2.png> | 
   |:--:| 
   | 제목 및 내용 입력 |
 
-  | ![](./Docs/Screenshots/5_Community/1_WriteArticle/3.png) | 
+  | <img src=./Docs/Screenshots/5_Community/1_WriteArticle/3.png> | 
   |:--:| 
   | 저장 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/5_Community/1_WriteArticle/4.png) | 
+  | <img src=./Docs/Screenshots/5_Community/1_WriteArticle/4.png> | 
   |:--:| 
   | 작성된 글 확인 |
 
@@ -414,41 +414,41 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 <img src=./Docs/Screenshots/5_Community/2_ReadArticle/1.png>
 
 - 글 수정
-  | ![](./Docs/Screenshots/5_Community/3_ModifyArticle/1.png) | 
+  | <img src=./Docs/Screenshots/5_Community/3_ModifyArticle/1.png> | 
   |:--:| 
   | 수정 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/5_Community/3_ModifyArticle/2.png) | 
+  | <img src=./Docs/Screenshots/5_Community/3_ModifyArticle/2.png> | 
   |:--:| 
   | 제목 및 본문 내용 수정 후 수정 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/5_Community/3_ModifyArticle/3.png) | 
+  | <img src=./Docs/Screenshots/5_Community/3_ModifyArticle/3.png> | 
   |:--:| 
   | 수정된 글 확인 |
 
 - 글 삭제
-  | ![](./Docs/Screenshots/5_Community/4_DeleteArticle/1.png) | 
+  | <img src=./Docs/Screenshots/5_Community/4_DeleteArticle/1.png> | 
   |:--:| 
   | 삭제 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/5_Community/4_DeleteArticle/2.png) | 
+  | <img src=./Docs/Screenshots/5_Community/4_DeleteArticle/2.png> | 
   |:--:| 
   | 글 삭제 확인 대화상자 |
 
-  | ![](./Docs/Screenshots/5_Community/4_DeleteArticle/3.png) | 
+  | <img src=./Docs/Screenshots/5_Community/4_DeleteArticle/3.png> | 
   |:--:| 
   | 글 삭제 후 글 목록으로 이동 |
 
 - 댓글 작성
-  | ![](./Docs/Screenshots/5_Community/5_WriteComment/1.png) | 
+  | <img src=./Docs/Screenshots/5_Community/5_WriteComment/1.png> | 
   |:--:| 
   | 댓글을 작성할 글 이동 |
 
-  | ![](./Docs/Screenshots/5_Community/5_WriteComment/2.png) | 
+  | <img src=./Docs/Screenshots/5_Community/5_WriteComment/2.png> | 
   |:--:| 
   | 댓글 입력 후 등록 클릭 |
 
-  | ![](./Docs/Screenshots/5_Community/5_WriteComment/3.png) | 
+  | <img src=./Docs/Screenshots/5_Community/5_WriteComment/3.png> | 
   |:--:| 
   | 작성된 댓글 확인 |
 
@@ -456,19 +456,19 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 <img src=./Docs/Screenshots/5_Community/6_DeleteComment/1.gif>
 
 - 글 정렬 (최신 순, 조회수 순, 인기 순)
-  | ![](./Docs/Screenshots/5_Community/7_SortArticle/1.png) | 
+  | <img src=./Docs/Screenshots/5_Community/7_SortArticle/1.png> | 
   |:--:| 
   | 기본 정렬: 최신순 |
 
-  | ![](./Docs/Screenshots/5_Community/7_SortArticle/2.png) | 
+  | <img src=./Docs/Screenshots/5_Community/7_SortArticle/2.png> | 
   |:--:| 
   | 최신순 정렬 |
 
-  | ![](./Docs/Screenshots/5_Community/7_SortArticle/3.png) | 
+  | <img src=./Docs/Screenshots/5_Community/7_SortArticle/3.png> | 
   |:--:| 
   | 조회수순 정렬 |
 
-  | ![](./Docs/Screenshots/5_Community/7_SortArticle/4.png) | 
+  | <img src=./Docs/Screenshots/5_Community/7_SortArticle/4.png> | 
   |:--:| 
   | 인기순 정렬 |
 
@@ -476,84 +476,84 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
 <img src=./Docs/Screenshots/5_Community/8_LikeArticle/1.png>
 
 - 게시글 검색
-  | ![](./Docs/Screenshots/5_Community/9_SearchArticle/1.png) | 
+  | <img src=./Docs/Screenshots/5_Community/9_SearchArticle/1.png> | 
   |:--:| 
   | 검색 창 클릭 |
 
-  | ![](./Docs/Screenshots/5_Community/9_SearchArticle/2.png) | 
+  | <img src=./Docs/Screenshots/5_Community/9_SearchArticle/2.png> | 
   |:--:| 
   | 검색어 입력 |
 
-  | ![](./Docs/Screenshots/5_Community/9_SearchArticle/3.png) | 
+  | <img src=./Docs/Screenshots/5_Community/9_SearchArticle/3.png> | 
   |:--:| 
   | 검색 결과 |
 
 ### 6. 통합 검색
 - 사용자
-  | ![](./Docs/Screenshots/6_IntegratedSearch/1_User/1.png) | 
+  | <img src=./Docs/Screenshots/6_IntegratedSearch/1_User/1.png> | 
   |:--:| 
   | 검색어 입력 |
 
-  | ![](./Docs/Screenshots/6_IntegratedSearch/1_User/2.png) | 
+  | <img src=./Docs/Screenshots/6_IntegratedSearch/1_User/2.png> | 
   |:--:| 
   | 검색된 사용자 클릭 |
 
-  | ![](./Docs/Screenshots/6_IntegratedSearch/1_User/3.png) | 
+  | <img src=./Docs/Screenshots/6_IntegratedSearch/1_User/3.png> | 
   |:--:| 
   | 사용자의 프로필 및 포트폴리오 조회 |
 
 - 구인글
-  | ![](./Docs/Screenshots/6_IntegratedSearch/2_Gather/1.png) | 
+  | <img src=./Docs/Screenshots/6_IntegratedSearch/2_Gather/1.png> | 
   |:--:| 
   | 검색어 입력 |
 
-  | ![](./Docs/Screenshots/6_IntegratedSearch/2_Gather/2.png) | 
+  | <img src=./Docs/Screenshots/6_IntegratedSearch/2_Gather/2.png> | 
   |:--:| 
   | 검색된 구인글 클릭 |
 
-  | ![](./Docs/Screenshots/6_IntegratedSearch/2_Gather/3.png) | 
+  | <img src=./Docs/Screenshots/6_IntegratedSearch/2_Gather/3.png> | 
   |:--:| 
   | 구인글 조회 |
 
 - 커뮤니티
-  | ![](./Docs/Screenshots/6_IntegratedSearch/3_Community/1.png) | 
+  | <img src=./Docs/Screenshots/6_IntegratedSearch/3_Community/1.png> | 
   |:--:| 
   | 검색어 입력 |
 
-  | ![](./Docs/Screenshots/6_IntegratedSearch/3_Community/2.png) | 
+  | <img src=./Docs/Screenshots/6_IntegratedSearch/3_Community/2.png> | 
   |:--:| 
   | 검색된 게시글 클릭 |
 
-  | ![](./Docs/Screenshots/6_IntegratedSearch/3_Community/3.png) | 
+  | <img src=./Docs/Screenshots/6_IntegratedSearch/3_Community/3.png> | 
   |:--:| 
   | 게시글 조회 |
 
 ### 7. 회원가입
 - 메인 페이지
-  | ![](./Docs/Screenshots/7_SignUp/1.png) | 
+  | <img src=./Docs/Screenshots/7_SignUp/1.png> | 
   |:--:| 
   | Sign Up 버튼 클릭 |
 
-  | ![](./Docs/Screenshots/7_SignUp/2-1.png) | 
+  | <img src=./Docs/Screenshots/7_SignUp/2-1.png> | 
   |:--:| 
   | 비밀번호와 비밀번호 확인 불일치 |
 
-  | ![](./Docs/Screenshots/7_SignUp/2-2.png) | 
+  | <img src=./Docs/Screenshots/7_SignUp/2-2.png> | 
   |:--:| 
   | 비밀번호와 비밀번호 확인 일치 |
 
-  | ![](./Docs/Screenshots/7_SignUp/3.png) | 
+  | <img src=./Docs/Screenshots/7_SignUp/3.png> | 
   |:--:| 
   | 폼 입력 |
 
-  | ![](./Docs/Screenshots/7_SignUp/4.png) | 
+  | <img src=./Docs/Screenshots/7_SignUp/4.png> | 
   |:--:| 
   | 이메일 인증 페이지 (회원가입 후 서비스 이용에 인증 필요) |
 
-  | ![](./Docs/Screenshots/7_SignUp/5.png) | 
+  | <img src=./Docs/Screenshots/7_SignUp/5.png> | 
   |:--:| 
   | 메일 확인 (링크 클릭) |
 
-  | ![](./Docs/Screenshots/7_SignUp/6.png) | 
+  | <img src=./Docs/Screenshots/7_SignUp/6.png> | 
   |:--:| 
   | 인증됨 |
