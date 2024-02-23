@@ -189,7 +189,10 @@ Mela!는 メラメラ(메라메라), 일본어로 활활을 뜻하는 의성어�
   ```
 
 - Matching
+
 <video src="./Docs/Screenshots/2_Gather/6_Matching/1.mp4" loop="" controls />
+
+<video src=./Docs/Screenshots/2_Gather/6_Matching/1.mp4 />
 
   ```plaintext
   다른 사용자가 업로드한 쇼츠
